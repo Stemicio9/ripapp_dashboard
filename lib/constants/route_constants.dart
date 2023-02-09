@@ -1,0 +1,22 @@
+
+import 'package:ripapp_dashboard/pages/forgot_password/forgot_password.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/dashboard.dart';
+import 'package:ripapp_dashboard/pages/login_section/login.dart';
+
+class RouteConstants {
+  static const String login = "/login";
+  static const String dashboard = "/dashboard";
+  static const String forgotPassword = "/forgotpassword";
+
+
+
+  static dynamic route(context) => {
+    '/': (context) =>  Login(),
+    login: (context) => Login(),
+    dashboard: (context) => Dashboard(),
+    forgotPassword: (context) => ForgotPassword(),
+
+
+
+  };
+}
