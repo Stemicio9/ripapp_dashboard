@@ -32,7 +32,7 @@ class DashboardAgencyState extends State<DashboardAgency> {
     return [
       CollapsibleItem(
         text: getCurrentLanguageValue(MY_PRODUCTS)!,
-        icon: Icons.egg,
+        icon: Icons.table_rows,
         onPressed: () => setState(() {
           title = getCurrentLanguageValue(MY_PRODUCTS)!;
           currentPage = 1;

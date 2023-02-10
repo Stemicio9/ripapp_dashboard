@@ -47,7 +47,7 @@ class DashboardState extends State<Dashboard> {
       ),
       CollapsibleItem(
         text: getCurrentLanguageValue(PRODUCTS_MANAGE)!,
-        icon: Icons.egg,
+        icon: Icons.table_rows,
         onPressed: () => setState(() {
           title = getCurrentLanguageValue(PRODUCTS_MANAGE)!;
           currentPage = 3;
