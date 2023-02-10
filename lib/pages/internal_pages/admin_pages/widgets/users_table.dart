@@ -14,6 +14,7 @@ class UsersTable extends StatelessWidget{
     'Cognome',
     'Email',
     'Città',
+    'Telefono',
     ''
   ];
 
@@ -24,6 +25,7 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
+      phoneNumber: '+39 0987654321'
     ),
     UserEntity(
       id: '2',
@@ -31,6 +33,8 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
+        phoneNumber: '+39 0987654321'
+
     ),
     UserEntity(
       id: '3',
@@ -38,6 +42,8 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
+        phoneNumber: '+39 0987654321'
+
     ),
     UserEntity(
       id: '4',
@@ -45,6 +51,8 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
+        phoneNumber: '+39 0987654321'
+
     ),
     UserEntity(
       id: '5',
@@ -52,18 +60,31 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
+        phoneNumber: '+39 0987654321'
+
     ),
   ];
 
   final edit;
   final delete;
   final showDetail;
+ // final onSort;
+ // final sortColumnIndex;
   final String detailMessage;
   final String editMessage;
   final String deleteMessage;
 
 
-  UsersTable({required this.delete, required this.edit, required this.showDetail, required this.detailMessage, required this.editMessage,required this.deleteMessage});
+  UsersTable({
+    required this.delete,
+    required this.edit,
+    required this.showDetail,
+    required this.detailMessage,
+    required this.editMessage,
+    required this.deleteMessage,
+   // required this.onSort,
+   // required this.sortColumnIndex
+  });
 
 
   @override
@@ -84,6 +105,7 @@ class UsersTable extends StatelessWidget{
         ),
         columns: createHeaderTable(),
         rows: createRows(),
+     //   sortColumnIndex: sortColumnIndex,
       ),
     );
   }
@@ -95,6 +117,7 @@ class UsersTable extends StatelessWidget{
     List<DataColumn> res = [];
     for (var i = 0; i < headerTitle.length; i++) {
       res.add(DataColumn(
+      //  onSort: onSort,
         label: Expanded(
             child: Texth4V2(
                 testo: headerTitle[i],
@@ -121,27 +144,32 @@ class UsersTable extends StatelessWidget{
       cells: <DataCell>[
         DataCell(Text(p.id,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
           p.firstName,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
           p.lastName,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
           p.email,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
           p.city,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+        )),
+        DataCell(Text(
+          p.phoneNumber,
+          style: SafeGoogleFont('Montserrat',
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Row(
           mainAxisAlignment: MainAxisAlignment.center,

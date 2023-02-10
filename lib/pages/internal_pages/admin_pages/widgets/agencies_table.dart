@@ -1,53 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
-import 'package:ripapp_dashboard/models/product_entity.dart';
-import 'package:ripapp_dashboard/models/user_entity.dart';
+import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
 
-class ProductsTable extends StatelessWidget{
-
+class AgenciesTable extends StatelessWidget {
   List<String> headerTitle = [
     'ID',
     'Nome',
-    'Prezzo',
-    'Descrizione',
+    'Email',
+    'Città',
+    'Telefono',
     ''
   ];
 
-  List<ProductEntity> products = [
-    ProductEntity(
-      id: '1',
-      name: 'Nome prodotto',
-      price: '50 €',
-      description: 'Descrizione prodotto',
-    ),
-    ProductEntity(
-      id: '2',
-      name: 'Nome prodotto',
-      price: '50 €',
-      description: 'Descrizione prodotto',
-    ),
-    ProductEntity(
-      id: '3',
-      name: 'Nome prodotto',
-      price: '50 €',
-      description: 'Descrizione prodotto',
-    ),
-    ProductEntity(
-      id: '4',
-      name: 'Nome prodotto',
-      price: '50 €',
-      description: 'Descrizione prodotto',
-    ),
-    ProductEntity(
-      id: '5',
-      name: 'Nome prodotto',
-      price: '50 €',
-      description: 'Descrizione prodotto',
-    ),
+  List<AgencyEntity> agencies = [
+    AgencyEntity(
+        id: '1',
+        agencyName: 'Nome agenzia',
+        email: 'agenzia@gmail.com',
+        city: 'Roma',
+        phoneNumber: '+39 0987654321'),
+    AgencyEntity(
+        id: '2',
+        agencyName: 'Nome agenzia',
+        email: 'agenzia@gmail.com',
+        city: 'Roma',
+        phoneNumber: '+39 0987654321'),
+    AgencyEntity(
+        id: '3',
+        agencyName: 'Nome agenzia',
+        email: 'agenzia@gmail.com',
+        city: 'Roma',
+        phoneNumber: '+39 0987654321'),
+    AgencyEntity(
+        id: '4',
+        agencyName: 'Nome agenzia',
+        email: 'agenzia@gmail.com',
+        city: 'Roma',
+        phoneNumber: '+39 0987654321'),
+    AgencyEntity(
+        id: '5',
+        agencyName: 'Nome agenzia',
+        email: 'agenzia@gmail.com',
+        city: 'Roma',
+        phoneNumber: '+39 0987654321'),
   ];
 
   final edit;
@@ -57,9 +56,13 @@ class ProductsTable extends StatelessWidget{
   final String editMessage;
   final String deleteMessage;
 
-
-  ProductsTable({required this.delete, required this.edit, required this.showDetail, required this.detailMessage, required this.editMessage,required this.deleteMessage});
-
+  AgenciesTable(
+      {required this.delete,
+      required this.edit,
+      required this.showDetail,
+      required this.detailMessage,
+      required this.editMessage,
+      required this.deleteMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +75,10 @@ class ProductsTable extends StatelessWidget{
         headingRowColor: MaterialStateColor.resolveWith((states) => background),
         border: const TableBorder(
           top: BorderSide(width: 0.5, color: greyState),
-          bottom:BorderSide(width: 0.5, color: greyState),
-          left:BorderSide(width: 0.5, color: greyState),
-          right:BorderSide(width: 0.5, color: greyState),
-          horizontalInside:BorderSide(width: 0.5, color: greyState),
+          bottom: BorderSide(width: 0.5, color: greyState),
+          left: BorderSide(width: 0.5, color: greyState),
+          right: BorderSide(width: 0.5, color: greyState),
+          horizontalInside: BorderSide(width: 0.5, color: greyState),
         ),
         columns: createHeaderTable(),
         rows: createRows(),
@@ -83,20 +86,16 @@ class ProductsTable extends StatelessWidget{
     );
   }
 
-
-
-
   List<DataColumn> createHeaderTable() {
     List<DataColumn> res = [];
     for (var i = 0; i < headerTitle.length; i++) {
       res.add(DataColumn(
         label: Expanded(
             child: Texth4V2(
-              testo: headerTitle[i],
-              color: white,
-              weight: FontWeight.bold,
-            )
-        ),
+          testo: headerTitle[i],
+          color: white,
+          weight: FontWeight.bold,
+        )),
       ));
     }
     return res;
@@ -104,8 +103,8 @@ class ProductsTable extends StatelessWidget{
 
   List<DataRow> createRows() {
     List<DataRow> res = [];
-    for (var i = 0; i < products.length; i++) {
-      var p = products[i];
+    for (var i = 0; i < agencies.length; i++) {
+      var p = agencies[i];
       res.add(composeSingleRow(p));
     }
     return res;
@@ -114,24 +113,30 @@ class ProductsTable extends StatelessWidget{
   DataRow composeSingleRow(dynamic p) {
     return DataRow(
       cells: <DataCell>[
-        DataCell(Text(p.id,
+        DataCell(Text(
+          p.id,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.name,
+          p.agencyName,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.price,
+          p.email,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.description,
+          p.city,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+        )),
+        DataCell(Text(
+          p.phoneNumber,
+          style: SafeGoogleFont('Montserrat',
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -167,7 +172,7 @@ class ProductsTable extends StatelessWidget{
             ),
             Padding(
               padding: getPadding(left: 4),
-              child:TooltipWidget(
+              child: TooltipWidget(
                 message: deleteMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(

@@ -1,51 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
-import 'package:ripapp_dashboard/models/agency_entity.dart';
+import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
 
-class AgenciesTable extends StatelessWidget{
+class DemiseTable extends StatelessWidget{
 
   List<String> headerTitle = [
     'ID',
     'Nome',
-    'Email',
+    'Cognome',
     'Città',
+    'Telefono',
+    'Nome Chiesa',
+    'Indirizzo Chiesa',
+    'Descrizione',
     ''
   ];
 
-  List<AgencyEntity> agencies = [
-    AgencyEntity(
+  List<DemiseEntity> users = [
+    DemiseEntity(
       id: '1',
-      agencyName: 'Nome agenzia',
-      email: 'agenzia@gmail.com',
+      firstName: 'Davide',
+      lastName: 'Rossi',
+      phoneNumber: '+39 0987654321',
       city: 'Roma',
+      churchAddress: 'Via Milano, 46',
+      churchName: 'Nome Chiesa',
+      description: 'Descrizione prodotto',
     ),
-    AgencyEntity(
+    DemiseEntity(
       id: '2',
-      agencyName: 'Nome agenzia',
-      email: 'agenzia@gmail.com',
+      firstName: 'Davide',
+      lastName: 'Rossi',
+      phoneNumber: '+39 0987654321',
       city: 'Roma',
+      churchAddress: 'Via Milano, 46',
+      churchName: 'Nome Chiesa',
+      description: 'Descrizione prodotto',
     ),
-    AgencyEntity(
+    DemiseEntity(
       id: '3',
-      agencyName: 'Nome agenzia',
-      email: 'agenzia@gmail.com',
+      firstName: 'Davide',
+      lastName: 'Rossi',
+      phoneNumber: '+39 0987654321',
       city: 'Roma',
+      churchAddress: 'Via Milano, 46',
+      churchName: 'Nome Chiesa',
+      description: 'Descrizione prodotto',
     ),
-    AgencyEntity(
+    DemiseEntity(
       id: '4',
-      agencyName: 'Nome agenzia',
-      email: 'agenzia@gmail.com',
+      firstName: 'Davide',
+      lastName: 'Rossi',
+      phoneNumber: '+39 0987654321',
       city: 'Roma',
+      churchAddress: 'Via Milano, 46',
+      churchName: 'Nome Chiesa',
+      description: 'Descrizione prodotto',
     ),
-    AgencyEntity(
+    DemiseEntity(
       id: '5',
-      agencyName: 'Nome agenzia',
-      email: 'agenzia@gmail.com',
+      firstName: 'Davide',
+      lastName: 'Rossi',
+      phoneNumber: '+39 0987654321',
       city: 'Roma',
+      churchAddress: 'Via Milano, 46',
+      churchName: 'Nome Chiesa',
+      description: 'Descrizione prodotto',
     ),
   ];
 
@@ -57,7 +81,7 @@ class AgenciesTable extends StatelessWidget{
   final String deleteMessage;
 
 
-  AgenciesTable({required this.delete, required this.edit, required this.showDetail, required this.detailMessage, required this.editMessage,required this.deleteMessage});
+  DemiseTable({required this.delete, required this.edit, required this.showDetail, required this.detailMessage, required this.editMessage,required this.deleteMessage});
 
 
   @override
@@ -103,8 +127,8 @@ class AgenciesTable extends StatelessWidget{
 
   List<DataRow> createRows() {
     List<DataRow> res = [];
-    for (var i = 0; i < agencies.length; i++) {
-      var p = agencies[i];
+    for (var i = 0; i < users.length; i++) {
+      var p = users[i];
       res.add(composeSingleRow(p));
     }
     return res;
@@ -115,22 +139,42 @@ class AgenciesTable extends StatelessWidget{
       cells: <DataCell>[
         DataCell(Text(p.id,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.agencyName,
+          p.firstName,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.email,
+          p.lastName,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
           p.city,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.normal),
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+        )),
+        DataCell(Text(
+          p.phoneNumber,
+          style: SafeGoogleFont('Montserrat',
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+        )),
+        DataCell(Text(
+          p.churchName,
+          style: SafeGoogleFont('Montserrat',
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+        )),
+        DataCell(Text(
+          p.churchAddress,
+          style: SafeGoogleFont('Montserrat',
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+        )),
+        DataCell(Text(
+          p.description,
+          style: SafeGoogleFont('Montserrat',
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Row(
           mainAxisAlignment: MainAxisAlignment.center,

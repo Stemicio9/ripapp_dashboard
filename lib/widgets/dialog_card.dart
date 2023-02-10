@@ -9,8 +9,9 @@ class DialogCard extends StatelessWidget {
   final double paddingRight;
   final double paddingLeft;
   final Color cardColor;
+  final bool cancelIcon;
 
-  DialogCard({required this.cardTitle, required this.child, this.paddingRight = 20, this.paddingLeft=20, this.cardColor = white});
+  DialogCard({required this.cardTitle, required this.child, this.paddingRight = 20, this.paddingLeft=20, this.cardColor = white, this.cancelIcon=false});
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +30,34 @@ class DialogCard extends StatelessWidget {
                     topRight: Radius.circular(10)),
                 color: background
             ),
-            child: Text(
-              cardTitle,
-              textAlign: TextAlign.center,
-              style: SafeGoogleFont(
-                'Montserrat',
-                fontSize:22,
-                fontWeight: FontWeight.w600,
-                color: white
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(),
+                Text(
+                  cardTitle,
+                  textAlign: TextAlign.center,
+                  style: SafeGoogleFont(
+                    'Montserrat',
+                    fontSize:22,
+                    fontWeight: FontWeight.w600,
+                    color: white
+                  ),
+                ),
+                Visibility(
+                  visible: cancelIcon,
+                  child: Padding(
+                    padding: getPadding(right: 5),
+                    child: GestureDetector(
+                      onTap: (){Navigator.pop(context);},
+                        child: const MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                            child: Icon(Icons.close_rounded,color: white,))
+                    ),
+                  ),
+                ),
 
-              ),
+              ],
             ),
           ),
           Container(

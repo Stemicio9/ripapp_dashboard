@@ -91,6 +91,16 @@ class LoginFormState extends State<LoginForm>{
                 text: getCurrentLanguageValue(LOGIN)!,
             ),
           ),
+          Padding(
+            padding: getPadding(top: 10),
+            child: ActionButtonV2(
+              maxWidth: 240,
+              action: loginAgency,
+              color: white,
+              textColor: background,
+              text: 'Login agenzia',
+            ),
+          ),
         ],
       ),
     );
@@ -135,5 +145,11 @@ class LoginFormState extends State<LoginForm>{
 
   //  }
   }
+  loginAgency() async {
+    //  if (_formKey.currentState!.validate()) {
+    Navigator.pushNamed(context, RouteConstants.dashboardAgency);
 
+
+    //  }
+  }
 }

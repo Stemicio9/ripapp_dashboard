@@ -45,6 +45,7 @@ class InputsV2Widget extends StatelessWidget {
   final double paddingRight; //40
   final double paddingTop; //10
   final double paddingBottom; //10
+  final inputFormatters;
 
   InputsV2Widget(
       {required hinttext,
@@ -83,6 +84,7 @@ class InputsV2Widget extends StatelessWidget {
       this.suffixIcon,
       this.svgPath = '',
       this.iconOnTap,
+      this.inputFormatters,
       this.borderSide = BorderSide.none,
       this.activeBorderSide = BorderSide.none})
       : hintText = hinttext;
@@ -109,6 +111,7 @@ class InputsV2Widget extends StatelessWidget {
           textInputAction: textInputAction,
           onChanged: onChanged,
           controller: controller,
+          inputFormatters: inputFormatters,
           keyboardType: multiline ? TextInputType.multiline : keyboard,
           maxLines: multiline ? maxLine : 1,
           onEditingComplete: () => node.nextFocus(),

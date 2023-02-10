@@ -4,6 +4,7 @@ class UserEntity {
   String? lastName;
   String? email;
   String? city;
+  String? phoneNumber;
 
   UserEntity({
     this.id,
@@ -11,12 +12,13 @@ class UserEntity {
     this.firstName,
     this.email,
     this.city,
+    this.phoneNumber
   });
 
   //toString
   @override
   String toString() {
-    return 'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, email: $email, city: $city';
+    return 'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, email: $email, city: $city, phonenumber:$phoneNumber';
   }
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
@@ -25,7 +27,9 @@ class UserEntity {
         lastName: json["lastName"] ?? "",
         email: json["email"] ?? "",
         city: json["city"] ?? "",
-      );
+        phoneNumber: json["phoneNumber"] ?? "",
+
+  );
 
   UserEntity copyWith({
     String? id,
@@ -33,6 +37,7 @@ class UserEntity {
     String? lastName,
     String? email,
     String? city,
+    String? phoneNumber,
   }) {
     return UserEntity(
       id: id ?? this.id,
@@ -40,6 +45,8 @@ class UserEntity {
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
       city: city ?? this.city,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+
     );
   }
 
@@ -49,5 +56,7 @@ class UserEntity {
         "lastName": lastName,
         "email": email,
         "city": city,
-      };
+        "phoneNumber": phoneNumber,
+
+  };
 }

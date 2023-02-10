@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agencies_manage.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/products_manage.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/users_manage.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/agencies_manage.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 
 
@@ -22,8 +22,6 @@ class DashboardState extends State<Dashboard> {
   int currentPage = 1;
 
  // final UserCubit? userCubit;
-
-
 //  DashboardState({this.userCubit});
 
 
