@@ -20,7 +20,6 @@ class ImagePlaceholder extends StatelessWidget {
     return Image.asset("assets/images/$name",
       width: width,
       height: height,
-      fit: BoxFit.cover,
       opacity: AlwaysStoppedAnimation(opacity),
     );
   }
