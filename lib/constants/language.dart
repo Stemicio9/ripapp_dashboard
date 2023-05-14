@@ -40,6 +40,16 @@ const String DEMISE_DETAIL = "Dettaglio decesso";
 const String AGENCY_DETAIL = "Dettaglio azienda";
 const String CHURCH_NAME = "Nome chiesa";
 const String CHURCH_ADDRESS = "Indirizzo chiesa";
+const String AGE = "Età";
+const String WAKE_HOUR = "Orario veglia";
+const String WAKE_DATE = "Data veglia";
+const String WAKE_NOTE = "Note veglia";
+const String FUNERAL_HOUR = "Orario funeral";
+const String FUNERAL_DATE = "Data funeral";
+const String FUNERAL_NOTE = "Note funeral";
+const String ADDRESS = "Indirizzo";
+const String RELATIVE_NUMBER = "Numero parente";
+const String INSERT_PHOTO = "Tocca per caricare una foto";
 
 
 final Map<String, String> LANG_IT = {
@@ -77,7 +87,16 @@ final Map<String, String> LANG_IT = {
   AGENCY_DETAIL:"Dettaglio agenzia",
   CHURCH_ADDRESS:"Indirizzo chiesa",
   CHURCH_NAME:"Nome chiesa",
-
+  AGE:"Età",
+  WAKE_HOUR:"Orario veglia",
+  WAKE_DATE:"Data veglia",
+  WAKE_NOTE:"Note veglia",
+  FUNERAL_HOUR:"Orario funerale",
+  FUNERAL_DATE:"Data funerale",
+  FUNERAL_NOTE:"Note funerale",
+  ADDRESS:"Indirizzo",
+  RELATIVE_NUMBER:"Numero parente",
+  INSERT_PHOTO: "Tocca per caricare una foto",
 
 
   //navbar title

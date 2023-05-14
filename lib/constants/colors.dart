@@ -13,6 +13,8 @@ const Color lightGreen = Color(0xFF45C439);
 const Color blueState = Color(0xFF224DE3);
 const Color greyState = Color(0xFFD9D9D9);
 const Color greyDisabled = Color(0xFFA8A8A8);
+const Color greyDrag = Color(0xFFF5F5F5);
+
 const Color redAccent = Color(0xFFFF0000);
 Color blackTransparent = Color(0xFF000000).withOpacity(0.65);
 Color blackDialog = Color(0xFF000000).withOpacity(0.95);

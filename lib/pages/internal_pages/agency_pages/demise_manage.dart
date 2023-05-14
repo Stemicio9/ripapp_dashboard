@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/demise_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/demise_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/demise_table.dart';
@@ -30,8 +31,6 @@ class DemiseManageState extends State<DemiseManage>{
   final String churchAddress = 'Via Milano, 46';
   final String description = 'Descrizione del decesso';
 
-
-
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
@@ -49,7 +48,8 @@ class DemiseManageState extends State<DemiseManage>{
         children: [
           Header(
             onTap: (){
-              showDialog(
+              Navigator.pushNamed(context, RouteConstants.addDemise);
+             /* showDialog(
                   context: context,
                   builder: (ctx) => DemiseForm(
                       onTap: (){
@@ -64,7 +64,7 @@ class DemiseManageState extends State<DemiseManage>{
                       churchAddressController: churchAddressController,
                       churchNameController: churchNameController
                   )
-              );
+              ); */
             },
             pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
             buttonText: getCurrentLanguageValue(ADD_DEMISE)!,

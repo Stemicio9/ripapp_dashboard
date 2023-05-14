@@ -3,5 +3,8 @@ class ImagesConstants{
 
   static String imgAvatar = "assets/images/profiledefault.jpeg";
 
+  static String imgCalendar = "assets/images/calendar.png";
+
+  static String imgClock = "assets/images/clock.png";
 
 }

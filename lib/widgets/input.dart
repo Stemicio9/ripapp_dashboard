@@ -29,7 +29,7 @@ class InputsV2Widget extends StatelessWidget {
   final iconOnTap;
   final BorderSide borderSide;
   final BorderSide activeBorderSide;
-
+  final int maxLenght;
   final bool multiline;
   final int maxLine;
   final double fontSize; //14
@@ -85,6 +85,7 @@ class InputsV2Widget extends StatelessWidget {
       this.svgPath = '',
       this.iconOnTap,
       this.inputFormatters,
+        this.maxLenght = 999999999,
       this.borderSide = BorderSide.none,
       this.activeBorderSide = BorderSide.none})
       : hintText = hinttext;
@@ -111,6 +112,7 @@ class InputsV2Widget extends StatelessWidget {
           textInputAction: textInputAction,
           onChanged: onChanged,
           controller: controller,
+          maxLength: maxLenght,
           inputFormatters: inputFormatters,
           keyboardType: multiline ? TextInputType.multiline : keyboard,
           maxLines: multiline ? maxLine : 1,
@@ -135,11 +137,11 @@ class InputsV2Widget extends StatelessWidget {
             ),
             hintText: hintText,
             hoverColor: white,
+            counterText: "",
             hintStyle: TextStyle(color: darkGrey, fontSize: fontHintSize),
             filled: true,
             errorStyle: const TextStyle(color: redAccent),
-            prefixIcon: isPrefixIcon
-                ? Align(
+            prefixIcon: isPrefixIcon ? Align(
                     widthFactor: 1.0,
                     heightFactor: 1.0,
                     child: CustomImageView(

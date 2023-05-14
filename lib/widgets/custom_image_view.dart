@@ -61,11 +61,14 @@ class CustomImageView extends StatelessWidget {
   }
 
   Widget _buildWidget() {
-    return GestureDetector(
-      onTap: onTap,
-      child: Padding(
-        padding: margin ?? EdgeInsets.zero,
-        child: _buildCircleImage(),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Padding(
+          padding: margin ?? EdgeInsets.zero,
+          child: _buildCircleImage(),
+        ),
       ),
     );
   }
