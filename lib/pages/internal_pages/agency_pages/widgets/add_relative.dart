@@ -51,16 +51,8 @@ class AddRelative extends StatelessWidget{
               ),
             ),
 
+        ...relativeRows.map((e) => e).toList()
 
-            SizedBox(
-              height: 200,
-              child: ListView.builder(
-                itemCount: relativeRows.length,
-                itemBuilder: (context, index) {
-                  return relativeRows[index];
-                },
-              ),
-            ),
           ],
         ),
       ),

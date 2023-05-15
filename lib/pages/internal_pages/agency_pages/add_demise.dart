@@ -66,7 +66,7 @@ class AddDemiseState extends State<AddDemise> {
     'Madre',
     'Padre',
   ];
-  String dropdownValue = kinship.first;
+
   late Image imageFile;
 
   final List<Widget> relativeRows = [];
@@ -353,16 +353,13 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   void createNewRelativeRow() {
+    selectedValues.add(kinship.first);
     var x = RelativeRow(
-        onChanged: (String? value) {
-          setState(() {
-            dropdownValue = value!;
-          });
-        },
+        onChanged: changeDropdown,
         kinship: kinship,
         relativeController: relativeController,
-        deleteRelative: () {},
-        value: dropdownValue
+        deleteRelative: deleteRelative,
+        value: selectedValues.last
     );
 
     // RelativeRow(onChanged: (String? value) {
@@ -372,5 +369,24 @@ class AddDemiseState extends State<AddDemise> {
     // }, kinship: kinship, relativeController: relativeController, deleteRelative: (){}, value: dropdownValue);
 
     relativeRows.add(x);
+
   }
+
+  changeDropdown(RelativeRow relativeRow, value){
+    setState(() {
+      var index = relativeRows.indexOf(relativeRow);
+      selectedValues[index] = value;
+    });
+  }
+
+  deleteRelative(RelativeRow relativeRow){
+    setState(() {
+      var index = relativeRows.indexOf(relativeRow);
+      relativeRows.remove(relativeRow);
+      selectedValues.removeAt(index);
+    });
+  }
+
+  var selectedValues = [];
+
 }

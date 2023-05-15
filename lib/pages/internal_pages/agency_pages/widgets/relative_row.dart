@@ -71,7 +71,11 @@ class RelativeRow extends StatelessWidget {
                         isExpanded: true,
                         underline:  const SizedBox(),
                         value: value,
-                        onChanged: onChanged,
+                        onChanged: (element){
+                          print("element");
+                          print(element);
+                          onChanged(this, element);
+                          },
                         items: kinship.map((String kinship) {
                           return  DropdownMenuItem<String>(
                             value: kinship,
@@ -134,7 +138,7 @@ class RelativeRow extends StatelessWidget {
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
-                          onTap: deleteRelative,
+                          onTap: (){deleteRelative(this);},
                           child: Icon(
                             Icons.delete_rounded,
                             color: rossoopaco,
