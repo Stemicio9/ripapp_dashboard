@@ -1,4 +1,3 @@
-
 import 'dart:html';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -8,6 +7,7 @@ import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_data.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
@@ -19,14 +19,14 @@ import '../../../constants/language.dart';
 import '../../../utils/size_utils.dart';
 import 'package:intl/intl.dart';
 
-class AddDemise extends StatefulWidget{
+class AddDemise extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return AddDemiseState();
   }
 }
 
-class AddDemiseState extends State<AddDemise>{
+class AddDemiseState extends State<AddDemise> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
@@ -37,7 +37,8 @@ class AddDemiseState extends State<AddDemise>{
   final TextEditingController wakeDateController = TextEditingController();
   final TextEditingController wakeTimeController = TextEditingController();
   final TextEditingController wakeNoteController = TextEditingController();
-  final TextEditingController funeralAddressController = TextEditingController();
+  final TextEditingController funeralAddressController =
+      TextEditingController();
   final TextEditingController funeralDateController = TextEditingController();
   final TextEditingController funeralTimeController = TextEditingController();
   final TextEditingController funeralNoteController = TextEditingController();
@@ -68,6 +69,8 @@ class AddDemiseState extends State<AddDemise>{
   String dropdownValue = kinship.first;
   late Image imageFile;
 
+  final List<Widget> relativeRows = [];
+
   @override
   void initState() {
     wakeTimeController.text = "";
@@ -77,6 +80,7 @@ class AddDemiseState extends State<AddDemise>{
     deceasedDateController.text = "";
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldWidget(
@@ -84,7 +88,7 @@ class AddDemiseState extends State<AddDemise>{
         child: Padding(
           padding: getPadding(top: 40, bottom: 40, left: 5, right: 5),
           child: Column(
-            crossAxisAlignment:CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
                 leftPadding: const EdgeInsets.only(left: 5),
@@ -97,17 +101,17 @@ class AddDemiseState extends State<AddDemise>{
               //deceased data
               DeceasedData(
                 //imageFile: imageFile,
-                imageOnTap: ()  async {
+                imageOnTap: () async {
                   //TODO: IMPLEMENTARE IMAGEPICKER
-                 // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
-                 Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
+                  // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
+                  Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
                   print(pickedImage);
                   setState(() {
                     imageFile = pickedImage!;
                   });
                 },
 
-                filterController:filterController,
+                filterController: filterController,
                 nameController: nameController,
                 phoneController: phoneController,
                 cityController: cityController,
@@ -122,14 +126,14 @@ class AddDemiseState extends State<AddDemise>{
                       context: context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime.now(),
-                      lastDate: DateTime.now().add(const Duration(days: 365))
-                  );
-                  if(pickedDate != null ){
-                    String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                      lastDate: DateTime.now().add(const Duration(days: 365)));
+                  if (pickedDate != null) {
+                    String formattedDate =
+                        DateFormat('dd-MM-yyyy').format(pickedDate);
                     setState(() {
                       deceasedDateController.text = formattedDate;
                     });
-                  }else{
+                  } else {
                     print("Date is not selected");
                   }
                 },
@@ -140,7 +144,10 @@ class AddDemiseState extends State<AddDemise>{
 
                   debugPrint('onDragDone:');
                   for (final file in detail.files) {
-                    debugPrint('  ${file.path} ${file.name}''  ${await file.lastModified()}''  ${await file.length()}''  ${file.mimeType}');
+                    debugPrint('  ${file.path} ${file.name}'
+                        '  ${await file.lastModified()}'
+                        '  ${await file.length()}'
+                        '  ${file.mimeType}');
                   }
                 },
                 onDragUpdated: (details) {
@@ -166,24 +173,32 @@ class AddDemiseState extends State<AddDemise>{
                     height: 200,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      color: _dragging ? Colors.blue.withOpacity(0.4) : greyDrag,
+                      color:
+                          _dragging ? Colors.blue.withOpacity(0.4) : greyDrag,
                     ),
                     child: Stack(
                       children: [
                         if (_list.isEmpty)
                           Center(
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Texth2V2(testo: 'PDF Necrologio', color: greyDisabled, weight: FontWeight.bold,),
-                                  Texth2V2(testo: "Trascina qui un file", color: greyDisabled,),
-                                ],
-                              ))
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Texth2V2(
+                                testo: 'PDF Necrologio',
+                                color: greyDisabled,
+                                weight: FontWeight.bold,
+                              ),
+                              Texth2V2(
+                                testo: "Trascina qui un file",
+                                color: greyDisabled,
+                              ),
+                            ],
+                          ))
                         else
                           Padding(
                             padding: const EdgeInsets.all(10),
                             child: Texth4V2(
-                              testo:_list.map((e) => e.name).join("\n"),
+                              testo: _list.map((e) => e.name).join("\n"),
                               color: black,
                               weight: FontWeight.bold,
                             ),
@@ -214,35 +229,35 @@ class AddDemiseState extends State<AddDemise>{
                     TimeOfDay? pickedTime = await showTimePicker(
                       context: context,
                       initialTime: TimeOfDay.now(),
-                      confirmText:  getCurrentLanguageValue(CONFIRM) ?? "",
-                      cancelText:  getCurrentLanguageValue(CANCEL) ?? "",
+                      confirmText: getCurrentLanguageValue(CONFIRM) ?? "",
+                      cancelText: getCurrentLanguageValue(CANCEL) ?? "",
                     );
-                    if(pickedTime != null ){
+                    if (pickedTime != null) {
                       setState(() {
-                        wakeTimeController.text = pickedTime.format(context).toString();
+                        wakeTimeController.text =
+                            pickedTime.format(context).toString();
                       });
-                    }else{
+                    } else {
                       print("Time is not selected");
                     }
                   },
-
                   showWakeDatePicker: () async {
                     DateTime? pickedDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 365))
-                    );
-                    if(pickedDate != null ){
-                      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                        lastDate:
+                            DateTime.now().add(const Duration(days: 365)));
+                    if (pickedDate != null) {
+                      String formattedDate =
+                          DateFormat('dd-MM-yyyy').format(pickedDate);
                       setState(() {
                         wakeDateController.text = formattedDate;
                       });
-                    }else{
+                    } else {
                       print("Date is not selected");
                     }
                   },
-
                 ),
               ),
 
@@ -258,15 +273,15 @@ class AddDemiseState extends State<AddDemise>{
                     TimeOfDay? pickedTime = await showTimePicker(
                       context: context,
                       initialTime: TimeOfDay.now(),
-                      confirmText:  getCurrentLanguageValue(CONFIRM) ?? "",
-                      cancelText:  getCurrentLanguageValue(CANCEL) ?? "",
+                      confirmText: getCurrentLanguageValue(CONFIRM) ?? "",
+                      cancelText: getCurrentLanguageValue(CANCEL) ?? "",
                     );
-                    if(pickedTime != null ){
+                    if (pickedTime != null) {
                       setState(() {
-                        funeralTimeController.text = pickedTime.format(context).toString();
+                        funeralTimeController.text =
+                            pickedTime.format(context).toString();
                       });
-
-                    }else{
+                    } else {
                       print("Time is not selected");
                     }
                   },
@@ -275,14 +290,15 @@ class AddDemiseState extends State<AddDemise>{
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 365))
-                    );
-                    if(pickedDate != null ){
-                      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                        lastDate:
+                            DateTime.now().add(const Duration(days: 365)));
+                    if (pickedDate != null) {
+                      String formattedDate =
+                          DateFormat('dd-MM-yyyy').format(pickedDate);
                       setState(() {
                         funeralDateController.text = formattedDate;
                       });
-                    }else{
+                    } else {
                       print("Date is not selected");
                     }
                   },
@@ -293,18 +309,16 @@ class AddDemiseState extends State<AddDemise>{
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: AddRelative(
-                  addRelative: (){},
-                  deleteRelative: (){},
-                  value: dropdownValue,
-                  relativeController: relativeController,
-                  onChanged: (String? value) {
+                  relativeRows: relativeRows,
+                  addRelative: () {
                     setState(() {
-                      dropdownValue = value!;
+                      createNewRelativeRow();
                     });
                   },
-                  kinship: kinship,
                 ),
               ),
+
+
 
               //form submit
               Padding(
@@ -312,10 +326,7 @@ class AddDemiseState extends State<AddDemise>{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    ActionButtonV2(
-                        action: formSubmit,
-                        text: 'Crea')
-                    ,
+                    ActionButtonV2(action: formSubmit, text: 'Crea'),
                   ],
                 ),
               ),
@@ -326,11 +337,10 @@ class AddDemiseState extends State<AddDemise>{
     );
   }
 
-
-  formSubmit(){
+  formSubmit() {
     ScaffoldMessenger.of(context).showSnackBar(
-       SnackBar(
-         backgroundColor: green,
+      SnackBar(
+        backgroundColor: green,
         content: const Text('Defunto aggiunto con successo!'),
         duration: const Duration(milliseconds: 3000),
         behavior: SnackBarBehavior.floating,
@@ -342,5 +352,25 @@ class AddDemiseState extends State<AddDemise>{
     Navigator.pop(context);
   }
 
+  void createNewRelativeRow() {
+    var x = RelativeRow(
+        onChanged: (String? value) {
+          setState(() {
+            dropdownValue = value!;
+          });
+        },
+        kinship: kinship,
+        relativeController: relativeController,
+        deleteRelative: () {},
+        value: dropdownValue
+    );
 
+    // RelativeRow(onChanged: (String? value) {
+    //   setState(() {
+    //     dropdownValue = value!;
+    //   });
+    // }, kinship: kinship, relativeController: relativeController, deleteRelative: (){}, value: dropdownValue);
+
+    relativeRows.add(x);
+  }
 }
