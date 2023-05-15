@@ -38,6 +38,7 @@ class AddRelative extends StatelessWidget{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //page title
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
               child: Texth1V2(
@@ -47,6 +48,7 @@ class AddRelative extends StatelessWidget{
               ),
             ),
 
+            //add relative button
             Padding(
               padding: const EdgeInsets.only(bottom: 25),
               child: ActionButtonV2(
@@ -63,6 +65,8 @@ class AddRelative extends StatelessWidget{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+
+
                   Expanded(
                       flex: 1,
                       child: Column(

@@ -113,8 +113,7 @@ class DeceasedData extends StatelessWidget {
                               border: Border.all(color: background, width: 1),
                               image: imageFile != null ?
                               DecorationImage(
-                                image:
-                                FileImage(imageFile!),
+                                image: FileImage(imageFile!),
                                 fit: BoxFit.contain,
                               )
                                   : null,

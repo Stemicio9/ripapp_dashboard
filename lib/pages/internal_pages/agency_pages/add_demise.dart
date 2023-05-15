@@ -96,15 +96,17 @@ class AddDemiseState extends State<AddDemise>{
 
               //deceased data
               DeceasedData(
+                //imageFile: imageFile,
                 imageOnTap: ()  async {
                   //TODO: IMPLEMENTARE IMAGEPICKER
-                  Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
-                 // Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
-                  print(bytesFromPicker);
+                 // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
+                 Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
+                  print(pickedImage);
                   setState(() {
-                    imageFile = bytesFromPicker!;
+                    imageFile = pickedImage!;
                   });
                 },
+
                 filterController:filterController,
                 nameController: nameController,
                 phoneController: phoneController,
@@ -310,7 +312,10 @@ class AddDemiseState extends State<AddDemise>{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    ActionButtonV2(action: (){}, text: 'Crea'),
+                    ActionButtonV2(
+                        action: formSubmit,
+                        text: 'Crea')
+                    ,
                   ],
                 ),
               ),
@@ -321,6 +326,21 @@ class AddDemiseState extends State<AddDemise>{
     );
   }
 
+
+  formSubmit(){
+    ScaffoldMessenger.of(context).showSnackBar(
+       SnackBar(
+         backgroundColor: green,
+        content: const Text('Defunto aggiunto con successo!'),
+        duration: const Duration(milliseconds: 3000),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(3),
+        ),
+      ),
+    );
+    Navigator.pop(context);
+  }
 
 
 }
