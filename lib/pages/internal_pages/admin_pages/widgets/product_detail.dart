@@ -36,7 +36,8 @@ class ProductDetail extends StatelessWidget {
                 children: [
                   Padding(
                       padding: getPadding(bottom: 30),
-                      child: Row(children: [
+                      child: Row(
+                          children: [
                         Expanded(
                           flex: 1,
                           child: RichText(

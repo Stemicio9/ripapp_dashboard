@@ -40,6 +40,8 @@ class ProductsManageState extends State<ProductsManage>{
           Header(
             onTap: (){
               showDialog(context: context, builder: (ctx)=>ProductForm(
+                  imageOnTap: (){},
+
                   onTap: (){
                     Navigator.pop(context);
                   },
@@ -70,6 +72,8 @@ class ProductsManageState extends State<ProductsManage>{
             },
             edit: (){
               showDialog(context: context, builder: (ctx)=>ProductForm(
+                  imageOnTap: (){},
+
                   onTap: (){
                     Navigator.pop(context);
                   },

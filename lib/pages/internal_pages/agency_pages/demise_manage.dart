@@ -86,7 +86,8 @@ class DemiseManageState extends State<DemiseManage>{
               );
             },
             edit: (){
-              showDialog(
+              Navigator.pushNamed(context, RouteConstants.editDemise);
+           /*   showDialog(
                   context: context,
                   builder: (ctx) => DemiseForm(
                       onTap: (){
@@ -101,7 +102,7 @@ class DemiseManageState extends State<DemiseManage>{
                       churchAddressController: churchAddressController,
                       churchNameController: churchNameController
                   )
-              );
+              ); */
             },
             showDetail: (){
               showDialog(

@@ -24,7 +24,8 @@ class AddRelative extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.only(top: 30, right: 30,left: 30,bottom: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
