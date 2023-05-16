@@ -25,7 +25,7 @@ class MyProductsState extends State<MyProducts>{
   final String name = 'Nome del prodotto';
   final String id = '1';
   final String price = '50';
-  final String description = 'Descrizione del prodotto';
+  final String productPhoto = 'Foto del prodotto';
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
@@ -91,7 +91,7 @@ class MyProductsState extends State<MyProducts>{
                   name: name,
                   id: id,
                   price: price,
-                  description: description
+                      productPhoto: productPhoto
                   )
               );
             },

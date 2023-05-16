@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
@@ -10,7 +9,6 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funer
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
-import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
@@ -318,38 +316,11 @@ class EditDemiseState extends State<EditDemise> {
                 ),
               ),
 
-
-
-              //form submit
-              Padding(
-                padding: const EdgeInsets.only(top: 30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ActionButtonV2(action: formSubmit, text: 'Crea'),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  formSubmit() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: green,
-        content: const Text('Defunto aggiunto con successo!'),
-        duration: const Duration(milliseconds: 3000),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(3),
-        ),
-      ),
-    );
-    Navigator.pop(context);
   }
 
   void createNewRelativeRow() {

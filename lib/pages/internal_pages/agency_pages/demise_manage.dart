@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/demise_detail.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/demise_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/demise_table.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
@@ -87,38 +85,11 @@ class DemiseManageState extends State<DemiseManage>{
             },
             edit: (){
               Navigator.pushNamed(context, RouteConstants.editDemise);
-           /*   showDialog(
-                  context: context,
-                  builder: (ctx) => DemiseForm(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      cardTitle: getCurrentLanguageValue(EDIT_DEMISE)!,
-                      nameController: nameController,
-                      descriptionController: descriptionController,
-                      phoneController: phoneController,
-                      cityController: cityController,
-                      lastNameController: lastNameController,
-                      churchAddressController: churchAddressController,
-                      churchNameController: churchNameController
-                  )
-              ); */
+
             },
             showDetail: (){
-              showDialog(
-                  context: context,
-                  builder: (ctx) => DemiseDetail(
-                      cardTitle: getCurrentLanguageValue(DEMISE_DETAIL)!,
-                      name: name,
-                      id: id,
-                      description: description,
-                      phoneNumber: phoneNumber,
-                      city: city,
-                      lastName: lastName,
-                      churchAddress: churchAddress,
-                      churchName: churchName
-                  )
-              );
+              Navigator.pushNamed(context, RouteConstants.demiseDetail);
+
             },
             detailMessage: detailMessage,
             editMessage: editMessage,

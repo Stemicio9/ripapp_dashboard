@@ -3,6 +3,7 @@ import 'package:ripapp_dashboard/pages/forgot_password/forgot_password.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/dashboard_agency.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/dashboard.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/demise_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/edit_demise.dart';
 import 'package:ripapp_dashboard/pages/login_section/login.dart';
 
@@ -13,6 +14,7 @@ class RouteConstants {
   static const String forgotPassword = "/forgotpassword";
   static const String addDemise = "/adddemise";
   static const String editDemise = "/editdemise";
+  static const String demiseDetail = "/demisedetail";
 
 
 
@@ -24,6 +26,7 @@ class RouteConstants {
     forgotPassword: (context) => ForgotPassword(),
     addDemise: (context) => AddDemise(),
     editDemise: (context) => EditDemise(),
+    demiseDetail: (context) => DemiseDetail(),
 
 
 

@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
-
 import '../../../../constants/colors.dart';
-import '../../../../constants/language.dart';
-import '../../../../utils/size_utils.dart';
-import '../../../../utils/style_utils.dart';
-import '../../../../widgets/input.dart';
 import '../../../../widgets/texts.dart';
 
 class AddRelative extends StatelessWidget{
 
   final addRelative;
   final List<Widget> relativeRows;
-
+  final bool isDetail;
 
   AddRelative({
     super.key,
     required this.relativeRows,
-    required this.addRelative,
+    this.addRelative,
+    this.isDetail = false,
   });
 
   @override
@@ -41,14 +37,17 @@ class AddRelative extends StatelessWidget{
             ),
 
             //add relative button
-            Padding(
-              padding: const EdgeInsets.only(bottom: 25),
-              child: ActionButtonV2(
-                action: addRelative,
-                text: 'Aggiungi parente',
-                maxHeight: 30,
-                fontSize: 14,
-                containerHeight: 30,
+            Visibility(
+              visible: !isDetail,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 25),
+                child: ActionButtonV2(
+                  action: addRelative,
+                  text: 'Aggiungi parente',
+                  maxHeight: 30,
+                  fontSize: 14,
+                  containerHeight: 30,
+                ),
               ),
             ),
 

@@ -29,7 +29,7 @@ class DemiseTable extends StatelessWidget{
       city: 'Roma',
       churchAddress: 'Via Milano, 46',
       churchName: 'Nome Chiesa',
-      description: 'Descrizione prodotto',
+      description: 'Descrizione decesso',
     ),
     DemiseEntity(
       id: '2',

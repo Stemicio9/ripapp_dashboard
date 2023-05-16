@@ -9,7 +9,7 @@ class ProductDetail extends StatelessWidget {
   final String id;
   final String name;
   final String price;
-  final String description;
+  final String productPhoto;
 
   const ProductDetail({
     super.key,
@@ -17,7 +17,7 @@ class ProductDetail extends StatelessWidget {
     required this.name,
     required this.id,
     required this.price,
-    required this.description,
+    required this.productPhoto,
   });
 
   @override
@@ -110,7 +110,7 @@ class ProductDetail extends StatelessWidget {
                       flex: 1,
                       child: RichText(
                           text: TextSpan(
-                              text: 'DESCRIZIONE: ',
+                              text: 'FOTO PRODOTTO: ',
                               style: SafeGoogleFont(
                                 'Montserrat',
                                 fontSize: 18,
@@ -119,7 +119,7 @@ class ProductDetail extends StatelessWidget {
                               ),
                               children: <TextSpan>[
                             TextSpan(
-                                text: description,
+                                text: productPhoto,
                                 style: SafeGoogleFont(
                                   'Montserrat',
                                   fontSize: 18,

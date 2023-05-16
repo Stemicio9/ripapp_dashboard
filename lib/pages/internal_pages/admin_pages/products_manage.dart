@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form.dart';
@@ -15,21 +14,19 @@ class ProductsManage extends StatefulWidget {
   }
 }
 
-
 class ProductsManageState extends State<ProductsManage>{
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
   final String message = 'Le informazioni riguardanti questo prodotto verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
-
   final String name = 'Nome del prodotto';
   final String id = '1';
   final String price = '50';
-  final String description = 'Descrizione del prodotto';
-
+  final String productPhoto = 'Foto del prodotto';
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -89,7 +86,7 @@ class ProductsManageState extends State<ProductsManage>{
                   name: name,
                   id: id,
                   price: price,
-                  description: description)
+                  productPhoto: productPhoto)
               );
             },
             detailMessage: detailMessage,
