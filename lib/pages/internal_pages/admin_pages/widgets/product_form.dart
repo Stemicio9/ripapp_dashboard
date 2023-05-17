@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
@@ -42,22 +43,70 @@ class ProductForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: getPadding(left: 100, right: 100),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          DialogCard(
-              cancelIcon: true,
-              paddingLeft: 10,
-              paddingRight: 10,
-              cardTitle: cardTitle,
-              child: Column(
-                children: [
-                  Row(
+          Container(
+            width: 600,
+            child: DialogCard(
+                cancelIcon: true,
+                paddingLeft: 10,
+                paddingRight: 10,
+                cardTitle: cardTitle,
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                             flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 30),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: getPadding(bottom: 5),
+                                    child: Text(
+                                      'FOTO',
+                                      style: SafeGoogleFont(
+                                        'Montserrat',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: background,
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: imageOnTap,
+                                    child: Container(
+                                      height: 132,
+                                      width: 132,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(Radius.circular(3)),
+                                        color: greyDrag,
+                                        border: Border.all(color: background, width: 1),
+                                        image: imageFile != null ?
+                                        DecorationImage(
+                                          image: FileImage(imageFile!),
+                                          fit: BoxFit.contain,
+                                        ) : null,
+                                      ),
+                                      child: imageFile == null ?  Image.asset(
+                                        ImagesConstants.imgProductPlaceholder,
+                                        fit: BoxFit.cover,
+                                      ) : const SizedBox(),
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                            )),
+
+                        Expanded(
+                            flex: 2,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -78,19 +127,13 @@ class ProductForm extends StatelessWidget {
                                   controller: nameController,
                                   validator: nameValidator,
                                   paddingLeft: 0,
-                                  paddingRight: 15,
+                                  paddingRight: 0,
                                   borderSide: const BorderSide(color: greyState),
                                   activeBorderSide: const BorderSide(color: background),
-                                )
-                              ],
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                                ),
+
                                 Padding(
-                                  padding: getPadding(bottom: 5,left: 6),
+                                  padding: getPadding(bottom: 5,top: 20),
                                   child: Text(
                                     'PREZZO',
                                     style: SafeGoogleFont(
@@ -106,122 +149,35 @@ class ProductForm extends StatelessWidget {
                                   controller: priceController,
                                   validator: priceValidator,
                                   inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
+                                    FilteringTextInputFormatter.digitsOnly
                                   ], // O,
                                   keyboard: TextInputType.number,
                                   paddingRight: 0,
-                                  paddingLeft: 15,
-                                  borderSide: const BorderSide(color: greyState),
-                                  activeBorderSide: const BorderSide(color: background),
-                                )
-                              ],
-                            )),
-
-                        /*    Expanded(
-                            flex: 1,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: getPadding(bottom: 5),
-                                  child: Text(
-                                    'DESCRIZIONE',
-                                    style: SafeGoogleFont(
-                                      'Montserrat',
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: background,
-                                    ),
-                                  ),
-                                ),
-                                InputsV2Widget(
-                                  hinttext: getCurrentLanguageValue(DESCRIPTION)!,
-                                  controller: descriptionController,
-                                  validator: descriptionValidator,
                                   paddingLeft: 0,
                                   borderSide: const BorderSide(color: greyState),
                                   activeBorderSide: const BorderSide(color: background),
                                 )
+
                               ],
-                            )), */
+                            )),
                       ],
                     ),
-
-
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: getPadding(bottom: 5),
-                                  child: Text(
-                                    'FOTO',
-                                    style: SafeGoogleFont(
-                                      'Montserrat',
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: background,
-                                    ),
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: imageOnTap,
-                                  child: Container(
-                                    height: height*0.3,
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(Radius.circular(3)),
-                                      color: greyDrag,
-                                      border: Border.all(color: background, width: 1),
-                                      image: imageFile != null ?
-                                      DecorationImage(
-                                        image: FileImage(imageFile!),
-                                        fit: BoxFit.contain,
-                                      )
-                                          : null,
-                                    ),
-                                    child: imageFile == null ? Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                                        child: Texth2V2(
-                                          testo:getCurrentLanguageValue(INSERT_PHOTO) ?? "",
-                                          color: greyDisabled,
-                                          weight: FontWeight.bold,
-                                          textalign: TextAlign.center,
-
-                                        ),
-                                      ),
-                                    ) : const SizedBox(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                    Padding(
+                      padding: getPadding(top: 30),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: ActionButtonV2(
+                          maxWidth: 150,
+                          action: onTap,
+                          text: getCurrentLanguageValue(SAVE)!,
                         ),
-                        Expanded(flex:1,child: Container()),
-                      ],
-
-                    ),
-                  ),
-
-
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ActionButtonV2(
-                      action: onTap,
-                      text: getCurrentLanguageValue(SAVE)!,
-                    ),
-                  )
-                ],
-              ))
+                      ),
+                    )
+                  ],
+                )),
+          )
         ],
+
       ),
     );
   }

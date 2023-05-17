@@ -23,52 +23,71 @@ class DeleteMessageDialog extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: MediaQuery.of(context).size.width / 3,
+              width: 700,
               child: DialogCard(
-                cardTitle:getCurrentLanguageValue(ATTENTION)!,
-                child: Text(
-                    message,
-                    textAlign: TextAlign.center,
-                    style: SafeGoogleFont(
-                      'Montserrat',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      color: black,
-                    )),
+                  cardTitle:getCurrentLanguageValue(ATTENTION)!,
+                  child: Column(
+                    children: [
+                      Text(
+                          message,
+                          textAlign: TextAlign.center,
+                          style: SafeGoogleFont(
+                            'Montserrat',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                            color: black,
+                          )),
+
+                      Padding(
+                        padding: getPadding(top: 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+
+                            Padding(
+                              padding: getPadding(right: 3),
+                              child: Expanded(
+                                flex: 1,
+                                child:  ActionButtonV2(
+                                  action: onConfirm,
+                                  text: getCurrentLanguageValue(CANCEL)!,
+                                  color: white,
+                                  hasBorder: true,
+                                  textColor: background,
+                                  borderColor: background,
+
+                                ),
+                              ),
+                            ),
+
+
+
+                            Padding(
+                              padding: getPadding(left: 3),
+                              child: Expanded(
+                                flex: 1,
+                                child:  ActionButtonV2(
+                                    action: onConfirm,
+                                    text: getCurrentLanguageValue(CONFIRM)!,
+                                    color: background,),
+                                ),
+                            ),
+
+
+                          ],
+                        ),
+                      )
+
+
+
+                    ],
+                  )
+
+
+
               ),
             ),
 
-
-            Padding(
-              padding: getPadding(top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: getPadding(right: 3),
-                    child: ActionButtonV2(
-                      action: onConfirm,
-                      text: getCurrentLanguageValue(CANCEL)!,
-                      color: white,
-                      textColor: background,
-                      maxWidth: 225,
-                      borderRadius: 10,
-
-                    ),
-                  ),
-                  Padding(
-                    padding: getPadding(left: 3),
-                    child: ActionButtonV2(
-                      action: onConfirm,
-                      text: getCurrentLanguageValue(CONFIRM)!,
-                      color: background,
-                      maxWidth: 225,
-                      borderRadius: 10,
-                    ),
-                  ),
-                ],
-              ),
-            )
           ],
         ));
   }

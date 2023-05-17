@@ -7,4 +7,7 @@ class ImagesConstants{
 
   static String imgClock = "assets/images/clock.png";
 
+  static String imgProductPlaceholder = "assets/images/photo_placeholder.jpeg";
+
+
 }

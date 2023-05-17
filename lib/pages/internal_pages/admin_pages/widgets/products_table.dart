@@ -12,7 +12,7 @@ class ProductsTable extends StatelessWidget{
     'ID',
     'Nome',
     'Prezzo',
-    'Descrizione',
+    'Foto',
     ''
   ];
 
@@ -21,31 +21,31 @@ class ProductsTable extends StatelessWidget{
       id: '1',
       name: 'Nome prodotto',
       price: '50',
-      description: 'Descrizione prodotto',
+      photoName: 'nome_prodotto.png',
     ),
     ProductEntity(
       id: '2',
       name: 'Nome prodotto',
       price: '50',
-      description: 'Descrizione prodotto',
+      photoName:  'nome_prodotto.png',
     ),
     ProductEntity(
       id: '3',
       name: 'Nome prodotto',
       price: '50',
-      description: 'Descrizione prodotto',
+      photoName:  'nome_prodotto.png',
     ),
     ProductEntity(
       id: '4',
       name: 'Nome prodotto',
       price: '50',
-      description: 'Descrizione prodotto',
+      photoName:  'nome_prodotto.png',
     ),
     ProductEntity(
       id: '5',
       name: 'Nome prodotto',
       price: '50',
-      description: 'Descrizione prodotto',
+      photoName:  'nome_prodotto.png',
     ),
   ];
 
@@ -128,7 +128,7 @@ class ProductsTable extends StatelessWidget{
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.description,
+          p.photoName,
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),

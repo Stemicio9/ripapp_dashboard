@@ -85,7 +85,7 @@ class ActionButtonV2 extends StatelessWidget {
             ),
             child: Container(
               constraints:
-                  BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight),
+              BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight),
               alignment: Alignment.center,
               child: IntrinsicHeight(
                 child: Stack(
