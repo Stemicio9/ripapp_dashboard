@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
@@ -30,7 +31,7 @@ class MyProductsState extends State<MyProducts>{
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-
+  late Image imageFile;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,15 @@ class MyProductsState extends State<MyProducts>{
           Header(
             onTap: (){
               showDialog(context: context, builder: (ctx)=>ProductForm(
-                imageOnTap: (){},
+                imageOnTap: () async{
+                  //TODO: IMPLEMENTARE IMAGEPICKER
+                  // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
+                  Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
+                  print(pickedImage);
+                  setState(() {
+                    imageFile = pickedImage!;
+                  });
+                },
                   onTap: (){
                     Navigator.pop(context);
                   },
@@ -73,7 +82,15 @@ class MyProductsState extends State<MyProducts>{
             },
             edit: (){
               showDialog(context: context, builder: (ctx)=>ProductForm(
-                imageOnTap: (){},
+                imageOnTap: () async {
+                  //TODO: IMPLEMENTARE IMAGEPICKER
+                  // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
+                  Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
+                  print(pickedImage);
+                  setState(() {
+                    imageFile = pickedImage!;
+                  });
+                },
                   onTap: (){
                     Navigator.pop(context);
                   },

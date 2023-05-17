@@ -163,7 +163,7 @@ class ProductForm extends StatelessWidget {
                                 Padding(
                                   padding: getPadding(bottom: 5),
                                   child: Text(
-                                    'FOTO PRODOTTO',
+                                    'FOTO',
                                     style: SafeGoogleFont(
                                       'Montserrat',
                                       fontSize: 14,

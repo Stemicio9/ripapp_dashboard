@@ -6,33 +6,27 @@ import '../../../../constants/language.dart';
 import '../../../../utils/size_utils.dart';
 import '../../../../utils/style_utils.dart';
 import '../../../../widgets/input.dart';
-import '../../../../widgets/texts.dart';
 
 class RelativeRow extends StatelessWidget {
 
   final onChanged;
   final List<String> kinship;
-  final String? value;
-  final String? relativePhone;
-  final String? relativeName;
-
+  final String value;
   final deleteRelative;
-  final TextEditingController? relativeController;
+  final TextEditingController relativeController;
   final dynamic relativeValidator;
   final bool isDetail;
 
 
   const RelativeRow({
     Key? key,
-    this.relativeName,
-    this.relativePhone,
-    this.onChanged,
+    required this.onChanged,
     required this. kinship,
     this.relativeValidator,
-    this.relativeController,
-    this.deleteRelative,
+    required this.relativeController,
+    required this.deleteRelative,
     this.isDetail = false,
-    this.value,
+    required this.value,
   }) : super(key: key);
 
   @override
@@ -60,18 +54,7 @@ class RelativeRow extends StatelessWidget {
                     ),
                   ),
 
-                  Visibility(
-                    visible: isDetail,
-                      child: Texth3V2(
-                          testo: relativeName!,
-                          color: black
-                      )
-                  ),
-
-
-                  Visibility(
-                    visible: !isDetail,
-                    child: Padding(
+                 Padding(
                       padding: const EdgeInsets.only(right: 20),
                       child: Container(
                         height: 48,
@@ -115,7 +98,7 @@ class RelativeRow extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
+
 
 
                 ],
@@ -138,22 +121,13 @@ class RelativeRow extends StatelessWidget {
                     ),
                   ),
 
-                  Visibility(
-                      visible: isDetail,
-                      child: Texth3V2(
-                          testo: relativePhone!,
-                          color: black
-                      )
-                  ),
 
-                  Visibility(
-                    visible: !isDetail,
-                    child: InputsV2Widget(
+                 InputsV2Widget(
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly,
                       ],
                       hinttext: getCurrentLanguageValue(RELATIVE_NUMBER) ?? "",
-                      controller: relativeController!,
+                      controller: relativeController,
                       validator: relativeValidator,
                       paddingLeft: 0,
                       paddingRight: 0,
@@ -161,35 +135,31 @@ class RelativeRow extends StatelessWidget {
                       activeBorderSide:
                       const BorderSide(color: background),
                     ),
-                  )
+
                 ],
               )),
 
-
-          Visibility(
-            visible: !isDetail,
-            child: Expanded(
-                flex: 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                            onTap: (){deleteRelative(this);},
-                            child: Icon(
-                              Icons.delete_rounded,
-                              color: rossoopaco,
-                              size: 40,
-                            )
-                        ),
+          Expanded(
+              flex: 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                          onTap: (){deleteRelative(this);},
+                          child: Icon(
+                            Icons.delete_rounded,
+                            color: rossoopaco,
+                            size: 40,
+                          )
                       ),
                     ),
-                  ],
-                )
-            ),
+                  ),
+                ],
+              )
           )
         ],
       ),

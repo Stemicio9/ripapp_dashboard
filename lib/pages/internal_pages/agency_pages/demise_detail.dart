@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_detail.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_row.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_detail_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
+import '../../../models/relative_entity.dart';
 import '../../../utils/size_utils.dart';
 
 class DemiseDetail extends StatefulWidget {
@@ -17,10 +18,6 @@ class DemiseDetail extends StatefulWidget {
 }
 
 class DemiseDetailState extends State<DemiseDetail> {
-  final TextEditingController relativeController = TextEditingController();
-  final TextEditingController filterController = TextEditingController();
-
-
   final String firstName = "Mario";
   final String lastName = "Rossi";
   final String age = "89";
@@ -42,10 +39,18 @@ class DemiseDetailState extends State<DemiseDetail> {
   final String wakeDate= "23-03-2023";
 
   late Image imageFile;
-  final List<Widget> relativeRows = [];
+  final TextEditingController relativeController = TextEditingController();
+
+  late List<RelativeEntity> relativeList = [
+     RelativeEntity(relativeName: 'Madre di', relativePhone: '3401234567'),
+     RelativeEntity(relativeName: 'Padre di', relativePhone: '3409876543'),
+  ];
+
+  List<Widget> relativeRows = [];
 
   @override
   Widget build(BuildContext context) {
+    createRelative();
     return ScaffoldWidget(
       body: SingleChildScrollView(
         child: Padding(
@@ -111,6 +116,17 @@ class DemiseDetailState extends State<DemiseDetail> {
         ),
       ),
     );
+  }
+
+  createRelative(){
+    relativeRows = [];
+      for(var element in relativeList){
+        relativeRows.add(
+            RelativeDetailRow(
+                relativeName: element.relativeName,
+                relativePhone: element.relativePhone,
+            ));
+      }
   }
 
 }

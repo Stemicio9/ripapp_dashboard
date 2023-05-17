@@ -359,7 +359,7 @@ class AddDemiseState extends State<AddDemise> {
         kinship: kinship,
         relativeController: relativeController,
         deleteRelative: deleteRelative,
-        value: selectedValues.last
+        value: selectedValues.last,
     );
 
     // RelativeRow(onChanged: (String? value) {
