@@ -80,27 +80,25 @@ class ProductForm extends StatelessWidget {
                                     ),
                                   ),
                                   InkWell(
-                                    onTap: imageOnTap,
-                                    child: Container(
-                                      height: 132,
-                                      width: 132,
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(Radius.circular(3)),
-                                        color: greyDrag,
-                                        border: Border.all(color: background, width: 1),
-                                        image: imageFile != null ?
-                                        DecorationImage(
-                                          image: FileImage(imageFile!),
-                                          fit: BoxFit.contain,
-                                        ) : null,
-                                      ),
-                                      child: imageFile == null ?  Image.asset(
-                                        ImagesConstants.imgProductPlaceholder,
-                                        fit: BoxFit.cover,
-                                      ) : const SizedBox(),
-                                    ),
-                                  ),
+                                      onTap: imageOnTap,
+                                      child: Container(
+                                        height: 130,
+                                        width: 130,
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(Radius.circular(3)),
+                                          color: greyDrag,
+                                          border: Border.all(color: background, width: 1),
+                                          image: imageFile != null ?
+                                          DecorationImage(
+                                            image: FileImage(imageFile!),
+                                            fit: BoxFit.contain,
+                                          ) : DecorationImage(
+                                            image: AssetImage(ImagesConstants.imgProductPlaceholder),
+                                            fit: BoxFit.cover,
 
+                                          ),
+                                        ),
+                                      ))
                                 ],
                               ),
                             )),
@@ -163,7 +161,7 @@ class ProductForm extends StatelessWidget {
                       ],
                     ),
                     Padding(
-                      padding: getPadding(top: 30),
+                      padding: getPadding(top: 40),
                       child: Align(
                         alignment: Alignment.center,
                         child: ActionButtonV2(
