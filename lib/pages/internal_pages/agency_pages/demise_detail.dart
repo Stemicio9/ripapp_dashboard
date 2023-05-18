@@ -35,7 +35,7 @@ class DemiseDetailState extends State<DemiseDetail> {
 
   final String wakeHour = "09:00";
   final String wakeNote = "Note della veglia";
-  final String wakeAddress = "Via fasulla, 35";
+  final String wakeAddress = "Via Milano, 35";
   final String wakeDate= "23-03-2023";
 
   late Image imageFile;

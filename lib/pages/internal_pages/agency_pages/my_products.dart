@@ -53,6 +53,17 @@ class MyProductsState extends State<MyProducts>{
                   });
                 },
                   onTap: (){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: green,
+                        content: const Text('Prodotto aggiunto con successo!'),
+                        duration: const Duration(milliseconds: 3000),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                      ),
+                    );
                     Navigator.pop(context);
                   },
                   cardTitle: getCurrentLanguageValue(ADD_PRODUCT)!,
@@ -92,6 +103,17 @@ class MyProductsState extends State<MyProducts>{
                   });
                 },
                   onTap: (){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: green,
+                        content: const Text('Prodotto modificato con successo!'),
+                        duration: const Duration(milliseconds: 3000),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                      ),
+                    );
                     Navigator.pop(context);
                   },
                   cardTitle: getCurrentLanguageValue(EDIT_PRODUCT)!,

@@ -3,9 +3,8 @@ class DemiseEntity {
   String? firstName;
   String? lastName;
   String? city;
-  String? churchName;
-  String? churchAddress;
-  String? description;
+  String? wakeAddress;
+  String? funeralAddress;
   String? phoneNumber;
 
 
@@ -18,16 +17,15 @@ class DemiseEntity {
     this.lastName,
     this.city,
     this.phoneNumber,
-    this.churchAddress,
-    this.churchName,
-    this.description
+    this.wakeAddress,
+    this.funeralAddress,
   });
 
   //toString
   @override
   String toString() {
     return
-      'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, city: $city, phoneNumber: $phoneNumber, churchAddress: $churchAddress, churchName: $churchName, description: $description';
+      'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, city: $city, phoneNumber: $phoneNumber, funeralAddress: $funeralAddress, wakeAddress: $wakeAddress';
   }
 
   factory DemiseEntity.fromJson(Map<String, dynamic> json) => DemiseEntity(
@@ -36,9 +34,8 @@ class DemiseEntity {
     lastName: json["lastName"] ?? "",
     city: json["city"] ?? "",
     phoneNumber: json["phoneNumber"] ?? "",
-    churchAddress: json["churchAddress"] ?? "",
-    churchName: json["churchName"] ?? "",
-    description: json["description"] ?? "",
+    wakeAddress: json["wakeAddress"] ?? "",
+    funeralAddress: json["funeralAddress"] ?? "",
   );
 
   DemiseEntity copyWith({
@@ -47,9 +44,8 @@ class DemiseEntity {
     String? lastName,
     String? city,
     String? phoneNumber,
-    String? churchAddress,
-    String? churchName,
-    String? description,
+    String? funeralAddress,
+    String? wakeAddress,
   }) {
     return DemiseEntity(
       id: id ?? this.id,
@@ -57,9 +53,8 @@ class DemiseEntity {
       lastName: lastName ?? this.lastName,
       city: city ?? this.city,
       phoneNumber: phoneNumber ?? this.phoneNumber,
-      churchAddress: churchAddress ?? this.churchAddress,
-      churchName: churchName ?? this.churchName,
-      description: description ?? this.description,
+      wakeAddress: wakeAddress ?? this.wakeAddress,
+      funeralAddress: funeralAddress ?? this.funeralAddress,
     );
   }
 
@@ -69,8 +64,7 @@ class DemiseEntity {
     "lastName": lastName,
     "city": city,
     "phoneNumber": phoneNumber,
-    "churchAddress": churchAddress,
-    "churchName": churchName,
-    "description": description,
+    "wakeAddress": wakeAddress,
+    "funeralAddress": funeralAddress,
   };
 }

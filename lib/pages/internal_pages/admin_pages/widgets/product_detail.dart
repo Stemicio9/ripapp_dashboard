@@ -46,9 +46,6 @@ class ProductDetail extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
 
-
-
-
                     Container(
                       height: 150,
                       width: 150,

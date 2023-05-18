@@ -17,6 +17,8 @@ import '../../../constants/language.dart';
 import '../../../utils/size_utils.dart';
 import 'package:intl/intl.dart';
 
+import '../../../widgets/action_button.dart';
+
 class EditDemise extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -316,12 +318,42 @@ class EditDemiseState extends State<EditDemise> {
                 ),
               ),
 
+
+              //form submit
+              Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ActionButtonV2(action: formSubmit, text: getCurrentLanguageValue(SAVE) ?? ""),
+                  ],
+                ),
+              ),
+
             ],
           ),
         ),
       ),
     );
   }
+
+
+
+  formSubmit() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: green,
+        content: const Text('Defunto modificato con successo!'),
+        duration: const Duration(milliseconds: 3000),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(3),
+        ),
+      ),
+    );
+    Navigator.pop(context);
+  }
+
 
   void createNewRelativeRow() {
     selectedValues.add(kinship.first);

@@ -9,5 +9,7 @@ class ImagesConstants{
 
   static String imgProductPlaceholder = "assets/images/photo_placeholder.jpeg";
 
+  static String imgDemisePlaceholder = "assets/images/demise_placeholder.jpeg";
+
 
 }

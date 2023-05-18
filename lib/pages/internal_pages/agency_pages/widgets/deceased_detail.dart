@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../../constants/colors.dart';
+import '../../../../constants/images_constants.dart';
 import '../../../../constants/language.dart';
 import '../../../../utils/size_utils.dart';
 import '../../../../utils/style_utils.dart';
@@ -62,30 +63,22 @@ class DeceasedDetail extends StatelessWidget{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        height: 200,
-                        width: 200,
+                        height: 150,
+                        width: 150,
                         decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(5)),
-                          color: greyDrag,
-                          border: Border.all(color: background, width: 1),
-                          image: imageFile != null ?
-                          DecorationImage(
-                            image: FileImage(imageFile!),
-                            fit: BoxFit.contain,
-                          )
-                              : null,
+                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                            color: greyDrag,
+                            border: Border.all(color: background, width: 1),
+                            image: imageFile != null ?
+                            DecorationImage(
+                              image: FileImage(imageFile!),
+                              fit: BoxFit.contain,
+                            )
+                                :  DecorationImage(
+                              image: AssetImage(ImagesConstants.imgDemisePlaceholder),
+                              fit: BoxFit.cover,
+                            )
                         ),
-                        child: imageFile == null ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Texth2V2(
-                              testo:getCurrentLanguageValue(INSERT_PHOTO) ?? "",
-                              color: greyDisabled,
-                              weight: FontWeight.bold,
-                              textalign: TextAlign.center,
-                            ),
-                          ),
-                        ) : const SizedBox(),
                       ),
                     ],
                   ),

@@ -81,73 +81,66 @@ class DeceasedData extends StatelessWidget {
                 weight: FontWeight.w700,
               ),
             ),
-
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: getPadding(bottom: 5),
-                          child: Text(
-                            'FOTO',
-                            style: SafeGoogleFont(
-                              'Montserrat',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: background,
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: imageOnTap,
-                          child: Container(
-                            height: height*0.3,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(Radius.circular(3)),
-                              color: greyDrag,
-                              border: Border.all(color: background, width: 1),
-                              image: imageFile != null ?
-                              DecorationImage(
-                                image: FileImage(imageFile!),
-                                fit: BoxFit.contain,
-                              )
-                                  : null,
-                            ),
-                            child: imageFile == null ? Center(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                child: Texth2V2(
-                                  testo:getCurrentLanguageValue(INSERT_PHOTO) ?? "",
-                                  color: greyDisabled,
-                                  weight: FontWeight.bold,
-                                  textalign: TextAlign.center,
-
-                                ),
-                              ),
-                            ) : const SizedBox(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(flex:1,child: Container()),
-                Expanded(flex:1,child: Container())
-
-              ],
-            ),
             
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Row(
                 children: [
                   Expanded(
-                      flex: 1,
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: getPadding(bottom: 5),
+                            child: Text(
+                              'FOTO',
+                              style: SafeGoogleFont(
+                                'Montserrat',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: background,
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: imageOnTap,
+                            child: Container(
+                              height: 138,
+                              width: 138,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(3)),
+                                color: greyDrag,
+                                border: Border.all(color: background, width: 1),
+                                image: imageFile != null ?
+                                DecorationImage(
+                                  image: FileImage(imageFile!),
+                                  fit: BoxFit.contain,
+                                )
+                                    : null,
+                              ),
+                              child: imageFile == null ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  child: Texth4V2(
+                                    testo:getCurrentLanguageValue(INSERT_PHOTO) ?? "",
+                                    color: greyDisabled,
+                                    weight: FontWeight.bold,
+                                    textalign: TextAlign.center,
+
+                                  ),
+                                ),
+                              ) : const SizedBox(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                      flex: 2,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -173,11 +166,36 @@ class DeceasedData extends StatelessWidget {
                             paddingLeft: 0,
                             borderSide: const BorderSide(color: greyState),
                             activeBorderSide: const BorderSide(color: background),
+                          ),
+
+                          Padding(
+                            padding: getPadding(bottom: 5,top: 30),
+                            child: Text(
+                              'ETÀ',
+                              style: SafeGoogleFont(
+                                'Montserrat',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: background,
+                              ),
+                            ),
+                          ),
+                          InputsV2Widget(
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            maxLenght: 3,
+                            hinttext: getCurrentLanguageValue(AGE)!,
+                            controller: ageController,
+                            validator: ageValidator,
+                            paddingLeft: 0,
+                            borderSide: const BorderSide(color: greyState),
+                            activeBorderSide: const BorderSide(color: background),
                           )
                         ],
                       )),
                   Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -204,55 +222,11 @@ class DeceasedData extends StatelessWidget {
                             paddingLeft: 0,
                             borderSide: const BorderSide(color: greyState),
                             activeBorderSide: const BorderSide(color: background),
-                          )
-                        ],
-                      )),
-                  Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: getPadding(bottom: 5, left: 6),
-                            child: Text(
-                              'ETÀ',
-                              style: SafeGoogleFont(
-                                'Montserrat',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: background,
-                              ),
-                            ),
                           ),
-                          InputsV2Widget(
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
-                            maxLenght: 3,
-                            hinttext: getCurrentLanguageValue(AGE)!,
-                            controller: ageController,
-                            validator: ageValidator,
-                            paddingRight: 0,
-                            borderSide: const BorderSide(color: greyState),
-                            activeBorderSide: const BorderSide(color: background),
-                          )
-                        ],
-                      )),
-                ],
-              ),
-            ),
 
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Row(
-                children: [
-                  Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+
                           Padding(
-                            padding: getPadding(bottom: 5),
+                            padding: getPadding(bottom: 5,top: 30),
                             child: Text(
                               'TELEFONO',
                               style: SafeGoogleFont(
@@ -271,14 +245,27 @@ class DeceasedData extends StatelessWidget {
                             controller: phoneController,
                             validator: phoneValidator,
                             paddingLeft: 0,
+                            paddingRight: 0,
                             borderSide: const BorderSide(color: greyState),
                             activeBorderSide:
                             const BorderSide(color: background),
                           )
                         ],
                       )),
+
+                ],
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Row(
+                children: [
                   Expanded(
                       flex: 1,
+                      child: Container()),
+                  Expanded(
+                      flex: 2,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -300,7 +287,6 @@ class DeceasedData extends StatelessWidget {
                             hinttext: "Data del decesso",
                             controller: dateController,
                             validator: dateValidator,
-                            paddingRight: 0,
                             paddingLeft: 0,
                             suffixIcon: ImagesConstants.imgCalendar,
                             isSuffixIcon: true,
@@ -310,12 +296,12 @@ class DeceasedData extends StatelessWidget {
                         ],
                       )),
                   Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: getPadding(bottom: 5, left: 6),
+                            padding: getPadding(bottom: 5),
                             child: Text(
                               'CITTÀ',
                               style: SafeGoogleFont(
@@ -329,7 +315,7 @@ class DeceasedData extends StatelessWidget {
                           AutocompleteWidget(
                             options: options,
                             paddingRight: 0,
-                            paddingLeft: 20,
+                            paddingLeft: 0,
                             hintText: getCurrentLanguageValue(CITY)!,
                             filterController: filterController,
                           )
@@ -344,9 +330,11 @@ class DeceasedData extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Expanded(flex:1,child: Container()),
                   Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -366,29 +354,14 @@ class DeceasedData extends StatelessWidget {
                             options: citiesOfInterestOptions,
                             paddingRight: 20,
                             paddingLeft: 0,
-                            hintText: "Inserisci comune di interesse",
+                            hintText: "Comune di interesse",
                             filterController: citiesController,
                           )
                         ],
                       )),
                   Expanded(
-                      flex: 1,
-                      child: Container()),
-                  Expanded(
-                      flex: 1,
-                      child: Container()
-                  ),
-                ],
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Row(
-                children: [
-                  Expanded(
-                      flex: 1,
-                      child: Column(
+                      flex: 2,
+                      child:  Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
@@ -403,26 +376,18 @@ class DeceasedData extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20),
-                            child: DropTarget(
+
+                         DropTarget(
                               onDragDone: onDragDone,
                               onDragUpdated: onDragUpdated,
                               onDragEntered: onDragEntered,
                               onDragExited: onDragExited,
                               child: child,
                             ),
-                          ),
+
                         ],
                       ),
-                  ),
-                  Expanded(
-                      flex: 1,
-                      child: Container()),
-                  Expanded(
-                      flex: 1,
-                      child: Container()
-                  ),
+                    ),
                 ],
               ),
             ),
