@@ -116,3 +116,11 @@ final Map<String, String> LANG_EN = {
 
 // image constants
 const String LOGO_IMAGE_NAME = "logo-white.png";
+
+
+//TODO aggiunti per far funzionare la form di registrazione
+const String FIRSTNAME = "Nome";
+const String LASTNAME = "Cognome";
+const String SIGNUP = "Registrati";
+const String ALREDY_HAVE_ACCOUNT = "Hai già un account?";
+const String SIGNIN = "Accedi";

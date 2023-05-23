@@ -5,7 +5,10 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agency
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agencies_table.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
+import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
+
+import '../../../models/agency_entity.dart';
 
 class AgenciesManage extends StatefulWidget {
   @override
@@ -41,14 +44,22 @@ class AgenciesManageState extends State<AgenciesManage> {
           Header(
             onTap: () {
               showDialog(context: context, builder: (ctx)=> AgencyForm(
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
                   cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
                   nameController: nameController,
                   emailController: emailController,
                   phoneController: phoneController,
-                  cityController: cityController
+                  cityController: cityController,
+                onSubmit: () {
+                  AgencyEntity agencyEntity = AgencyEntity(
+                    agencyName: nameController.text,
+                    city: cityController.text,
+                    email: emailController.text,
+                    phoneNumber: phoneController.text,
+                  );
+
+                  print("salvataggio operatore agenzia...");
+                  //Navigator.pop(context);
+                },
               ));
             },
             pageTitle: getCurrentLanguageValue(AGENCIES_MANAGE)!,
@@ -69,8 +80,8 @@ class AgenciesManageState extends State<AgenciesManage> {
             },
             edit: () {
               showDialog(context: context, builder: (ctx)=> AgencyForm(
-                  onTap: (){
-                    Navigator.pop(context);
+                  onSubmit: (){
+                    print("aggiornamento operatore agenzia...");
                   },
                   cardTitle: getCurrentLanguageValue(EDIT_AGENCY)!,
                   nameController: nameController,
@@ -98,4 +109,10 @@ class AgenciesManageState extends State<AgenciesManage> {
       ),
     );
   }
+}
+
+
+Future saveAgency(AgencyEntity agencyEntity) async {
+  var response = await AgencyRepository().saveAgency(agencyEntity);
+  print(response);
 }

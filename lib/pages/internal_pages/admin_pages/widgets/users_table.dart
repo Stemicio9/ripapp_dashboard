@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
@@ -25,7 +26,9 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
-      phoneNumber: '+39 0987654321'
+      phoneNumber: '+39 0987654321',
+      idtoken: '',
+      status: UserStatus.disabled
     ),
     UserEntity(
       id: '2',
@@ -33,7 +36,9 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
-        phoneNumber: '+39 0987654321'
+        phoneNumber: '+39 0987654321',
+        idtoken: '',
+        status: UserStatus.disabled
 
     ),
     UserEntity(
@@ -42,8 +47,9 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
-        phoneNumber: '+39 0987654321'
-
+        phoneNumber: '+39 0987654321',
+        idtoken: '',
+        status: UserStatus.disabled
     ),
     UserEntity(
       id: '4',
@@ -51,8 +57,9 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
-        phoneNumber: '+39 0987654321'
-
+        phoneNumber: '+39 0987654321',
+        idtoken: '',
+        status: UserStatus.disabled
     ),
     UserEntity(
       id: '5',
@@ -60,8 +67,9 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
-        phoneNumber: '+39 0987654321'
-
+        phoneNumber: '+39 0987654321',
+        idtoken: '',
+        status: UserStatus.disabled
     ),
   ];
 

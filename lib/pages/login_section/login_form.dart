@@ -3,11 +3,14 @@ import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
+import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/utilities/image_utility.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class LoginForm extends StatefulWidget {
   @override
@@ -140,6 +143,11 @@ class LoginFormState extends State<LoginForm>{
 
   formsubmit() async {
   //  if (_formKey.currentState!.validate()) {
+    FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailTextController.text, password: _passwordTextController.text).then((value) async {
+      print("TI SALUTO ");
+      String token = await value.user!.getIdToken();
+      var response = await UserRepository().loginPreLayer(token);
+    });
       Navigator.pushNamed(context, RouteConstants.dashboard);
 
 

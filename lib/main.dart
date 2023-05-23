@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
   String initialRoute = "/";
   WidgetsFlutterBinding.ensureInitialized();
   runApp( MyApp(initialRoute: initialRoute));
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class MyApp extends StatelessWidget {

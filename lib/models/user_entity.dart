@@ -1,24 +1,37 @@
-class UserEntity {
-  String? id;
-  String? firstName;
-  String? lastName;
-  String? email;
-  String? city;
-  String? phoneNumber;
 
+
+import 'dart:convert';
+
+import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
+
+String userEntityToJson(UserEntity data) => json.encode(data.toJson());
+
+
+class UserEntity {
   UserEntity({
-    this.id,
-    this.lastName,
-    this.firstName,
-    this.email,
-    this.city,
-    this.phoneNumber
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.city,
+    required this.phoneNumber,
+    required this.idtoken,
+    required this.status
   });
 
+
+  String id;
+  String firstName;
+  String lastName;
+  String email;
+  String city;
+  String phoneNumber;
+  String idtoken;
+  UserStatus status;
   //toString
   @override
   String toString() {
-    return 'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, email: $email, city: $city, phonenumber:$phoneNumber';
+    return 'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, email: $email, city: $city, phonenumber:$phoneNumber, idtoken:$idtoken, status:$status';
   }
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
@@ -28,7 +41,8 @@ class UserEntity {
         email: json["email"] ?? "",
         city: json["city"] ?? "",
         phoneNumber: json["phoneNumber"] ?? "",
-
+        idtoken: json["idtoken"] ?? "",
+        status: json["status"]
   );
 
   UserEntity copyWith({
@@ -38,6 +52,8 @@ class UserEntity {
     String? email,
     String? city,
     String? phoneNumber,
+    String? idtoken,
+    UserStatus? status
   }) {
     return UserEntity(
       id: id ?? this.id,
@@ -46,7 +62,8 @@ class UserEntity {
       email: email ?? this.email,
       city: city ?? this.city,
       phoneNumber: phoneNumber ?? this.phoneNumber,
-
+      idtoken: idtoken ?? this.idtoken,
+      status: status ?? this.status
     );
   }
 
@@ -57,6 +74,7 @@ class UserEntity {
         "email": email,
         "city": city,
         "phoneNumber": phoneNumber,
-
+        "idtoken": idtoken,
+        "status": status
   };
 }

@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
@@ -17,11 +19,10 @@ class AgencyForm extends StatelessWidget {
   final dynamic cityValidator;
   final dynamic emailValidator;
   final dynamic phoneValidator;
-  final onTap;
+  final Function() onSubmit;
 
   const AgencyForm({
     super.key,
-    required this.onTap,
     required this.cardTitle,
     this.nameValidator,
     this.emailValidator,
@@ -31,6 +32,7 @@ class AgencyForm extends StatelessWidget {
     required this.emailController,
     required this.phoneController,
     required this.cityController,
+    required this.onSubmit
   });
 
   @override
@@ -173,7 +175,7 @@ class AgencyForm extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: ActionButtonV2(
-                      action: onTap,
+                      action: onSubmit,
                       text: getCurrentLanguageValue(SAVE)!,
                     ),
                   )
