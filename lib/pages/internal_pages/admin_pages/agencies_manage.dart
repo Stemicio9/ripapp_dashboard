@@ -56,7 +56,7 @@ class AgenciesManageState extends State<AgenciesManage> {
                     email: emailController.text,
                     phoneNumber: phoneController.text,
                   );
-
+                  AgencyRepository().saveAgency(agencyEntity);
                   print("salvataggio operatore agenzia...");
                   //Navigator.pop(context);
                 },
