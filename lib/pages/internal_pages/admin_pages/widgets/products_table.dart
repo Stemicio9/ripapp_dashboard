@@ -18,33 +18,33 @@ class ProductsTable extends StatelessWidget{
 
   List<ProductEntity> products = [
     ProductEntity(
-      id: '1',
+      id: 1,
       name: 'Nome prodotto',
-      price: '50',
+      price: double.tryParse('50'),
       photoName: 'nome_prodotto.png',
     ),
     ProductEntity(
-      id: '2',
+      id: 2,
       name: 'Nome prodotto',
-      price: '50',
+      price:  double.tryParse('50'),
       photoName:  'nome_prodotto.png',
     ),
     ProductEntity(
-      id: '3',
+      id: 3,
       name: 'Nome prodotto',
-      price: '50',
+      price:  double.tryParse('50'),
       photoName:  'nome_prodotto.png',
     ),
     ProductEntity(
-      id: '4',
+      id: 4,
       name: 'Nome prodotto',
-      price: '50',
+      price:  double.tryParse('50'),
       photoName:  'nome_prodotto.png',
     ),
     ProductEntity(
-      id: '5',
+      id: 5,
       name: 'Nome prodotto',
-      price: '50',
+      price:  double.tryParse('50'),
       photoName:  'nome_prodotto.png',
     ),
   ];
@@ -113,7 +113,7 @@ class ProductsTable extends StatelessWidget{
   DataRow composeSingleRow(dynamic p) {
     return DataRow(
       cells: <DataCell>[
-        DataCell(Text(p.id,
+        DataCell(Text(p.id.toString(),
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),

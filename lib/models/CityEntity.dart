@@ -22,4 +22,10 @@ class CityEntity {
     cityid: "0",
     name: "Seleziona Città",
   );
+
+
+  @override
+  String toString() {
+    return name;
+  }
 }

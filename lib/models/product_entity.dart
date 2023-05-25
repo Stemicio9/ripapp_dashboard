@@ -1,8 +1,8 @@
 class ProductEntity {
-  String? id;
+  int? id;
   String? name;
   String? photoName;
-  String? price;
+  double? price;
 
   ProductEntity({
     this.id,
@@ -14,21 +14,21 @@ class ProductEntity {
   //toString
   @override
   String toString() {
-    return 'UserEntity{id: $id, name: $name, description: $photoName, price: $price,';
+    return 'UserEntity{id: $id, productName: $name, description: $photoName, price: $price,';
   }
 
   factory ProductEntity.fromJson(Map<String, dynamic> json) => ProductEntity(
-    id: json["id"] ?? "",
-    name: json["name"] ?? "",
-    photoName: json["photoName"] ?? "",
+    id: json["id"] ?? 0,
+    name: json["productName"] ?? "",
+    photoName: json["urlImage"] ?? "",
     price: json["price"] ?? "",
   );
 
   ProductEntity copyWith({
-    String? id,
+    int? id,
     String? name,
     String? photoName,
-    String? price,
+    double? price,
   }) {
     return ProductEntity(
       id: id ?? this.id,
@@ -40,8 +40,8 @@ class ProductEntity {
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "name": name,
-    "photoName": photoName,
+    "productName": name,
+    "urlImage": photoName,
     "price": price,
   };
 }

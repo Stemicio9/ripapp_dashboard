@@ -57,8 +57,10 @@ class UserRepository {
     print("REGISTRO UTENTE");
     userEntity.status = UserStatus.active;
     print("USER STATUS: ");
-    print(userEntity.status);
-    var response = await _dio.post(signupUrl,data: userEntity, options: Options(headers: buildHeaders()));
+    print("USER no: ");
+    print("USER si: ");
+    print(userEntity);
+    var response = await _dio.post(signupUrl,data: userEntity.toJson(), options: Options(headers: buildHeaders()));
     return response.data;
   }
 

@@ -1,12 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_table.dart';
+import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 
@@ -41,6 +45,11 @@ class UsersManageState extends State<UsersManage> {
 
   @override
   Widget build(BuildContext context) {
+    nameController.text="nome";
+    lastNameController.text="cognome";
+    emailController.text="email@mail.it";
+    phoneController.text="3232";
+    cityController.text="citta";
     return Padding(
       padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
       child: Column(
@@ -51,13 +60,27 @@ class UsersManageState extends State<UsersManage> {
               showDialog(
                   context: context,
                   builder: (ctx) => UsersForm(
-                      onTap: (){
-                        UserEntity userEntity = new UserEntity();
+                      onTap: () {
+                        UserEntity userEntity = UserEntity();
                         userEntity.firstName = nameController.text;
                         userEntity.email = emailController.text;
                         userEntity.phoneNumber = phoneController.text;
-                        userEntity.city = cityController.text;
+                        // TODO change here the cityId (understand how)
+                        userEntity.city = [CityEntity(cityid: "4", name: cityController.text)];
                         userEntity.lastName = lastNameController.text;
+                        userEntity.password = /*passwordController.text*/ "passwordDifficile";
+                        userEntity.status = /*dropdown.status*/ UserStatus.active;
+                        if (userEntity.email != "" && userEntity.password != "") {
+                          FirebaseAuth.instance.createUserWithEmailAndPassword(
+                              email: userEntity.email ?? "",
+                              password: userEntity.password ?? "").then((
+                              value) async {
+                            if (value.user == null) {
+                              return; //TODO: Handle error
+                            }
+                            var response = await UserRepository().signup(userEntity);
+                          });
+                        }
                         Navigator.pop(context);
                       },
                       cardTitle: getCurrentLanguageValue(ADD_USER)!,

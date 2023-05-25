@@ -30,7 +30,6 @@ class MyProductsState extends State<MyProducts>{
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
   late Image imageFile;
 
   @override
@@ -68,7 +67,6 @@ class MyProductsState extends State<MyProducts>{
                   },
                   cardTitle: getCurrentLanguageValue(ADD_PRODUCT)!,
                   nameController: nameController,
-                  descriptionController: descriptionController,
                   priceController: priceController
               ));
             },
@@ -118,7 +116,6 @@ class MyProductsState extends State<MyProducts>{
                   },
                   cardTitle: getCurrentLanguageValue(EDIT_PRODUCT)!,
                   nameController: nameController,
-                  descriptionController: descriptionController,
                   priceController: priceController
               ));
             },

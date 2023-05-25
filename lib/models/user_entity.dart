@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 
 String userEntityToJson(UserEntity data) => json.encode(data.toJson());
@@ -16,7 +17,8 @@ class UserEntity {
     this.city,
     this.phoneNumber,
     this.idtoken,
-    this.status
+    this.status,
+    this.password
   });
 
 
@@ -24,10 +26,11 @@ class UserEntity {
   String? firstName;
   String? lastName;
   String? email;
-  String? city;
+  List<CityEntity>? city;
   String? phoneNumber;
   String? idtoken;
   UserStatus? status;
+  String? password;
   //toString
   @override
   String toString() {
@@ -50,7 +53,7 @@ class UserEntity {
     String? firstName,
     String? lastName,
     String? email,
-    String? city,
+    List<CityEntity>? city,
     String? phoneNumber,
     String? idtoken,
     UserStatus? status
@@ -72,9 +75,11 @@ class UserEntity {
         "firstName": firstName,
         "lastName": lastName,
         "email": email,
-        "city": city,
+        "city": city?.map((e) => e.toJson()).toList() ?? [],
         "phoneNumber": phoneNumber,
         "idtoken": idtoken,
-        "status": status
+        "status": status?.name ?? ""
   };
+
+  // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
 }

@@ -295,7 +295,7 @@ class RegisterForm extends StatelessWidget {
                               id: "",
                               firstName: nameController.text,
                               lastName: lastnameController.text,
-                              city: "",
+                              city: [],
                               email: emailController.text,
                               phoneNumber: phoneController.text,
                               idtoken: "",

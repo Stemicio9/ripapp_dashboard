@@ -149,7 +149,7 @@ class LoginFormState extends State<LoginForm>{
       UserRepository().setFirebaseToken(token);
       var response = await UserRepository().loginPreLayer(token);
     });
-      //Navigator.pushNamed(context, RouteConstants.dashboard);
+    Navigator.pushNamed(context, RouteConstants.dashboard);
 
 
   //  }

@@ -17,7 +17,6 @@ class ProductForm extends StatelessWidget {
   final String cardTitle;
   final TextEditingController nameController;
   final TextEditingController priceController;
-  final TextEditingController descriptionController;
 
   final dynamic nameValidator;
   final dynamic priceValidator;
@@ -37,7 +36,6 @@ class ProductForm extends StatelessWidget {
     this.descriptionValidator,
     this.priceValidator,
     required this.nameController,
-    required this.descriptionController,
     required this.priceController,
   });
 

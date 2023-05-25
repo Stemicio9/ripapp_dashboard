@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
@@ -25,7 +26,7 @@ class UsersTable extends StatelessWidget{
       firstName: 'Davide',
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
-      city: 'Roma',
+      city: [CityEntity.defaultCity()],
       phoneNumber: '+39 0987654321',
       idtoken: '',
       status: UserStatus.disabled
@@ -35,7 +36,7 @@ class UsersTable extends StatelessWidget{
       firstName: 'Davide',
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
-      city: 'Roma',
+      city: [CityEntity.defaultCity()],
         phoneNumber: '+39 0987654321',
         idtoken: '',
         status: UserStatus.disabled
@@ -46,7 +47,7 @@ class UsersTable extends StatelessWidget{
       firstName: 'Davide',
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
-      city: 'Roma',
+      city: [CityEntity.defaultCity()],
         phoneNumber: '+39 0987654321',
         idtoken: '',
         status: UserStatus.disabled
@@ -56,7 +57,7 @@ class UsersTable extends StatelessWidget{
       firstName: 'Davide',
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
-      city: 'Roma',
+      city: [CityEntity.defaultCity()],
         phoneNumber: '+39 0987654321',
         idtoken: '',
         status: UserStatus.disabled
@@ -66,7 +67,7 @@ class UsersTable extends StatelessWidget{
       firstName: 'Davide',
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
-      city: 'Roma',
+      city: [CityEntity.defaultCity()],
         phoneNumber: '+39 0987654321',
         idtoken: '',
         status: UserStatus.disabled
@@ -170,7 +171,7 @@ class UsersTable extends StatelessWidget{
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.city,
+          p.city.toString(),
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),

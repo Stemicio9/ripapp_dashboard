@@ -1,5 +1,6 @@
+
 class AgencyEntity {
-  String? id;
+  int? id;
   String? agencyName;
   String? email;
   String? city;
@@ -17,20 +18,20 @@ class AgencyEntity {
   //toString
   @override
   String toString() {
-    return 'UserEntity{id: $id, agencyName: $agencyName, email: $email, city: $city, phoneNumber:$phoneNumber ';
+    return 'UserEntity{agencyid: $id, agencyName: $agencyName, email: $email, address: $city, telephoneNumber:$phoneNumber ';
   }
 
   factory AgencyEntity.fromJson(Map<String, dynamic> json) => AgencyEntity(
-    id: json["id"] ?? "",
-    agencyName: json["agencyName"] ?? "",
+    id: json["agencyid"] ?? "",
+    agencyName: json["name"] ?? "",
     email: json["email"] ?? "",
-    city: json["city"] ?? "",
-    phoneNumber: json["phoneNumber"] ?? "",
+    city: json["address"] ?? "",
+    phoneNumber: json["telephoneNumber"] ?? "",
 
   );
 
   AgencyEntity copyWith({
-    String? id,
+    int? id,
     String? agencyName,
     String? email,
     String? city,
@@ -48,11 +49,11 @@ class AgencyEntity {
   }
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "agencyName": agencyName,
+    "agencyid": id,
+    "name": agencyName,
     "email": email,
-    "city": city,
-    "phoneNumber": phoneNumber,
+    "address": city,
+    "telephoneNumber": phoneNumber,
 
   };
 }

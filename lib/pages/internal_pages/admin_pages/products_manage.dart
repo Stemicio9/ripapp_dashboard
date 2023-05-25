@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
+import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 class ProductsManage extends StatefulWidget {
@@ -25,10 +27,11 @@ class ProductsManageState extends State<ProductsManage>{
   final String productPhoto = 'Foto del prodotto';
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    nameController.text = "nomeprod";
+    priceController.text = "19";
     return Padding(
       padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
       child: Column(
@@ -40,11 +43,15 @@ class ProductsManageState extends State<ProductsManage>{
                   imageOnTap: (){},
 
                   onTap: (){
+                    ProductEntity productEntity = ProductEntity();
+                    productEntity.name = nameController.text;
+                    productEntity.price = double.tryParse(priceController.text);
+                    productEntity.photoName = nameController.text;
+                    ProductRepository().saveProduct(productEntity);
                     Navigator.pop(context);
                   },
                   cardTitle: getCurrentLanguageValue(ADD_PRODUCT)!,
                   nameController: nameController,
-                  descriptionController: descriptionController,
                   priceController: priceController
               ));
             },
@@ -76,7 +83,6 @@ class ProductsManageState extends State<ProductsManage>{
                   },
                   cardTitle: getCurrentLanguageValue(EDIT_PRODUCT)!,
                   nameController: nameController,
-                  descriptionController: descriptionController,
                   priceController: priceController
               ));
             },
