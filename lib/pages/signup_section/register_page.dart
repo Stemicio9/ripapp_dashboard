@@ -17,7 +17,7 @@ class RegisterPage extends StatelessWidget {
   }
 
   signup(UserEntity userEntity, String password) {
-    FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEntity.email, password: password).then((value) async {
+    FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEntity.email ?? "", password: password).then((value) async {
       if(value.user == null){
         return; //TODO: Handle error
       }

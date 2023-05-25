@@ -9,25 +9,25 @@ String userEntityToJson(UserEntity data) => json.encode(data.toJson());
 
 class UserEntity {
   UserEntity({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.city,
-    required this.phoneNumber,
-    required this.idtoken,
-    required this.status
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.city,
+    this.phoneNumber,
+    this.idtoken,
+    this.status
   });
 
 
-  String id;
-  String firstName;
-  String lastName;
-  String email;
-  String city;
-  String phoneNumber;
-  String idtoken;
-  UserStatus status;
+  String? id;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? city;
+  String? phoneNumber;
+  String? idtoken;
+  UserStatus? status;
   //toString
   @override
   String toString() {

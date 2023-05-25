@@ -1,6 +1,6 @@
 enum UserStatus { agency, active, disabled, notfound, admin }
 
-String userStatusToString(UserStatus type) {
+String userStatusToString(UserStatus? type) {
   if (type == null) {
     return "";
   }

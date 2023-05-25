@@ -146,9 +146,10 @@ class LoginFormState extends State<LoginForm>{
     FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailTextController.text, password: _passwordTextController.text).then((value) async {
       print("TI SALUTO ");
       String token = await value.user!.getIdToken();
+      UserRepository().setFirebaseToken(token);
       var response = await UserRepository().loginPreLayer(token);
     });
-      Navigator.pushNamed(context, RouteConstants.dashboard);
+      //Navigator.pushNamed(context, RouteConstants.dashboard);
 
 
   //  }

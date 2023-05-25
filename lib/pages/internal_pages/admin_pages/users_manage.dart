@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
@@ -51,6 +52,12 @@ class UsersManageState extends State<UsersManage> {
                   context: context,
                   builder: (ctx) => UsersForm(
                       onTap: (){
+                        UserEntity userEntity = new UserEntity();
+                        userEntity.firstName = nameController.text;
+                        userEntity.email = emailController.text;
+                        userEntity.phoneNumber = phoneController.text;
+                        userEntity.city = cityController.text;
+                        userEntity.lastName = lastNameController.text;
                         Navigator.pop(context);
                       },
                       cardTitle: getCurrentLanguageValue(ADD_USER)!,
