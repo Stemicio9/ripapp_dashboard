@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
@@ -25,7 +26,7 @@ class DemiseTable extends StatelessWidget{
       firstName: 'Mario',
       lastName: 'Rossi',
       phoneNumber: '+39 0987654321',
-      city: 'Roma',
+      city: CityEntity(name: "Roma"),
       wakeAddress: 'Via Milano, 46',
       funeralAddress: 'Via Roma, 74',
     ),
@@ -34,7 +35,7 @@ class DemiseTable extends StatelessWidget{
       firstName: 'Mario',
       lastName: 'Rossi',
       phoneNumber: '+39 0987654321',
-      city: 'Roma',
+      city: CityEntity(name: "Roma"),
       wakeAddress: 'Via Milano, 46',
       funeralAddress: 'Via Roma, 74',
     ),
@@ -43,7 +44,7 @@ class DemiseTable extends StatelessWidget{
       firstName: 'Mario',
       lastName: 'Rossi',
       phoneNumber: '+39 0987654321',
-      city: 'Roma',
+      city: CityEntity(name: "Roma"),
       wakeAddress: 'Via Milano, 46',
       funeralAddress: 'Via Roma, 74',
     ),
@@ -52,7 +53,7 @@ class DemiseTable extends StatelessWidget{
       firstName: 'Mario',
       lastName: 'Rossi',
       phoneNumber: '+39 0987654321',
-      city: 'Roma',
+      city: CityEntity(name: "Roma"),
       wakeAddress: 'Via Milano, 46',
       funeralAddress: 'Via Roma, 74',
     ),
@@ -61,7 +62,7 @@ class DemiseTable extends StatelessWidget{
       firstName: 'Mario',
       lastName: 'Rossi',
       phoneNumber: '+39 0987654321',
-      city: 'Roma',
+      city: CityEntity(name: "Roma"),
       wakeAddress: 'Via Milano, 46',
       funeralAddress: 'Via Roma, 74',
     ),
@@ -146,7 +147,7 @@ class DemiseTable extends StatelessWidget{
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.city,
+          p.city.name,
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),

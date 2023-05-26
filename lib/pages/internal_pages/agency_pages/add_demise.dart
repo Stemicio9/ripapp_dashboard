@@ -4,12 +4,15 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker_web/image_picker_web.dart';
+import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
+import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:cross_file/cross_file.dart';
@@ -83,6 +86,21 @@ class AddDemiseState extends State<AddDemise> {
 
   @override
   Widget build(BuildContext context) {
+    nameController.text = "nomedefunto";
+    lastNameController.text = "cognomedefunto";
+    cityController.text = "cittadefunto";
+    phoneController.text = "333";
+    ageController.text = "89";
+    deceasedDateController.text = "2020-01-02 03:04:05.000";
+    addressController.text = "indirizzo";
+    wakeDateController.text = "2020-01-02 03:04:05.000";
+    wakeNoteController.text = "note";
+    funeralAddressController.text = "indirizzo";
+    funeralDateController.text = "2020-01-02 03:04:05.000";
+    funeralNoteController.text = "note";
+    citiesController.text = "citta";
+    relativeController.text = "parente";
+
     return ScaffoldWidget(
       body: SingleChildScrollView(
         child: Padding(
@@ -338,6 +356,26 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   formSubmit() {
+    DemiseEntity demiseEntity = DemiseEntity();
+
+    demiseEntity.firstName = (nameController.text);
+    demiseEntity.lastName = (lastNameController.text);
+    demiseEntity.city = CityEntity(name: cityController.text);
+    demiseEntity.phoneNumber = (phoneController.text);
+    demiseEntity.age = int.parse(ageController.text);
+    demiseEntity.deceasedDate = DateTime.parse(deceasedDateController.text);
+    demiseEntity.wakeAddress = (addressController.text);
+    demiseEntity.wakeDateTime = DateTime.parse(wakeDateController.text);
+    //demiseEntity.wakeDateTime = (wakeTimeController.text);
+    demiseEntity.wakeNote = (wakeNoteController.text);
+    demiseEntity.funeralAddress= (funeralAddressController.text);
+    demiseEntity.funeralDateTime = DateTime.parse(funeralDateController.text);
+    //demiseEntity.funeralDateTime = (funeralTimeController.text);
+    demiseEntity.funeralNotes = (funeralNoteController.text);
+    //demiseEntity.cities = (citiesController.text);
+    //demiseEntity.relative = (relativeController.text);
+
+    DemiseRepository().saveProduct(demiseEntity);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: green,

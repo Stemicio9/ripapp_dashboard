@@ -1,11 +1,11 @@
 
 class CityEntity {
   CityEntity({
-    required this.cityid,
+     this.cityid,
     required this.name,
   });
 
-  String cityid;
+  String? cityid = "";
   String name;
 
   factory CityEntity.fromJson(Map<String, dynamic> json) => CityEntity(

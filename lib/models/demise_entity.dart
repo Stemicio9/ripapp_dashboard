@@ -1,15 +1,23 @@
+
+import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/relative_entity.dart';
+
 class DemiseEntity {
   String? id;
   String? firstName;
   String? lastName;
-  String? city;
-  String? wakeAddress;
-  String? funeralAddress;
+  CityEntity? city;
   String? phoneNumber;
-
-
-
-
+  int? age;
+  DateTime? deceasedDate;
+  String? wakeAddress;
+  DateTime? wakeDateTime;
+  String? wakeNote;
+  String? funeralAddress;
+  DateTime? funeralDateTime;
+  String? funeralNotes;
+  List<CityEntity>? cities;
+  RelativeEntity? relative;
 
   DemiseEntity({
     this.id,
@@ -17,8 +25,16 @@ class DemiseEntity {
     this.lastName,
     this.city,
     this.phoneNumber,
+    this.age,
+    this.deceasedDate,
     this.wakeAddress,
+    this.wakeDateTime,
     this.funeralAddress,
+    this.wakeNote,
+    this.funeralDateTime,
+    this.funeralNotes,
+    this.cities,
+    this.relative
   });
 
   //toString
@@ -29,20 +45,28 @@ class DemiseEntity {
   }
 
   factory DemiseEntity.fromJson(Map<String, dynamic> json) => DemiseEntity(
-    id: json["id"] ?? "",
-    firstName: json["firstName"] ?? "",
-    lastName: json["lastName"] ?? "",
-    city: json["city"] ?? "",
-    phoneNumber: json["phoneNumber"] ?? "",
-    wakeAddress: json["wakeAddress"] ?? "",
-    funeralAddress: json["funeralAddress"] ?? "",
+      id: json["demiseid"] ?? "",
+      firstName: json["name"] ?? "",
+      lastName: json["surname"] ?? "",
+      city: json["city"] ?? "",
+      phoneNumber: json["phonenumber"] ?? "",
+      age: json["age"] ?? "",
+      deceasedDate: json["deceasedDate"] == null ? null : DateTime.parse(json["deceasedDate"]),
+      wakeAddress: json["wakeaddress"] ?? "",
+      wakeDateTime: json["wakets"] == null ? null : DateTime.parse(json["wakets"]),
+      funeralAddress: json["funeraladdress"] ?? "",
+      wakeNote: json["wakenotes"] ?? "",
+      funeralDateTime: json["funeralts"] == null ? null : DateTime.parse(json["funeralts"]),
+      funeralNotes: json["funeralnotes"] ?? "",
+      cities: json["cities"] ?? "",
+      relative: json["relatives"] ?? "",
   );
 
   DemiseEntity copyWith({
     String? id,
     String? firstName,
     String? lastName,
-    String? city,
+    CityEntity? city,
     String? phoneNumber,
     String? funeralAddress,
     String? wakeAddress,
@@ -59,12 +83,20 @@ class DemiseEntity {
   }
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "firstName": firstName,
-    "lastName": lastName,
-    "city": city,
-    "phoneNumber": phoneNumber,
-    "wakeAddress": wakeAddress,
-    "funeralAddress": funeralAddress,
+  "demiseid":id,
+  "name":firstName,
+  "surname":lastName,
+  "city":city,
+  "phonenumber":phoneNumber,
+  "age":age,
+  "ts":deceasedDate == null ? null : wakeDateTime!.toIso8601String(),
+  "wakeaddress":wakeAddress,
+  "wakets": wakeDateTime == null ? null : wakeDateTime!.toIso8601String(),
+  "funeraladdress":funeralAddress,
+  "wakenotes":wakeNote,
+  "funeralts":funeralDateTime == null ? null : funeralDateTime!.toIso8601String(),
+  "funeralnotes":funeralNotes,
+  "cities":cities,
+  "relatives":relative,
   };
 }
