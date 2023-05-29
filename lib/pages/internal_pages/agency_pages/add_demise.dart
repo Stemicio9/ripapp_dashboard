@@ -375,7 +375,7 @@ class AddDemiseState extends State<AddDemise> {
     //demiseEntity.cities = (citiesController.text);
     //demiseEntity.relative = (relativeController.text);
 
-    DemiseRepository().saveProduct(demiseEntity);
+    DemiseRepository().saveDemise(demiseEntity);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: green,

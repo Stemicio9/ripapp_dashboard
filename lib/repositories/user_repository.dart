@@ -55,7 +55,6 @@ class UserRepository {
 
   Future<dynamic> signup(UserEntity userEntity) async {
     print("REGISTRO UTENTE");
-    userEntity.status = UserStatus.active;
     print("USER STATUS: ");
     print("USER no: ");
     print("USER si: ");

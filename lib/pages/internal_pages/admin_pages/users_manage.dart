@@ -4,6 +4,7 @@ import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
+import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_form.dart';
@@ -62,26 +63,39 @@ class UsersManageState extends State<UsersManage> {
                   builder: (ctx) => UsersForm(
                       onTap: () {
                         UserEntity userEntity = UserEntity();
-                        userEntity.firstName = nameController.text;
+                        /*userEntity.firstName = nameController.text;
                         userEntity.email = emailController.text;
                         userEntity.phoneNumber = phoneController.text;
                         // TODO change here the cityId (understand how)
                         userEntity.city = [CityEntity(cityid: "4", name: cityController.text)];
                         userEntity.lastName = lastNameController.text;
                         userEntity.password = /*passwordController.text*/ "passwordDifficile";
-                        userEntity.status = /*dropdown.status*/ UserStatus.active;
+                        userEntity.status = /*dropdown.status*/ UserStatus.active;*/
+
+                        userEntity.firstName = "agen";
+                        userEntity.lastName = "zia";
+                        userEntity.email = "agen@zia.it";
+                        userEntity.password = "123456";
+                        userEntity.status = UserStatus.agency;
+                        userEntity.agency = AgencyEntity(id: 1,agencyName: "agenzia", email: "agenzia@email.it", city: "", phoneNumber: "");
+
+
+
                         if (userEntity.email != "" && userEntity.password != "") {
                           FirebaseAuth.instance.createUserWithEmailAndPassword(
                               email: userEntity.email ?? "",
                               password: userEntity.password ?? "").then((
                               value) async {
                             if (value.user == null) {
+                              print("Utente nullo");
                               return; //TODO: Handle error
                             }
+                            print("SALVO SU DB LOCALE");
                             var response = await UserRepository().signup(userEntity);
+                            Navigator.pop(context);
                           });
                         }
-                        Navigator.pop(context);
+
                       },
                       cardTitle: getCurrentLanguageValue(ADD_USER)!,
                       nameController: nameController,
