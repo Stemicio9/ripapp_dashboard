@@ -36,6 +36,7 @@ class SearchAgencyCubit extends Cubit<SearchAgencyState> {
         var result = await AgencyRepository().getAgencies().then((agencies) => emit(SearchAgencyLoaded(agencies))).catchError((e) => emit(SearchAgencyError()));
     }catch(e){
         // ignore
+      emit(SearchAgencyError());
       }
     }
   }
@@ -58,7 +59,7 @@ Widget agencyDropdown(){
       builder: (context, state){
     if (state is SearchAgencyLoading)
       //rotellina
-      return null;
+      return CircularProgressIndicator();
     else if (state is loaded)
       if (state.lista == vuota)
         return Error("non ci sono agenzie");
@@ -67,4 +68,15 @@ Widget agencyDropdown(){
       return Error("errore di connessione");
   }
 }
+   Widget buildFunction(BuildContext context, state){
+       if (state is SearchAgencyLoading)
+      //rotellina
+      return null;
+    else if (state is loaded)
+      if (state.lista == vuota)
+        return Error("non ci sono agenzie");
+      else return dropdownFilled;
+    else
+      return Error("errore di connessione");
+   }
  */
