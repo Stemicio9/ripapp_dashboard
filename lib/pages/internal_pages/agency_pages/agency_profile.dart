@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/profile_form.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/edit_profile_form.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/language.dart';
@@ -56,7 +56,7 @@ class AgencyProfileState extends State<AgencyProfile>{
             onTap: (){
               showDialog(
                   context: context,
-                  builder: (ctx) => ProfileForm(
+                  builder: (ctx) => EditProfileForm(
                       imageOnTap: () async {
                         //TODO: IMPLEMENTARE IMAGEPICKER
                         // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
@@ -70,7 +70,7 @@ class AgencyProfileState extends State<AgencyProfile>{
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: green,
-                            content: const Text('Prodotto modificato con successo!'),
+                            content: const Text('Profilo modificato con successo!'),
                             duration: const Duration(milliseconds: 3000),
                             behavior: SnackBarBehavior.floating,
                             shape: RoundedRectangleBorder(

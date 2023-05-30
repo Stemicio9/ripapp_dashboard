@@ -11,7 +11,7 @@ import '../../../../utils/style_utils.dart';
 import '../../../../widgets/action_button.dart';
 import '../../../../widgets/input.dart';
 
-class ProfileForm extends StatelessWidget{
+class EditProfileForm extends StatelessWidget{
 
   final String cardTitle;
   final TextEditingController nameController;
@@ -28,7 +28,7 @@ class ProfileForm extends StatelessWidget{
   final File? imageFile;
 
 
-  const ProfileForm({
+  const EditProfileForm({
     super.key,
     this.imageFile,
     required this.imageOnTap,
@@ -129,7 +129,7 @@ class ProfileForm extends StatelessWidget{
                                   controller: nameController,
                                   validator: nameValidator,
                                   paddingLeft: 0,
-                                  paddingRight: 0,
+                                  paddingRight: 20,
                                   borderSide: const BorderSide(color: greyState),
                                   activeBorderSide: const BorderSide(color: background),
                                 ),
@@ -150,7 +150,7 @@ class ProfileForm extends StatelessWidget{
                                   hinttext: getCurrentLanguageValue(EMAIL) ?? "",
                                   controller: emailController,
                                   validator: emailValidator,
-                                  paddingRight: 0,
+                                  paddingRight: 20,
                                   paddingLeft: 0,
                                   borderSide: const BorderSide(color: greyState),
                                   activeBorderSide: const BorderSide(color: background),
