@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/edit_profile_form.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/profile_data.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/language.dart';
@@ -90,6 +91,8 @@ class AgencyProfileState extends State<AgencyProfile>{
             },
 
           ),
+
+          ProfileData(nameController: nameController, emailController: emailController, lastNameController: lastNameController, phoneNumberController: phoneController,)
         ],
       ),
     );
