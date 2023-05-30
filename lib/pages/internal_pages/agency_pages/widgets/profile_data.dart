@@ -6,8 +6,7 @@ import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
 
-
-class ProfileData extends StatelessWidget{
+class ProfileData extends StatelessWidget {
   final File? imageFile;
   final TextEditingController nameController;
   final TextEditingController emailController;
@@ -18,11 +17,18 @@ class ProfileData extends StatelessWidget{
   final dynamic lastNameValidator;
   final dynamic phoneNumberValidator;
 
-
-  
   ProfileData({
-    this.imageFile, required this.nameController, this.nameValidator, required this.emailController, this.emailValidator, required this.lastNameController, this.lastNameValidator, required this.phoneNumberController, this.phoneNumberValidator,
-});
+    this.imageFile,
+    required this.nameController,
+    this.nameValidator,
+    required this.emailController,
+    this.emailValidator,
+    required this.lastNameController,
+    this.lastNameValidator,
+    required this.phoneNumberController,
+    this.phoneNumberValidator,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,16 +37,16 @@ class ProfileData extends StatelessWidget{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            flex: 1,
+              flex: 1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(bottom: 5.0),
                     child: Text(
-                        'FOTO',
+                      'FOTO',
                       style: SafeGoogleFont(
-                          'Montserrat',
+                        'Montserrat',
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: background,
@@ -48,29 +54,28 @@ class ProfileData extends StatelessWidget{
                     ),
                   ),
                   Container(
-                      height: 130,
-                      width: 130,
-                      decoration: BoxDecoration(
+                    height: 137,
+                    width: 137,
+                    decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(3)),
                         color: greyDrag,
                         border: Border.all(
                           color: background,
                           width: 1,
                         ),
-                          image: imageFile != null ? DecorationImage(
-                              fit: BoxFit.cover,
-                              image: FileImage(imageFile!)
-                          ) : DecorationImage(
-                              image: AssetImage(ImagesConstants.imgDemisePlaceholder),
-                            fit: BoxFit.cover,
-                          )
-                      ),
-                    ),
+                        image: imageFile != null
+                            ? DecorationImage(
+                                fit: BoxFit.cover, image: FileImage(imageFile!))
+                            : DecorationImage(
+                                image: AssetImage(
+                                    ImagesConstants.imgDemisePlaceholder),
+                                fit: BoxFit.cover,
+                              )),
+                  ),
                 ],
               )),
-
           Expanded(
-            flex: 2,
+              flex: 3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -78,19 +83,18 @@ class ProfileData extends StatelessWidget{
                     padding: const EdgeInsets.only(bottom: 5.0),
                     child: Text(
                       'NOME',
-                    style: SafeGoogleFont(
-                      'Montserrat',
-                      fontWeight: FontWeight.w600,
-                      color: background,
-                      fontSize: 14,
-                    ),
+                      style: SafeGoogleFont(
+                        'Montserrat',
+                        fontWeight: FontWeight.w600,
+                        color: background,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-
                   InputsV2Widget(
-                      hinttext: getCurrentLanguageValue(NAME) ?? "",
-                      controller: nameController,
-                  validator: nameValidator,
+                    hinttext: getCurrentLanguageValue(NAME) ?? "",
+                    controller: nameController,
+                    validator: nameValidator,
                     paddingLeft: 0,
                     borderSide: const BorderSide(
                       color: greyState,
@@ -100,24 +104,23 @@ class ProfileData extends StatelessWidget{
                     ),
                     readOnly: true,
                   ),
-
                   Padding(
-                      padding: EdgeInsets.only(top: 20, bottom: 5),
-                  child: Text(
-                    'EMAIL',
-                    style: SafeGoogleFont(
+                    padding: EdgeInsets.only(top: 20, bottom: 5),
+                    child: Text(
+                      'EMAIL',
+                      style: SafeGoogleFont(
                         'Montserrat',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      color: background,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: background,
+                      ),
                     ),
                   ),
-                  ),
                   InputsV2Widget(
-                      hinttext: getCurrentLanguageValue(EMAIL)?? "",
-                      controller: emailController,
-                  validator: emailValidator,
-                  paddingLeft: 0,
+                    hinttext: getCurrentLanguageValue(EMAIL) ?? "",
+                    controller: emailController,
+                    validator: emailValidator,
+                    paddingLeft: 0,
                     borderSide: const BorderSide(
                       color: greyState,
                     ),
@@ -129,27 +132,27 @@ class ProfileData extends StatelessWidget{
                 ],
               )),
           Expanded(
-            flex: 2,
+              flex: 3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                      padding: EdgeInsets.only(bottom: 5),
-                  child: Text(
-                    'COGNOME',
-                    style: SafeGoogleFont(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      'COGNOME',
+                      style: SafeGoogleFont(
                         'Montserrat',
-                    fontSize: 14,
-                      color: background,
-                      fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: background,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  ),
                   InputsV2Widget(
-                      hinttext: getCurrentLanguageValue(LAST_NAME),
-                      controller: lastNameController,
+                    hinttext: getCurrentLanguageValue(LAST_NAME)?? "",
+                    controller: lastNameController,
                     validator: lastNameValidator,
-                  paddingLeft: 0,
+                    paddingLeft: 0,
                     borderSide: const BorderSide(
                       color: greyState,
                     ),
@@ -158,22 +161,22 @@ class ProfileData extends StatelessWidget{
                     ),
                     readOnly: true,
                   ),
-              Padding(
-                padding: EdgeInsets.only(top: 20, bottom: 5),
-                child: Text(
-                  'TELEFONO',
-                  style: SafeGoogleFont(
-                    'Montserrat',
-                  fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: background,
+                  Padding(
+                    padding: EdgeInsets.only(top: 20, bottom: 5),
+                    child: Text(
+                      'TELEFONO',
+                      style: SafeGoogleFont(
+                        'Montserrat',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: background,
+                      ),
+                    ),
                   ),
-                ),
-              ),
                   InputsV2Widget(
-                      hinttext: getCurrentLanguageValue(PHONE_NUMBER),
-                      controller: phoneNumberController,
-                  validator: phoneNumberValidator,
+                    hinttext: getCurrentLanguageValue(PHONE_NUMBER)?? "",
+                    controller: phoneNumberController,
+                    validator: phoneNumberValidator,
                     paddingLeft: 0,
                     borderSide: const BorderSide(
                       color: greyState,
@@ -184,15 +187,9 @@ class ProfileData extends StatelessWidget{
                     readOnly: true,
                   ),
                 ],
-
-
               )),
-
-
-
         ],
       ),
     );
   }
-
 }

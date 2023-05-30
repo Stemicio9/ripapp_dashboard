@@ -27,7 +27,7 @@ class CustomImageView extends StatelessWidget {
   Alignment? alignment;
   VoidCallback? onTap;
   EdgeInsetsGeometry? margin;
-  BorderRadius? radius;
+  BorderRadiusGeometry? radius;
   BoxBorder? border;
 
   ///a [CustomImageView] it can be used for showing any type of images
@@ -77,7 +77,7 @@ class CustomImageView extends StatelessWidget {
   _buildCircleImage() {
     if (radius != null) {
       return ClipRRect(
-        borderRadius: radius,
+        borderRadius: radius!,
         child: _buildImageWithBorder(),
       );
     } else {
