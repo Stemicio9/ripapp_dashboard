@@ -1,6 +1,7 @@
 
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -8,6 +9,8 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/agencies_manag
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
+
+import '../../../blocs/searchAgenciesCubit.dart';
 
 
 class Dashboard extends StatefulWidget {
@@ -91,14 +94,27 @@ class DashboardState extends State<Dashboard> {
     );
   }
 
+
   Widget _body(Size size, BuildContext context) {
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      color: lightGrey,
-      child: bodyChild(),
+    return MultiBlocProvider (
+        providers: [
+          BlocProvider<SearchAgencyCubit>(create: (_) => SearchAgencyCubit()),
+        ],
+        child: Builder(
+          builder: (context) {
+            return Container(
+              height: double.infinity,
+              width: double.infinity,
+              color: lightGrey,
+              child: bodyChild(),
+            );
+          },
+        ),
     );
   }
+
+
+
 
   Widget bodyChild() {
     switch (currentPage) {
