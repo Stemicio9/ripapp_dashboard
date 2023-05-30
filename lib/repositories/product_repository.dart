@@ -18,6 +18,7 @@ class ProductRepository{
   }
 
   Future<dynamic> saveProduct(ProductEntity productEntity) async {
+    print("3");
     print(productEntity);
     Map<String, String> values = {};
     values.putIfAbsent("idtoken", () => UserRepository().firebaseToken ?? "");

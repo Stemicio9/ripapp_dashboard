@@ -20,177 +20,184 @@ class AgencyForm extends StatelessWidget {
   final dynamic phoneValidator;
   final Function() onSubmit;
 
-  const AgencyForm({
-    super.key,
-    required this.cardTitle,
-    this.nameValidator,
-    this.emailValidator,
-    this.phoneValidator,
-    this.cityValidator,
-    required this.nameController,
-    required this.emailController,
-    required this.phoneController,
-    required this.cityController,
-    required this.onSubmit
-  });
+  const AgencyForm(
+      {super.key,
+      required this.cardTitle,
+      this.nameValidator,
+      this.emailValidator,
+      this.phoneValidator,
+      this.cityValidator,
+      required this.nameController,
+      required this.emailController,
+      required this.phoneController,
+      required this.cityController,
+      required this.onSubmit});
 
   @override
   Widget build(BuildContext context) {
-    nameController.text="agenzia";
-    emailController.text="agenzia@email.it";
-    phoneController.text="333";
-    cityController.text="citta";
+    nameController.text = "agenzia";
+    emailController.text = "agenzia@email.it";
+    phoneController.text = "333";
+    cityController.text = "citta";
     return Container(
       padding: getPadding(left: 20, right: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 700,
-            child: DialogCard(
-                cancelIcon: true,
-                paddingLeft: 10,
-                paddingRight: 10,
-                cardTitle: cardTitle,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: getPadding(bottom: 30),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: getPadding(bottom: 5),
-                                    child: Text(
-                                      'NOME',
-                                      style: SafeGoogleFont(
-                                        'Montserrat',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: background,
+              width: 700,
+              child: DialogCard(
+                  cancelIcon: true,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  cardTitle: cardTitle,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: getPadding(bottom: 30),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                flex: 1,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: getPadding(bottom: 5),
+                                      child: Text(
+                                        'NOME',
+                                        style: SafeGoogleFont(
+                                          'Montserrat',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: background,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  InputsV2Widget(
-                                    hinttext: getCurrentLanguageValue(NAME)!,
-                                    controller: nameController,
-                                    validator: nameValidator,
-                                    paddingLeft: 0,
-                                    paddingRight: 10,
-                                    borderSide: const BorderSide(color: greyState),
-                                    activeBorderSide: const BorderSide(color: background),
-                                  )
-                                ],
-                              )),
-                          Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: getPadding(bottom: 5,left: 3),
-                                    child: Text(
-                                      'CITTÀ',
-                                      style: SafeGoogleFont(
-                                        'Montserrat',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: background,
+                                    InputsV2Widget(
+                                      hinttext: getCurrentLanguageValue(NAME)!,
+                                      controller: nameController,
+                                      validator: nameValidator,
+                                      paddingLeft: 0,
+                                      paddingRight: 10,
+                                      borderSide:
+                                          const BorderSide(color: greyState),
+                                      activeBorderSide:
+                                          const BorderSide(color: background),
+                                    )
+                                  ],
+                                )),
+                            Expanded(
+                                flex: 1,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: getPadding(bottom: 5, left: 3),
+                                      child: Text(
+                                        'CITTÀ',
+                                        style: SafeGoogleFont(
+                                          'Montserrat',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: background,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  InputsV2Widget(
-                                    hinttext: getCurrentLanguageValue(CITY)!,
-                                    controller: cityController,
-                                    validator: cityValidator,
-                                    paddingRight: 0,
-                                    paddingLeft: 10,
-                                    borderSide: const BorderSide(color: greyState),
-                                    activeBorderSide: const BorderSide(color: background),
-                                  )
-                                ],
-                              )),
-                        ],
+                                    InputsV2Widget(
+                                      hinttext: getCurrentLanguageValue(CITY)!,
+                                      controller: cityController,
+                                      validator: cityValidator,
+                                      paddingRight: 0,
+                                      paddingLeft: 10,
+                                      borderSide:
+                                          const BorderSide(color: greyState),
+                                      activeBorderSide:
+                                          const BorderSide(color: background),
+                                    )
+                                  ],
+                                )),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: getPadding(bottom: 40),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: getPadding(bottom: 5),
-                                    child: Text(
-                                      'EMAIL',
-                                      style: SafeGoogleFont(
-                                        'Montserrat',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: background,
+                      Padding(
+                        padding: getPadding(bottom: 40),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                flex: 1,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: getPadding(bottom: 5),
+                                      child: Text(
+                                        'EMAIL',
+                                        style: SafeGoogleFont(
+                                          'Montserrat',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: background,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  InputsV2Widget(
-                                    hinttext: getCurrentLanguageValue(EMAIL)!,
-                                    controller: emailController,
-                                    validator: emailValidator,
-                                    paddingLeft: 0,
-                                    paddingRight: 10,
-                                    borderSide: const BorderSide(color: greyState),
-                                    activeBorderSide: const BorderSide(color: background),
-                                  )
-                                ],
-                              )),
-                          Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: getPadding(bottom: 5,left: 3),
-                                    child: Text(
-                                      'TELEFONO',
-                                      style: SafeGoogleFont(
-                                        'Montserrat',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: background,
+                                    InputsV2Widget(
+                                      hinttext: getCurrentLanguageValue(EMAIL)!,
+                                      controller: emailController,
+                                      validator: emailValidator,
+                                      paddingLeft: 0,
+                                      paddingRight: 10,
+                                      borderSide:
+                                          const BorderSide(color: greyState),
+                                      activeBorderSide:
+                                          const BorderSide(color: background),
+                                    )
+                                  ],
+                                )),
+                            Expanded(
+                                flex: 1,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: getPadding(bottom: 5, left: 3),
+                                      child: Text(
+                                        'TELEFONO',
+                                        style: SafeGoogleFont(
+                                          'Montserrat',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: background,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  InputsV2Widget(
-                                    hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
-                                    controller: phoneController,
-                                    validator: phoneValidator,
-                                    paddingRight: 0,
-                                    paddingLeft: 10,
-                                    borderSide: const BorderSide(color: greyState),
-                                    activeBorderSide: const BorderSide(color: background),
-                                  )
-                                ],
-                              )),
-                        ],
+                                    InputsV2Widget(
+                                      hinttext: getCurrentLanguageValue(
+                                          PHONE_NUMBER)!,
+                                      controller: phoneController,
+                                      validator: phoneValidator,
+                                      paddingRight: 0,
+                                      paddingLeft: 10,
+                                      borderSide:
+                                          const BorderSide(color: greyState),
+                                      activeBorderSide:
+                                          const BorderSide(color: background),
+                                    )
+                                  ],
+                                )),
+                          ],
+                        ),
                       ),
-                    ),
-
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ActionButtonV2(
-                      action: onSubmit,
-                      text: getCurrentLanguageValue(SAVE)!,
-                    ),
-                  )
-                ],
-              ))
-          ],
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: ActionButtonV2(
+                          action: onSubmit,
+                          text: getCurrentLanguageValue(SAVE)!,
+                        ),
+                      )
+                    ],
+                  )))
+        ],
       ),
     );
   }

@@ -23,6 +23,8 @@ class UsersForm extends StatefulWidget{
   final dynamic lastNameValidator;
   final dynamic passwordValidator;
   final onTap;
+  final Function(String selectedValue) change;
+  final List<String> roles;
 
   const UsersForm({
     super.key,
@@ -40,6 +42,8 @@ class UsersForm extends StatefulWidget{
     required this.cityController,
     required this.passwordController,
     required this.lastNameController,
+    required this.change,
+    required this.roles,
   });
 
   @override
@@ -51,12 +55,6 @@ class UsersForm extends StatefulWidget{
 
 
 class UsersFormState extends State<UsersForm> {
-
-  List<String> roles = <String>[
-    'Amministratore',
-    'Agenzia',
-    'Utente',
-  ];
 
   List<String> agencies = <String>[
     'Seleziona Agenzia',
@@ -72,10 +70,12 @@ class UsersFormState extends State<UsersForm> {
 
   @override
   void initState() {
-    selectedValue = roles.first;
+    selectedValue = widget.roles.first;
     selectedAgency = agencies.first;
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -331,9 +331,10 @@ class UsersFormState extends State<UsersForm> {
                                         onChanged: (String? value) {
                                           setState(() {
                                             selectedValue = value!;
+                                            widget.change(selectedValue);
                                           });
                                         },
-                                        items: roles.map((String role) {
+                                        items: widget.roles.map((String role) {
                                           return  DropdownMenuItem<String>(
                                             value: role,
                                             child:  Padding(

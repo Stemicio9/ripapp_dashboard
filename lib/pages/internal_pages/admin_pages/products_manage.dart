@@ -43,10 +43,12 @@ class ProductsManageState extends State<ProductsManage>{
                   imageOnTap: (){},
 
                   onTap: (){
+                    print("1");
                     ProductEntity productEntity = ProductEntity();
                     productEntity.name = nameController.text;
                     productEntity.price = double.tryParse(priceController.text);
                     productEntity.photoName = nameController.text;
+                    print("2");
                     ProductRepository().saveProduct(productEntity);
                     Navigator.pop(context);
                   },

@@ -15,6 +15,8 @@ import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 
+enum UserRoles { Amministratore, Agenzia, Utente }
+
 class UsersManage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -23,20 +25,43 @@ class UsersManage extends StatefulWidget {
 }
 
 class UsersManageState extends State<UsersManage> {
+  UserEntity userEntity = new UserEntity(
+    id: '1',
+    firstName: 'Davide',
+    lastName: 'Rossi',
+    email: 'daviderossi@gmail.com',
+    city: [CityEntity.defaultCity()],
+    phoneNumber: '+39 0987654321',
+
+  );
+
+  //setStatusFromDropdown(UserRoles role) {
+  setStatusFromDropdown(String userRole) {
+    UserRoles role = UserRoles.values.firstWhere((e) => e.toString() == 'UserRoles.' + userRole);
+
+    userEntity.role = role.toString();
+    switch(role) {
+      case UserRoles.Amministratore: {userEntity.status = UserStatus.admin;}
+      break;
+
+      case UserRoles.Agenzia: {userEntity.status = UserStatus.agency;}
+      break;
+
+      case UserRoles.Utente: {userEntity.status = UserStatus.active;}
+      break;
+
+      default: {}
+      break;
+    }
+    print("e allera lo stato è questo bru" + userEntity.status.toString());
+  }
 
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
-  final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
-  final String name = 'Davide';
-  final String lastName = 'Rossi';
-  final String id = '1';
-  final String phoneNumber = '+39 0987654321';
-  final String city = 'Roma';
-  final String email = 'daviderossi@gmail.com';
+  final String message =
+      'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
   final String role = 'Amministratore';
-
-
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -45,111 +70,112 @@ class UsersManageState extends State<UsersManage> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-
-
   @override
   Widget build(BuildContext context) {
-    nameController.text="nome";
-    lastNameController.text="cognome";
-    emailController.text="email@mail.it";
-    phoneController.text="3232";
-    cityController.text="citta";
+    nameController.text = "nome";
+    lastNameController.text = "cognome";
+    emailController.text = "email@mail.it";
+    phoneController.text = "3232";
+    cityController.text = "citta";
+    passwordController.text = "123456";
     return Padding(
       padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Header(
-            onTap: (){
+            onTap: () {
               showDialog(
                   context: context,
                   builder: (ctx) => UsersForm(
-                    onTap: (){
-                      if (userEntity.email != "" && userEntity.password != "") {
-                        FirebaseAuth.instance.createUserWithEmailAndPassword(
-                            email: userEntity.email ?? "",
-                            password: userEntity.password ?? "").then((
-                            value) async {
-                          if (value.user == null) {
-                            print("Utente nullo");
-                            return; //TODO: Handle error
+                        onTap: () {
+                          userEntity.firstName = nameController.text;
+                          userEntity.lastName = lastNameController.text;
+                          userEntity.email = emailController.text;
+                          userEntity.phoneNumber = phoneController.text;
+                          userEntity.password = passwordController.text;
+                          if (userEntity.email != "" &&
+                              userEntity.password != "") {
+                            FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
+                                    email: userEntity.email ?? "",
+                                    password: userEntity.password ?? "")
+                                .then((value) async {
+                              if (value.user == null) {
+                                print("Utente nullo");
+                                return; //TODO: Handle error
+                              }
+                              print("SALVO SU DB LOCALE");
+                              var response =
+                                  await UserRepository().signup(userEntity);
+                              Navigator.pop(context);
+                            });
                           }
-                          print("SALVO SU DB LOCALE");
-                          var response = await UserRepository().signup(userEntity);
-                          Navigator.pop(context);
-                        });
-                      }
-                    },
-                    cardTitle: getCurrentLanguageValue(ADD_USER)!,
-                    nameController: nameController,
-                    emailController: emailController,
-                    phoneController: phoneController,
-                    cityController: cityController,
-                    lastNameController: lastNameController,
-                    passwordController: passwordController,
-
-                  )
-
-              );
+                        },
+                        cardTitle: getCurrentLanguageValue(ADD_USER)!,
+                        nameController: nameController,
+                        emailController: emailController,
+                        phoneController: phoneController,
+                        cityController: cityController,
+                        lastNameController: lastNameController,
+                        passwordController: passwordController,
+                        change: setStatusFromDropdown,
+                        roles: UserRoles.values.map((e) => e.name).toList(),
+                      ));
             },
             pageTitle: getCurrentLanguageValue(USERS_MANAGE)!,
             buttonText: getCurrentLanguageValue(ADD_USER)!,
           ),
-
           UsersTable(
-            delete: (){
+            delete: () {
               showDialog(
                   context: context,
                   builder: (ctx) => DeleteMessageDialog(
-                      onConfirm: (){
+                      onConfirm: () {
                         Navigator.pop(context);
                       },
-                      onCancel: (){
+                      onCancel: () {
                         Navigator.pop(context);
                       },
-                      message: message
-                  )
-              );
+                      message: message));
             },
-            edit: (){
+            edit: () {
               showDialog(
                   context: context,
                   barrierColor: blackTransparent,
                   builder: (ctx) => UsersForm(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    cardTitle: getCurrentLanguageValue(EDIT_USER)!,
-                    nameController: nameController,
-                    emailController: emailController,
-                    phoneController: phoneController,
-                    cityController: cityController,
-                    lastNameController: lastNameController,
-                    passwordController: passwordController,
-                  )
-              );
+                        change: setStatusFromDropdown,
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        cardTitle: getCurrentLanguageValue(EDIT_USER)!,
+                        nameController: nameController,
+                        emailController: emailController,
+                        phoneController: phoneController,
+                        cityController: cityController,
+                        lastNameController: lastNameController,
+                        passwordController: passwordController,
+                        roles: UserRoles.values.map((e) => e.name).toList(),
+                      ));
             },
-            showDetail: (){
+            showDetail: () {
               showDialog(
                   context: context,
-                  builder: (ctx) =>UsersDetail(
-                      cardTitle: getCurrentLanguageValue(USER_DETAIL)!,
-                      name: name,
-                      id: id,
-                      email: email,
-                      phoneNumber: phoneNumber,
-                      city: city,
-                      lastName: lastName,
-                      role: role,
-                  )
-              );
+                  builder: (ctx) => UsersDetail(
+                        cardTitle: getCurrentLanguageValue(USER_DETAIL)!,
+                        name: userEntity.firstName!,
+                        id: userEntity.id!,
+                        email: userEntity.email!,
+                        phoneNumber: userEntity.phoneNumber!,
+                        city: userEntity.city!.first.toString(), //TODO check if lists or single city
+                        lastName: userEntity.lastName!,
+                        role: userEntity.role!,
+                      ));
             },
             detailMessage: detailMessage,
             editMessage: editMessage,
             deleteMessage: deleteMessage,
           ),
-
-
         ],
       ),
     );

@@ -38,10 +38,11 @@ class DemiseRepository{
     print("ciao");
     Map<String, Object>? headers = Map();
     myoptions.headers = headers;
-    myoptions.headers!["set-cookie"] = "idtoken=123;";
+    //myoptions.headers!["set-cookie"] = "idtoken=123;";
     myoptions.headers!["Content-Type"] = "application/json";
     myoptions.headers!["app_version"] = appVersion;
     var response = await _dio.post(demiseUrl, data: demiseEntity, options: myoptions);
+    //var response = await _dio.post(demiseUrl, data: demiseEntity);
     return response.data;
   }
 
