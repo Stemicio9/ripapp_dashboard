@@ -4,6 +4,8 @@ import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 
+import '../../../../widgets/texts.dart';
+
 class AgencyDetail extends StatelessWidget {
   final String cardTitle;
   final String id;
@@ -25,143 +27,112 @@ class AgencyDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: getPadding(left: 80, right: 80),
+      padding: getPadding(left: 20, right: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          DialogCard(
-              paddingLeft: 10,
-              paddingRight: 10,
-              cancelIcon: true,
-              cardTitle: cardTitle,
-              child: Column(
-                children: [
-                  Padding(
-                      padding: getPadding(bottom: 30),
-                      child: Row(children: [
-                        Expanded(
-                          flex: 1,
-                          child: RichText(
-                              text: TextSpan(
-                                  text: 'ID: ',
-                                  style: SafeGoogleFont(
-                                    'Montserrat',
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    color: background,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: id,
-                                        style: SafeGoogleFont(
-                                          'Montserrat',
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
-                                          color: black,
-                                        ))
-                                  ])),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: RichText(
-                              text: TextSpan(
-                                  text: 'NOME: ',
-                                  style: SafeGoogleFont(
-                                    'Montserrat',
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    color: background,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: name,
-                                        style: SafeGoogleFont(
-                                          'Montserrat',
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                          color: black,
-                                        ))
-                                  ])),
-                        ),
-                      ])),
-                  Padding(
-                      padding: getPadding(bottom: 30),
-                      child: Row(children: [
-                        Expanded(
-                          flex: 1,
-                          child: RichText(
-                              text: TextSpan(
-                                  text: 'EMAIL: ',
-                                  style: SafeGoogleFont(
-                                    'Montserrat',
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    color: background,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: email,
-                                        style: SafeGoogleFont(
-                                          'Montserrat',
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                          color: black,
-                                        ))
-                                  ])),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: RichText(
-                              text: TextSpan(
-                                  text: 'TELEFONO: ',
-                                  style: SafeGoogleFont(
-                                    'Montserrat',
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    color: background,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: phoneNumber,
-                                        style: SafeGoogleFont(
-                                          'Montserrat',
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
-                                          color: black,
-                                        ))
-                                  ])),
-                        ),
-                      ])),
-                  Row(children: [
+          Container(
+            width: 700,
+            child: DialogCard(
+                paddingLeft: 10,
+                paddingRight: 10,
+                cancelIcon: true,
+                cardTitle: cardTitle,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Expanded(
                       flex: 1,
-                      child: RichText(
-                          text: TextSpan(
-                              text: 'CITTÀ: ',
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: getPadding(bottom: 5),
+                            child: Text(
+                              'ID',
                               style: SafeGoogleFont(
                                 'Montserrat',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
                                 color: background,
                               ),
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text: city,
-                                    style: SafeGoogleFont(
-                                      'Montserrat',
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                      color: black,
-                                    ))
-                              ])),
+                            ),
+                          ),
+                          Texth3V2(testo: id, color: black),
+
+                          Padding(
+                            padding: getPadding(bottom: 5,top: 20),
+                            child: Text(
+                              'EMAIL',
+                              style: SafeGoogleFont(
+                                'Montserrat',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: background,
+                              ),
+                            ),
+                          ),
+                          Texth3V2(testo: email, color: black),
+                          Padding(
+                            padding: getPadding(bottom: 5,top: 20),
+                            child: Text(
+                              'CITTÀ',
+                              style: SafeGoogleFont(
+                                'Montserrat',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: background,
+                              ),
+                            ),
+                          ),
+                          Texth3V2(testo: city, color: black),
+                        ],
+                      ),
                     ),
+
+
                     Expanded(
                       flex: 1,
-                      child:Container()
-                    ),
-                  ]),
-                ],
-              ))
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: getPadding(bottom: 5),
+                              child: Text(
+                                'NOME',
+                                style: SafeGoogleFont(
+                                  'Montserrat',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: background,
+                                ),
+                              ),
+                            ),
+                            Texth3V2(testo: name, color: black),
+
+                            Padding(
+                              padding: getPadding(bottom: 5,top: 20),
+                              child: Text(
+                                'TELEFONO',
+                                style: SafeGoogleFont(
+                                  'Montserrat',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: background,
+                                ),
+                              ),
+                            ),
+                            Texth3V2(testo: phoneNumber, color: black),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                )
+               ),
+          )
         ],
       ),
     );

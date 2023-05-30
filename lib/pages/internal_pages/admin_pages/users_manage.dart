@@ -34,6 +34,7 @@ class UsersManageState extends State<UsersManage> {
   final String phoneNumber = '+39 0987654321';
   final String city = 'Roma';
   final String email = 'daviderossi@gmail.com';
+  final String role = 'Amministratore';
 
 
 
@@ -42,6 +43,8 @@ class UsersManageState extends State<UsersManage> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
 
 
   @override
@@ -61,55 +64,37 @@ class UsersManageState extends State<UsersManage> {
               showDialog(
                   context: context,
                   builder: (ctx) => UsersForm(
-                      onTap: () {
-                        UserEntity userEntity = UserEntity();
-                        /*userEntity.firstName = nameController.text;
-                        userEntity.email = emailController.text;
-                        userEntity.phoneNumber = phoneController.text;
-                        // TODO change here the cityId (understand how)
-                        userEntity.city = [CityEntity(cityid: "4", name: cityController.text)];
-                        userEntity.lastName = lastNameController.text;
-                        userEntity.password = /*passwordController.text*/ "passwordDifficile";
-                        userEntity.status = /*dropdown.status*/ UserStatus.active;*/
+                    onTap: (){
+                      if (userEntity.email != "" && userEntity.password != "") {
+                        FirebaseAuth.instance.createUserWithEmailAndPassword(
+                            email: userEntity.email ?? "",
+                            password: userEntity.password ?? "").then((
+                            value) async {
+                          if (value.user == null) {
+                            print("Utente nullo");
+                            return; //TODO: Handle error
+                          }
+                          print("SALVO SU DB LOCALE");
+                          var response = await UserRepository().signup(userEntity);
+                          Navigator.pop(context);
+                        });
+                      }
+                    },
+                    cardTitle: getCurrentLanguageValue(ADD_USER)!,
+                    nameController: nameController,
+                    emailController: emailController,
+                    phoneController: phoneController,
+                    cityController: cityController,
+                    lastNameController: lastNameController,
+                    passwordController: passwordController,
 
-                        userEntity.firstName = "agen";
-                        userEntity.lastName = "zia";
-                        userEntity.email = "agen@zia.it";
-                        userEntity.password = "123456";
-                        userEntity.status = UserStatus.agency;
-                        userEntity.agency = AgencyEntity(id: 1,agencyName: "agenzia", email: "agenzia@email.it", city: "", phoneNumber: "");
-
-
-
-                        if (userEntity.email != "" && userEntity.password != "") {
-                          FirebaseAuth.instance.createUserWithEmailAndPassword(
-                              email: userEntity.email ?? "",
-                              password: userEntity.password ?? "").then((
-                              value) async {
-                            if (value.user == null) {
-                              print("Utente nullo");
-                              return; //TODO: Handle error
-                            }
-                            print("SALVO SU DB LOCALE");
-                            var response = await UserRepository().signup(userEntity);
-                            Navigator.pop(context);
-                          });
-                        }
-
-                      },
-                      cardTitle: getCurrentLanguageValue(ADD_USER)!,
-                      nameController: nameController,
-                      emailController: emailController,
-                      phoneController: phoneController,
-                      cityController: cityController,
-                      lastNameController: lastNameController
                   )
 
               );
             },
             pageTitle: getCurrentLanguageValue(USERS_MANAGE)!,
             buttonText: getCurrentLanguageValue(ADD_USER)!,
-            ),
+          ),
 
           UsersTable(
             delete: (){
@@ -131,17 +116,17 @@ class UsersManageState extends State<UsersManage> {
                   context: context,
                   barrierColor: blackTransparent,
                   builder: (ctx) => UsersForm(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      cardTitle: getCurrentLanguageValue(EDIT_USER)!,
-                      nameController: nameController,
-                      emailController: emailController,
-                      phoneController: phoneController,
-                      cityController: cityController,
-                      lastNameController: lastNameController
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    cardTitle: getCurrentLanguageValue(EDIT_USER)!,
+                    nameController: nameController,
+                    emailController: emailController,
+                    phoneController: phoneController,
+                    cityController: cityController,
+                    lastNameController: lastNameController,
+                    passwordController: passwordController,
                   )
-
               );
             },
             showDetail: (){
@@ -154,14 +139,16 @@ class UsersManageState extends State<UsersManage> {
                       email: email,
                       phoneNumber: phoneNumber,
                       city: city,
-                      lastName: lastName
+                      lastName: lastName,
+                      role: role,
                   )
               );
             },
             detailMessage: detailMessage,
             editMessage: editMessage,
             deleteMessage: deleteMessage,
-          )
+          ),
+
 
         ],
       ),

@@ -17,6 +17,7 @@ class UsersTable extends StatelessWidget{
     'Email',
     'Città',
     'Telefono',
+    'Ruolo',
     ''
   ];
 
@@ -26,51 +27,59 @@ class UsersTable extends StatelessWidget{
       firstName: 'Davide',
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
-      city: [CityEntity.defaultCity()],
+        city: [CityEntity.defaultCity()],
       phoneNumber: '+39 0987654321',
-      idtoken: '',
-      status: UserStatus.disabled
+        idtoken: '',
+        status: UserStatus.disabled,
+        role: 'Amministratore'
     ),
     UserEntity(
       id: '2',
-      firstName: 'Davide',
-      lastName: 'Rossi',
-      email: 'daviderossi@gmail.com',
-      city: [CityEntity.defaultCity()],
+        firstName: 'Davide',
+        lastName: 'Rossi',
+        email: 'daviderossi@gmail.com',
+        city: [CityEntity.defaultCity()],
         phoneNumber: '+39 0987654321',
         idtoken: '',
-        status: UserStatus.disabled
+        status: UserStatus.disabled,
+        role: 'Agenzia'
 
     ),
     UserEntity(
       id: '3',
-      firstName: 'Davide',
-      lastName: 'Rossi',
-      email: 'daviderossi@gmail.com',
-      city: [CityEntity.defaultCity()],
+        firstName: 'Davide',
+        lastName: 'Rossi',
+        email: 'daviderossi@gmail.com',
+        city: [CityEntity.defaultCity()],
         phoneNumber: '+39 0987654321',
         idtoken: '',
-        status: UserStatus.disabled
+        status: UserStatus.disabled,
+        role: 'Utente'
+
     ),
     UserEntity(
       id: '4',
-      firstName: 'Davide',
-      lastName: 'Rossi',
-      email: 'daviderossi@gmail.com',
-      city: [CityEntity.defaultCity()],
+        firstName: 'Davide',
+        lastName: 'Rossi',
+        email: 'daviderossi@gmail.com',
+        city: [CityEntity.defaultCity()],
         phoneNumber: '+39 0987654321',
         idtoken: '',
-        status: UserStatus.disabled
+        status: UserStatus.disabled,
+        role: 'Amministratore'
+
     ),
     UserEntity(
       id: '5',
-      firstName: 'Davide',
-      lastName: 'Rossi',
-      email: 'daviderossi@gmail.com',
-      city: [CityEntity.defaultCity()],
+        firstName: 'Davide',
+        lastName: 'Rossi',
+        email: 'daviderossi@gmail.com',
+        city: [CityEntity.defaultCity()],
         phoneNumber: '+39 0987654321',
         idtoken: '',
-        status: UserStatus.disabled
+        status: UserStatus.disabled,
+        role: 'Amministratore'
+
     ),
   ];
 
@@ -177,6 +186,11 @@ class UsersTable extends StatelessWidget{
         )),
         DataCell(Text(
           p.phoneNumber,
+          style: SafeGoogleFont('Montserrat',
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+        )),
+        DataCell(Text(
+          p.role,
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),

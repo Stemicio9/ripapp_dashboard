@@ -21,11 +21,8 @@ class DashboardAgencyState extends State<DashboardAgency> {
   int currentPage = 1;
   String agencyName = 'Nome agenzia';
   String image = "assets/images/profiledefault.jpeg";
-
   // final UserCubit? userCubit;
-
-
-//  DashboardState({this.userCubit});
+  //  DashboardState({this.userCubit});
 
 
   List<CollapsibleItem> get _items {
