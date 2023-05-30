@@ -28,7 +28,5 @@ class RouteConstants {
     editDemise: (context) => EditDemise(),
     demiseDetail: (context) => DemiseDetail(),
 
-
-
   };
 }

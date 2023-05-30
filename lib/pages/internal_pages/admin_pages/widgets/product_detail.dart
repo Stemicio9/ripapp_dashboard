@@ -57,8 +57,7 @@ class ProductDetail extends StatelessWidget {
                           DecorationImage(
                             image: FileImage(imageFile!),
                             fit: BoxFit.contain,
-                          )
-                              :  DecorationImage(
+                          ) :  DecorationImage(
                             image: AssetImage(ImagesConstants.imgProductPlaceholder),
                             fit: BoxFit.cover,
                           )

@@ -15,6 +15,7 @@ class UsersTable extends StatelessWidget{
     'Email',
     'Città',
     'Telefono',
+    'Ruolo',
     ''
   ];
 
@@ -25,7 +26,8 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
-      phoneNumber: '+39 0987654321'
+      phoneNumber: '+39 0987654321',
+      role: 'Amministratore'
     ),
     UserEntity(
       id: '2',
@@ -33,7 +35,8 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
-        phoneNumber: '+39 0987654321'
+        phoneNumber: '+39 0987654321',
+        role: 'Agenzia'
 
     ),
     UserEntity(
@@ -42,7 +45,8 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
-        phoneNumber: '+39 0987654321'
+        phoneNumber: '+39 0987654321',
+        role: 'Utente'
 
     ),
     UserEntity(
@@ -51,7 +55,8 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
-        phoneNumber: '+39 0987654321'
+        phoneNumber: '+39 0987654321',
+        role: 'Amministratore'
 
     ),
     UserEntity(
@@ -60,7 +65,8 @@ class UsersTable extends StatelessWidget{
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
       city: 'Roma',
-        phoneNumber: '+39 0987654321'
+        phoneNumber: '+39 0987654321',
+        role: 'Amministratore'
 
     ),
   ];
@@ -168,6 +174,11 @@ class UsersTable extends StatelessWidget{
         )),
         DataCell(Text(
           p.phoneNumber,
+          style: SafeGoogleFont('Montserrat',
+              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+        )),
+        DataCell(Text(
+          p.role,
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),

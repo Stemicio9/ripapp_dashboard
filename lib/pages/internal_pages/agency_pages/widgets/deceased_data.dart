@@ -119,9 +119,12 @@ class DeceasedData extends StatelessWidget {
                                   image: FileImage(imageFile!),
                                   fit: BoxFit.contain,
                                 )
-                                    : null,
+                                    : DecorationImage(
+                                  image: AssetImage(ImagesConstants.imgDemisePlaceholder),
+                              fit: BoxFit.cover,
+                                )
                               ),
-                              child: imageFile == null ? Center(
+                          /*    child: imageFile == null ? Center(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 20),
                                   child: Texth4V2(
@@ -132,7 +135,7 @@ class DeceasedData extends StatelessWidget {
 
                                   ),
                                 ),
-                              ) : const SizedBox(),
+                              ) : const SizedBox(), */
                             ),
                           ),
                         ],

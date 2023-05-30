@@ -5,6 +5,7 @@ class UserEntity {
   String? email;
   String? city;
   String? phoneNumber;
+  String? role;
 
   UserEntity({
     this.id,
@@ -12,13 +13,14 @@ class UserEntity {
     this.firstName,
     this.email,
     this.city,
-    this.phoneNumber
+    this.phoneNumber,
+    this.role
   });
 
   //toString
   @override
   String toString() {
-    return 'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, email: $email, city: $city, phonenumber:$phoneNumber';
+    return 'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, email: $email, city: $city, phonenumber:$phoneNumber, role:$role';
   }
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
@@ -28,6 +30,7 @@ class UserEntity {
         email: json["email"] ?? "",
         city: json["city"] ?? "",
         phoneNumber: json["phoneNumber"] ?? "",
+        role: json["role"] ?? "",
 
   );
 
@@ -38,6 +41,7 @@ class UserEntity {
     String? email,
     String? city,
     String? phoneNumber,
+    String? role,
   }) {
     return UserEntity(
       id: id ?? this.id,
@@ -46,6 +50,7 @@ class UserEntity {
       email: email ?? this.email,
       city: city ?? this.city,
       phoneNumber: phoneNumber ?? this.phoneNumber,
+      role: role ?? this.role,
 
     );
   }
@@ -57,6 +62,7 @@ class UserEntity {
         "email": email,
         "city": city,
         "phoneNumber": phoneNumber,
+        "role": role,
 
   };
 }
