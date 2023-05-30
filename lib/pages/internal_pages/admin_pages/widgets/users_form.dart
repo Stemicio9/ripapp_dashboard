@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
 
-class UsersForm extends StatefulWidget{
+class UsersForm extends StatelessWidget {
 
   final String cardTitle;
   final TextEditingController nameController;
@@ -25,6 +28,7 @@ class UsersForm extends StatefulWidget{
   final onTap;
   final Function(String selectedValue) change;
   final List<String> roles;
+
 
   const UsersForm({
     super.key,
@@ -47,14 +51,79 @@ class UsersForm extends StatefulWidget{
   });
 
   @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (_) => SearchAgencyCubit(),
+        child: UsersFormWidget(onTap: onTap,
+          cardTitle: cardTitle,
+          nameController: nameController,
+          phoneController: phoneController,
+          emailController: emailController,
+          cityController: cityController,
+          passwordController: passwordController,
+          lastNameController: lastNameController,
+          change: change,
+          roles: roles
+        ),
+    );
+  }
+}
+
+
+
+
+
+
+class UsersFormWidget extends StatefulWidget{
+
+  final String cardTitle;
+  final TextEditingController nameController;
+  final TextEditingController phoneController;
+  final TextEditingController emailController;
+  final TextEditingController cityController;
+  final TextEditingController lastNameController;
+  final TextEditingController passwordController;
+  final dynamic nameValidator;
+  final dynamic cityValidator;
+  final dynamic emailValidator;
+  final dynamic phoneValidator;
+  final dynamic lastNameValidator;
+  final dynamic passwordValidator;
+  final onTap;
+  final Function(String selectedValue) change;
+  final List<String> roles;
+
+  const UsersFormWidget({
+    super.key,
+    required this.onTap,
+    required this.cardTitle,
+    this.nameValidator,
+    this.emailValidator,
+    this.phoneValidator,
+    this.cityValidator,
+    this.lastNameValidator,
+    this.passwordValidator,
+    required this.nameController,
+    required this.emailController,
+    required this.phoneController,
+    required this.cityController,
+    required this.passwordController,
+    required this.lastNameController,
+    required this.change,
+    required this.roles,
+  });
+
+  @override
   State<StatefulWidget> createState() {
-    return UsersFormState();
+    return UsersFormWidgetState();
   }
 
 }
 
 
-class UsersFormState extends State<UsersForm> {
+class UsersFormWidgetState extends State<UsersFormWidget> {
+
+  SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
 
   List<String> agencies = <String>[
     'Seleziona Agenzia',
@@ -66,12 +135,13 @@ class UsersFormState extends State<UsersForm> {
   ];
 
   late String selectedValue;
-  late String selectedAgency;
+  late AgencyEntity selectedAgency;
+
 
   @override
   void initState() {
     selectedValue = widget.roles.first;
-    selectedAgency = agencies.first;
+    _searchAgencyCubit.fetchAgencies();
     super.initState();
   }
 
@@ -383,42 +453,57 @@ class UsersFormState extends State<UsersForm> {
                                           borderRadius: BorderRadius.circular(3),
                                           border: Border.all(color: greyState)
                                       ),
-                                      child: DropdownButton<String>(
-                                        hint: const Text(
-                                          "Seleziona agenzia",
-                                          style: TextStyle(
-                                            color: black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
+                                      child: BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
+                                              builder: (context, state){
 
-                                        isExpanded: true,
-                                        underline:  const SizedBox(),
-                                        value: selectedAgency,
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            selectedAgency = value!;
-                                          });
-                                        },
-                                        items: agencies.map((String agency) {
-                                          return  DropdownMenuItem<String>(
-                                            value: agency,
-                                            child:  Padding(
-                                              padding: const EdgeInsets.only(left: 20),
-                                              child: Text(
-                                                agency,
-                                                style: const TextStyle(
+                                            if (state is SearchAgencyLoading)
+                                              return CircularProgressIndicator();
+                                            else if (state is SearchAgencyLoaded)
+                                              if ((state.agencies as List).length == 0) {
+                                                return ErrorWidget("lista vuota"); //TODO aggiungere errore
+                                              }
+                                              else {
+                                                List<AgencyEntity> agencies = state.agencies;
+
+                                                  return DropdownButton<AgencyEntity>(
+                                                  hint: const Text(
+                                                  "Seleziona agenzia",
+                                                  style: TextStyle(
                                                   color: black,
                                                   fontSize: 14,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }).toList(),
+                                                  fontWeight: FontWeight.normal,
+                                                  ),
+                                                  ),
+
+                                                  isExpanded: true,
+                                                  underline: const SizedBox(),
+                                                  value: state.selectedAgency,
+                                                  onChanged: (AgencyEntity? value) {
+                                                    _searchAgencyCubit.changeSelectedAgency(value);
+                                                  },
+                                                  items: agencies.map((AgencyEntity agency) {
+                                                  return DropdownMenuItem<AgencyEntity>(
+                                                  value: agency,
+                                                  child: Padding(
+                                                  padding: const EdgeInsets.only(left: 20),
+                                                  child: Text(
+                                                  agency?.agencyName ?? "",
+                                                  style: const TextStyle(
+                                                  color: black,
+                                                  fontSize: 14,
+                                                  ),
+                                                  ),
+                                                  ),
+                                                  );
+                                                  }).toList(),
+                                                  );
+                                              }
+                                          else
+                                          return ErrorWidget("errore di connessione"); //TODO aggiungere errore
+                                        }
+                                        ),
                                       ),
                                     ),
-                                  ),
                                 ],
                               ) : Container()),
                         ],
@@ -440,3 +525,35 @@ class UsersFormState extends State<UsersForm> {
     );
   }
 }
+
+/*
+                                          return BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
+                                            builder: (context, state){
+                                              if (state is SearchAgencyLoading)
+                                                return CircularProgressIndicator();
+                                              else if (state is SearchAgencyLoaded)
+                                                if ((state.agencies as List<>).length == 0) {
+                                                  return Error(
+                                                      "non ci sono agenzie");
+                                                }
+                                                else {
+                                                  items: agencies.map( (String agency) {
+                                                  return DropdownMenuItem<String>(
+                                                  value: agency,
+                                                  child: Padding(
+                                                  padding: const EdgeInsets.only(left: 20),
+                                                  child: Text(
+                                                  agency,
+                                                  style: const TextStyle(
+                                                  color: black,
+                                                  fontSize: 14,
+                                                  ),
+                                                  ),
+                                                  ),
+                                                  );
+                                                  }).toList(),;
+                                                  }
+                                              else
+                                                return Error("errore di connessione");
+                                            }
+ */

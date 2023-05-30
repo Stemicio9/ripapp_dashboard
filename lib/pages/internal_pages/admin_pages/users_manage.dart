@@ -38,7 +38,6 @@ class UsersManageState extends State<UsersManage> {
   //setStatusFromDropdown(UserRoles role) {
   setStatusFromDropdown(String userRole) {
     UserRoles role = UserRoles.values.firstWhere((e) => e.toString() == 'UserRoles.' + userRole);
-
     userEntity.role = role.toString();
     switch(role) {
       case UserRoles.Amministratore: {userEntity.status = UserStatus.admin;}
@@ -53,7 +52,6 @@ class UsersManageState extends State<UsersManage> {
       default: {}
       break;
     }
-    print("e allera lo stato è questo bru" + userEntity.status.toString());
   }
 
   final String detailMessage = 'Dettagli';

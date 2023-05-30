@@ -15,9 +15,21 @@ class SearchAgencyError extends SearchAgencyState {}
 
 class SearchAgencyLoaded extends SearchAgencyState {
   final List<AgencyEntity> agencies;
+  final AgencyEntity? selectedAgency;
   //final bool loadingMore;
   //SearchAgencyLoaded(this.agencies, this.loadingMore);
-  SearchAgencyLoaded(this.agencies);
+  SearchAgencyLoaded(this.agencies, this.selectedAgency);
+
+
+  SearchAgencyLoaded copyWith({
+    List<AgencyEntity>? agencies,
+    AgencyEntity? selectedAgency,
+  }) {
+    return SearchAgencyLoaded(
+       agencies ?? this.agencies,
+       selectedAgency ?? this.selectedAgency
+    );
+  }
 }
 
 
@@ -27,19 +39,32 @@ class SearchAgencyLoaded extends SearchAgencyState {
 
 
 class SearchAgencyCubit extends Cubit<SearchAgencyState> {
-  SearchAgencyCubit() : super(SearchAgencyState());
+  SearchAgencyCubit() : super(SearchAgencyLoading());
 
   fetchAgencies() async {
     emit(SearchAgencyLoading());
     try {
-        var currentState = state as SearchAgencyLoaded;
-        var result = await AgencyRepository().getAgencies().then((agencies) => emit(SearchAgencyLoaded(agencies))).catchError((e) => emit(SearchAgencyError()));
+      print("FACCIO LA FETCH DELLE AGENZIE");
+      // todo manage if agencies is null or empty in response
+        var result = await AgencyRepository().getAgencies().then((agencies) => emit(SearchAgencyLoaded(agencies, agencies.first))).catchError((e) => emit(SearchAgencyError()));
     }catch(e){
         // ignore
       emit(SearchAgencyError());
       }
     }
+
+
+  changeSelectedAgency(AgencyEntity? selectedAgency){
+    if(state is SearchAgencyLoaded && selectedAgency != null){
+      var a = state as SearchAgencyLoaded;
+      emit(a.copyWith(selectedAgency: selectedAgency));
+    }
+
   }
+
+  }
+
+
 
 
 
