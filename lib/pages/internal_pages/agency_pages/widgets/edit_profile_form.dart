@@ -66,9 +66,7 @@ class EditProfileForm extends StatelessWidget{
                       children: [
                         Expanded(
                             flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 30),
-                              child: Column(
+                            child:  Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
@@ -92,19 +90,17 @@ class EditProfileForm extends StatelessWidget{
                                           borderRadius: const BorderRadius.all(Radius.circular(3)),
                                           color: greyDrag,
                                           border: Border.all(color: background, width: 1),
-                                          image: imageFile != null ?
-                                          DecorationImage(
+                                          image: imageFile != null ? DecorationImage(
                                             image: FileImage(imageFile!),
                                             fit: BoxFit.contain,
                                           ) : DecorationImage(
-                                            image: AssetImage(ImagesConstants.imgProductPlaceholder),
+                                            image: AssetImage(ImagesConstants.imgDemisePlaceholder),
                                             fit: BoxFit.cover,
 
                                           ),
                                         ),
                                       ))
                                 ],
-                              ),
                             )),
 
                         Expanded(
