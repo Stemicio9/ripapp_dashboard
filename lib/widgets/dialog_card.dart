@@ -11,7 +11,7 @@ class DialogCard extends StatelessWidget {
   final Color cardColor;
   final bool cancelIcon;
 
-  DialogCard({required this.cardTitle, required this.child, this.paddingRight = 20, this.paddingLeft=20, this.cardColor = white, this.cancelIcon=false});
+  DialogCard({required this.cardTitle, required this.child, this.paddingRight = 0, this.paddingLeft=0, this.cardColor = white, this.cancelIcon=false});
 
   @override
   Widget build(BuildContext context) {
