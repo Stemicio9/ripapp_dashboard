@@ -51,7 +51,11 @@ class MyProductsState extends State<MyProducts>{
             deleteProfileOnTap: (){},
             onTap: (){
               showDialog(context: context, builder: (ctx)=>
-                  const ProductsPopup()
+                   ProductsPopup(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                  )
               );
             },
             pageTitle: getCurrentLanguageValue(MY_PRODUCTS)!,

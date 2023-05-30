@@ -1,12 +1,16 @@
 
-
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/entities/single_product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/products_row.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 
+import '../../../../constants/language.dart';
+import '../../../../widgets/action_button.dart';
+
 class ProductsPopup extends StatefulWidget {
-  const ProductsPopup({Key? key}) : super(key: key);
+  final Function() onTap;
+
+  const ProductsPopup({Key? key,required this.onTap}) : super(key: key);
 
   @override
   State<ProductsPopup> createState() => _ProductsPopupState();
@@ -19,12 +23,13 @@ class _ProductsPopupState extends State<ProductsPopup> {
   // fixme make a bloc and a cubit to manage this situation
   late List<SingleProductEntity> products = List.empty(growable: true);
 
+
   @override
   void initState() {
     // fixme here we use initState only to initialize product list, but is dummy
     // fixme delete this method when bloc will be done
     for(int i = 0; i<10; i++){
-      products.add(SingleProductEntity(name: "Prodotto $i", onTap: onProductTapped));
+      products.add(SingleProductEntity(name: "Prodotto $i", onTap: onProductTapped,price: "100,00"));
     }
     super.initState();
   }
@@ -48,10 +53,31 @@ class _ProductsPopupState extends State<ProductsPopup> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: 750,
+          width: 970,
           child: DialogCard(
               cardTitle: 'Seleziona i tuoi prodotti',
-              child: ProductsRow(products: products,)
+              child: Column(
+                children: [
+                Container(
+                      height: 450,
+                        child: SingleChildScrollView(
+                            child: ProductsRow(products: products,)
+                        )
+                    ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(right: 30,top: 20),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: ActionButtonV2(
+                        action: widget.onTap,
+                        text: getCurrentLanguageValue(SAVE) ?? "",
+                      ),
+                    ),
+                  )
+                ],
+              ),
+
           ),
         ),
       ],

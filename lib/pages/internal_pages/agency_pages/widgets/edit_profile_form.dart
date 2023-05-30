@@ -215,9 +215,8 @@ class EditProfileForm extends StatelessWidget{
                     Padding(
                       padding: getPadding(top: 40),
                       child: Align(
-                        alignment: Alignment.center,
+                        alignment: Alignment.centerRight,
                         child: ActionButtonV2(
-                          maxWidth: 150,
                           action: onTap,
                           text: getCurrentLanguageValue(SAVE)!,
                         ),
