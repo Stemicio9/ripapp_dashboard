@@ -39,6 +39,7 @@ class AgenciesManageState extends State<AgenciesManage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Header(
+            deleteProfileOnTap: (){},
             onTap: () {
               showDialog(context: context, builder: (ctx)=> AgencyForm(
                   onTap: (){

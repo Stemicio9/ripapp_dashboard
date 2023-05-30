@@ -8,6 +8,8 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/demise_manage
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/my_products.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 
+import 'agency_profile.dart';
+
 
 class DashboardAgency extends StatefulWidget {
   @override
@@ -44,6 +46,15 @@ class DashboardAgencyState extends State<DashboardAgency> {
           currentPage = 2;
         }),
         isSelected: currentPage == 2,
+      ),
+      CollapsibleItem(
+        text: getCurrentLanguageValue(MY_PROFILE)!,
+        icon: Icons.person_rounded,
+        onPressed: () => setState(() {
+          title = getCurrentLanguageValue(DEATHS_INSERT)!;
+          currentPage = 3;
+        }),
+        isSelected: currentPage == 3,
       ),
       CollapsibleItem(
         text: 'Logout',
@@ -96,6 +107,8 @@ class DashboardAgencyState extends State<DashboardAgency> {
         return MyProducts();
       case 2:
         return DemiseManage();
+      case 3:
+        return AgencyProfile();
       default:
         return Container();
     }

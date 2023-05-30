@@ -45,24 +45,9 @@ class DemiseManageState extends State<DemiseManage>{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Header(
+            deleteProfileOnTap: (){},
             onTap: (){
               Navigator.pushNamed(context, RouteConstants.addDemise);
-             /* showDialog(
-                  context: context,
-                  builder: (ctx) => DemiseForm(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      cardTitle: getCurrentLanguageValue(ADD_DEMISE)!,
-                      nameController: nameController,
-                      descriptionController: descriptionController,
-                      phoneController: phoneController,
-                      cityController: cityController,
-                      lastNameController: lastNameController,
-                      churchAddressController: churchAddressController,
-                      churchNameController: churchNameController
-                  )
-              ); */
             },
             pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
             buttonText: getCurrentLanguageValue(ADD_DEMISE)!,

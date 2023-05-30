@@ -23,7 +23,7 @@ class DeleteMessageDialog extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 600,
+              width: 650,
               child: DialogCard(
                   cardTitle:getCurrentLanguageValue(ATTENTION)!,
                   child: Column(
@@ -60,8 +60,6 @@ class DeleteMessageDialog extends StatelessWidget {
                               ),
                             ),
 
-
-
                             Padding(
                               padding: getPadding(left: 3),
                               child: Expanded(
@@ -72,19 +70,11 @@ class DeleteMessageDialog extends StatelessWidget {
                                     color: background,),
                                 ),
                             ),
-
-
                           ],
                         ),
                       )
-
-
-
                     ],
                   )
-
-
-
               ),
             ),
 

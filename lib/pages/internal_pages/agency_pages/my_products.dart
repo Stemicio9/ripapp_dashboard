@@ -41,6 +41,7 @@ class MyProductsState extends State<MyProducts>{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Header(
+            deleteProfileOnTap: (){},
             onTap: (){
               showDialog(context: context, builder: (ctx)=>ProductForm(
                 imageOnTap: () async{

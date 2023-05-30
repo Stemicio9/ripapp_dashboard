@@ -31,6 +31,7 @@ const String DESCRIPTION = "Descrizione";
 const String LAST_NAME = "Cognome";
 const String EDIT_USER = "Modifica utente";
 const String EDIT_PRODUCT = "Modifica prodotto";
+const String EDIT_PROFILE = "Modifica profilo";
 const String EDIT_DEMISE = "Modifica decesso";
 const String EDIT_AGENCY = "Modifica agenzia";
 const String SAVE = "Salva";
@@ -50,6 +51,8 @@ const String FUNERAL_NOTE = "Note funeral";
 const String ADDRESS = "Indirizzo";
 const String RELATIVE_NUMBER = "Numero parente";
 const String INSERT_PHOTO = "Tocca per caricare una foto";
+const String MY_PROFILE = "Il mio profilo";
+const String DELETE_ACCOUNT = "Elimina account";
 
 
 final Map<String, String> LANG_IT = {
@@ -97,7 +100,9 @@ final Map<String, String> LANG_IT = {
   ADDRESS:"Indirizzo",
   RELATIVE_NUMBER:"Numero parente",
   INSERT_PHOTO: "Tocca per caricare una foto",
-
+  MY_PROFILE: "Il mio profilo",
+  EDIT_PROFILE: "Modifica profilo",
+  DELETE_ACCOUNT: "Elimina account",
 
   //navbar title
   USERS_MANAGE: "Gestisci utenti",

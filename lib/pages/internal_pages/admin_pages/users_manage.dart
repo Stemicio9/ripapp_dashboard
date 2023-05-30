@@ -50,6 +50,7 @@ class UsersManageState extends State<UsersManage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Header(
+            deleteProfileOnTap: (){},
             onTap: (){
               showDialog(
                   context: context,
