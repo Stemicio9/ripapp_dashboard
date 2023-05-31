@@ -28,15 +28,18 @@ class DeleteMessageDialog extends StatelessWidget {
                   cardTitle:getCurrentLanguageValue(ATTENTION)!,
                   child: Column(
                     children: [
-                      Text(
-                          message,
-                          textAlign: TextAlign.center,
-                          style: SafeGoogleFont(
-                            'Montserrat',
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                            color: black,
-                          )),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                            message,
+                            textAlign: TextAlign.center,
+                            style: SafeGoogleFont(
+                              'Montserrat',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                              color: black,
+                            )),
+                      ),
 
                       Padding(
                         padding: getPadding(top: 30),
@@ -55,12 +58,11 @@ class DeleteMessageDialog extends StatelessWidget {
                                   hasBorder: true,
                                   textColor: background,
                                   borderColor: background,
+                                  maxWidth: 180,
 
                                 ),
                               ),
                             ),
-
-
 
                             Padding(
                               padding: getPadding(left: 3),
@@ -69,22 +71,16 @@ class DeleteMessageDialog extends StatelessWidget {
                                 child:  ActionButtonV2(
                                     action: onConfirm,
                                     text: getCurrentLanguageValue(CONFIRM)!,
-                                    color: background,),
+                                    color: background,
+                                    maxWidth: 180,
+                                ),
                                 ),
                             ),
-
-
                           ],
                         ),
                       )
-
-
-
                     ],
                   )
-
-
-
               ),
             ),
 

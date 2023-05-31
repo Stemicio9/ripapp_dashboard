@@ -28,6 +28,7 @@ class UsersManageState extends State<UsersManage> {
   final String phoneNumber = '+39 0987654321';
   final String city = 'Roma';
   final String email = 'daviderossi@gmail.com';
+  final String role = 'Amministratore';
 
 
 
@@ -36,36 +37,42 @@ class UsersManageState extends State<UsersManage> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
 
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Header(
+            deleteProfileOnTap: (){},
             onTap: (){
               showDialog(
                   context: context,
                   builder: (ctx) => UsersForm(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      cardTitle: getCurrentLanguageValue(ADD_USER)!,
-                      nameController: nameController,
-                      emailController: emailController,
-                      phoneController: phoneController,
-                      cityController: cityController,
-                      lastNameController: lastNameController
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    cardTitle: getCurrentLanguageValue(ADD_USER)!,
+                    nameController: nameController,
+                    emailController: emailController,
+                    phoneController: phoneController,
+                    cityController: cityController,
+                    lastNameController: lastNameController,
+                    passwordController: passwordController,
+
                   )
 
               );
             },
             pageTitle: getCurrentLanguageValue(USERS_MANAGE)!,
             buttonText: getCurrentLanguageValue(ADD_USER)!,
-            ),
+          ),
 
           UsersTable(
             delete: (){
@@ -87,17 +94,17 @@ class UsersManageState extends State<UsersManage> {
                   context: context,
                   barrierColor: blackTransparent,
                   builder: (ctx) => UsersForm(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      cardTitle: getCurrentLanguageValue(EDIT_USER)!,
-                      nameController: nameController,
-                      emailController: emailController,
-                      phoneController: phoneController,
-                      cityController: cityController,
-                      lastNameController: lastNameController
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    cardTitle: getCurrentLanguageValue(EDIT_USER)!,
+                    nameController: nameController,
+                    emailController: emailController,
+                    phoneController: phoneController,
+                    cityController: cityController,
+                    lastNameController: lastNameController,
+                    passwordController: passwordController,
                   )
-
               );
             },
             showDetail: (){
@@ -110,14 +117,16 @@ class UsersManageState extends State<UsersManage> {
                       email: email,
                       phoneNumber: phoneNumber,
                       city: city,
-                      lastName: lastName
+                      lastName: lastName,
+                      role: role,
                   )
               );
             },
             detailMessage: detailMessage,
             editMessage: editMessage,
             deleteMessage: deleteMessage,
-          )
+          ),
+
 
         ],
       ),

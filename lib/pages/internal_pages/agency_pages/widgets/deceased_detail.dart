@@ -180,10 +180,6 @@ class DeceasedDetail extends StatelessWidget{
                       ),
                       Texth3V2(testo: cityOfInterest, color: black),
 
-
-
-
-
                     ],
                   ),
                 ),
@@ -249,7 +245,6 @@ class DeceasedDetail extends StatelessWidget{
                           )
                         ],
                       )
-
                     ],
                   ),
                 )

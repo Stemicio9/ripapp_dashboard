@@ -6,12 +6,14 @@ import 'package:ripapp_dashboard/widgets/texts.dart';
 
 class Header extends StatelessWidget {
   final onTap;
+  final deleteProfileOnTap;
   final String pageTitle;
   final bool isVisible;
   final bool showPageTitle;
   final bool iconVisible;
   final String buttonText;
   final bool showBackButton;
+  final bool showDeleteProfile;
   final EdgeInsetsGeometry leftPadding;
 
   // final TextEditingController filterController;
@@ -19,7 +21,9 @@ class Header extends StatelessWidget {
   //final List<String> kOptions;
 
   Header(
-      {required this.onTap,
+      {
+        required this.onTap,
+        required this.deleteProfileOnTap,
         this.showPageTitle = true,
         this.pageTitle = '',
         this.isVisible = true,
@@ -27,6 +31,7 @@ class Header extends StatelessWidget {
         this.buttonText = '',
         this.iconVisible = true,
         this.showBackButton = false,
+        this.showDeleteProfile = false
       //  required this.filterController,
        // this.kOptions = const [],
       //  required this.optionSelected
@@ -38,6 +43,7 @@ class Header extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: Visibility(
@@ -71,45 +77,44 @@ class Header extends StatelessWidget {
             ),
           ),
         ),
-        Visibility(
-          visible: isVisible,
-          child: Padding(
-          padding: getPadding(top: 20),
-          child: Row(
-            children: [
-           Padding(
-                  padding: getPadding(right: 5),
-                  child: ActionButtonV2(
-                    action: onTap,
-                    text: buttonText,
-                    fontSize: 14,
-                    containerHeight: 35,
-                  ),
-                ),
 
-           /*   Container(
-                width: 300,
-                height: 34,
-                child: W1NAutocomplete(
-                  customFilter: (TextEditingValue textEditingValue) {
-                    if (textEditingValue.text == '') {
-                      return kOptions;
-                    }
-                    return kOptions.where((String option) =>
-                        option.contains(textEditingValue.text.toLowerCase()));
-                  },
-                  contentPaddingTop: 20,
-                  filterController: filterController,
-                  optionSelected: optionSelected,
-                  hintText: getCurrentLanguageValue(SEARCH)!,
-                  suffixIcon: ImageConstant.imgSearch,
-                  isSuffixIcon: true,
-                  paddingLeft: 0,
-                ),
-              ) */
-            ],
-          ),
-        ),
+
+        Row(
+          children: [
+            Padding(
+              padding: getPadding(top: 20),
+              child: Row(
+                children: [
+               Visibility(
+                 visible: isVisible,
+                 child: Padding(
+                        padding: getPadding(right: 5),
+                        child: ActionButtonV2(
+                          action: onTap,
+                          text: buttonText,
+                          fontSize: 14,
+                          containerHeight: 35,
+                        ),
+                      ),
+               ),
+
+                  Visibility(
+                    visible: showDeleteProfile,
+                    child: Padding(
+                      padding: getPadding(right: 5),
+                      child: ActionButtonV2(
+                        action: deleteProfileOnTap,
+                        text: 'Elimina account',
+                        fontSize: 14,
+                        containerHeight: 35,
+                        color: rossoopaco,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ],
     );
