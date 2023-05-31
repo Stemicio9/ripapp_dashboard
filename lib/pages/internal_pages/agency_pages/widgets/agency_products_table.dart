@@ -23,25 +23,25 @@ class AgencyProductsTable extends StatelessWidget {
     ),
     ProductEntity(
       id: 2,
-      name: 'Prodotto 1',
+      name: 'Prodotto 2',
       price: 100.00,
       photoName: ImagesConstants.imgProductPlaceholder,
     ),
     ProductEntity(
       id: 3,
-      name: 'Prodotto 1',
+      name: 'Prodotto 3',
       price: 100.00,
       photoName: ImagesConstants.imgProductPlaceholder,
     ),
     ProductEntity(
       id: 4,
-      name: 'Prodotto 1',
+      name: 'Prodotto 4',
       price: 100.00,
       photoName: ImagesConstants.imgProductPlaceholder,
     ),
     ProductEntity(
       id: 5,
-      name: 'Prodotto 1',
+      name: 'Prodotto 5',
       price: 100.00,
       photoName: ImagesConstants.imgProductPlaceholder,
     ),
@@ -107,12 +107,12 @@ class AgencyProductsTable extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(3)),
             color: greyDrag,
-            border: Border.all(color: background, width: 1),
+            border: Border.all(color: background, width: 0.5),
             image: imageFile != null ?
             DecorationImage(
               image: FileImage(imageFile!),
               fit: BoxFit.contain,
-            ) : DecorationImage(
+            ) : const DecorationImage(
               image: AssetImage(ImagesConstants.imgProductPlaceholder),
               fit: BoxFit.cover,
 
@@ -128,7 +128,7 @@ class AgencyProductsTable extends StatelessWidget {
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          '${p.price} €',
+          '€ ${p.price}',
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
