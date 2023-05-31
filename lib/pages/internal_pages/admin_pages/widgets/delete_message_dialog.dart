@@ -52,7 +52,7 @@ class DeleteMessageDialog extends StatelessWidget {
                               child: Expanded(
                                 flex: 1,
                                 child:  ActionButtonV2(
-                                  action: onConfirm,
+                                  action: onCancel,
                                   text: getCurrentLanguageValue(CANCEL)!,
                                   color: white,
                                   hasBorder: true,
