@@ -7,7 +7,7 @@ class ImagesConstants{
 
   static String imgClock = "assets/images/clock.png";
 
-  static String imgProductPlaceholder = "assets/images/photo_placeholder.jpeg";
+  static const String imgProductPlaceholder = "assets/images/photo_placeholder.jpeg";
 
   static String imgDemisePlaceholder = "assets/images/demise_placeholder.jpeg";
 

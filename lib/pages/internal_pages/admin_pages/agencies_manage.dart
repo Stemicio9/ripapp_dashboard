@@ -42,6 +42,7 @@ class AgenciesManageState extends State<AgenciesManage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Header(
+            deleteProfileOnTap: (){},
             onTap: () async {
               showDialog(context: context, builder: (ctx)=> AgencyForm(
                   cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
@@ -109,7 +110,6 @@ class AgenciesManageState extends State<AgenciesManage> {
       ),
     );
   }
-
 }
 
 

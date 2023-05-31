@@ -59,6 +59,7 @@ class DemiseDetailState extends State<DemiseDetail> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
+                deleteProfileOnTap: (){},
                 leftPadding: const EdgeInsets.only(left: 5),
                 showBackButton: true,
                 onTap: null,

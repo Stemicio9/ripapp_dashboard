@@ -38,6 +38,7 @@ class ProductsManageState extends State<ProductsManage>{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Header(
+            deleteProfileOnTap: (){},
             onTap: (){
               showDialog(context: context, builder: (ctx)=>ProductForm(
                   imageOnTap: (){},
@@ -88,6 +89,8 @@ class ProductsManageState extends State<ProductsManage>{
                   priceController: priceController
               ));
             },
+
+
             showDetail: (){
               showDialog(context: context, builder: (ctx)=>ProductDetail(
                   cardTitle: getCurrentLanguageValue(PRODUCT_DETAIL)!,

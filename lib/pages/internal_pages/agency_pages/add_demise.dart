@@ -109,6 +109,7 @@ class AddDemiseState extends State<AddDemise> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(
+                deleteProfileOnTap: (){},
                 leftPadding: const EdgeInsets.only(left: 5),
                 showBackButton: true,
                 onTap: null,

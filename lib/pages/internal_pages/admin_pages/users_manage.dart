@@ -60,8 +60,13 @@ class UsersManageState extends State<UsersManage> {
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
-  final String message =
-      'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
+  final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
+  final String name = 'Davide';
+  final String lastName = 'Rossi';
+  final String id = '1';
+  final String phoneNumber = '+39 0987654321';
+  final String city = 'Roma';
+  final String email = 'daviderossi@gmail.com';
   final String role = 'Amministratore';
 
   final TextEditingController nameController = TextEditingController();
@@ -85,7 +90,8 @@ class UsersManageState extends State<UsersManage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Header(
-            onTap: () {
+            deleteProfileOnTap: (){},
+            onTap: (){
               showDialog(
                   context: context,
                   builder: (ctx) => UsersForm(
@@ -130,19 +136,21 @@ class UsersManageState extends State<UsersManage> {
             buttonText: getCurrentLanguageValue(ADD_USER)!,
           ),
           UsersTable(
-            delete: () {
+            delete: (){
               showDialog(
                   context: context,
                   builder: (ctx) => DeleteMessageDialog(
-                      onConfirm: () {
+                      onConfirm: (){
                         Navigator.pop(context);
                       },
-                      onCancel: () {
+                      onCancel: (){
                         Navigator.pop(context);
                       },
-                      message: message));
+                      message: message
+                  )
+              );
             },
-            edit: () {
+            edit: (){
               showDialog(
                   context: context,
                   barrierColor: blackTransparent,
@@ -162,7 +170,7 @@ class UsersManageState extends State<UsersManage> {
                         roles: UserRoles.values.map((e) => e.name).toList(),
                       ));
             },
-            showDetail: () {
+            showDetail: (){
               showDialog(
                   context: context,
                   builder: (ctx) => UsersDetail(

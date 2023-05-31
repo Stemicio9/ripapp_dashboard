@@ -43,7 +43,6 @@ class UsersTable extends StatelessWidget{
         idtoken: '',
         status: UserStatus.disabled,
         role: 'Agenzia'
-
     ),
     UserEntity(
       id: '3',
@@ -55,7 +54,6 @@ class UsersTable extends StatelessWidget{
         idtoken: '',
         status: UserStatus.disabled,
         role: 'Utente'
-
     ),
     UserEntity(
       id: '4',

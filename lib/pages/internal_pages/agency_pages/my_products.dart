@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/entities/single_product_entity.dart';
+import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/products_popup.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/products_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
@@ -40,38 +44,18 @@ class MyProductsState extends State<MyProducts>{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Header(
+            deleteProfileOnTap: (){},
             onTap: (){
-              showDialog(context: context, builder: (ctx)=>ProductForm(
-                imageOnTap: () async{
-                  //TODO: IMPLEMENTARE IMAGEPICKER
-                  // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
-                  Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
-                  print(pickedImage);
-                  setState(() {
-                    imageFile = pickedImage!;
-                  });
-                },
-                  onTap: (){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: green,
-                        content: const Text('Prodotto aggiunto con successo!'),
-                        duration: const Duration(milliseconds: 3000),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                      ),
-                    );
-                    Navigator.pop(context);
-                  },
-                  cardTitle: getCurrentLanguageValue(ADD_PRODUCT)!,
-                  nameController: nameController,
-                  priceController: priceController
-              ));
+              showDialog(context: context, builder: (ctx)=>
+                   ProductsPopup(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                  )
+              );
             },
-            pageTitle: getCurrentLanguageValue(MY_PRODUCTS)!,
-            buttonText: getCurrentLanguageValue(ADD_PRODUCT)!,
+            pageTitle: getCurrentLanguageValue(MY_PRODUCTS) ?? "",
+            buttonText: getCurrentLanguageValue(SELECT_PRODUCTS) ?? "",
           ),
 
           ProductsTable(
