@@ -92,6 +92,7 @@ class ProfileData extends StatelessWidget {
                     ),
                   ),
                   InputsV2Widget(
+                    mouseCursor: SystemMouseCursors.basic,
                     hinttext: getCurrentLanguageValue(NAME) ?? "",
                     controller: nameController,
                     validator: nameValidator,
@@ -117,6 +118,7 @@ class ProfileData extends StatelessWidget {
                     ),
                   ),
                   InputsV2Widget(
+                    mouseCursor: SystemMouseCursors.basic,
                     hinttext: getCurrentLanguageValue(EMAIL) ?? "",
                     controller: emailController,
                     validator: emailValidator,
@@ -149,6 +151,7 @@ class ProfileData extends StatelessWidget {
                     ),
                   ),
                   InputsV2Widget(
+                    mouseCursor: SystemMouseCursors.basic,
                     hinttext: getCurrentLanguageValue(LAST_NAME)?? "",
                     controller: lastNameController,
                     validator: lastNameValidator,
@@ -174,6 +177,7 @@ class ProfileData extends StatelessWidget {
                     ),
                   ),
                   InputsV2Widget(
+                    mouseCursor: SystemMouseCursors.basic,
                     hinttext: getCurrentLanguageValue(PHONE_NUMBER)?? "",
                     controller: phoneNumberController,
                     validator: phoneNumberValidator,

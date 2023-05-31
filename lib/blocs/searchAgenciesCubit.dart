@@ -64,30 +64,3 @@ MultiBlocProvider(
  */
 
 
-/* implementare i vari sottocasi
-Widget agencyDropdown(){
-  return BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
-      builder: (context, state){
-    if (state is SearchAgencyLoading)
-      //rotellina
-      return CircularProgressIndicator();
-    else if (state is loaded)
-      if (state.lista == vuota)
-        return Error("non ci sono agenzie");
-      else return dropdownFilled;
-    else
-      return Error("errore di connessione");
-  }
-}
-   Widget buildFunction(BuildContext context, state){
-       if (state is SearchAgencyLoading)
-      //rotellina
-      return null;
-    else if (state is loaded)
-      if (state.lista == vuota)
-        return Error("non ci sono agenzie");
-      else return dropdownFilled;
-    else
-      return Error("errore di connessione");
-   }
- */

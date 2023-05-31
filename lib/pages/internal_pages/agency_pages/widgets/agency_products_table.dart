@@ -45,6 +45,18 @@ class AgencyProductsTable extends StatelessWidget {
       price: 100.00,
       photoName: ImagesConstants.imgProductPlaceholder,
     ),
+    ProductEntity(
+      id: 6,
+      name: 'Prodotto 6',
+      price: 100.00,
+      photoName: ImagesConstants.imgProductPlaceholder,
+    ),
+    ProductEntity(
+      id: 7,
+      name: 'Prodotto 7',
+      price: 100.00,
+      photoName: ImagesConstants.imgProductPlaceholder,
+    ),
   ];
 
   @override
@@ -54,6 +66,7 @@ class AgencyProductsTable extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: DataTable(
         columnSpacing: 30,
+        dataRowHeight: 85,
         dataRowColor: MaterialStateColor.resolveWith((states) => white),
         headingRowColor: MaterialStateColor.resolveWith((states) => background),
         border: const TableBorder(
@@ -98,12 +111,16 @@ class AgencyProductsTable extends StatelessWidget {
       cells: <DataCell>[
         DataCell(Text(
           p.id.toString(),
-          style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+          style: SafeGoogleFont(
+              'Montserrat',
+              color: black,
+              fontSize: 14,
+              fontWeight: FontWeight.w700
+          ),
         )),
         DataCell(Container(
-          height: 40,
-          width: 40,
+          height: 70,
+          width: 70,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(3)),
             color: greyDrag,
@@ -118,22 +135,17 @@ class AgencyProductsTable extends StatelessWidget {
 
             ),
           ),
-        )
-
-
-        ),
+        )),
         DataCell(Text(
           p.name,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+              color: black, fontSize: 14, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
           '€ ${p.price}',
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+              color: black, fontSize: 14, fontWeight: FontWeight.w700),
         )),
-
-
       ],
     );
   }

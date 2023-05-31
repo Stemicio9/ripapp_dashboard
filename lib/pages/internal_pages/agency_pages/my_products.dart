@@ -36,29 +36,31 @@ class MyProductsState extends State<MyProducts>{
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Header(
-            deleteProfileOnTap: (){},
-            onTap: (){
-              showDialog(context: context, builder: (ctx)=>
-                   ProductsPopup(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                  )
-              );
-            },
-            pageTitle: getCurrentLanguageValue(MY_PRODUCTS) ?? "",
-            buttonText: getCurrentLanguageValue(SELECT_PRODUCTS) ?? "",
-          ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Header(
+              deleteProfileOnTap: (){},
+              onTap: (){
+                showDialog(context: context, builder: (ctx)=>
+                     ProductsPopup(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                    )
+                );
+              },
+              pageTitle: getCurrentLanguageValue(MY_PRODUCTS) ?? "",
+              buttonText: getCurrentLanguageValue(SELECT_PRODUCTS) ?? "",
+            ),
 
-          AgencyProductsTable()
+            AgencyProductsTable()
 
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -53,7 +53,7 @@ class _ProductsPopupState extends State<ProductsPopup> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: 970,
+          width: 1200,
           child: DialogCard(
               cancelIcon: true,
               cardTitle: 'Seleziona i tuoi prodotti',

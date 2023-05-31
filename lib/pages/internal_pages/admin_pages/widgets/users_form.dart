@@ -55,8 +55,8 @@ class UsersForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => SearchAgencyCubit(),
-        child: UsersFormWidget(onTap: onTap,
+      create: (_) => SearchAgencyCubit(),
+      child: UsersFormWidget(onTap: onTap,
           cardTitle: cardTitle,
           nameController: nameController,
           phoneController: phoneController,
@@ -67,7 +67,7 @@ class UsersForm extends StatelessWidget {
           statusChange: statusChange,
           agencyChange: agencyChange,
           roles: roles
-        ),
+      ),
     );
   }
 }
@@ -164,8 +164,8 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
           Container(
             width: 700,
             child: DialogCard(
-              cancelIcon: true,
-              paddingLeft: 10,
+                cancelIcon: true,
+                paddingLeft: 10,
                 paddingRight: 10,
                 cardTitle: widget.cardTitle,
                 child: Column(
@@ -459,7 +459,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                           border: Border.all(color: greyState)
                                       ),
                                       child: BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
-                                              builder: (context, state){
+                                          builder: (context, state){
 
                                             if (state is SearchAgencyLoading)
                                               return CircularProgressIndicator();
@@ -470,14 +470,14 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                               else {
                                                 List<AgencyEntity> agencies = state.agencies;
 
-                                                  return DropdownButton<AgencyEntity>(
+                                                return DropdownButton<AgencyEntity>(
                                                   hint: const Text(
-                                                  "Seleziona agenzia",
-                                                  style: TextStyle(
-                                                  color: black,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                  ),
+                                                    "Seleziona agenzia",
+                                                    style: TextStyle(
+                                                      color: black,
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.normal,
+                                                    ),
                                                   ),
 
                                                   isExpanded: true,
@@ -494,13 +494,13 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                       value: agency,
                                                       child: Padding(
                                                         padding:
-                                                            const EdgeInsets
-                                                                .only(left: 20),
+                                                        const EdgeInsets
+                                                            .only(left: 20),
                                                         child: Text(
                                                           agency?.agencyName ??
                                                               "",
                                                           style:
-                                                              const TextStyle(
+                                                          const TextStyle(
                                                             color: black,
                                                             fontSize: 14,
                                                           ),
@@ -510,12 +510,12 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                   }).toList(),
                                                 );
                                               }
-                                          else
-                                          return ErrorWidget("errore di connessione"); //TODO aggiungere errore
-                                        }
-                                        ),
+                                            else
+                                              return ErrorWidget("errore di connessione"); //TODO aggiungere errore
+                                          }
                                       ),
                                     ),
+                                  ),
                                 ],
                               ) : Container()),
                         ],
@@ -525,8 +525,8 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: ActionButtonV2(
-                          action: widget.onTap,
-                          text: getCurrentLanguageValue(SAVE)!,
+                        action: widget.onTap,
+                        text: getCurrentLanguageValue(SAVE)!,
                       ),
                     )
                   ],
