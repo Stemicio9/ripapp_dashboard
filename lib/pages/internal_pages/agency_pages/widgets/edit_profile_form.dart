@@ -11,7 +11,9 @@ import '../../../../utils/style_utils.dart';
 import '../../../../widgets/action_button.dart';
 import '../../../../widgets/input.dart';
 
-class EditProfileForm extends StatelessWidget{
+
+class EditProfileForm extends StatefulWidget{
+
 
   final String cardTitle;
   final TextEditingController nameController;
@@ -23,12 +25,14 @@ class EditProfileForm extends StatelessWidget{
   final dynamic lastNameValidator;
   final dynamic phoneValidator;
   final dynamic emailValidator;
-  final onTap;
-  final imageOnTap;
+  final Function() onTap;
+  bool showConfirmPassword;
+  final Function() imageOnTap;
+  final Function() changePassword;
   final File? imageFile;
 
 
-  const EditProfileForm({
+   EditProfileForm({
     super.key,
     this.imageFile,
     required this.imageOnTap,
@@ -42,7 +46,22 @@ class EditProfileForm extends StatelessWidget{
     required this.lastNameController,
     required this.emailController,
     required this.phoneController,
+    this.showConfirmPassword = false,
+    required this.changePassword
   });
+
+  @override
+  State<StatefulWidget> createState() {
+    return EditProfileFormState();
+  }
+
+}
+
+
+
+class EditProfileFormState extends State<EditProfileForm>{
+
+
 
 
   @override
@@ -58,7 +77,7 @@ class EditProfileForm extends StatelessWidget{
                 cancelIcon: true,
                 paddingLeft: 10,
                 paddingRight: 10,
-                cardTitle: cardTitle,
+                cardTitle: widget.cardTitle,
                 child: Column(
                   children: [
                     Row(
@@ -82,7 +101,7 @@ class EditProfileForm extends StatelessWidget{
                                     ),
                                   ),
                                   InkWell(
-                                      onTap: imageOnTap,
+                                      onTap: widget.imageOnTap,
                                       child: Container(
                                         height: 130,
                                         width: 130,
@@ -90,8 +109,8 @@ class EditProfileForm extends StatelessWidget{
                                           borderRadius: const BorderRadius.all(Radius.circular(3)),
                                           color: greyDrag,
                                           border: Border.all(color: background, width: 1),
-                                          image: imageFile != null ? DecorationImage(
-                                            image: FileImage(imageFile!),
+                                          image: widget.imageFile != null ? DecorationImage(
+                                            image: FileImage(widget.imageFile!),
                                             fit: BoxFit.contain,
                                           ) : DecorationImage(
                                             image: AssetImage(ImagesConstants.imgDemisePlaceholder),
@@ -122,8 +141,8 @@ class EditProfileForm extends StatelessWidget{
                                 ),
                                 InputsV2Widget(
                                   hinttext: getCurrentLanguageValue(NAME) ?? "",
-                                  controller: nameController,
-                                  validator: nameValidator,
+                                  controller: widget.nameController,
+                                  validator: widget.nameValidator,
                                   paddingLeft: 0,
                                   paddingRight: 20,
                                   borderSide: const BorderSide(color: greyState),
@@ -144,12 +163,78 @@ class EditProfileForm extends StatelessWidget{
                                 ),
                                 InputsV2Widget(
                                   hinttext: getCurrentLanguageValue(EMAIL) ?? "",
-                                  controller: emailController,
-                                  validator: emailValidator,
+                                  controller: widget.emailController,
+                                  validator: widget.emailValidator,
                                   paddingRight: 20,
                                   paddingLeft: 0,
                                   borderSide: const BorderSide(color: greyState),
                                   activeBorderSide: const BorderSide(color: background),
+                                ),
+
+                                Padding(
+                                  padding: getPadding(bottom: 5,top: 20),
+                                  child: Text(
+                                    'CAMBIA PASSWORD',
+                                    style: SafeGoogleFont(
+                                      'Montserrat',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: background,
+                                    ),
+                                  ),
+                                ),
+
+
+
+                                Visibility(
+                                  visible: !widget.showConfirmPassword,
+                                  child: ActionButtonV2(
+                                      action: (){
+                                        setState(() {
+                                          widget.showConfirmPassword = true;
+                                        });
+                                      },
+                                      text: "Reset password",
+                                    fontSize: 14,
+                                    containerHeight: 35,
+                                  ),
+                                ),
+
+                                Visibility(
+                                  visible: widget.showConfirmPassword,
+                                    child: Row(
+                                      children: [
+
+                                        Padding(
+                                          padding: getPadding(right:6.5),
+                                          child: ActionButtonV2(
+                                            action: (){
+                                              setState(() {
+                                                widget.showConfirmPassword = false;
+                                              });
+                                            },
+                                            text: getCurrentLanguageValue(CANCEL) ?? "",
+                                            maxWidth: 100,
+                                            fontSize: 14,
+                                            containerHeight: 35,
+                                            borderColor: background,
+                                            textColor: background,
+                                            color: white,
+                                            hasBorder: true,
+
+                                          ),
+                                        ),
+
+                                        ActionButtonV2(
+                                          action: widget.changePassword,
+                                          text: getCurrentLanguageValue(CONFIRM) ?? "",
+                                          maxWidth: 100,
+                                          fontSize: 14,
+                                          containerHeight: 35,
+
+                                        ),
+                                      ],
+                                    )
                                 )
 
                               ],
@@ -174,8 +259,8 @@ class EditProfileForm extends StatelessWidget{
                                 ),
                                 InputsV2Widget(
                                   hinttext: getCurrentLanguageValue(LAST_NAME) ?? "",
-                                  controller: lastNameController,
-                                  validator: lastNameValidator,
+                                  controller: widget.lastNameController,
+                                  validator: widget.lastNameValidator,
                                   paddingLeft: 0,
                                   paddingRight: 0,
                                   borderSide: const BorderSide(color: greyState),
@@ -196,8 +281,8 @@ class EditProfileForm extends StatelessWidget{
                                 ),
                                 InputsV2Widget(
                                   hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
-                                  controller: phoneController,
-                                  validator: phoneValidator,
+                                  controller: widget.phoneController,
+                                  validator: widget.phoneValidator,
                                   inputFormatters: <TextInputFormatter>[
                                     FilteringTextInputFormatter.digitsOnly
                                   ], // O,
@@ -217,7 +302,7 @@ class EditProfileForm extends StatelessWidget{
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: ActionButtonV2(
-                          action: onTap,
+                          action: widget.onTap,
                           text: getCurrentLanguageValue(SAVE)!,
                         ),
                       ),

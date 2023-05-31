@@ -55,6 +55,7 @@ class _ProductsPopupState extends State<ProductsPopup> {
         Container(
           width: 970,
           child: DialogCard(
+              cancelIcon: true,
               cardTitle: 'Seleziona i tuoi prodotti',
               child: Column(
                 children: [

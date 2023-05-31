@@ -58,6 +58,20 @@ class AgencyProfileState extends State<AgencyProfile>{
               showDialog(
                   context: context,
                   builder: (ctx) => EditProfileForm(
+                      changePassword:(){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: green,
+                            content: const Text('Ti abbiamo inviatp una mail per il reset della password!'),
+                            duration: const Duration(milliseconds: 3000),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      } ,
                       imageOnTap: () async {
                         //TODO: IMPLEMENTARE IMAGEPICKER
                         // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();

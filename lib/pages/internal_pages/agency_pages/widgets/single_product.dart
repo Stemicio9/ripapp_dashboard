@@ -20,62 +20,65 @@ class SingleProduct extends StatelessWidget {
           elevation: 5,
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
               side: BorderSide(
                   color: singleProductEntity.isSelected ? background : white,
                   width: 2)),
-          child: Padding(
-            padding: const EdgeInsets.all(30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 130,
-                  width: 130,
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(3)),
-                      color: greyDrag,
-                      border: Border.all(
-                        color: background,
-                        width: 1,
-                      ),
-                      image: DecorationImage(
-                        image: AssetImage(singleProductEntity.urlImage),
-                        fit: BoxFit.cover,
-                      )),
-                ),
-                Padding(
-                  padding: getPadding(top: 25),
-                  child: Text(
-                    singleProductEntity.name,
-                    style: SafeGoogleFont(
-                        'Montserrat',
-                        fontSize: 14,
-                        color: background,
-                        fontWeight: FontWeight.bold),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: Padding(
+              padding: const EdgeInsets.all(30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 130,
+                    width: 130,
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(Radius.circular(3)),
+                        color: greyDrag,
+                        border: Border.all(
+                          color: background,
+                          width: 1,
+                        ),
+                        image: DecorationImage(
+                          image: AssetImage(singleProductEntity.urlImage),
+                          fit: BoxFit.cover,
+                        )),
                   ),
-                ),
-
-                Container(
-                  width: 60,
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Divider(
-                    thickness: 1,
-                    color: blackDivider,
-
-                  ),
-                ),
-
-                 Text(
-                    "€ ${singleProductEntity.price}",
-                    style: SafeGoogleFont(
-                        'Montserrat',
-                        fontSize: 14,
-                        color: background,
-                        fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: getPadding(top: 25),
+                    child: Text(
+                      singleProductEntity.name,
+                      style: SafeGoogleFont(
+                          'Montserrat',
+                          fontSize: 14,
+                          color: background,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
 
-              ],
+                  Container(
+                    width: 60,
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Divider(
+                      thickness: 1,
+                      color: blackDivider,
+
+                    ),
+                  ),
+
+                   Text(
+                      "€ ${singleProductEntity.price}",
+                      style: SafeGoogleFont(
+                          'Montserrat',
+                          fontSize: 14,
+                          color: background,
+                          fontWeight: FontWeight.bold),
+                    ),
+
+                ],
+              ),
             ),
           ),
         ));

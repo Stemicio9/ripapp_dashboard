@@ -11,7 +11,13 @@ class DialogCard extends StatelessWidget {
   final Color cardColor;
   final bool cancelIcon;
 
-  DialogCard({required this.cardTitle, required this.child, this.paddingRight = 0, this.paddingLeft=0, this.cardColor = white, this.cancelIcon=false});
+  DialogCard(
+      {required this.cardTitle,
+      required this.child,
+      this.paddingRight = 0,
+      this.paddingLeft = 0,
+      this.cardColor = white,
+      this.cancelIcon = false});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +25,7 @@ class DialogCard extends StatelessWidget {
         color: cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 0,
-        child: Column(
-            children: [
+        child: Column(children: [
           Container(
             width: MediaQuery.of(context).size.width,
             padding: getPadding(top: 15, bottom: 15),
@@ -28,8 +33,7 @@ class DialogCard extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10)),
-                color: background
-            ),
+                color: background),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -38,10 +42,10 @@ class DialogCard extends StatelessWidget {
                   cardTitle,
                   textAlign: TextAlign.center,
                   style: SafeGoogleFont(
-                    'Montserrat',
-                    fontSize:22,
-                    fontWeight: FontWeight.w600,
-                    color: white
+                      'Montserrat',
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: white
                   ),
                 ),
                 Visibility(
@@ -49,20 +53,28 @@ class DialogCard extends StatelessWidget {
                   child: Padding(
                     padding: getPadding(right: 5),
                     child: GestureDetector(
-                      onTap: (){Navigator.pop(context);},
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
                         child: const MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                            child: Icon(Icons.close_rounded,color: white,))
-                    ),
+                            cursor: SystemMouseCursors.click,
+                            child: Icon(
+                              Icons.close_rounded,
+                              color: white,
+                            ))),
                   ),
                 ),
-
               ],
             ),
           ),
           Container(
             width: MediaQuery.of(context).size.width,
-            padding: getPadding(top: 35, bottom: 35, left: paddingLeft, right: paddingRight),
+            padding: getPadding(
+                top: 35,
+                bottom: 35,
+                left: paddingLeft,
+                right: paddingRight
+            ),
             child: child,
           )
         ]));

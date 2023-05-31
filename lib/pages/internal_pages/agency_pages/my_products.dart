@@ -58,8 +58,8 @@ class MyProductsState extends State<MyProducts>{
                   )
               );
             },
-            pageTitle: getCurrentLanguageValue(MY_PRODUCTS)!,
-            buttonText: getCurrentLanguageValue(ADD_PRODUCT)!,
+            pageTitle: getCurrentLanguageValue(MY_PRODUCTS) ?? "",
+            buttonText: getCurrentLanguageValue(SELECT_PRODUCTS) ?? "",
           ),
 
           ProductsTable(
