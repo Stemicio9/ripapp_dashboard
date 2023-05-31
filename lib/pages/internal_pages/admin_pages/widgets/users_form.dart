@@ -26,7 +26,8 @@ class UsersForm extends StatelessWidget {
   final dynamic lastNameValidator;
   final dynamic passwordValidator;
   final onTap;
-  final Function(String selectedValue) change;
+  final Function(String selectedValue) statusChange;
+  final Function(AgencyEntity selectedAgency) agencyChange;
   final List<String> roles;
 
 
@@ -46,7 +47,8 @@ class UsersForm extends StatelessWidget {
     required this.cityController,
     required this.passwordController,
     required this.lastNameController,
-    required this.change,
+    required this.statusChange,
+    required this.agencyChange,
     required this.roles,
   });
 
@@ -62,7 +64,8 @@ class UsersForm extends StatelessWidget {
           cityController: cityController,
           passwordController: passwordController,
           lastNameController: lastNameController,
-          change: change,
+          statusChange: statusChange,
+          agencyChange: agencyChange,
           roles: roles
         ),
     );
@@ -90,7 +93,8 @@ class UsersFormWidget extends StatefulWidget{
   final dynamic lastNameValidator;
   final dynamic passwordValidator;
   final onTap;
-  final Function(String selectedValue) change;
+  final Function(String selectedValue) statusChange;
+  final Function(AgencyEntity selectedAgency) agencyChange;
   final List<String> roles;
 
   const UsersFormWidget({
@@ -109,7 +113,8 @@ class UsersFormWidget extends StatefulWidget{
     required this.cityController,
     required this.passwordController,
     required this.lastNameController,
-    required this.change,
+    required this.statusChange,
+    required this.agencyChange,
     required this.roles,
   });
 
@@ -401,7 +406,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                         onChanged: (String? value) {
                                           setState(() {
                                             selectedValue = value!;
-                                            widget.change(selectedValue);
+                                            widget.statusChange(selectedValue);
                                           });
                                         },
                                         items: widget.roles.map((String role) {
@@ -480,23 +485,30 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                   value: state.selectedAgency,
                                                   onChanged: (AgencyEntity? value) {
                                                     _searchAgencyCubit.changeSelectedAgency(value);
+                                                    print("valoreeee ");print( value.toString());
+                                                    if (value != null)
+                                                      widget.agencyChange(value!);
                                                   },
                                                   items: agencies.map((AgencyEntity agency) {
-                                                  return DropdownMenuItem<AgencyEntity>(
-                                                  value: agency,
-                                                  child: Padding(
-                                                  padding: const EdgeInsets.only(left: 20),
-                                                  child: Text(
-                                                  agency?.agencyName ?? "",
-                                                  style: const TextStyle(
-                                                  color: black,
-                                                  fontSize: 14,
-                                                  ),
-                                                  ),
-                                                  ),
-                                                  );
+                                                    return DropdownMenuItem<AgencyEntity>(
+                                                      value: agency,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(left: 20),
+                                                        child: Text(
+                                                          agency?.agencyName ??
+                                                              "",
+                                                          style:
+                                                              const TextStyle(
+                                                            color: black,
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
                                                   }).toList(),
-                                                  );
+                                                );
                                               }
                                           else
                                           return ErrorWidget("errore di connessione"); //TODO aggiungere errore
@@ -525,35 +537,3 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
     );
   }
 }
-
-/*
-                                          return BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
-                                            builder: (context, state){
-                                              if (state is SearchAgencyLoading)
-                                                return CircularProgressIndicator();
-                                              else if (state is SearchAgencyLoaded)
-                                                if ((state.agencies as List<>).length == 0) {
-                                                  return Error(
-                                                      "non ci sono agenzie");
-                                                }
-                                                else {
-                                                  items: agencies.map( (String agency) {
-                                                  return DropdownMenuItem<String>(
-                                                  value: agency,
-                                                  child: Padding(
-                                                  padding: const EdgeInsets.only(left: 20),
-                                                  child: Text(
-                                                  agency,
-                                                  style: const TextStyle(
-                                                  color: black,
-                                                  fontSize: 14,
-                                                  ),
-                                                  ),
-                                                  ),
-                                                  );
-                                                  }).toList(),;
-                                                  }
-                                              else
-                                                return Error("errore di connessione");
-                                            }
- */

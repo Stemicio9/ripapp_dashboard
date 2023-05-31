@@ -43,9 +43,6 @@ class AgenciesManageState extends State<AgenciesManage> {
         children: [
           Header(
             onTap: () async {
-              var agenzie = await AgencyRepository().getAgencies();
-              print(agenzie);
-
               showDialog(context: context, builder: (ctx)=> AgencyForm(
                   cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
                   nameController: nameController,

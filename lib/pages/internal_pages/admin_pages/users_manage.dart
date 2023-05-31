@@ -35,7 +35,6 @@ class UsersManageState extends State<UsersManage> {
 
   );
 
-  //setStatusFromDropdown(UserRoles role) {
   setStatusFromDropdown(String userRole) {
     UserRoles role = UserRoles.values.firstWhere((e) => e.toString() == 'UserRoles.' + userRole);
     userEntity.role = role.toString();
@@ -52,6 +51,10 @@ class UsersManageState extends State<UsersManage> {
       default: {}
       break;
     }
+  }
+
+  setAgencyFromDropdown(AgencyEntity agencyEntity){
+    userEntity.agency = agencyEntity;
   }
 
   final String detailMessage = 'Dettagli';
@@ -104,11 +107,12 @@ class UsersManageState extends State<UsersManage> {
                                 return; //TODO: Handle error
                               }
                               print("SALVO SU DB LOCALE");
-                              var response =
-                                  await UserRepository().signup(userEntity);
+                              var response = await UserRepository().signup(userEntity);
                               Navigator.pop(context);
                             });
                           }
+
+
                         },
                         cardTitle: getCurrentLanguageValue(ADD_USER)!,
                         nameController: nameController,
@@ -117,7 +121,8 @@ class UsersManageState extends State<UsersManage> {
                         cityController: cityController,
                         lastNameController: lastNameController,
                         passwordController: passwordController,
-                        change: setStatusFromDropdown,
+                        statusChange: setStatusFromDropdown,
+                        agencyChange: setAgencyFromDropdown,
                         roles: UserRoles.values.map((e) => e.name).toList(),
                       ));
             },
@@ -142,7 +147,8 @@ class UsersManageState extends State<UsersManage> {
                   context: context,
                   barrierColor: blackTransparent,
                   builder: (ctx) => UsersForm(
-                        change: setStatusFromDropdown,
+                        statusChange: setStatusFromDropdown,
+                        agencyChange: setAgencyFromDropdown,
                         onTap: () {
                           Navigator.pop(context);
                         },

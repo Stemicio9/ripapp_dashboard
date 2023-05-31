@@ -18,7 +18,7 @@ class AgencyEntity {
   //toString
   @override
   String toString() {
-    return 'UserEntity{agencyid: $id, agencyName: $agencyName, email: $email, address: $city, telephoneNumber:$phoneNumber ';
+    return 'AgencyEntity{agencyid: $id, agencyName: $agencyName, email: $email, address: $city, telephoneNumber:$phoneNumber }';
   }
 
   factory AgencyEntity.fromJson(Map<String, dynamic> json) => AgencyEntity(

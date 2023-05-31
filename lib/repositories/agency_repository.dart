@@ -28,14 +28,11 @@ class AgencyRepository{
     Response res;
     try {
       res = await _dio.get(allAgenciesUrl);
-      print("e allora no");
     }
     on DioError catch (e) {
-      print("e allora no 2");
       return List.empty(growable: true);
     }
     if (res.statusCode != 200) {
-      print("e allora no 3");
       return List.empty(growable: true);
     }
     List<AgencyEntity> agencies = (res.data as List).map((agency) => AgencyEntity.fromJson(agency)).toList();

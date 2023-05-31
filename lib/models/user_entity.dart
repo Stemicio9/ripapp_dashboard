@@ -35,7 +35,8 @@ class UserEntity {
   //toString
   @override
   String toString() {
-    return 'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, email: $email, city: $city, phonenumber:$phoneNumber, idtoken:$idtoken, status:$status, role:$role';
+    return 'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, email: $email,'
+        ' city: $city, phonenumber:$phoneNumber, idtoken:$idtoken, status:$status, role:$role, agency:$agency}';
   }
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(

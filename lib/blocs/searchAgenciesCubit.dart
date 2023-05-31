@@ -8,11 +8,8 @@ import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 
 @immutable
 class SearchAgencyState{}
-
 class SearchAgencyLoading extends SearchAgencyState {}
-
 class SearchAgencyError extends SearchAgencyState {}
-
 class SearchAgencyLoaded extends SearchAgencyState {
   final List<AgencyEntity> agencies;
   final AgencyEntity? selectedAgency;
@@ -20,23 +17,15 @@ class SearchAgencyLoaded extends SearchAgencyState {
   //SearchAgencyLoaded(this.agencies, this.loadingMore);
   SearchAgencyLoaded(this.agencies, this.selectedAgency);
 
-
-  SearchAgencyLoaded copyWith({
-    List<AgencyEntity>? agencies,
-    AgencyEntity? selectedAgency,
-  }) {
+  //copywith si prende una lista di agenzie e una agenzia; se non vengono fornite viene tornata una copia del
+  //SearchAgencyLoaded corrente con la sua lista e la sua agenzia
+  SearchAgencyLoaded copyWith({List<AgencyEntity>? agencies, AgencyEntity? selectedAgency,}) {
     return SearchAgencyLoaded(
        agencies ?? this.agencies,
        selectedAgency ?? this.selectedAgency
     );
   }
 }
-
-
-
-
-
-
 
 class SearchAgencyCubit extends Cubit<SearchAgencyState> {
   SearchAgencyCubit() : super(SearchAgencyLoading());
@@ -53,16 +42,13 @@ class SearchAgencyCubit extends Cubit<SearchAgencyState> {
       }
     }
 
-
   changeSelectedAgency(AgencyEntity? selectedAgency){
     if(state is SearchAgencyLoaded && selectedAgency != null){
       var a = state as SearchAgencyLoaded;
       emit(a.copyWith(selectedAgency: selectedAgency));
     }
-
   }
-
-  }
+}
 
 
 
