@@ -18,12 +18,10 @@ class AgencyForm extends StatelessWidget {
   final dynamic cityValidator;
   final dynamic emailValidator;
   final dynamic phoneValidator;
-  final onTap;
   final Function() onSubmit;
 
   const AgencyForm({
     super.key,
-    required this.onTap,
     required this.cardTitle,
     this.nameValidator,
     this.emailValidator,
@@ -190,7 +188,7 @@ class AgencyForm extends StatelessWidget {
                     ),
                   )
                 ],
-              ))
+              )))
         ],
       ),
     );
