@@ -463,44 +463,57 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
 
                                             if (state is SearchAgencyLoading)
                                               return CircularProgressIndicator();
-                                            else if (state is SearchAgencyLoaded)
-                                              if ((state.agencies as List).length == 0) {
-                                                return ErrorWidget("lista vuota"); //TODO aggiungere errore
+                                            else if (state is SearchAgencyLoaded) {
+                                              if ((state.agencies as List)
+                                                  .length == 0) {
+                                                return ErrorWidget(
+                                                    "lista vuota"); //TODO aggiungere errore
                                               }
                                               else {
-                                                List<AgencyEntity> agencies = state.agencies;
+                                                List<
+                                                    AgencyEntity> agencies = state
+                                                    .agencies;
 
-                                                  return DropdownButton<AgencyEntity>(
+                                                return DropdownButton<
+                                                    AgencyEntity>(
                                                   hint: const Text(
-                                                  "Seleziona agenzia",
-                                                  style: TextStyle(
-                                                  color: black,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                  ),
+                                                    "Seleziona agenzia",
+                                                    style: TextStyle(
+                                                      color: black,
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight
+                                                          .normal,
+                                                    ),
                                                   ),
 
                                                   isExpanded: true,
                                                   underline: const SizedBox(),
                                                   value: state.selectedAgency,
-                                                  onChanged: (AgencyEntity? value) {
-                                                    _searchAgencyCubit.changeSelectedAgency(value);
-                                                    print("valoreeee ");print( value.toString());
+                                                  onChanged: (
+                                                      AgencyEntity? value) {
+                                                    _searchAgencyCubit
+                                                        .changeSelectedAgency(
+                                                        value);
+                                                    print("valoreeee ");
+                                                    print(value.toString());
                                                     if (value != null)
-                                                      widget.agencyChange(value!);
+                                                      widget.agencyChange(
+                                                          value!);
                                                   },
-                                                  items: agencies.map((AgencyEntity agency) {
-                                                    return DropdownMenuItem<AgencyEntity>(
+                                                  items: agencies.map((
+                                                      AgencyEntity agency) {
+                                                    return DropdownMenuItem<
+                                                        AgencyEntity>(
                                                       value: agency,
                                                       child: Padding(
                                                         padding:
-                                                            const EdgeInsets
-                                                                .only(left: 20),
+                                                        const EdgeInsets
+                                                            .only(left: 20),
                                                         child: Text(
                                                           agency?.agencyName ??
                                                               "",
                                                           style:
-                                                              const TextStyle(
+                                                          const TextStyle(
                                                             color: black,
                                                             fontSize: 14,
                                                           ),
@@ -510,8 +523,9 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                   }).toList(),
                                                 );
                                               }
-                                          else
-                                          return ErrorWidget("errore di connessione"); //TODO aggiungere errore
+                                            }
+                                            else
+                                            return ErrorWidget("errore di connessione"); //TODO aggiungere errore
                                         }
                                         ),
                                       ),

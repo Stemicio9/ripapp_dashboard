@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/entities/single_product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/products_row.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
@@ -7,27 +9,52 @@ import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import '../../../../constants/language.dart';
 import '../../../../widgets/action_button.dart';
 
-class ProductsPopup extends StatefulWidget {
+//ProductsPopup
+//_ProductsPopupState
+class ProductsPopup extends StatelessWidget {
+
   final Function() onTap;
 
   const ProductsPopup({Key? key,required this.onTap}) : super(key: key);
 
   @override
-  State<ProductsPopup> createState() => _ProductsPopupState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SearchProductCubit(),
+      child: ProductsPopupWrapped(
+        onTap: onTap
+      ),
+    );
+  }
 }
 
-class _ProductsPopupState extends State<ProductsPopup> {
+
+
+class ProductsPopupWrapped extends StatefulWidget {
+  final Function() onTap;
+
+  const ProductsPopupWrapped({Key? key,required this.onTap}) : super(key: key);
+
+  @override
+  State<ProductsPopupWrapped> createState() => _ProductsPopupWrappedState();
+}
+
+class _ProductsPopupWrappedState extends State<ProductsPopupWrapped> {
 
 
   // fixme change with real data from backend
   // fixme make a bloc and a cubit to manage this situation
   late List<SingleProductEntity> products = List.empty(growable: true);
 
+  SearchProductCubit get _searchProductCubit => context.read<SearchProductCubit>();
+
 
   @override
   void initState() {
     // fixme here we use initState only to initialize product list, but is dummy
     // fixme delete this method when bloc will be done
+    _searchProductCubit.fetchProducts();
+
     for(int i = 0; i<10; i++){
       products.add(SingleProductEntity(name: "Prodotto $i", onTap: onProductTapped,price: "100,00"));
     }
@@ -62,10 +89,22 @@ class _ProductsPopupState extends State<ProductsPopup> {
                 Container(
                       height: 450,
                         child: SingleChildScrollView(
-                            child: ProductsRow(products: products,)
+                            child:
+                              BlocBuilder<SearchProductCubit, SearchProductState>(
+                                  builder: (context, state){
+                                if (state is SearchProductLoaded){
+                                  products.clear();
+                                  state.availableProducts.forEach((product) {
+                                    products.add(SingleProductEntity(name: product.name ?? "", price: product.price.toString(),
+                                        urlImage: "url", isSelected: state.agencyProducts.contains(product), onTap: onProductTapped));
+                                  });
+                                  return ProductsRow(products: products,);
+                                }
+                                else
+                                  return ErrorWidget("errore");
+                              }
                         )
-                    ),
-
+                    ),),
                   Padding(
                     padding: const EdgeInsets.only(right: 30,top: 20),
                     child: Align(
