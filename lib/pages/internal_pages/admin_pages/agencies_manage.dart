@@ -59,7 +59,7 @@ class AgenciesManageState extends State<AgenciesManage> {
                   );
                   AgencyRepository().saveAgency(agencyEntity);
                   print("salvataggio agenzia...");
-                  //Navigator.pop(context);
+                  Navigator.pop(context);
                 },
               ));
             },

@@ -28,6 +28,7 @@ class InputsV2Widget extends StatelessWidget {
   final onTap;
   final iconOnTap;
   final BorderSide borderSide;
+  final MouseCursor mouseCursor;
   final BorderSide activeBorderSide;
   final int maxLenght;
   final bool multiline;
@@ -87,6 +88,7 @@ class InputsV2Widget extends StatelessWidget {
       this.inputFormatters,
         this.maxLenght = 999999999,
       this.borderSide = BorderSide.none,
+        this.mouseCursor = SystemMouseCursors.text,
       this.activeBorderSide = BorderSide.none})
       : hintText = hinttext;
 
@@ -100,6 +102,7 @@ class InputsV2Widget extends StatelessWidget {
             top: paddingTop,
             bottom: paddingBottom),
         child: TextFormField(
+          mouseCursor: mouseCursor,
           readOnly: readOnly,
           onTap: onTap,
           focusNode: focusNode,

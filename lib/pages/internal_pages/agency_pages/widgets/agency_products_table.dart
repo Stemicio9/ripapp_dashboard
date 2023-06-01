@@ -23,25 +23,37 @@ class AgencyProductsTable extends StatelessWidget {
     ),
     ProductEntity(
       id: 2,
-      name: 'Prodotto 1',
+      name: 'Prodotto 2',
       price: 100.00,
       photoName: ImagesConstants.imgProductPlaceholder,
     ),
     ProductEntity(
       id: 3,
-      name: 'Prodotto 1',
+      name: 'Prodotto 3',
       price: 100.00,
       photoName: ImagesConstants.imgProductPlaceholder,
     ),
     ProductEntity(
       id: 4,
-      name: 'Prodotto 1',
+      name: 'Prodotto 4',
       price: 100.00,
       photoName: ImagesConstants.imgProductPlaceholder,
     ),
     ProductEntity(
       id: 5,
-      name: 'Prodotto 1',
+      name: 'Prodotto 5',
+      price: 100.00,
+      photoName: ImagesConstants.imgProductPlaceholder,
+    ),
+    ProductEntity(
+      id: 6,
+      name: 'Prodotto 6',
+      price: 100.00,
+      photoName: ImagesConstants.imgProductPlaceholder,
+    ),
+    ProductEntity(
+      id: 7,
+      name: 'Prodotto 7',
       price: 100.00,
       photoName: ImagesConstants.imgProductPlaceholder,
     ),
@@ -54,6 +66,7 @@ class AgencyProductsTable extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: DataTable(
         columnSpacing: 30,
+        dataRowHeight: 85,
         dataRowColor: MaterialStateColor.resolveWith((states) => white),
         headingRowColor: MaterialStateColor.resolveWith((states) => background),
         border: const TableBorder(
@@ -98,42 +111,41 @@ class AgencyProductsTable extends StatelessWidget {
       cells: <DataCell>[
         DataCell(Text(
           p.id.toString(),
-          style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+          style: SafeGoogleFont(
+              'Montserrat',
+              color: black,
+              fontSize: 14,
+              fontWeight: FontWeight.w700
+          ),
         )),
         DataCell(Container(
-          height: 40,
-          width: 40,
+          height: 70,
+          width: 70,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(3)),
             color: greyDrag,
-            border: Border.all(color: background, width: 1),
+            border: Border.all(color: background, width: 0.5),
             image: imageFile != null ?
             DecorationImage(
               image: FileImage(imageFile!),
               fit: BoxFit.contain,
-            ) : DecorationImage(
+            ) : const DecorationImage(
               image: AssetImage(ImagesConstants.imgProductPlaceholder),
               fit: BoxFit.cover,
 
             ),
           ),
-        )
-
-
-        ),
+        )),
         DataCell(Text(
           p.name,
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+              color: black, fontSize: 14, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          '${p.price} €',
+          '€ ${p.price}',
           style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.w700),
+              color: black, fontSize: 14, fontWeight: FontWeight.w700),
         )),
-
-
       ],
     );
   }

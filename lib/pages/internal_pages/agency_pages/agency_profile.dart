@@ -62,7 +62,7 @@ class AgencyProfileState extends State<AgencyProfile>{
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: green,
-                            content: const Text('Ti abbiamo inviatp una mail per il reset della password!'),
+                            content: const Text('Ti abbiamo inviato una mail per il reset della password!'),
                             duration: const Duration(milliseconds: 3000),
                             behavior: SnackBarBehavior.floating,
                             shape: RoundedRectangleBorder(
