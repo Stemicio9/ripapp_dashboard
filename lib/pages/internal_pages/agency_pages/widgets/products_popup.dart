@@ -2,7 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/entities/single_product_entity.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
+import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/products_row.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 
@@ -55,18 +58,34 @@ class _ProductsPopupWrappedState extends State<ProductsPopupWrapped> {
     // fixme delete this method when bloc will be done
     _searchProductCubit.fetchProducts();
 
-    for(int i = 0; i<10; i++){
+    /*
+    state.productsOffered.forEach((productOffered) {
+      products.add(SingleProductEntity(id: productOffered.productEntity.id!,
+          name: productOffered.productEntity.name ?? "",
+          price: productOffered.productEntity.price.toString(),
+          urlImage: /*productOffered.productEntity.photoName ??*/ ImagesConstants.imgProductPlaceholder,
+          isSelected: productOffered.offered,
+          onTap: onProductTapped));
+    });*/
+
+    /*for(int i = 0; i<10; i++){
       products.add(SingleProductEntity(name: "Prodotto $i", onTap: onProductTapped,price: "100,00"));
-    }
+    }*/
     super.initState();
   }
 
   // fixme when a product is tapped, this is the function called
   // fixme change this function when bloc is implemented
-  void onProductTapped(SingleProductEntity productEntity){
+  void onProductTapped(SingleProductEntity productEntity, SearchProductLoaded state){
     var index = products.indexOf(productEntity);
     print("TAPPATO PRODOTTO IN POSIZIONE $index");
+    print("prima il PRODOTTO IN POSIZIONE $index è " + products[index].isSelected.toString());
     products[index].isSelected = !products[index].isSelected;
+    print("dopo il PRODOTTO IN POSIZIONE $index è " + products[index].isSelected.toString());
+
+    if (state is SearchProductLoaded)
+      state.productsOffered[index].offered = products[index].isSelected;
+    print(state.productsOffered);
     List<SingleProductEntity> copy = List.from(products);
     setState(() {
       products = copy;
@@ -94,11 +113,15 @@ class _ProductsPopupWrappedState extends State<ProductsPopupWrapped> {
                                   builder: (context, state){
                                 if (state is SearchProductLoaded){
                                   products.clear();
-                                  state.availableProducts.forEach((product) {
-                                    products.add(SingleProductEntity(name: product.name ?? "", price: product.price.toString(),
-                                        urlImage: "url", isSelected: state.agencyProducts.contains(product), onTap: onProductTapped));
+                                  state.productsOffered.forEach((productOffered) {
+                                    products.add(SingleProductEntity(id: productOffered.productEntity.id!,
+                                        name: productOffered.productEntity.name ?? "",
+                                        price: productOffered.productEntity.price.toString(),
+                                        urlImage: /*productOffered.productEntity.photoName ??*/ ImagesConstants.imgProductPlaceholder,
+                                        isSelected: productOffered.offered,
+                                        onTap: onProductTapped));
                                   });
-                                  return ProductsRow(products: products,);
+                                  return ProductsRow(products: products, state: state);
                                 }
                                 else
                                   return ErrorWidget("errore");

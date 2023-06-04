@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/entities/single_product_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
@@ -6,15 +7,16 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 
 class SingleProduct extends StatelessWidget {
   final SingleProductEntity singleProductEntity;
+  final SearchProductLoaded state;
 
-  const SingleProduct({Key? key, required this.singleProductEntity})
+  const SingleProduct({Key? key, required this.singleProductEntity, required this.state})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          singleProductEntity.onTap(singleProductEntity);
+          singleProductEntity.onTap(singleProductEntity, state);
         },
         child: Card(
           elevation: 5,

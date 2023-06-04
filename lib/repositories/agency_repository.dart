@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:js_interop';
 
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/constants/rest_path.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
@@ -16,6 +18,7 @@ class AgencyRepository{
   final String agencyUrl = "$baseUrl/api/auth/agency";
   final String allAgenciesUrl = "$baseUrl/api/auth/agencies";
   final String allAgenciesProductsUrl = "$baseUrl/api/auth/products";
+  final String allProductsOfferedByAgency = "$baseUrl/api/auth/productsOffered";
 
   factory AgencyRepository() {
     return _agencyRepository ;
@@ -44,14 +47,17 @@ class AgencyRepository{
     return agencies;
   }
 
-  Future<List<ProductEntity>> getAllAgencyProducts() async {
+  Future<List<ProductOffered>> getAllAgencyProducts() async {
     Map<String, dynamic>? parameters = {};
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
     var userId = (user != null) ? user.id : "4";
     parameters.putIfAbsent("offset", () => 0);
     parameters.putIfAbsent("userid", () => userId!);
-    Response res = await _dio.get(allAgenciesProductsUrl, queryParameters: parameters);
-    List<ProductEntity> products = (res.data as List).map((product) => ProductEntity.fromJson(product)).toList();
+    Response res = await _dio.get(allProductsOfferedByAgency, queryParameters: parameters);
+    print("qualcosa");
+    List<ProductOffered> productsOffered =  (jsonDecode(jsonEncode(res.data)) as List).map((e) => ProductOffered.fromJson(e)).toList();
+    print(productsOffered);
+    List<ProductOffered> products = (res.data as List).map((product) => ProductOffered.fromJson(product)).toList();
     return products;
   }
 

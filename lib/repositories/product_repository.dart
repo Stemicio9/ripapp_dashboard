@@ -2,6 +2,7 @@
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
@@ -36,7 +37,7 @@ class ProductRepository{
     Map<String, dynamic>? parameters = {};
     parameters.putIfAbsent("userId", () => int.tryParse(userId!));
     var response = await _dio.get(availableProductsUrl, queryParameters: parameters);
-    List<ProductEntity> products = (response.data as List).map((product) => ProductEntity.fromJson(product)).toList();
+    List<ProductOffered> products = (response.data as List).map((product) => ProductOffered.fromJson(product)).toList();
     return products;
   }
 

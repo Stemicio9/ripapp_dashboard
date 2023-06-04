@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
+import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/repositories/product_repository.dart';
@@ -10,14 +12,12 @@ class SearchProductLoading extends SearchProductState {}
 class SearchProductError extends SearchProductState {}
 class SearchProductLoaded extends SearchProductState {
 
-  final List<ProductEntity> availableProducts;
-  final List<ProductEntity> agencyProducts;
-  SearchProductLoaded(this.availableProducts, this.agencyProducts);
+  final List<ProductOffered> productsOffered;
+  SearchProductLoaded(this.productsOffered);
 
-  SearchProductLoaded copyWith({List<ProductEntity>? availableProducts, List<ProductEntity>? agencyProducts,}) {
+  SearchProductLoaded copyWith({List<ProductOffered>? productsOffered,}) {
     return SearchProductLoaded(
-        availableProducts ?? this.availableProducts,
-        agencyProducts ?? this.agencyProducts
+        productsOffered ?? this.productsOffered,
     );
   }
 
@@ -29,17 +29,23 @@ class SearchProductCubit extends Cubit<SearchProductState>{
 
   fetchProducts() async {
     emit(SearchProductLoading());
-    List<ProductEntity> availableProductsRetrieved = await ProductRepository().getAvailableProducts();
-    List<ProductEntity> agencyProductsRetrieved = await AgencyRepository().getAllAgencyProducts();
-    print("piccolo sunto della situazione: prodotti totali: " + availableProductsRetrieved.toString() + " \n prodotti miei: " + agencyProductsRetrieved.toString());
-    if (availableProductsRetrieved.length == 0){print("non ci sono prodotti da mostrare");}
+    List<ProductOffered> agencyProductsRetrieved = await AgencyRepository().getAllAgencyProducts();
+    print("piccolo sunto della situazione: " + agencyProductsRetrieved.toString());
+    if (agencyProductsRetrieved.length == 0){print("non ci sono prodotti da mostrare");}
     else{
       try {
-        emit(SearchProductLoaded(availableProductsRetrieved, agencyProductsRetrieved));
+        emit(SearchProductLoaded(agencyProductsRetrieved));
       }
       catch (e){
         print("error");
       }
+    }
+  }
+
+  void changeSelectedProducts() {
+    if (state is SearchProductLoaded) {
+      var aLoadedState = state as SearchProductLoaded; //prende lo stato corrente
+      emit(aLoadedState.copyWith());
     }
   }
 }
