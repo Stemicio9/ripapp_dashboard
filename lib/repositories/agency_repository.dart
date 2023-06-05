@@ -66,7 +66,15 @@ class AgencyRepository{
     var userId = (user != null) ? user.id : "4";
     Map<String, dynamic>? parameters = {};
     parameters.putIfAbsent("userid", () => userId);
-    //_dio.post(allProductsOfferedByAgency, data: productsOffered, queryParameters: parameters);
+
+    Options myoptions = Options();
+    Map<String, Object>? headers = Map();
+    myoptions.headers = headers;
+    //myoptions.headers!["set-cookie"] = "idtoken=123;";
+    myoptions.headers!["Content-Type"] = "application/json";
+    myoptions.headers!["app_version"] = appVersion;
+
+    _dio.post(allProductsOfferedByAgency, data: productsOffered, queryParameters: parameters, options: myoptions);
   }
 
 }

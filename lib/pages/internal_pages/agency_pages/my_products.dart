@@ -39,7 +39,7 @@ class MyProductsState extends State<MyProducts>{
   void changeAgencyProducts(List<ProductOffered> productsOffered){
     print("chiamata senza evento");
     AgencyRepository().setAgencyProducts(productsOffered);
-    //Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   @override
@@ -55,7 +55,7 @@ class MyProductsState extends State<MyProducts>{
               onTap: (){
                 showDialog(context: context, builder: (ctx)=>
                      ProductsPopup(
-                      onTap: (List<ProductOffered> list) => changeAgencyProducts
+                      onTap: changeAgencyProducts
                       )
                 );
               },

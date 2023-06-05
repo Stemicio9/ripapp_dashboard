@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
+import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
@@ -14,6 +16,18 @@ class AgencyProductsTable extends StatelessWidget {
 
   File? imageFile;
 
+  /*fetchProducts() async {
+    List<ProductOffered> agencyProductsRetrieved = await AgencyRepository().getAllAgencyProducts();
+    if (agencyProductsRetrieved.length == 0){print("non ci sono prodotti da mostrare");}
+    else{
+      try {
+        emit(SearchProductLoaded(agencyProductsRetrieved));
+      }
+      catch (e){
+        print("error");
+      }
+    }
+  }*/
   List<ProductEntity> products = [
     ProductEntity(
       id: 1,

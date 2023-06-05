@@ -16,7 +16,7 @@ import '../../../../widgets/action_button.dart';
 //_ProductsPopupState
 class ProductsPopup extends StatelessWidget {
 
-  dynamic onTap;
+  final Function(List<ProductOffered>) onTap;
 
    ProductsPopup({Key? key,required this.onTap}) : super(key: key);
 
@@ -25,7 +25,7 @@ class ProductsPopup extends StatelessWidget {
     return BlocProvider(
       create: (_) => SearchProductCubit(),
       child: ProductsPopupWrapped(
-        onTap: () => onTap
+        onTap: onTap
       ),
     );
   }
@@ -34,7 +34,7 @@ class ProductsPopup extends StatelessWidget {
 
 
 class ProductsPopupWrapped extends StatefulWidget {
-  dynamic onTap;
+  final Function(List<ProductOffered>) onTap;
 
    ProductsPopupWrapped({Key? key,required this.onTap}) : super(key: key);
 
@@ -146,8 +146,8 @@ class _ProductsPopupWrappedState extends State<ProductsPopupWrapped> {
                                                 alignment: Alignment
                                                     .centerRight,
                                                 child: ActionButtonV2(
-                                                  action: widget.onTap(
-                                                      state.productsOffered),
+                                                  action: () {widget.onTap(
+                                                      state.productsOffered);},
                                                   text: getCurrentLanguageValue(
                                                       SAVE) ?? "",
                                                 ),
