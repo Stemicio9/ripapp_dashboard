@@ -61,4 +61,12 @@ class AgencyRepository{
     return products;
   }
 
+  void setAgencyProducts(List<ProductOffered> productsOffered) async {
+    UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
+    var userId = (user != null) ? user.id : "4";
+    Map<String, dynamic>? parameters = {};
+    parameters.putIfAbsent("userid", () => userId);
+    //_dio.post(allProductsOfferedByAgency, data: productsOffered, queryParameters: parameters);
+  }
+
 }

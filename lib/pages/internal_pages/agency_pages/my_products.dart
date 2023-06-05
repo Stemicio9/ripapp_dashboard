@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/agency_products_table.dart';
@@ -9,6 +10,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/produ
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
+import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 class MyProducts extends StatefulWidget {
@@ -34,6 +36,12 @@ class MyProductsState extends State<MyProducts>{
   final TextEditingController priceController = TextEditingController();
   late Image imageFile;
 
+  void changeAgencyProducts(List<ProductOffered> productsOffered){
+    print("chiamata senza evento");
+    AgencyRepository().setAgencyProducts(productsOffered);
+    //Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -47,10 +55,8 @@ class MyProductsState extends State<MyProducts>{
               onTap: (){
                 showDialog(context: context, builder: (ctx)=>
                      ProductsPopup(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                    )
+                      onTap: (List<ProductOffered> list) => changeAgencyProducts
+                      )
                 );
               },
               pageTitle: getCurrentLanguageValue(MY_PRODUCTS) ?? "",

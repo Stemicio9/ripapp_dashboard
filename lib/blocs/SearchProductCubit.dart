@@ -30,7 +30,6 @@ class SearchProductCubit extends Cubit<SearchProductState>{
   fetchProducts() async {
     emit(SearchProductLoading());
     List<ProductOffered> agencyProductsRetrieved = await AgencyRepository().getAllAgencyProducts();
-    print("piccolo sunto della situazione: " + agencyProductsRetrieved.toString());
     if (agencyProductsRetrieved.length == 0){print("non ci sono prodotti da mostrare");}
     else{
       try {
