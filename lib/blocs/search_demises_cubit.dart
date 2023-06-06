@@ -10,7 +10,7 @@ import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 class SearchDemiseCubit extends Cubit<SearchDemiseState> {
   SearchDemiseCubit() : super(SearchDemiseState());
 
-  fetchDemises({required List<String> cities,required SearchSorting sorting,required int offset}){
+  Future fetchDemises({required List<String> cities,required SearchSorting sorting,required int offset}) async {
     if(offset == 0) {
       emit(SearchDemiseLoading());
     }else{
@@ -21,9 +21,15 @@ class SearchDemiseCubit extends Cubit<SearchDemiseState> {
         // ignore
       }
     }
+    print("esatto");
     try{
+      /*
       DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset))
           .then((demises) => emit(SearchDemiseLoaded(demises, false))).catchError((e) => emit(SearchDemiseLoaded(List.empty(growable: false), false)));
+      */
+      var demises = await DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset));
+      print(demises);
+      emit(SearchDemiseLoaded(demises, false));
     }catch(e){
       emit(SearchDemiseError());
     }

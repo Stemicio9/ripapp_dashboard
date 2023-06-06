@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
           providers: [
             BlocProvider<SearchProductCubit>(create: (_) => SearchProductCubit()),
+            BlocProvider<SearchDemiseCubit>(create: (_) => SearchDemiseCubit()),
           ],
           child: Builder(
             builder: (context) {

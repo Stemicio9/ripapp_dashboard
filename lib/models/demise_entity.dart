@@ -1,9 +1,11 @@
 
+import 'dart:convert';
+
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/relative_entity.dart';
 
 class DemiseEntity {
-  String? id;
+  int? id;
   String? firstName;
   String? lastName;
   CityEntity? city;
@@ -41,14 +43,27 @@ class DemiseEntity {
   @override
   String toString() {
     return
-      'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, city: $city, phoneNumber: $phoneNumber, funeralAddress: $funeralAddress, wakeAddress: $wakeAddress';
+      'UserEntity{demiseid: $id, '
+          'firstName: $firstName, '
+          'lastName: $lastName, '
+          'city: $city, '
+          'phoneNumber: $phoneNumber, '
+          'funeralAddress: $funeralAddress, '
+          'wakeAddress: $wakeAddress}\n';
   }
 
+  /* campi complicati:
+  city
+deceasedDate
+wakeDateTime
+funeralDateTime
+cities
+relative*/
   factory DemiseEntity.fromJson(Map<String, dynamic> json) => DemiseEntity(
       id: json["demiseid"] ?? "",
       firstName: json["name"] ?? "",
       lastName: json["surname"] ?? "",
-      city: json["city"] ?? "",
+      city: json["city"] == null ? null : CityEntity.fromJson(json["city"]),
       phoneNumber: json["phonenumber"] ?? "",
       age: json["age"] ?? "",
       deceasedDate: json["deceasedDate"] == null ? null : DateTime.parse(json["deceasedDate"]),
@@ -58,12 +73,14 @@ class DemiseEntity {
       wakeNote: json["wakenotes"] ?? "",
       funeralDateTime: json["funeralts"] == null ? null : DateTime.parse(json["funeralts"]),
       funeralNotes: json["funeralnotes"] ?? "",
-      cities: json["cities"] ?? "",
-      relative: json["relatives"] ?? "",
+      /*cities: json["cities"] todo aggiungere questi due campi!!
+        .map((data) => CityEntity.fromJson(data))
+        .toList(),
+      relative: json["relatives"] ?? "",*/
   );
 
   DemiseEntity copyWith({
-    String? id,
+    int? id,
     String? firstName,
     String? lastName,
     CityEntity? city,
@@ -82,11 +99,12 @@ class DemiseEntity {
     );
   }
 
+
   Map<String, dynamic> toJson() => {
   "demiseid":id,
   "name":firstName,
   "surname":lastName,
-  "city":city,
+  "city":city?.toJson() ?? null,
   "phonenumber":phoneNumber,
   "age":age,
   "ts":deceasedDate == null ? null : wakeDateTime!.toIso8601String(),
@@ -96,7 +114,7 @@ class DemiseEntity {
   "wakenotes":wakeNote,
   "funeralts":funeralDateTime == null ? null : funeralDateTime!.toIso8601String(),
   "funeralnotes":funeralNotes,
-  "cities":cities,
-  "relatives":relative,
+  "cities": cities?.map((e) => e.toJson()).toList() ?? [],
+  "relatives":relative?.toJson() ?? null,
   };
 }

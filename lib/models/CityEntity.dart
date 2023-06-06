@@ -5,7 +5,7 @@ class CityEntity {
     required this.name,
   });
 
-  String? cityid = "";
+  int? cityid = 0;
   String name;
 
   factory CityEntity.fromJson(Map<String, dynamic> json) => CityEntity(
@@ -19,7 +19,7 @@ class CityEntity {
   };
 
   factory CityEntity.defaultCity() => CityEntity(
-    cityid: "0",
+    cityid: 0,
     name: "Seleziona Città",
   );
 

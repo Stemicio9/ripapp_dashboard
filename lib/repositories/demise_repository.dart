@@ -25,6 +25,7 @@ class DemiseRepository{
 
   final String demiseUrl = "$baseUrl/api/auth/demiseWithoutCookie";
   final String searchDemisesByCityUrl = "$baseUrl/api/auth/search/demises";
+  final String searchDemisesIgnorante = "$baseUrl/api/auth/demisesIgnorante";
 
 
 
@@ -52,15 +53,18 @@ class DemiseRepository{
   Future<List<DemiseEntity>> getDemisesByCities(DemisesSearchEntity demisesSearchEntity) async {
     Response res;
     try {
-      res = await _dio.post(searchDemisesByCityUrl, data: demisesSearchEntity.toJson(), options: Options(headers: buildHeaders()));
+      //res = await _dio.post(searchDemisesByCityUrl, data: demisesSearchEntity.toJson(), options: Options(headers: buildHeaders()));
+      res = await _dio.get(searchDemisesIgnorante);
+      print("esatto2");
     }
     on DioError catch (e) {
       return List.empty(growable: true);
     }
-    if (res.statusCode != 201) {
+    if (res.statusCode != 201 && res.statusCode != 200) {
       return List.empty(growable: true);
     }
     List<DemiseEntity> demises = (res.data as List).map((e) => DemiseEntity.fromJson(e)).toList();
+    print(" demises"+ demises.toString());
     return demises;
   }
 

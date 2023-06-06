@@ -1,13 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
 
-class DemiseTable extends StatelessWidget{
+class DemiseTable extends StatefulWidget {
+  const DemiseTable({required this.delete, required this.edit, required this.showDetail, required this.detailMessage, required this.editMessage,required this.deleteMessage});
+  final edit;
+  final delete;
+  final showDetail;
+  final String detailMessage;
+  final String editMessage;
+  final String deleteMessage;
+
+  @override
+  State<StatefulWidget> createState() => DemiseTableState(
+      edit: this.edit,
+      delete: this.delete,
+      showDetail: this.showDetail,
+      detailMessage: this.detailMessage,
+      editMessage: this.editMessage,
+      deleteMessage: this.deleteMessage,
+  );
+
+}
+
+
+class DemiseTableState extends State<DemiseTable>{
+  SearchDemiseCubit get _searchDemiseCubit => context.read<SearchDemiseCubit>();
+
+  @override
+  void initState() {
+    _searchDemiseCubit.fetchDemises(cities: [], sorting: SearchSorting.name, offset: 0);
+    super.initState();
+  }
 
   List<String> headerTitle = [
     'ID',
@@ -20,8 +52,8 @@ class DemiseTable extends StatelessWidget{
     ''
   ];
 
-  List<DemiseEntity> users = [
-    DemiseEntity(
+  List<DemiseEntity> demises = [];
+    /*DemiseEntity(
       id: '1',
       firstName: 'Mario',
       lastName: 'Rossi',
@@ -66,7 +98,7 @@ class DemiseTable extends StatelessWidget{
       wakeAddress: 'Via Milano, 46',
       funeralAddress: 'Via Roma, 74',
     ),
-  ];
+  ];*/
 
   final edit;
   final delete;
@@ -76,29 +108,45 @@ class DemiseTable extends StatelessWidget{
   final String deleteMessage;
 
 
-  DemiseTable({required this.delete, required this.edit, required this.showDetail, required this.detailMessage, required this.editMessage,required this.deleteMessage});
+  DemiseTableState({required this.delete, required this.edit, required this.showDetail, required this.detailMessage, required this.editMessage,required this.deleteMessage});
 
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: getPadding(top: 20),
-      width: MediaQuery.of(context).size.width,
-      child: DataTable(
-        columnSpacing: 30,
-        dataRowColor: MaterialStateColor.resolveWith((states) => white),
-        headingRowColor: MaterialStateColor.resolveWith((states) => background),
-        border: const TableBorder(
-          top: BorderSide(width: 0.5, color: greyState),
-          bottom:BorderSide(width: 0.5, color: greyState),
-          left:BorderSide(width: 0.5, color: greyState),
-          right:BorderSide(width: 0.5, color: greyState),
-          horizontalInside:BorderSide(width: 0.5, color: greyState),
-        ),
-        columns: createHeaderTable(),
-        rows: createRows(),
-      ),
-    );
+    return
+      BlocBuilder<SearchDemiseCubit, SearchDemiseState>(
+          builder: (context, state)
+    {
+      if (state is SearchDemiseLoaded){
+        demises = state.demises;
+        return Container(
+          padding: getPadding(top: 20),
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          child: DataTable(
+            columnSpacing: 30,
+            dataRowColor: MaterialStateColor.resolveWith((states) => white),
+            headingRowColor: MaterialStateColor.resolveWith((
+                states) => background),
+            border: const TableBorder(
+              top: BorderSide(width: 0.5, color: greyState),
+              bottom: BorderSide(width: 0.5, color: greyState),
+              left: BorderSide(width: 0.5, color: greyState),
+              right: BorderSide(width: 0.5, color: greyState),
+              horizontalInside: BorderSide(width: 0.5, color: greyState),
+            ),
+            columns: createHeaderTable(),
+            rows: createRows(),
+          ),
+        );}
+      else return ErrorWidget("amioii");
+    });
+
+
+
+
   }
 
 
@@ -122,8 +170,8 @@ class DemiseTable extends StatelessWidget{
 
   List<DataRow> createRows() {
     List<DataRow> res = [];
-    for (var i = 0; i < users.length; i++) {
-      var p = users[i];
+    for (var i = 0; i < demises.length; i++) {
+      var p = demises[i];
       res.add(composeSingleRow(p));
     }
     return res;
@@ -132,7 +180,7 @@ class DemiseTable extends StatelessWidget{
   DataRow composeSingleRow(dynamic p) {
     return DataRow(
       cells: <DataCell>[
-        DataCell(Text(p.id,
+        DataCell(Text(p.id.toString(),
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
