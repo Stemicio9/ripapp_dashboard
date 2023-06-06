@@ -19,22 +19,32 @@ import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 
 
-
-
-
-
-
-
-
-class MyProducts extends StatefulWidget {
+class MyProducts extends StatelessWidget{
   @override
-  State<StatefulWidget> createState() {
-    return MyProductsState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SearchProductCubit(),
+      child: MyProductsWrapped(),
+    );
   }
 }
 
 
-class MyProductsState extends State<MyProducts>{
+
+
+
+
+
+class MyProductsWrapped extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return MyProductsWrappedState();
+  }
+}
+
+
+class MyProductsWrappedState extends State<MyProductsWrapped>{
+  SearchProductCubit get _searchProductCubit => context.read<SearchProductCubit>();
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
@@ -50,9 +60,9 @@ class MyProductsState extends State<MyProducts>{
   late Image imageFile;
 
   void changeAgencyProducts(List<ProductOffered> productsOffered){
-    print("chiamata senza evento");
     AgencyRepository().setAgencyProducts(productsOffered);
     Navigator.pop(context);
+    _searchProductCubit.changeSelectedProducts();
   }
 
   @override

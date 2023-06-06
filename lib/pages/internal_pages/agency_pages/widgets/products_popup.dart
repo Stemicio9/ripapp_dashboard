@@ -12,37 +12,30 @@ import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import '../../../../constants/language.dart';
 import '../../../../widgets/action_button.dart';
 
-//ProductsPopup
-//_ProductsPopupState
+/*
 class ProductsPopup extends StatelessWidget {
+  final Function(List<ProductOffered>) onTap;
+  ProductsPopup({Key? key,required this.onTap}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SearchProductCubit(),
+      child: ProductsPopupWrapped(onTap: onTap,),
+    );
+  }
+}
+*/
 
+class ProductsPopup extends StatefulWidget {
   final Function(List<ProductOffered>) onTap;
 
    ProductsPopup({Key? key,required this.onTap}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SearchProductCubit(),
-      child: ProductsPopupWrapped(
-        onTap: onTap
-      ),
-    );
-  }
+  State<ProductsPopup> createState() => _ProductsPopupState();
 }
 
-
-
-class ProductsPopupWrapped extends StatefulWidget {
-  final Function(List<ProductOffered>) onTap;
-
-   ProductsPopupWrapped({Key? key,required this.onTap}) : super(key: key);
-
-  @override
-  State<ProductsPopupWrapped> createState() => _ProductsPopupWrappedState();
-}
-
-class _ProductsPopupWrappedState extends State<ProductsPopupWrapped> {
+class _ProductsPopupState extends State<ProductsPopup> {
 
 
   // fixme change with real data from backend
@@ -148,7 +141,7 @@ class _ProductsPopupWrappedState extends State<ProductsPopupWrapped> {
                                                 child: ActionButtonV2(
                                                   action: () {widget.onTap(
                                                       state.productsOffered);
-                                                    _searchProductCubit.changeSelectedProducts();},
+                                                    },
                                                   text: getCurrentLanguageValue(
                                                       SAVE) ?? "",
                                                 ),

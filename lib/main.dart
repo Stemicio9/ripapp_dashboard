@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,6 +38,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key,required this.initialRoute});
 
   @override
+  /*
   Widget build(BuildContext context) {
     return MaterialApp(
       localizationsDelegates: const [
@@ -56,6 +59,36 @@ class MyApp extends StatelessWidget {
       initialRoute: initialRoute,
     );
   }
+*/
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+          providers: [
+            BlocProvider<SearchProductCubit>(create: (_) => SearchProductCubit()),
+          ],
+          child: Builder(
+            builder: (context) {
+              return MaterialApp(
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate
+                ],
+                supportedLocales: const [
+                  Locale('it'),
+                  Locale('en')
+                ],
+                title: 'Flutter Demo',
+                theme: ThemeData(
+
+                  primarySwatch: primary
+                ),
+                routes: RouteConstants.route(context) ,
+                initialRoute: initialRoute,
+    );
+            },
+          ),
+        );
 }
 
 
+}

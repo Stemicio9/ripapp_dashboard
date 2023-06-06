@@ -13,28 +13,18 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 
 
-class AgencyProductsTable extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SearchProductCubit(),
-      child: AgencyProductsTableWrapped(
-      ),
-    );
-  }
-}
 
 
-class AgencyProductsTableWrapped extends StatefulWidget {
+class AgencyProductsTable extends StatefulWidget {
 
-  const AgencyProductsTableWrapped({super.key});
+  const AgencyProductsTable({super.key});
 
   @override
-  State<StatefulWidget> createState() => AgencyProductsTableWrappedState();
+  State<StatefulWidget> createState() => AgencyProductsTableState();
 
 }
 
-class AgencyProductsTableWrappedState extends State<AgencyProductsTableWrapped> {
+class AgencyProductsTableState extends State<AgencyProductsTable> {
   List<String> headerTitle = ['ID', 'Foto', 'Nome', 'Prezzo',];
   @override
   // TODO: implement context
