@@ -122,7 +122,6 @@ class UsersFormWidget extends StatefulWidget{
   State<StatefulWidget> createState() {
     return UsersFormWidgetState();
   }
-
 }
 
 
@@ -146,6 +145,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   @override
   void initState() {
     selectedValue = widget.roles.first;
+    widget.statusChange(selectedValue);
     _searchAgencyCubit.fetchAgencies();
     super.initState();
   }

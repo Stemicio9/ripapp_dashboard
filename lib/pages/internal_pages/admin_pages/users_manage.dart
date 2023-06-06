@@ -113,6 +113,7 @@ class UsersManageState extends State<UsersManage> {
                                 return; //TODO: Handle error
                               }
                               print("SALVO SU DB LOCALE");
+                              print("utente appena iscritto = " + userEntity.toString());
                               var response = await UserRepository().signup(userEntity);
                               Navigator.pop(context);
                             });
