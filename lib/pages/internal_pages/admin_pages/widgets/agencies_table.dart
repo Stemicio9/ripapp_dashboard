@@ -19,31 +19,31 @@ class AgenciesTable extends StatelessWidget {
   List<AgencyEntity> agencies = [
     AgencyEntity(
         id: 1,
-        agencyName: 'Nome agenzia',
+        agencyName: 'Agenzia srl',
         email: 'agenzia@gmail.com',
         city: 'Roma',
         phoneNumber: '+39 0987654321'),
     AgencyEntity(
         id: 2,
-        agencyName: 'Nome agenzia',
+        agencyName: 'Agenzia srl',
         email: 'agenzia@gmail.com',
         city: 'Roma',
         phoneNumber: '+39 0987654321'),
     AgencyEntity(
         id: 3,
-        agencyName: 'Nome agenzia',
+        agencyName: 'Agenzia srl',
         email: 'agenzia@gmail.com',
         city: 'Roma',
         phoneNumber: '+39 0987654321'),
     AgencyEntity(
         id: 4,
-        agencyName: 'Nome agenzia',
+        agencyName: 'Agenzia srl',
         email: 'agenzia@gmail.com',
         city: 'Roma',
         phoneNumber: '+39 0987654321'),
     AgencyEntity(
         id: 5,
-        agencyName: 'Nome agenzia',
+        agencyName: 'Agenzia srl',
         email: 'agenzia@gmail.com',
         city: 'Roma',
         phoneNumber: '+39 0987654321'),

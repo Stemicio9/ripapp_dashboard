@@ -21,15 +21,12 @@ class AgenciesManageState extends State<AgenciesManage> {
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
-  final String message =
-      'Le informazioni riguardanti questa agenzia verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
-
+  final String message = 'Le informazioni riguardanti questa agenzia verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
   final String name = 'Azienda srl';
   final String id = '1';
   final String phoneNumber = '+39 0987654321';
   final String city = 'Roma';
   final String email = 'aziendasrl@gmail.com';
-
   final TextEditingController nameController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();

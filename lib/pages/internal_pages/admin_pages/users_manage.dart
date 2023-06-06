@@ -32,7 +32,7 @@ class UsersManageState extends State<UsersManage> {
     email: 'daviderossi@gmail.com',
     city: [CityEntity.defaultCity()],
     phoneNumber: '+39 0987654321',
-
+    role: 'Amministratore'
   );
 
   setStatusFromDropdown(String userRole) {
@@ -78,12 +78,6 @@ class UsersManageState extends State<UsersManage> {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = "nome";
-    lastNameController.text = "cognome";
-    emailController.text = "email@mail.it";
-    phoneController.text = "3232";
-    cityController.text = "citta";
-    passwordController.text = "123456";
     return Padding(
       padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
       child: Column(

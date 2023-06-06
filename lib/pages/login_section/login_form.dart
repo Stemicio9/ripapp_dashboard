@@ -91,7 +91,8 @@ class LoginFormState extends State<LoginForm>{
                 action: formsubmit,
                 color: white,
                 textColor: background,
-                text: getCurrentLanguageValue(LOGIN)!,
+               // text: getCurrentLanguageValue(LOGIN)!,
+               text: "Login admin"
             ),
           ),
           Padding(

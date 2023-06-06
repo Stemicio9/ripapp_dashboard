@@ -36,10 +36,6 @@ class AgencyForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = "agenzia";
-    emailController.text = "agenzia@email.it";
-    phoneController.text = "333";
-    cityController.text = "citta";
     return Container(
       padding: getPadding(left: 20, right: 20),
       child: Column(

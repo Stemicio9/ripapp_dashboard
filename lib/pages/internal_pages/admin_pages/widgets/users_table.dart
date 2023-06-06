@@ -23,18 +23,18 @@ class UsersTable extends StatelessWidget{
 
   List<UserEntity> users = [
     UserEntity(
-      id: '1',
-      firstName: 'Davide',
-      lastName: 'Rossi',
-      email: 'daviderossi@gmail.com',
+        id: '1',
+        firstName: 'Davide',
+        lastName: 'Rossi',
+        email: 'daviderossi@gmail.com',
         city: [CityEntity.defaultCity()],
-      phoneNumber: '+39 0987654321',
+        phoneNumber: '+39 0987654321',
         idtoken: '',
         status: UserStatus.disabled,
         role: 'Amministratore'
     ),
     UserEntity(
-      id: '2',
+        id: '2',
         firstName: 'Davide',
         lastName: 'Rossi',
         email: 'daviderossi@gmail.com',
@@ -45,7 +45,7 @@ class UsersTable extends StatelessWidget{
         role: 'Agenzia'
     ),
     UserEntity(
-      id: '3',
+        id: '3',
         firstName: 'Davide',
         lastName: 'Rossi',
         email: 'daviderossi@gmail.com',
@@ -56,7 +56,7 @@ class UsersTable extends StatelessWidget{
         role: 'Utente'
     ),
     UserEntity(
-      id: '4',
+        id: '4',
         firstName: 'Davide',
         lastName: 'Rossi',
         email: 'daviderossi@gmail.com',
@@ -68,7 +68,7 @@ class UsersTable extends StatelessWidget{
 
     ),
     UserEntity(
-      id: '5',
+        id: '5',
         firstName: 'Davide',
         lastName: 'Rossi',
         email: 'daviderossi@gmail.com',
@@ -84,8 +84,8 @@ class UsersTable extends StatelessWidget{
   final edit;
   final delete;
   final showDetail;
- // final onSort;
- // final sortColumnIndex;
+  // final onSort;
+  // final sortColumnIndex;
   final String detailMessage;
   final String editMessage;
   final String deleteMessage;
@@ -98,8 +98,8 @@ class UsersTable extends StatelessWidget{
     required this.detailMessage,
     required this.editMessage,
     required this.deleteMessage,
-   // required this.onSort,
-   // required this.sortColumnIndex
+    // required this.onSort,
+    // required this.sortColumnIndex
   });
 
 
@@ -121,7 +121,7 @@ class UsersTable extends StatelessWidget{
         ),
         columns: createHeaderTable(),
         rows: createRows(),
-     //   sortColumnIndex: sortColumnIndex,
+        //   sortColumnIndex: sortColumnIndex,
       ),
     );
   }
@@ -133,12 +133,12 @@ class UsersTable extends StatelessWidget{
     List<DataColumn> res = [];
     for (var i = 0; i < headerTitle.length; i++) {
       res.add(DataColumn(
-      //  onSort: onSort,
+        //  onSort: onSort,
         label: Expanded(
             child: Texth4V2(
-                testo: headerTitle[i],
-                color: white,
-                 weight: FontWeight.bold,
+              testo: headerTitle[i],
+              color: white,
+              weight: FontWeight.bold,
             )
         ),
       ));

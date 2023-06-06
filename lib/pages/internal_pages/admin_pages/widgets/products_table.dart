@@ -21,31 +21,31 @@ class ProductsTable extends StatelessWidget{
       id: 1,
       name: 'Nome prodotto',
       price: 50,
-      photoName: 'nome_prodotto.png',
+      photoName: 'immagine_prodotto.png',
     ),
     ProductEntity(
       id: 2,
       name: 'Nome prodotto',
       price:  50,
-      photoName:  'nome_prodotto.png',
+      photoName:  'immagine_prodotto.png',
     ),
     ProductEntity(
       id: 3,
       name: 'Nome prodotto',
       price:  50,
-      photoName:  'nome_prodotto.png',
+      photoName:  'immagine_prodotto.png',
     ),
     ProductEntity(
       id: 4,
       name: 'Nome prodotto',
       price:  50,
-      photoName:  'nome_prodotto.png',
+      photoName:  'immagine_prodotto.png',
     ),
     ProductEntity(
       id: 5,
       name: 'Nome prodotto',
       price:  50,
-      photoName:  'nome_prodotto.png',
+      photoName:  'immagine_prodotto.png',
     ),
   ];
 
