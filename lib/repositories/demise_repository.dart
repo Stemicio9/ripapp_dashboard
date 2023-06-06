@@ -4,6 +4,7 @@ import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:ripapp_dashboard/constants/rest_path.dart';
 import 'package:ripapp_dashboard/cookies/CookiesManager.dart';
+import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 
@@ -23,6 +24,8 @@ class DemiseRepository{
   }
 
   final String demiseUrl = "$baseUrl/api/auth/demiseWithoutCookie";
+  final String searchDemisesByCityUrl = "$baseUrl/api/auth/search/demises";
+
 
 
 
@@ -44,6 +47,21 @@ class DemiseRepository{
     var response = await _dio.post(demiseUrl, data: demiseEntity, options: myoptions);
     //var response = await _dio.post(demiseUrl, data: demiseEntity);
     return response.data;
+  }
+
+  Future<List<DemiseEntity>> getDemisesByCities(DemisesSearchEntity demisesSearchEntity) async {
+    Response res;
+    try {
+      res = await _dio.post(searchDemisesByCityUrl, data: demisesSearchEntity.toJson(), options: Options(headers: buildHeaders()));
+    }
+    on DioError catch (e) {
+      return List.empty(growable: true);
+    }
+    if (res.statusCode != 201) {
+      return List.empty(growable: true);
+    }
+    List<DemiseEntity> demises = (res.data as List).map((e) => DemiseEntity.fromJson(e)).toList();
+    return demises;
   }
 
 }

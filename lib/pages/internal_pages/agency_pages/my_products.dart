@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
@@ -12,6 +14,17 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
+
+
+
+
+
+
+
+
+
+
+
 
 class MyProducts extends StatefulWidget {
   @override
@@ -62,10 +75,12 @@ class MyProductsState extends State<MyProducts>{
               pageTitle: getCurrentLanguageValue(MY_PRODUCTS) ?? "",
               buttonText: getCurrentLanguageValue(SELECT_PRODUCTS) ?? "",
             ),
+            /*Builder(builder: (context) {
+               return AgencyProductsTable();
+            }*/
+               AgencyProductsTable()
 
-            AgencyProductsTable()
-
-          ],
+        ],
         ),
       ),
     );

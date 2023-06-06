@@ -147,7 +147,8 @@ class _ProductsPopupWrappedState extends State<ProductsPopupWrapped> {
                                                     .centerRight,
                                                 child: ActionButtonV2(
                                                   action: () {widget.onTap(
-                                                      state.productsOffered);},
+                                                      state.productsOffered);
+                                                    _searchProductCubit.changeSelectedProducts();},
                                                   text: getCurrentLanguageValue(
                                                       SAVE) ?? "",
                                                 ),
