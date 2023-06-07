@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
-import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
@@ -44,7 +44,7 @@ class MyProducts extends StatefulWidget {
 
 
 class MyProductsState extends State<MyProducts>{
-  SearchProductCubit get _searchProductCubit => context.read<SearchProductCubit>();
+  SearchProductsOfferedCubit get _searchProductCubit => context.read<SearchProductsOfferedCubit>();
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';

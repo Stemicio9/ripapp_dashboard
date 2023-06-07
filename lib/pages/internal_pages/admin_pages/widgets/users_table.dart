@@ -160,12 +160,13 @@ class UsersTableState extends State<UsersTable>{
         if (state is SearchUsersLoaded){
           users = state.users;
           print("utenti: " + users.toString());
-          return SingleChildScrollView(
-              child:
+          return
            Container(
             padding: getPadding(top: 20),
             width: MediaQuery.of(context).size.width,
-            child: DataTable(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: DataTable(
               columnSpacing: 30,
               dataRowColor: MaterialStateColor.resolveWith((states) => white),
               headingRowColor: MaterialStateColor.resolveWith((states) => background),
@@ -180,7 +181,8 @@ class UsersTableState extends State<UsersTable>{
               rows: createRows(),
               //   sortColumnIndex: sortColumnIndex,
             ),
-          ));}
+          )
+           );}
         else {
           return ErrorWidget("errore");
         }

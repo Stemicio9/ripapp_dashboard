@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/entities/single_product_entity.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
@@ -42,7 +42,7 @@ class _ProductsPopupState extends State<ProductsPopup> {
   // fixme make a bloc and a cubit to manage this situation
   late List<SingleProductEntity> products = List.empty(growable: true);
 
-  SearchProductCubit get _searchProductCubit => context.read<SearchProductCubit>();
+  SearchProductsOfferedCubit get _searchProductCubit => context.read<SearchProductsOfferedCubit>();
 
 
   @override
@@ -69,14 +69,14 @@ class _ProductsPopupState extends State<ProductsPopup> {
 
   // fixme when a product is tapped, this is the function called
   // fixme change this function when bloc is implemented
-  void onProductTapped(SingleProductEntity productEntity, SearchProductLoaded state){
+  void onProductTapped(SingleProductEntity productEntity, SearchProductsOfferedLoaded state){
     var index = products.indexOf(productEntity);
     print("TAPPATO PRODOTTO IN POSIZIONE $index");
     print("prima il PRODOTTO IN POSIZIONE $index è " + products[index].isSelected.toString());
     products[index].isSelected = !products[index].isSelected;
     print("dopo il PRODOTTO IN POSIZIONE $index è " + products[index].isSelected.toString());
 
-    if (state is SearchProductLoaded)
+    if (state is SearchProductsOfferedLoaded)
       state.productsOffered[index].offered = products[index].isSelected;
     print(state.productsOffered);
     List<SingleProductEntity> copy = List.from(products);
@@ -102,9 +102,9 @@ class _ProductsPopupState extends State<ProductsPopup> {
               cancelIcon: true,
               cardTitle: 'Seleziona i tuoi prodotti',
               child:
-               BlocBuilder<SearchProductCubit, SearchProductState>(
+               BlocBuilder<SearchProductsOfferedCubit, SearchProductsOfferedState>(
                                   builder: (context, state) {
-                                    if (state is SearchProductLoaded) {
+                                    if (state is SearchProductsOfferedLoaded) {
                                       products.clear();
                                       state.productsOffered.forEach((
                                           productOffered) {

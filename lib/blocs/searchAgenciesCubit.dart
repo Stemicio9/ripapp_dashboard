@@ -48,4 +48,11 @@ class SearchAgencyCubit extends Cubit<SearchAgencyState> {
       emit(a.copyWith(selectedAgency: selectedAgency));
     }
   }
+
+  refreshAgencies(){
+    if(state is SearchAgencyLoaded){
+      var a = state as SearchAgencyLoaded;
+      emit(a.copyWith());
+    }
+  }
 }

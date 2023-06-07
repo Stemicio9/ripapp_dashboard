@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
@@ -6,7 +8,44 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
 
-class AgenciesTable extends StatelessWidget {
+class AgenciesTable extends StatefulWidget {
+
+  final edit;
+  final delete;
+  final showDetail;
+  final String detailMessage;
+  final String editMessage;
+  final String deleteMessage;
+
+  AgenciesTable(
+      {required this.delete,
+        required this.edit,
+        required this.showDetail,
+        required this.detailMessage,
+        required this.editMessage,
+        required this.deleteMessage});
+  @override
+  State<StatefulWidget> createState() => AgenciesTableState(
+    delete: delete,
+    edit: edit,
+    showDetail: showDetail,
+    detailMessage: detailMessage,
+    editMessage: editMessage,
+    deleteMessage: deleteMessage,
+  );
+}
+
+class AgenciesTableState extends State<AgenciesTable> {
+
+
+  SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
+
+  @override
+  void initState() {
+    _searchAgencyCubit.fetchAgencies();
+    super.initState();
+  }
+
   List<String> headerTitle = [
     'ID',
     'Nome',
@@ -16,7 +55,8 @@ class AgenciesTable extends StatelessWidget {
     ''
   ];
 
-  List<AgencyEntity> agencies = [
+  List<AgencyEntity> agencies = [];
+  /*
     AgencyEntity(
         id: 1,
         agencyName: 'Nome agenzia',
@@ -47,7 +87,7 @@ class AgenciesTable extends StatelessWidget {
         email: 'agenzia@gmail.com',
         city: 'Roma',
         phoneNumber: '+39 0987654321'),
-  ];
+  ];*/
 
   final edit;
   final delete;
@@ -56,7 +96,7 @@ class AgenciesTable extends StatelessWidget {
   final String editMessage;
   final String deleteMessage;
 
-  AgenciesTable(
+  AgenciesTableState(
       {required this.delete,
       required this.edit,
       required this.showDetail,
@@ -66,25 +106,35 @@ class AgenciesTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: getPadding(top: 20),
-      width: MediaQuery.of(context).size.width,
-      child: DataTable(
-        columnSpacing: 30,
-        dataRowColor: MaterialStateColor.resolveWith((states) => white),
-        headingRowColor: MaterialStateColor.resolveWith((states) => background),
-        border: const TableBorder(
-          top: BorderSide(width: 0.5, color: greyState),
-          bottom: BorderSide(width: 0.5, color: greyState),
-          left: BorderSide(width: 0.5, color: greyState),
-          right: BorderSide(width: 0.5, color: greyState),
-          horizontalInside: BorderSide(width: 0.5, color: greyState),
-        ),
-        columns: createHeaderTable(),
-        rows: createRows(),
-      ),
-    );
+    return
+      BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
+          builder: (context, state)
+          {
+            if (state is SearchAgencyLoaded){
+              agencies = state.agencies;
+              return Container(
+                padding: getPadding(top: 20),
+                width: MediaQuery.of(context).size.width,
+                child: DataTable(
+                  columnSpacing: 30,
+                  dataRowColor: MaterialStateColor.resolveWith((states) => white),
+                  headingRowColor: MaterialStateColor.resolveWith((states) => background),
+                  border: const TableBorder(
+                    top: BorderSide(width: 0.5, color: greyState),
+                    bottom: BorderSide(width: 0.5, color: greyState),
+                    left: BorderSide(width: 0.5, color: greyState),
+                    right: BorderSide(width: 0.5, color: greyState),
+                    horizontalInside: BorderSide(width: 0.5, color: greyState),
+                  ),
+                  columns: createHeaderTable(),
+                  rows: createRows(),
+                ),
+              );
+            }
+            else return ErrorWidget("al lupo al lupo");
+          });
   }
+
 
   List<DataColumn> createHeaderTable() {
     List<DataColumn> res = [];

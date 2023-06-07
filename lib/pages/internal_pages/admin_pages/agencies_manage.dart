@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agency_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agency_form.dart';
@@ -30,6 +32,8 @@ class AgenciesManageState extends State<AgenciesManage> {
   final String city = 'Roma';
   final String email = 'aziendasrl@gmail.com';
 
+  SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -59,6 +63,7 @@ class AgenciesManageState extends State<AgenciesManage> {
                   );
                   AgencyRepository().saveAgency(agencyEntity);
                   print("salvataggio agenzia...");
+                  _searchAgencyCubit.refreshAgencies();
                   Navigator.pop(context);
                 },
               ));
