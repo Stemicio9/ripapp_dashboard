@@ -1,4 +1,8 @@
-enum UserStatus { agency, active, disabled, notfound, admin }
+enum UserStatus { agency, active, disabled, notfound, admin;
+
+  String toJson() => name;
+  static UserStatus fromJson(String json) => values.byName(json);
+}
 
 String userStatusToString(UserStatus? type) {
   if (type == null) {

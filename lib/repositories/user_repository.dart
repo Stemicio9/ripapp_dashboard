@@ -16,6 +16,7 @@ class UserRepository {
 
   final String loginUrl = "$baseUrl/api/auth/login";
   final String accountUrl = "$baseUrl/api/auth/account";
+  final String allUsersUrl = "$baseUrl/api/auth/accounts";
   final String signupUrl = "$baseUrl/api/saveUser";
 
   factory UserRepository() {
@@ -84,6 +85,18 @@ class UserRepository {
 
     CustomFirebaseAuthenticationListener().role = userStatusToString(accountResponse.status);
     CustomFirebaseAuthenticationListener().userEntity = accountResponse;
+  }
+
+  Future<List<UserEntity>> getAllUsers() async {
+    Map<String, dynamic>? parameters = {};
+    UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
+    var userId = (user != null) ? user.id : "4";
+    parameters.putIfAbsent("offset", () => 0);
+    parameters.putIfAbsent("userid", () => userId!);
+    Response res = await _dio.get(allUsersUrl, queryParameters: parameters);
+    print("dati = " + res.data.toString());
+    List<UserEntity> users = (res.data as List).map((user) => UserEntity.fromJson(user)).toList();
+    return users;
   }
 
 }

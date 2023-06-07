@@ -21,9 +21,10 @@ class UsersTable extends StatelessWidget{
     ''
   ];
 
-  List<UserEntity> users = [
+  List<UserEntity> users = [];
+  /*
     UserEntity(
-      id: '1',
+      id: 1,
       firstName: 'Davide',
       lastName: 'Rossi',
       email: 'daviderossi@gmail.com',
@@ -34,7 +35,7 @@ class UsersTable extends StatelessWidget{
         role: 'Amministratore'
     ),
     UserEntity(
-      id: '2',
+      id:2,
         firstName: 'Davide',
         lastName: 'Rossi',
         email: 'daviderossi@gmail.com',
@@ -45,7 +46,7 @@ class UsersTable extends StatelessWidget{
         role: 'Agenzia'
     ),
     UserEntity(
-      id: '3',
+      id: 3,
         firstName: 'Davide',
         lastName: 'Rossi',
         email: 'daviderossi@gmail.com',
@@ -56,7 +57,7 @@ class UsersTable extends StatelessWidget{
         role: 'Utente'
     ),
     UserEntity(
-      id: '4',
+      id: 4,
         firstName: 'Davide',
         lastName: 'Rossi',
         email: 'daviderossi@gmail.com',
@@ -68,7 +69,7 @@ class UsersTable extends StatelessWidget{
 
     ),
     UserEntity(
-      id: '5',
+      id: 5,
         firstName: 'Davide',
         lastName: 'Rossi',
         email: 'daviderossi@gmail.com',
@@ -80,6 +81,7 @@ class UsersTable extends StatelessWidget{
 
     ),
   ];
+   */
 
   final edit;
   final delete;
@@ -158,7 +160,7 @@ class UsersTable extends StatelessWidget{
   DataRow composeSingleRow(dynamic p) {
     return DataRow(
       cells: <DataCell>[
-        DataCell(Text(p.id,
+        DataCell(Text(p.id.toString(),
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),

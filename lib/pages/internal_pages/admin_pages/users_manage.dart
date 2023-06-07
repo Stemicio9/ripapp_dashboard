@@ -26,7 +26,7 @@ class UsersManage extends StatefulWidget {
 
 class UsersManageState extends State<UsersManage> {
   UserEntity userEntity = new UserEntity(
-    id: '1',
+    id: 1,
     firstName: 'Davide',
     lastName: 'Rossi',
     email: 'daviderossi@gmail.com',
@@ -91,7 +91,7 @@ class UsersManageState extends State<UsersManage> {
         children: [
           Header(
             deleteProfileOnTap: (){},
-            onTap: (){
+            onTap: () {
               showDialog(
                   context: context,
                   builder: (ctx) => UsersForm(

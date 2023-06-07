@@ -18,7 +18,7 @@ import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 
 
-
+/*
 class MyProducts extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class MyProducts extends StatelessWidget{
       child: MyProductsWrapped(),
     );
   }
-}
+}*/
 
 
 
@@ -35,15 +35,15 @@ class MyProducts extends StatelessWidget{
 
 
 
-class MyProductsWrapped extends StatefulWidget {
+class MyProducts extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return MyProductsWrappedState();
+    return MyProductsState();
   }
 }
 
 
-class MyProductsWrappedState extends State<MyProductsWrapped>{
+class MyProductsState extends State<MyProducts>{
   SearchProductCubit get _searchProductCubit => context.read<SearchProductCubit>();
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
