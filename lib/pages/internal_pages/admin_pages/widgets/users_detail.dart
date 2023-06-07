@@ -8,7 +8,7 @@ import '../../../../widgets/texts.dart';
 
 class UsersDetail extends StatelessWidget {
   final String cardTitle;
-  final String id;
+  final int id;
   final String name;
   final String lastName;
   final String phoneNumber;
@@ -62,7 +62,7 @@ class UsersDetail extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Texth3V2(testo: id, color: black),
+                              Texth3V2(testo: id.toString(), color: black),
 
                               Padding(
                                 padding: getPadding(bottom: 5,top: 20),

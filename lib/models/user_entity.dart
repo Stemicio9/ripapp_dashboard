@@ -7,7 +7,7 @@ import 'package:ripapp_dashboard/models/agency_entity.dart';
 String userEntityToJson(UserEntity data) => json.encode(data.toJson());
 
 class UserEntity {
-  String? id;
+  int? id;
   String? firstName;
   String? lastName;
   String? email;
@@ -35,24 +35,24 @@ class UserEntity {
   //toString
   @override
   String toString() {
-    return 'UserEntity{id: $id, firstName: $firstName, lastName: $lastName, email: $email,'
-        ' city: $city, phonenumber:$phoneNumber, idtoken:$idtoken, status:$status, role:$role, agency:$agency}';
+    return 'UserEntity{accountid: $id, name: $firstName, surname: $lastName, email: $email,'
+        ' city: $city, phone:$phoneNumber, idtoken:$idtoken, status:$status, role:$role, agency:$agency}';
   }
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
-      id: json["id"] ?? "",
-      firstName: json["firstName"] ?? "",
-      lastName: json["lastName"] ?? "",
+      id: json["accountid"] ?? 0,
+      firstName: json["name"] ?? "",
+      lastName: json["surname"] ?? "",
       email: json["email"] ?? "",
-      city: json["city"] ?? "",
-      phoneNumber: json["phoneNumber"] ?? "",
+      city: (json["city"] as List).map((e) => CityEntity.fromJson(e)).toList() ?? List.empty(),
+      phoneNumber: json["phone"] ?? "",
       idtoken: json["idtoken"] ?? "",
-      status: json["status"],
-      agency: json["agency"],
-      role: json["role"]);
+ //     status: json["status"] != null && (json["status"] as String).isNotEmpty ? UserStatus.values.firstWhere((e) => e.toString() == json["status"]) : UserStatus.active,
+      agency: json["agency"] != null ? AgencyEntity.fromJson(json["agency"]) : null,
+      role: json["role"] ?? "");
 
   UserEntity copyWith(
-      {String? id,
+      {int? id,
       String? firstName,
       String? lastName,
       String? email,
@@ -74,12 +74,12 @@ class UserEntity {
   }
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "firstName": firstName,
-        "lastName": lastName,
+        "accountid": id,
+        "name": firstName,
+        "surname": lastName,
         "email": email,
         "city": city?.map((e) => e.toJson()).toList() ?? [],
-        "phoneNumber": phoneNumber,
+        "phone": phoneNumber,
         "idtoken": idtoken,
         "status": status?.name ?? "",
         "role": role ?? "",
