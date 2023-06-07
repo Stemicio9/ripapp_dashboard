@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:dio/browser.dart';
@@ -17,6 +19,11 @@ class UserRepository {
   final String loginUrl = "$baseUrl/api/auth/login";
   final String accountUrl = "$baseUrl/api/auth/account";
   final String signupUrl = "$baseUrl/api/saveUser";
+  final String deleteUrl = "$baseUrl/api/auth/account";
+  final String deleteUserUrl = "$baseUrl/api/auth/account";
+  final String listAccountUrl = "$baseUrl/api/auth/account/list";
+  final String saveUsertUrl = "$baseUrl/api/auth/account";
+
 
   factory UserRepository() {
     return _userRepository;
@@ -52,6 +59,29 @@ class UserRepository {
     print(response.data);
     return UserEntity.fromJson(response.data);
   }
+  Future<List<UserEntity>> getList() async{
+    Response response;
+    response = await _dio.get(listAccountUrl);
+    print("object");
+    print(response.data);
+    // todo this could be not necessary
+    String goodJson = jsonEncode(response.data);
+    List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
+    return userEntityList;
+  }
+  Future<dynamic> deleteUser(int idUser) async{
+    String urlDeleteUser = '$deleteUserUrl$idUser';
+    var response = await _dio.delete(urlDeleteUser);
+    return response.data;
+  }
+  Future<dynamic> saveUser(UserEntity saveUser) async{
+    Response response;
+    print(saveUser.toJson());
+    response = await _dio.post(saveUsertUrl, data: saveUser.toJson());
+
+    return response.data;
+  }
+
 
   Future<dynamic> signup(UserEntity userEntity) async {
     print("REGISTRO UTENTE");
@@ -84,6 +114,8 @@ class UserRepository {
 
     CustomFirebaseAuthenticationListener().role = userStatusToString(accountResponse.status);
     CustomFirebaseAuthenticationListener().userEntity = accountResponse;
+
+
   }
 
 }

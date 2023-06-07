@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
@@ -14,19 +15,70 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 
+import '../../../blocs/users_list_cubit.dart';
+
 
 enum UserRoles { Amministratore, Agenzia, Utente }
 
-class UsersManage extends StatefulWidget {
+class UsersManage extends StatelessWidget{
+
+  final String detailMessage = 'Dettagli';
+  final String editMessage = 'Modifica';
+  final String deleteMessage = 'Elimina';
+  final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
+  final String name = 'Davide';
+  final String lastName = 'Rossi';
+  final String id = '1';
+  final String phoneNumber = '+39 0987654321';
+  final String city = 'Roma';
+  final String email = 'daviderossi@gmail.com';
+  final String role = 'Amministratore';
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return BlocProvider(
+        create: (_) => UsersListCubit(),
+        child: UsersManageWidget()
+    );
+  }
+
+}
+
+
+
+class UsersManageWidget extends StatefulWidget {
+
+  final String detailMessage = 'Dettagli';
+  final String editMessage = 'Modifica';
+  final String deleteMessage = 'Elimina';
+  final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
+  final String name = 'Davide';
+  final String lastName = 'Rossi';
+  final String id = '1';
+  final String phoneNumber = '+39 0987654321';
+  final String city = 'Roma';
+  final String email = 'daviderossi@gmail.com';
+  final String role = 'Amministratore';
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+
   @override
   State<StatefulWidget> createState() {
     return UsersManageState();
   }
 }
 
-class UsersManageState extends State<UsersManage> {
+class UsersManageState extends State<UsersManageWidget> {
   UserEntity userEntity = new UserEntity(
-    id: '1',
+    id:1,
     firstName: 'Davide',
     lastName: 'Rossi',
     email: 'daviderossi@gmail.com',
@@ -57,139 +109,165 @@ class UsersManageState extends State<UsersManage> {
     userEntity.agency = agencyEntity;
   }
 
-  final String detailMessage = 'Dettagli';
-  final String editMessage = 'Modifica';
-  final String deleteMessage = 'Elimina';
-  final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
-  final String name = 'Davide';
-  final String lastName = 'Rossi';
-  final String id = '1';
-  final String phoneNumber = '+39 0987654321';
-  final String city = 'Roma';
-  final String email = 'daviderossi@gmail.com';
-  final String role = 'Amministratore';
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController cityController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = "nome";
-    lastNameController.text = "cognome";
-    emailController.text = "email@mail.it";
-    phoneController.text = "3232";
-    cityController.text = "citta";
-    passwordController.text = "123456";
+    widget.nameController.text = "nome";
+    widget.lastNameController.text = "cognome";
+    widget.emailController.text = "email@mail.it";
+    widget.phoneController.text = "3232";
+    widget.cityController.text = "citta";
+    widget.passwordController.text = "123456";
+    return Content();
+
+
+   /* return BlocBuilder<UsersListCubit, UsersListState>(
+        builder: (context, state) {
+          print("ciao");
+          print(state.runtimeType);
+          if (state is UsersListLoading) {
+            return CircularProgressIndicator();
+          } else if (state is UsersListLoaded) {
+            print("Egg");
+            if ((state.accountList).isEmpty) {
+              return ErrorWidget("lista vuota"); //TODO aggiungere errore
+            }
+            else {
+              List<UserEntity> usersList = state.accountList;
+              return Content();
+            }
+          }
+          else{
+            return ErrorWidget("errore di connessione"); //TODO aggiungere errore
+          }
+        }); */
+  }
+
+
+
+
+  Widget Content(){
     return Padding(
       padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Header(
-            deleteProfileOnTap: (){},
-            onTap: (){
+            deleteProfileOnTap: () {},
+            onTap: () {
               showDialog(
                   context: context,
-                  builder: (ctx) => UsersForm(
+                  builder: (ctx) =>
+                      UsersForm(
                         onTap: () {
-                          userEntity.firstName = nameController.text;
-                          userEntity.lastName = lastNameController.text;
-                          userEntity.email = emailController.text;
-                          userEntity.phoneNumber = phoneController.text;
-                          userEntity.password = passwordController.text;
+                          userEntity.firstName = widget.nameController
+                              .text;
+                          userEntity.lastName = widget.lastNameController
+                              .text;
+                          userEntity.email = widget.emailController.text;
+                          userEntity.phoneNumber = widget.phoneController
+                              .text;
+                          userEntity.password = widget.passwordController
+                              .text;
                           if (userEntity.email != "" &&
                               userEntity.password != "") {
                             FirebaseAuth.instance
                                 .createUserWithEmailAndPassword(
-                                    email: userEntity.email ?? "",
-                                    password: userEntity.password ?? "")
+                                email: userEntity.email ?? "",
+                                password: userEntity.password ?? "")
                                 .then((value) async {
                               if (value.user == null) {
                                 print("Utente nullo");
                                 return; //TODO: Handle error
                               }
+
                               print("SALVO SU DB LOCALE");
-                              var response = await UserRepository().signup(userEntity);
+                              var response = await UserRepository()
+                                  .signup(userEntity);
                               Navigator.pop(context);
                             });
                           }
-
-
                         },
                         cardTitle: getCurrentLanguageValue(ADD_USER)!,
-                        nameController: nameController,
-                        emailController: emailController,
-                        phoneController: phoneController,
-                        cityController: cityController,
-                        lastNameController: lastNameController,
-                        passwordController: passwordController,
+                        nameController: widget.nameController,
+                        emailController: widget.emailController,
+                        phoneController: widget.phoneController,
+                        cityController: widget.cityController,
+                        lastNameController: widget.lastNameController,
+                        passwordController: widget.passwordController,
                         statusChange: setStatusFromDropdown,
                         agencyChange: setAgencyFromDropdown,
-                        roles: UserRoles.values.map((e) => e.name).toList(),
+                        roles: UserRoles.values.map((e) => e.name)
+                            .toList(),
                       ));
             },
             pageTitle: getCurrentLanguageValue(USERS_MANAGE)!,
             buttonText: getCurrentLanguageValue(ADD_USER)!,
           ),
           UsersTable(
-            delete: (){
+            delete: () {
               showDialog(
                   context: context,
-                  builder: (ctx) => DeleteMessageDialog(
-                      onConfirm: (){
-                        Navigator.pop(context);
-                      },
-                      onCancel: (){
-                        Navigator.pop(context);
-                      },
-                      message: message
-                  )
+                  builder: (ctx) =>
+                      DeleteMessageDialog(
+                          onConfirm: () {
+                            Navigator.pop(context);
+                          },
+                          onCancel: () {
+                            Navigator.pop(context);
+                          },
+                          message: widget.message
+                      )
               );
             },
-            edit: (){
+            edit: () {
               showDialog(
                   context: context,
                   barrierColor: blackTransparent,
-                  builder: (ctx) => UsersForm(
+                  builder: (ctx) =>
+                      UsersForm(
                         statusChange: setStatusFromDropdown,
                         agencyChange: setAgencyFromDropdown,
                         onTap: () {
                           Navigator.pop(context);
                         },
                         cardTitle: getCurrentLanguageValue(EDIT_USER)!,
-                        nameController: nameController,
-                        emailController: emailController,
-                        phoneController: phoneController,
-                        cityController: cityController,
-                        lastNameController: lastNameController,
-                        passwordController: passwordController,
-                        roles: UserRoles.values.map((e) => e.name).toList(),
+                        nameController: widget.nameController,
+                        emailController: widget.emailController,
+                        phoneController: widget.phoneController,
+                        cityController: widget.cityController,
+                        lastNameController: widget.lastNameController,
+                        passwordController: widget.passwordController,
+                        roles: UserRoles.values.map((e) => e.name)
+                            .toList(),
                       ));
             },
-            showDetail: (){
+            showDetail: () {
               showDialog(
                   context: context,
-                  builder: (ctx) => UsersDetail(
+                  builder: (ctx) =>
+                      UsersDetail(
                         cardTitle: getCurrentLanguageValue(USER_DETAIL)!,
                         name: userEntity.firstName!,
                         id: userEntity.id!,
                         email: userEntity.email!,
                         phoneNumber: userEntity.phoneNumber!,
-                        city: userEntity.city!.first.toString(), //TODO check if lists or single city
+                        city: userEntity.city!.first.toString(),
+                        //TODO check if lists or single city
                         lastName: userEntity.lastName!,
                         role: userEntity.role!,
                       ));
             },
-            detailMessage: detailMessage,
-            editMessage: editMessage,
-            deleteMessage: deleteMessage,
+            detailMessage: widget.detailMessage,
+            editMessage: widget.editMessage,
+            deleteMessage: widget.deleteMessage,
           ),
         ],
       ),
     );
   }
 }
+
+
+

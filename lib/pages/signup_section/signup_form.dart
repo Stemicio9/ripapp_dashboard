@@ -292,7 +292,7 @@ class RegisterForm extends StatelessWidget {
                           buttonColor: Colors.green,
                           onTap: () {
                             UserEntity userEntity = UserEntity(
-                              id: "",
+                              id: 0,
                               firstName: nameController.text,
                               lastName: lastnameController.text,
                               city: [],
