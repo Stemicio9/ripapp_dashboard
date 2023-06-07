@@ -63,6 +63,7 @@ class AgenciesManageState extends State<AgenciesManage> {
                   );
                   AgencyRepository().saveAgency(agencyEntity);
                   print("salvataggio agenzia...");
+                  (_searchAgencyCubit.state as SearchAgencyLoaded).agencies.add(agencyEntity);
                   _searchAgencyCubit.refreshAgencies();
                   Navigator.pop(context);
                 },
