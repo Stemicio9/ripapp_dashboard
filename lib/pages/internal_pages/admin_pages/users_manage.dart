@@ -84,7 +84,7 @@ class UsersManageState extends State<UsersManageWidget> {
     email: 'daviderossi@gmail.com',
     city: [CityEntity.defaultCity()],
     phoneNumber: '+39 0987654321',
-
+    role: 'Amministratore'
   );
 
   setStatusFromDropdown(String userRole) {

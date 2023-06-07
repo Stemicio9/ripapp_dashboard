@@ -438,7 +438,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: getPadding(bottom: 5,left: 6),
+                                    padding: getPadding(bottom: 5,left: 4),
                                     child: Text(
                                       'AGENZIA',
                                       style: SafeGoogleFont(
@@ -451,7 +451,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                   ),
 
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 20),
+                                    padding: const EdgeInsets.only(left: 10),
                                     child: Container(
                                       height: 48,
                                       decoration: BoxDecoration(

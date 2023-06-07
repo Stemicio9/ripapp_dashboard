@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker_web/image_picker_web.dart';
@@ -40,8 +41,7 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController wakeDateController = TextEditingController();
   final TextEditingController wakeTimeController = TextEditingController();
   final TextEditingController wakeNoteController = TextEditingController();
-  final TextEditingController funeralAddressController =
-      TextEditingController();
+  final TextEditingController funeralAddressController = TextEditingController();
   final TextEditingController funeralDateController = TextEditingController();
   final TextEditingController funeralTimeController = TextEditingController();
   final TextEditingController funeralNoteController = TextEditingController();
@@ -68,6 +68,12 @@ class AddDemiseState extends State<AddDemise> {
   static const List<String> kinship = <String>[
     'Madre',
     'Padre',
+    'Fratello',
+    'Sorella',
+    'Figlio',
+    'Figlia',
+    'Nonno',
+    'Nonna',
   ];
 
   late Image imageFile;
@@ -86,20 +92,20 @@ class AddDemiseState extends State<AddDemise> {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = "nomedefunto";
-    lastNameController.text = "cognomedefunto";
-    cityController.text = "cittadefunto";
-    phoneController.text = "333";
-    ageController.text = "89";
-    deceasedDateController.text = "2020-01-02 03:04:05.000";
-    addressController.text = "indirizzo";
-    wakeDateController.text = "2020-01-02 03:04:05.000";
-    wakeNoteController.text = "note";
-    funeralAddressController.text = "indirizzo";
-    funeralDateController.text = "2020-01-02 03:04:05.000";
-    funeralNoteController.text = "note";
-    citiesController.text = "citta";
-    relativeController.text = "parente";
+    // nameController.text = "nomedefunto";
+    // lastNameController.text = "cognomedefunto";
+    // cityController.text = "cittadefunto";
+    // phoneController.text = "333";
+    // ageController.text = "89";
+    // deceasedDateController.text = "2020-01-02 03:04:05.000";
+    // addressController.text = "indirizzo";
+    // wakeDateController.text = "2020-01-02 03:04:05.000";
+    // wakeNoteController.text = "note";
+    // funeralAddressController.text = "indirizzo";
+    // funeralDateController.text = "2020-01-02 03:04:05.000";
+    // funeralNoteController.text = "note";
+    // citiesController.text = "citta";
+    // relativeController.text = "parente";
 
     return ScaffoldWidget(
       body: SingleChildScrollView(
@@ -119,15 +125,20 @@ class AddDemiseState extends State<AddDemise> {
 
               //deceased data
               DeceasedData(
-                //imageFile: imageFile,
+               // imageFile: imageFile,
                 imageOnTap: () async {
-                  //TODO: IMPLEMENTARE IMAGEPICKER
-                  // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
                   Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
                   print(pickedImage);
                   setState(() {
                     imageFile = pickedImage!;
                   });
+
+                  //TODO SALVARE IMMAGINE SU FIRESTORAGE
+                 // final storageRef = FirebaseStorage.instance.ref();
+                //  final path = "profile_images/deceased_images/$imageFile";
+                //  final imageRef = storageRef.child(path);
+                //  imageRef.putFile(imageFile);
+
                 },
 
                 filterController: filterController,
@@ -199,20 +210,13 @@ class AddDemiseState extends State<AddDemise> {
                       children: [
                         if (_list.isEmpty)
                           Center(
-                              child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Texth2V2(
-                                testo: 'PDF Necrologio',
+
+                             child: Texth2V2(
+                                testo: 'Trascina qui un file',
                                 color: greyDisabled,
                                 weight: FontWeight.bold,
                               ),
-                              Texth2V2(
-                                testo: "Trascina qui un file",
-                                color: greyDisabled,
-                              ),
-                            ],
-                          ))
+                          )
                         else
                           Padding(
                             padding: const EdgeInsets.all(10),
@@ -337,8 +341,6 @@ class AddDemiseState extends State<AddDemise> {
                 ),
               ),
 
-
-
               //form submit
               Padding(
                 padding: const EdgeInsets.only(top: 30),
@@ -358,20 +360,17 @@ class AddDemiseState extends State<AddDemise> {
 
   formSubmit() {
     DemiseEntity demiseEntity = DemiseEntity();
-
     demiseEntity.firstName = (nameController.text);
     demiseEntity.lastName = (lastNameController.text);
     demiseEntity.city = CityEntity(name: cityController.text);
     demiseEntity.phoneNumber = (phoneController.text);
     demiseEntity.age = int.parse(ageController.text);
-    demiseEntity.deceasedDate = DateTime.parse(deceasedDateController.text);
+    demiseEntity.deceasedDate = convertDate(deceasedDateController.text);
     demiseEntity.wakeAddress = (addressController.text);
-    demiseEntity.wakeDateTime = DateTime.parse(wakeDateController.text);
-    //demiseEntity.wakeDateTime = (wakeTimeController.text);
+    demiseEntity.wakeDateTime = convertDate(wakeDateController.text);
     demiseEntity.wakeNote = (wakeNoteController.text);
     demiseEntity.funeralAddress= (funeralAddressController.text);
-    demiseEntity.funeralDateTime = DateTime.parse(funeralDateController.text);
-    //demiseEntity.funeralDateTime = (funeralTimeController.text);
+    demiseEntity.funeralDateTime = convertDate(funeralDateController.text);
     demiseEntity.funeralNotes = (funeralNoteController.text);
     //demiseEntity.cities = (citiesController.text);
     //demiseEntity.relative = (relativeController.text);
@@ -427,5 +426,10 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   var selectedValues = [];
+
+  DateTime? convertDate(String dateString) {
+    var dt = dateString.split("-").reversed.join("-");
+    return DateTime.parse(dt);
+  }
 
 }

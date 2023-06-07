@@ -30,8 +30,6 @@ class ProductsManageState extends State<ProductsManage>{
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = "nomeprod";
-    priceController.text = "19";
     return Padding(
       padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
       child: Column(
@@ -42,7 +40,6 @@ class ProductsManageState extends State<ProductsManage>{
             onTap: (){
               showDialog(context: context, builder: (ctx)=>ProductForm(
                   imageOnTap: (){},
-
                   onTap: (){
                     print("1");
                     ProductEntity productEntity = ProductEntity();
