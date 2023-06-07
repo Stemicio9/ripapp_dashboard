@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/search_users_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
@@ -8,7 +10,50 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
 
-class UsersTable extends StatelessWidget{
+class UsersTable extends StatefulWidget{
+
+  final edit;
+  final delete;
+  final showDetail;
+  // final onSort;
+  // final sortColumnIndex;
+  final String detailMessage;
+  final String editMessage;
+  final String deleteMessage;
+
+  UsersTable({
+    required this.delete,
+    required this.edit,
+    required this.showDetail,
+    required this.detailMessage,
+    required this.editMessage,
+    required this.deleteMessage,
+    super.key
+    // required this.onSort,
+    // required this.sortColumnIndex
+  });
+
+  @override
+  State<StatefulWidget> createState()  => UsersTableState(
+    delete: delete,
+    edit: edit,
+    showDetail: showDetail,
+    detailMessage: detailMessage,
+    editMessage: editMessage,
+    deleteMessage: deleteMessage,
+  );
+}
+
+class UsersTableState extends State<UsersTable>{
+
+
+  SearchUsersCubit get _searchUsersCubit => context.read<SearchUsersCubit>();
+
+  @override
+  void initState() {
+    _searchUsersCubit.fetchUsers();
+    super.initState();
+  }
 
   List<String> headerTitle = [
     'ID',
@@ -93,7 +138,7 @@ class UsersTable extends StatelessWidget{
   final String deleteMessage;
 
 
-  UsersTable({
+  UsersTableState({
     required this.delete,
     required this.edit,
     required this.showDetail,
@@ -107,28 +152,41 @@ class UsersTable extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: getPadding(top: 20),
-      width: MediaQuery.of(context).size.width,
-      child: DataTable(
-        columnSpacing: 30,
-        dataRowColor: MaterialStateColor.resolveWith((states) => white),
-        headingRowColor: MaterialStateColor.resolveWith((states) => background),
-        border: const TableBorder(
-          top: BorderSide(width: 0.5, color: greyState),
-          bottom:BorderSide(width: 0.5, color: greyState),
-          left:BorderSide(width: 0.5, color: greyState),
-          right:BorderSide(width: 0.5, color: greyState),
-          horizontalInside:BorderSide(width: 0.5, color: greyState),
-        ),
-        columns: createHeaderTable(),
-        rows: createRows(),
-     //   sortColumnIndex: sortColumnIndex,
-      ),
-    );
+
+  return
+  BlocBuilder<SearchUsersCubit, SearchUsersState>(
+  builder: (context, state)
+      {
+        if (state is SearchUsersLoaded){
+          users = state.users;
+          print("utenti: " + users.toString());
+          return SingleChildScrollView(
+              child:
+           Container(
+            padding: getPadding(top: 20),
+            width: MediaQuery.of(context).size.width,
+            child: DataTable(
+              columnSpacing: 30,
+              dataRowColor: MaterialStateColor.resolveWith((states) => white),
+              headingRowColor: MaterialStateColor.resolveWith((states) => background),
+              border: const TableBorder(
+                top: BorderSide(width: 0.5, color: greyState),
+                bottom:BorderSide(width: 0.5, color: greyState),
+                left:BorderSide(width: 0.5, color: greyState),
+                right:BorderSide(width: 0.5, color: greyState),
+                horizontalInside:BorderSide(width: 0.5, color: greyState),
+              ),
+              columns: createHeaderTable(),
+              rows: createRows(),
+              //   sortColumnIndex: sortColumnIndex,
+            ),
+          ));}
+        else {
+          return ErrorWidget("errore");
+        }
+      }
+);
   }
-
-
 
 
   List<DataColumn> createHeaderTable() {
@@ -190,7 +248,7 @@ class UsersTable extends StatelessWidget{
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.role,
+          p.role ?? "",
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
@@ -247,4 +305,6 @@ class UsersTable extends StatelessWidget{
       ],
     );
   }
+
+
 }

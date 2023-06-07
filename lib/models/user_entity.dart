@@ -48,7 +48,7 @@ class UserEntity {
       .toList(),*/
       phoneNumber: json["phone"] ?? "",
       idtoken: json["idtoken"] ?? "",
-      //status: UserStatus.fromJson(json['status']),
+      status: UserStatus.fromJson(json['status']),
       agency: json["agency"] != null ? AgencyEntity.fromJson(json["agency"]) : null,
       /*role: json["role"]*/);
 
@@ -82,7 +82,7 @@ class UserEntity {
         "city": city?.map((e) => e.toJson()).toList() ?? [],
         "phone": phoneNumber,
         "idtoken": idtoken,
-        //"status":  status?.toJson() ?? null,
+        "status":  status?.toJson() ?? null,
         //"role": role ?? "",
         "agency": agency?.toJson() ?? null
       };

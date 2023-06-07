@@ -10,6 +10,12 @@ class SearchUsersError extends SearchUsersState {}
 class SearchUsersLoaded extends SearchUsersState {
   final List<UserEntity> users;
   SearchUsersLoaded(this.users);
+
+  SearchUsersLoaded copyWith({List<UserEntity>? users,}) {
+    return SearchUsersLoaded(
+      users ?? this.users,
+    );
+  }
 }
 
 
@@ -21,8 +27,24 @@ class SearchUsersCubit extends Cubit<SearchUsersState>{
 
     try {
       List<UserEntity> usersRetrieved = await UserRepository().getAllUsers();
+      if (usersRetrieved.length == 0){print("non ci sono utenti da mostrare");}
+      else{
+        try {
+          emit(SearchUsersLoaded(usersRetrieved));
+        }
+        catch (e){
+          print("error");
+        }
+      }
     }catch(e){
       emit(SearchUsersError());
+    }
+  }
+
+  void refreshUsers() {
+    if (state is SearchUsersLoaded) {
+      var aLoadedState = state as SearchUsersLoaded; //prende lo stato corrente
+      emit(aLoadedState.copyWith());
     }
   }
 }

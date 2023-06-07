@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/search_users_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
@@ -25,6 +27,9 @@ class UsersManage extends StatefulWidget {
 }
 
 class UsersManageState extends State<UsersManage> {
+
+  SearchUsersCubit get _searchUsersCubit => context.read<SearchUsersCubit>();
+
   UserEntity userEntity = new UserEntity(
     id: 1,
     firstName: 'Davide',
@@ -115,6 +120,10 @@ class UsersManageState extends State<UsersManage> {
                               print("SALVO SU DB LOCALE");
                               print("utente appena iscritto = " + userEntity.toString());
                               var response = await UserRepository().signup(userEntity);
+                              if ( _searchUsersCubit.state is SearchUsersLoaded){
+                                (_searchUsersCubit.state as SearchUsersLoaded).users.add(userEntity);
+                                _searchUsersCubit.refreshUsers();
+                              }
                               Navigator.pop(context);
                             });
                           }
