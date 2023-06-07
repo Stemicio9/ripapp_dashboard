@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
@@ -28,6 +30,8 @@ class ProductsManageState extends State<ProductsManage>{
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
+  SearchProductCubit get _searchProductsCubit => context.read<SearchProductCubit>();
+
   @override
   Widget build(BuildContext context) {
     nameController.text = "nomeprod";
@@ -51,6 +55,8 @@ class ProductsManageState extends State<ProductsManage>{
                     productEntity.photoName = nameController.text;
                     print("2");
                     ProductRepository().saveProduct(productEntity);
+                    (_searchProductsCubit.state as SearchProductLoaded).products.add(productEntity);
+                    _searchProductsCubit.refreshProducts();
                     Navigator.pop(context);
                   },
                   cardTitle: getCurrentLanguageValue(ADD_PRODUCT)!,

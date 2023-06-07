@@ -44,7 +44,7 @@ class SearchProductCubit extends Cubit<SearchProductState>{
     }
   }
 
-  void changeSelectedProducts() {
+  void refreshProducts() {
     if (state is SearchProductLoaded) {
       var aLoadedState = state as SearchProductLoaded; //prende lo stato corrente
       emit(aLoadedState.copyWith());
