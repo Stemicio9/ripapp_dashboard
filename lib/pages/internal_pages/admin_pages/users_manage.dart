@@ -146,15 +146,11 @@ class UsersManageState extends State<UsersManageWidget> {
                   builder: (ctx) =>
                       UsersForm(
                         onTap: () {
-                          userEntity.firstName = widget.nameController
-                              .text;
-                          userEntity.lastName = widget.lastNameController
-                              .text;
+                          userEntity.firstName = widget.nameController.text;
+                          userEntity.lastName = widget.lastNameController.text;
                           userEntity.email = widget.emailController.text;
-                          userEntity.phoneNumber = widget.phoneController
-                              .text;
-                          userEntity.password = widget.passwordController
-                              .text;
+                          userEntity.phoneNumber = widget.phoneController.text;
+                          userEntity.password = widget.passwordController.text;
                           if (userEntity.email != "" &&
                               userEntity.password != "") {
                             FirebaseAuth.instance
@@ -168,8 +164,7 @@ class UsersManageState extends State<UsersManageWidget> {
                               }
 
                               print("SALVO SU DB LOCALE");
-                              var response = await UserRepository()
-                                  .signup(userEntity);
+                              _userListCubit.signup(userEntity);
                               Navigator.pop(context);
                             });
                           }

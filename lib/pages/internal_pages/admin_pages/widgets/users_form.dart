@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
+import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
@@ -460,7 +461,6 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                       ),
                                       child: BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
                                               builder: (context, state){
-
                                             if (state is SearchAgencyLoading)
                                               return CircularProgressIndicator();
                                             else if (state is SearchAgencyLoaded)
