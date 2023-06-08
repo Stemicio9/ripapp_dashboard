@@ -53,6 +53,7 @@ class UsersTable extends StatefulWidget{
 class UsersTableState extends State<UsersTable>{
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
 
+  List<UserEntity> usersList = [];
   @override
   void initState() {
     _userListCubit.fetchUsersList();
@@ -73,7 +74,7 @@ class UsersTableState extends State<UsersTable>{
               return ErrorWidget("lista vuota"); //TODO aggiungere errore
             }
             else {
-              List<UserEntity> usersList = state.accountList;
+              usersList = state.accountList;
               return Container(
                 padding: getPadding(top: 20),
                 width: MediaQuery.of(context).size.width,
@@ -204,7 +205,7 @@ class UsersTableState extends State<UsersTable>{
                 message: widget.deleteMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(
-                    onTap: widget.delete,
+                    onTap: (){widget.delete(p,usersList);},
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Icon(

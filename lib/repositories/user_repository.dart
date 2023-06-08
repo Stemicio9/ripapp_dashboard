@@ -22,7 +22,7 @@ class UserRepository {
   final String deleteUrl = "$baseUrl/api/auth/account";
   final String deleteUserUrl = "$baseUrl/api/auth/account";
   final String listAccountUrl = "$baseUrl/api/auth/account/list";
-  final String saveUsertUrl = "$baseUrl/api/auth/account";
+
 
 
   factory UserRepository() {
@@ -70,15 +70,8 @@ class UserRepository {
     return userEntityList;
   }
   Future<dynamic> deleteUser(int idUser) async{
-    String urlDeleteUser = '$deleteUserUrl$idUser';
+    String urlDeleteUser = '$deleteUserUrl/$idUser';
     var response = await _dio.delete(urlDeleteUser);
-    return response.data;
-  }
-  Future<dynamic> saveUser(UserEntity saveUser) async{
-    Response response;
-    print(saveUser.toJson());
-    response = await _dio.post(saveUsertUrl, data: saveUser.toJson());
-
     return response.data;
   }
 
