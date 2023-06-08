@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
-import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
@@ -74,10 +73,6 @@ class UsersForm extends StatelessWidget {
 }
 
 
-
-
-
-
 class UsersFormWidget extends StatefulWidget{
 
   final String cardTitle;
@@ -129,6 +124,8 @@ class UsersFormWidget extends StatefulWidget{
 class UsersFormWidgetState extends State<UsersFormWidget> {
 
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
+  late String selectedValue;
+  late AgencyEntity selectedAgency;
 
   List<String> agencies = <String>[
     'Seleziona Agenzia',
@@ -139,10 +136,6 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
     'Agenzia 5',
   ];
 
-  late String selectedValue;
-  late AgencyEntity selectedAgency;
-
-
   @override
   void initState() {
     selectedValue = widget.roles.first;
@@ -150,8 +143,6 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
     _searchAgencyCubit.fetchAgencies();
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {

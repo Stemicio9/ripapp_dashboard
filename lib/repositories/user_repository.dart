@@ -82,7 +82,8 @@ class UserRepository {
     print("USER STATUS: ");
     print("USER no: ");
     print("USER si: ");
-    print(userEntity);
+    print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO");
+    print(userEntity.toJson());
     var response = await _dio.post(signupUrl,data: userEntity.toJson(), options: Options(headers: buildHeaders()));
     return response.data;
   }
