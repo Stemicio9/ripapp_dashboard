@@ -166,7 +166,7 @@ class UsersManageState extends State<UsersManageWidget> {
                                 }
 
                                 print("SALVO SU DB LOCALE");
-                                _userListCubit.signup(userEntity);
+                                //_userListCubit.signup(userEntity);
                                 Navigator.pop(context);
                               });
                             }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
+import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 
 String userEntityToJson(UserEntity data) => json.encode(data.toJson());
@@ -46,16 +46,13 @@ class UserEntity {
       email: json["email"] ?? "",
       city: (json["city"] as List).map((e) => CityEntity.fromJson(e)).toList() ?? List.empty(),
       phoneNumber: json["phone"] ?? "",
-      /*city: json["city"].map((data) => CityEntity.fromJson(data))
-      .toList(),*/
-      phoneNumber: json["phone"] ?? "",
       idtoken: json["idtoken"] ?? "",
  //     status: json["status"] != null && (json["status"] as String).isNotEmpty ? UserStatus.values.firstWhere((e) => e.toString() == json["status"]) : UserStatus.active,
       agency: json["agency"] != null ? AgencyEntity.fromJson(json["agency"]) : null,
-      role: json["role"] ?? "");
-      status: UserStatus.fromJson(json['status']),
-      agency: json["agency"] != null ? AgencyEntity.fromJson(json["agency"]) : null,
-      /*role: json["role"]*/);
+      role: json["role"] ?? "",
+      status: UserStatus.fromJson(json['status']
+      )
+  );
 
   UserEntity copyWith(
       {int? id,
@@ -75,7 +72,7 @@ class UserEntity {
         city: city ?? this.city,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         idtoken: idtoken ?? this.idtoken,
-        status: status ?? this.status,
+      //  status: status ?? this.status,
         role: role ?? this.role);
   }
 
