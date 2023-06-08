@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
-
 
 
 class UsersTable extends StatefulWidget{
@@ -67,7 +67,9 @@ class UsersTableState extends State<UsersTable>{
           print("ciao");
           print(state.runtimeType);
           if (state is UsersListLoading) {
-            return CircularProgressIndicator();
+            return const Center(
+                child: CircularProgressIndicator()
+            );
           } else if (state is UsersListLoaded) {
             print("Egg");
             if ((state.accountList).isEmpty) {
@@ -163,7 +165,9 @@ class UsersTableState extends State<UsersTable>{
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.role ?? "",
+          p.status.toString() == 'UserStatus.active' ? 'Utente' :
+          p.status.toString() == 'UserStatus.agency' ? 'Agenzia' :
+          'Amministratore',
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
@@ -174,7 +178,7 @@ class UsersTableState extends State<UsersTable>{
               message: widget.detailMessage,
               direction: AxisDirection.down,
               child: GestureDetector(
-                  onTap: widget.showDetail,
+                  onTap:  (){widget.showDetail(p);},
                   child: const MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Icon(
@@ -205,7 +209,9 @@ class UsersTableState extends State<UsersTable>{
                 message: widget.deleteMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(
-                    onTap: (){widget.delete(p,usersList);},
+                    onTap: (){
+                      widget.delete(p,usersList);
+                      },
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Icon(

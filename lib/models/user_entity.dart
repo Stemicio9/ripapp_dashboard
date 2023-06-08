@@ -47,11 +47,10 @@ class UserEntity {
       city: (json["city"] as List).map((e) => CityEntity.fromJson(e)).toList() ?? List.empty(),
       phoneNumber: json["phone"] ?? "",
       idtoken: json["idtoken"] ?? "",
- //     status: json["status"] != null && (json["status"] as String).isNotEmpty ? UserStatus.values.firstWhere((e) => e.toString() == json["status"]) : UserStatus.active,
+       // status: json["status"] != null && (json["status"] as String).isNotEmpty ? UserStatus.values.firstWhere((e) => e.toString() == json["status"]) : UserStatus.active,
       agency: json["agency"] != null ? AgencyEntity.fromJson(json["agency"]) : null,
       role: json["role"] ?? "",
-      status: UserStatus.fromJson(json['status']
-      )
+      status: UserStatus.fromJson(json['status'])
   );
 
   UserEntity copyWith(
@@ -84,9 +83,9 @@ class UserEntity {
         "city": city?.map((e) => e.toJson()).toList() ?? [],
         "phone": phoneNumber,
         "idtoken": idtoken,
-        "status":  status?.toJson() ?? null,
+        "status":  status?.toJson(),
         //"role": role ?? "",
-        "agency": agency?.toJson() ?? null
+        "agency": agency?.toJson()
       };
 
 // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
