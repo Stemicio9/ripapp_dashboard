@@ -38,6 +38,29 @@ class UsersListCubit extends Cubit<UsersListState> {
     }
   }
 
+
+  delete(idUser)async{
+    emit(UsersListLoading());
+    try{
+      var result = await UserRepository().deleteUser(idUser);
+      fetchUsersList();
+    }catch(e){
+      print("ERRORE");
+      print(e);
+      emit(UsersListError());
+    }
+  }
+  signup(UserEntity userEntity) async{
+    emit(UsersListLoading());
+    try{
+      var result = await UserRepository().signup(userEntity);
+      fetchUsersList();
+    }catch(e){
+      emit(UsersListError());
+    }
+  }
+  
+
   changeSelectedAgency(UserEntity? userEntity){
     if(state is UsersListLoaded && userEntity != null){
       var a = state as UsersListLoaded;

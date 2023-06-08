@@ -1,3 +1,5 @@
+import 'dart:js_util';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,6 +79,9 @@ class UsersManageWidget extends StatefulWidget {
 }
 
 class UsersManageState extends State<UsersManageWidget> {
+
+  UsersListCubit get _userListCubit => context.read<UsersListCubit>();
+
   UserEntity userEntity = new UserEntity(
     id:1,
     firstName: 'Davide',
@@ -119,29 +124,9 @@ class UsersManageState extends State<UsersManageWidget> {
     widget.phoneController.text = "3232";
     widget.cityController.text = "citta";
     widget.passwordController.text = "123456";
+
     return Content();
 
-
-   /* return BlocBuilder<UsersListCubit, UsersListState>(
-        builder: (context, state) {
-          print("ciao");
-          print(state.runtimeType);
-          if (state is UsersListLoading) {
-            return CircularProgressIndicator();
-          } else if (state is UsersListLoaded) {
-            print("Egg");
-            if ((state.accountList).isEmpty) {
-              return ErrorWidget("lista vuota"); //TODO aggiungere errore
-            }
-            else {
-              List<UserEntity> usersList = state.accountList;
-              return Content();
-            }
-          }
-          else{
-            return ErrorWidget("errore di connessione"); //TODO aggiungere errore
-          }
-        }); */
   }
 
 
@@ -205,13 +190,19 @@ class UsersManageState extends State<UsersManageWidget> {
             pageTitle: getCurrentLanguageValue(USERS_MANAGE)!,
             buttonText: getCurrentLanguageValue(ADD_USER)!,
           ),
+
           UsersTable(
-            delete: () {
+            delete: (dynamic p,dynamic usersList) {
               showDialog(
                   context: context,
                   builder: (ctx) =>
                       DeleteMessageDialog(
                           onConfirm: () {
+                            for(var e in usersList){
+                              if(e.id == p.id){
+                                _userListCubit.delete(e.id!);
+                              }
+                            }
                             Navigator.pop(context);
                           },
                           onCancel: () {
@@ -267,6 +258,7 @@ class UsersManageState extends State<UsersManageWidget> {
       ),
     );
   }
+
 }
 
 
