@@ -49,18 +49,3 @@ class SearchAgencyCubit extends Cubit<SearchAgencyState> {
     }
   }
 }
-
-
-
-
-
-
-
-/* FATTO
-MultiBlocProvider(
-  providers: [
-    BlocProvider<SearchAgencyCubit>(create: (_) => SearchAgencyCubit()),
-],
- */
-
-

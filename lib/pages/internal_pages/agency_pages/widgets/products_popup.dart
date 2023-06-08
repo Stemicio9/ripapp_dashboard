@@ -1,16 +1,35 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/entities/single_product_entity.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
+import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/products_row.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 
 import '../../../../constants/language.dart';
 import '../../../../widgets/action_button.dart';
 
-class ProductsPopup extends StatefulWidget {
-  final Function() onTap;
+/*
+class ProductsPopup extends StatelessWidget {
+  final Function(List<ProductOffered>) onTap;
+  ProductsPopup({Key? key,required this.onTap}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SearchProductCubit(),
+      child: ProductsPopupWrapped(onTap: onTap,),
+    );
+  }
+}
+*/
 
-  const ProductsPopup({Key? key,required this.onTap}) : super(key: key);
+class ProductsPopup extends StatefulWidget {
+  final Function(List<ProductOffered>) onTap;
+
+   ProductsPopup({Key? key,required this.onTap}) : super(key: key);
 
   @override
   State<ProductsPopup> createState() => _ProductsPopupState();
@@ -23,23 +42,43 @@ class _ProductsPopupState extends State<ProductsPopup> {
   // fixme make a bloc and a cubit to manage this situation
   late List<SingleProductEntity> products = List.empty(growable: true);
 
+  SearchProductCubit get _searchProductCubit => context.read<SearchProductCubit>();
+
 
   @override
   void initState() {
     // fixme here we use initState only to initialize product list, but is dummy
     // fixme delete this method when bloc will be done
-    for(int i = 0; i<10; i++){
+    _searchProductCubit.fetchProducts();
+
+    /*
+    state.productsOffered.forEach((productOffered) {
+      products.add(SingleProductEntity(id: productOffered.productEntity.id!,
+          name: productOffered.productEntity.name ?? "",
+          price: productOffered.productEntity.price.toString(),
+          urlImage: /*productOffered.productEntity.photoName ??*/ ImagesConstants.imgProductPlaceholder,
+          isSelected: productOffered.offered,
+          onTap: onProductTapped));
+    });*/
+
+    /*for(int i = 0; i<10; i++){
       products.add(SingleProductEntity(name: "Prodotto $i", onTap: onProductTapped,price: "100,00"));
-    }
+    }*/
     super.initState();
   }
 
   // fixme when a product is tapped, this is the function called
   // fixme change this function when bloc is implemented
-  void onProductTapped(SingleProductEntity productEntity){
+  void onProductTapped(SingleProductEntity productEntity, SearchProductLoaded state){
     var index = products.indexOf(productEntity);
     print("TAPPATO PRODOTTO IN POSIZIONE $index");
+    print("prima il PRODOTTO IN POSIZIONE $index è " + products[index].isSelected.toString());
     products[index].isSelected = !products[index].isSelected;
+    print("dopo il PRODOTTO IN POSIZIONE $index è " + products[index].isSelected.toString());
+
+    if (state is SearchProductLoaded)
+      state.productsOffered[index].offered = products[index].isSelected;
+    print(state.productsOffered);
     List<SingleProductEntity> copy = List.from(products);
     setState(() {
       products = copy;
@@ -49,7 +88,12 @@ class _ProductsPopupState extends State<ProductsPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return
+      SingleChildScrollView(
+       child:
+
+
+      Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
@@ -57,31 +101,63 @@ class _ProductsPopupState extends State<ProductsPopup> {
           child: DialogCard(
               cancelIcon: true,
               cardTitle: 'Seleziona i tuoi prodotti',
-              child: Column(
-                children: [
-                Container(
-                      height: 450,
-                        child: SingleChildScrollView(
-                            child: ProductsRow(products: products,)
-                        )
-                    ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(right: 30,top: 20),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: ActionButtonV2(
-                        action: widget.onTap,
-                        text: getCurrentLanguageValue(SAVE) ?? "",
-                      ),
-                    ),
-                  )
-                ],
-              ),
-
-          ),
+              child:
+               BlocBuilder<SearchProductCubit, SearchProductState>(
+                                  builder: (context, state) {
+                                    if (state is SearchProductLoaded) {
+                                      products.clear();
+                                      state.productsOffered.forEach((
+                                          productOffered) {
+                                        products.add(SingleProductEntity(
+                                            id: productOffered.productEntity
+                                                .id!,
+                                            name: productOffered.productEntity
+                                                .name ?? "",
+                                            price: productOffered.productEntity
+                                                .price.toString(),
+                                            urlImage: /*productOffered.productEntity.photoName ??*/ ImagesConstants
+                                                .imgProductPlaceholder,
+                                            isSelected: productOffered.offered,
+                                            onTap: onProductTapped));
+                                      });
+                                      return
+                                        Column(
+                                          children: [
+                                            Container(
+                                                height: 450,
+                                                child: SingleChildScrollView(
+                                                    child:
+                                                    ProductsRow(
+                                                        products: products,
+                                                        state: state)
+                                                )
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 30, top: 20),
+                                              child: Align(
+                                                alignment: Alignment
+                                                    .centerRight,
+                                                child: ActionButtonV2(
+                                                  action: () {widget.onTap(
+                                                      state.productsOffered);
+                                                    },
+                                                  text: getCurrentLanguageValue(
+                                                      SAVE) ?? "",
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        );
+                                    }
+                                    else
+                                      return ErrorWidget("errore");
+                                  }),
         ),
-      ],
-    );
+        )],
+    ));
+
+
+
   }
 }

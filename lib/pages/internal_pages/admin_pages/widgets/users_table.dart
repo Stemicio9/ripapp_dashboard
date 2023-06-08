@@ -163,7 +163,7 @@ class UsersTableState extends State<UsersTable>{
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.role,
+          p.role ?? "",
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
@@ -220,4 +220,6 @@ class UsersTableState extends State<UsersTable>{
       ],
     );
   }
+
+
 }

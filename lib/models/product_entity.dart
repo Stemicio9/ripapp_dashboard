@@ -14,11 +14,11 @@ class ProductEntity {
   //toString
   @override
   String toString() {
-    return 'UserEntity{id: $id, productName: $name, description: $photoName, price: $price,';
+    return 'ProductEntity{id: $id, productName: $name, photoName: $photoName, price: $price}';
   }
 
   factory ProductEntity.fromJson(Map<String, dynamic> json) => ProductEntity(
-    id: json["id"] ?? 0,
+    id: json["productId"] ?? 0,
     name: json["productName"] ?? "",
     photoName: json["urlImage"] ?? "",
     price: json["price"] ?? "",
@@ -39,7 +39,7 @@ class ProductEntity {
   }
 
   Map<String, dynamic> toJson() => {
-    "id": id,
+    "productId": id,
     "productName": name,
     "urlImage": photoName,
     "price": price,

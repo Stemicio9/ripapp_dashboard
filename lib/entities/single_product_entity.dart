@@ -1,29 +1,33 @@
 
 
 
+import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
 
 
 
 class SingleProductEntity {
+  final int id; //fixme vedere se questo id va bene, l'ho aggiunto ma non so se logicamente va messo
   final String name;
   final String price;
   final String urlImage;
   bool isSelected;
-  final Function(SingleProductEntity) onTap;
+  final Function(SingleProductEntity, SearchProductLoaded) onTap;
 
   SingleProductEntity({
+    this.id = 0,
     this.name = "Product",
     this.price = "Price",
     this.urlImage = ImagesConstants.imgProductPlaceholder,
     this.isSelected = false,
     this.onTap = constantFunction});
 
-  static void constantFunction(SingleProductEntity singleProductEntity){}
+  static void constantFunction(SingleProductEntity singleProductEntity, SearchProductLoaded state){}
 
 
   SingleProductEntity copyWith({
-    String? name, String? urlImage,String? price, bool? isSelected, Function(SingleProductEntity)? onTap
+    String? name, String? urlImage,String? price, bool? isSelected, Function(SingleProductEntity, SearchProductLoaded)? onTap
   }){
     return SingleProductEntity(
         name : name ?? this.name,

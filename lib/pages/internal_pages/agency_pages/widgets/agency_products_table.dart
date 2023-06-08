@@ -1,20 +1,61 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
+import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 
-class AgencyProductsTable extends StatelessWidget {
+
+
+
+class AgencyProductsTable extends StatefulWidget {
+
+  const AgencyProductsTable({super.key});
+
+  @override
+  State<StatefulWidget> createState() => AgencyProductsTableState();
+
+}
+
+class AgencyProductsTableState extends State<AgencyProductsTable> {
   List<String> headerTitle = ['ID', 'Foto', 'Nome', 'Prezzo',];
+  @override
+  // TODO: implement context
+  SearchProductCubit get _searchProductCubit => context.read<SearchProductCubit>();
+
 
 
   File? imageFile;
 
-  List<ProductEntity> products = [
+  /*fetchProducts() async {
+    List<ProductOffered> agencyProductsRetrieved = await AgencyRepository().getAllAgencyProducts();
+    if (agencyProductsRetrieved.length == 0){print("non ci sono prodotti da mostrare");}
+    else{
+      try {
+        emit(SearchProductLoaded(agencyProductsRetrieved));
+      }
+      catch (e){
+        print("error");
+      }
+    }
+  }*/
+
+  @override
+  void initState() {
+    _searchProductCubit.fetchProducts();
+    super.initState();
+  }
+
+
+  List<ProductEntity> products = [];
+  /*List<ProductEntity> products = [
     ProductEntity(
       id: 1,
       name: 'Prodotto 1',
@@ -57,30 +98,52 @@ class AgencyProductsTable extends StatelessWidget {
       price: 100.00,
       photoName: ImagesConstants.imgProductPlaceholder,
     ),
-  ];
+  ];*/
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: getPadding(top: 20),
-      width: MediaQuery.of(context).size.width,
-      child: DataTable(
-        columnSpacing: 30,
-        dataRowHeight: 85,
-        dataRowColor: MaterialStateColor.resolveWith((states) => white),
-        headingRowColor: MaterialStateColor.resolveWith((states) => background),
-        border: const TableBorder(
-          top: BorderSide(width: 0.5, color: greyState),
-          bottom: BorderSide(width: 0.5, color: greyState),
-          left: BorderSide(width: 0.5, color: greyState),
-          right: BorderSide(width: 0.5, color: greyState),
-          horizontalInside: BorderSide(width: 0.5, color: greyState),
-        ),
-        columns: createHeaderTable(),
-        rows: createRows(),
-      ),
-    );
-  }
+    return
+      BlocBuilder<SearchProductCubit, SearchProductState>(
+          builder: (context, state)
+    {
+      if (state is SearchProductLoaded) {
+        products.clear();
+        state.productsOffered.forEach((
+            productOffered) {
+          if (productOffered.offered)
+            products.add(productOffered.productEntity);
+        });
+        return Container(
+          padding: getPadding(top: 20),
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          child: DataTable(
+            columnSpacing: 30,
+            dataRowHeight: 85,
+            dataRowColor: MaterialStateColor.resolveWith((states) => white),
+            headingRowColor: MaterialStateColor.resolveWith((
+                states) => background),
+            border: const TableBorder(
+              top: BorderSide(width: 0.5, color: greyState),
+              bottom: BorderSide(width: 0.5, color: greyState),
+              left: BorderSide(width: 0.5, color: greyState),
+              right: BorderSide(width: 0.5, color: greyState),
+              horizontalInside: BorderSide(width: 0.5, color: greyState),
+            ),
+            columns: createHeaderTable(),
+            rows: createRows(),
+          ),
+        );
+      }
+      else
+        return ErrorWidget("errore");
+    });
+  } //fine metodo build
+
+
+
 
   List<DataColumn> createHeaderTable() {
     List<DataColumn> res = [];
@@ -149,4 +212,5 @@ class AgencyProductsTable extends StatelessWidget {
       ],
     );
   }
+
 }

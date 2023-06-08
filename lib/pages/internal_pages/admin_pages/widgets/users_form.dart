@@ -56,8 +56,8 @@ class UsersForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SearchAgencyCubit(),
-      child: UsersFormWidget(onTap: onTap,
+        create: (_) => SearchAgencyCubit(),
+        child: UsersFormWidget(onTap: onTap,
           cardTitle: cardTitle,
           nameController: nameController,
           phoneController: phoneController,
@@ -68,7 +68,7 @@ class UsersForm extends StatelessWidget {
           statusChange: statusChange,
           agencyChange: agencyChange,
           roles: roles
-      ),
+        ),
     );
   }
 }
@@ -123,7 +123,6 @@ class UsersFormWidget extends StatefulWidget{
   State<StatefulWidget> createState() {
     return UsersFormWidgetState();
   }
-
 }
 
 
@@ -147,6 +146,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   @override
   void initState() {
     selectedValue = widget.roles.first;
+    widget.statusChange(selectedValue);
     _searchAgencyCubit.fetchAgencies();
     super.initState();
   }
@@ -464,12 +464,16 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
 
                                             if (state is SearchAgencyLoading)
                                               return CircularProgressIndicator();
-                                            else if (state is SearchAgencyLoaded)
-                                              if ((state.agencies as List).length == 0) {
-                                                return ErrorWidget("lista vuota"); //TODO aggiungere errore
+                                            else if (state is SearchAgencyLoaded) {
+                                              if ((state.agencies as List)
+                                                  .length == 0) {
+                                                return ErrorWidget(
+                                                    "lista vuota"); //TODO aggiungere errore
                                               }
                                               else {
-                                                List<AgencyEntity> agencies = state.agencies;
+                                                List<
+                                                    AgencyEntity> agencies = state
+                                                    .agencies;
 
                                                 return DropdownButton<AgencyEntity>(
                                                   hint: const Text(
@@ -484,14 +488,21 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                   isExpanded: true,
                                                   underline: const SizedBox(),
                                                   value: state.selectedAgency,
-                                                  onChanged: (AgencyEntity? value) {
-                                                    _searchAgencyCubit.changeSelectedAgency(value);
-                                                    print("valoreeee ");print( value.toString());
+                                                  onChanged: (
+                                                      AgencyEntity? value) {
+                                                    _searchAgencyCubit
+                                                        .changeSelectedAgency(
+                                                        value);
+                                                    print("valoreeee ");
+                                                    print(value.toString());
                                                     if (value != null)
-                                                      widget.agencyChange(value!);
+                                                      widget.agencyChange(
+                                                          value!);
                                                   },
-                                                  items: agencies.map((AgencyEntity agency) {
-                                                    return DropdownMenuItem<AgencyEntity>(
+                                                  items: agencies.map((
+                                                      AgencyEntity agency) {
+                                                    return DropdownMenuItem<
+                                                        AgencyEntity>(
                                                       value: agency,
                                                       child: Padding(
                                                         padding:
@@ -511,12 +522,13 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                   }).toList(),
                                                 );
                                               }
+                                            }
                                             else
-                                              return ErrorWidget("errore di connessione"); //TODO aggiungere errore
-                                          }
+                                            return ErrorWidget("errore di connessione"); //TODO aggiungere errore
+                                        }
+                                        ),
                                       ),
                                     ),
-                                  ),
                                 ],
                               ) : Container()),
                         ],
