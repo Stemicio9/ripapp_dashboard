@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../constants/colors.dart';
-import '../utils/size_utils.dart';
-import 'input.dart';
 
 class AutocompleteWidget extends StatelessWidget{
 
@@ -32,9 +29,9 @@ class AutocompleteWidget extends StatelessWidget{
             left: paddingLeft,
             right: paddingRight,
             top: paddingTop,
-            bottom: paddingBottom),
+            bottom: paddingBottom
+        ),
         child: Autocomplete<String>(
-
         optionsBuilder: (TextEditingValue textEditingValue) {
           if (textEditingValue.text == '') {
             return const Iterable<String>.empty();

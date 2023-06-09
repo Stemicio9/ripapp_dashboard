@@ -108,8 +108,12 @@ class AgenciesTableState extends State<AgenciesTable> {
   Widget build(BuildContext context) {
     return
       BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
-          builder: (context, state)
-          {
+          builder: (context, state) {
+            if (state is SearchAgencyLoading) {
+              return const Center(
+                  child: CircularProgressIndicator()
+              );
+            }
             if (state is SearchAgencyLoaded){
               agencies = state.agencies;
               return Container(
@@ -131,7 +135,7 @@ class AgenciesTableState extends State<AgenciesTable> {
                 ),
               );
             }
-            else return ErrorWidget("al lupo al lupo");
+            else return ErrorWidget("ERRORE DI CARICAMENTO");
           });
   }
 
