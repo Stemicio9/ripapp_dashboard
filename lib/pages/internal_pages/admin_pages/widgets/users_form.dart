@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
-import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
@@ -11,17 +10,22 @@ import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
 
+import '../../../../widgets/autocomplete.dart';
+
 class UsersForm extends StatelessWidget {
 
   final String cardTitle;
   final TextEditingController nameController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
-  final TextEditingController cityController;
+  //final TextEditingController cityController;
   final TextEditingController lastNameController;
   final TextEditingController passwordController;
+  final TextEditingController filterController;
   final dynamic nameValidator;
-  final dynamic cityValidator;
+  final List<String> options;
+
+  //final dynamic cityValidator;
   final dynamic emailValidator;
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
@@ -39,30 +43,36 @@ class UsersForm extends StatelessWidget {
     this.nameValidator,
     this.emailValidator,
     this.phoneValidator,
-    this.cityValidator,
+    //this.cityValidator,
     this.lastNameValidator,
     this.passwordValidator,
     required this.nameController,
     required this.emailController,
+    required this.filterController,
     required this.phoneController,
-    required this.cityController,
+  //  required this.cityController,
     required this.passwordController,
     required this.lastNameController,
     required this.statusChange,
     required this.agencyChange,
     required this.roles,
+    required this.options
   });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (_) => SearchAgencyCubit(),
-        child: UsersFormWidget(onTap: onTap,
+        child: UsersFormWidget(
+            onTap: onTap,
           cardTitle: cardTitle,
+          options: options,
+          filterController: filterController,
           nameController: nameController,
           phoneController: phoneController,
           emailController: emailController,
-          cityController: cityController,
+        //  cityController: cityController,
+
           passwordController: passwordController,
           lastNameController: lastNameController,
           statusChange: statusChange,
@@ -74,21 +84,19 @@ class UsersForm extends StatelessWidget {
 }
 
 
-
-
-
-
 class UsersFormWidget extends StatefulWidget{
 
   final String cardTitle;
   final TextEditingController nameController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
-  final TextEditingController cityController;
+ // final TextEditingController cityController;
   final TextEditingController lastNameController;
+  final TextEditingController filterController;
   final TextEditingController passwordController;
   final dynamic nameValidator;
-  final dynamic cityValidator;
+  final List<String> options;
+ // final dynamic cityValidator;
   final dynamic emailValidator;
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
@@ -105,18 +113,20 @@ class UsersFormWidget extends StatefulWidget{
     this.nameValidator,
     this.emailValidator,
     this.phoneValidator,
-    this.cityValidator,
+   // this.cityValidator,
     this.lastNameValidator,
     this.passwordValidator,
     required this.nameController,
     required this.emailController,
+    required this.filterController,
     required this.phoneController,
-    required this.cityController,
+   // required this.cityController,
     required this.passwordController,
     required this.lastNameController,
     required this.statusChange,
     required this.agencyChange,
     required this.roles,
+    required this.options
   });
 
   @override
@@ -129,6 +139,8 @@ class UsersFormWidget extends StatefulWidget{
 class UsersFormWidgetState extends State<UsersFormWidget> {
 
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
+  late String selectedValue;
+  late AgencyEntity selectedAgency;
 
   List<String> agencies = <String>[
     'Seleziona Agenzia',
@@ -139,10 +151,6 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
     'Agenzia 5',
   ];
 
-  late String selectedValue;
-  late AgencyEntity selectedAgency;
-
-
   @override
   void initState() {
     selectedValue = widget.roles.first;
@@ -150,8 +158,6 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
     _searchAgencyCubit.fetchAgencies();
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -319,15 +325,15 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                       ),
                                     ),
                                   ),
-                                  InputsV2Widget(
-                                    hinttext: getCurrentLanguageValue(CITY)!,
-                                    controller: widget.cityController,
-                                    validator: widget.cityValidator,
-                                    paddingLeft: 0,
+
+                                  AutocompleteWidget(
+                                    options: widget.options,
                                     paddingRight: 10,
-                                    borderSide: const BorderSide(color: greyState),
-                                    activeBorderSide: const BorderSide(color: background),
+                                    paddingLeft: 0,
+                                    hintText: getCurrentLanguageValue(CITY)!,
+                                    filterController: widget.filterController,
                                   )
+
                                 ],
                               )),
                           Expanded(

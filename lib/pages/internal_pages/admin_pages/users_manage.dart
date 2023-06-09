@@ -1,4 +1,3 @@
-import 'dart:js_util';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_table.dart';
-import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 import '../../../blocs/users_list_cubit.dart';
@@ -28,14 +26,6 @@ class UsersManage extends StatelessWidget{
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
   final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
-  final String name = 'Davide';
-  final String lastName = 'Rossi';
-  final String id = '1';
-  final String phoneNumber = '+39 0987654321';
-  final String city = 'Roma';
-  final String email = 'daviderossi@gmail.com';
-  final String role = 'Amministratore';
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,29 +38,19 @@ class UsersManage extends StatelessWidget{
 
 }
 
-
-
 class UsersManageWidget extends StatefulWidget {
 
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
   final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
-  final String name = 'Davide';
-  final String lastName = 'Rossi';
-  final String id = '1';
-  final String phoneNumber = '+39 0987654321';
-  final String city = 'Roma';
-  final String email = 'daviderossi@gmail.com';
-  final String role = 'Amministratore';
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController cityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
+  final TextEditingController filterController = TextEditingController();
 
   @override
   State<StatefulWidget> createState() {
@@ -82,6 +62,13 @@ class UsersManageState extends State<UsersManageWidget> {
 
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
 
+  static const List<String> cityOptions = <String>[
+    'Milano',
+    'Roma',
+    'Firenze',
+    'Torino',
+  ];
+
   UserEntity userEntity = new UserEntity(
     id:1,
     firstName: 'Davide',
@@ -90,7 +77,6 @@ class UsersManageState extends State<UsersManageWidget> {
     city: [CityEntity.defaultCity()],
     phoneNumber: '+39 0987654321',
     role: 'Amministratore'
-
   );
 
   setStatusFromDropdown(String userRole) {
@@ -123,15 +109,11 @@ class UsersManageState extends State<UsersManageWidget> {
     widget.lastNameController.text = "cognome";
     widget.emailController.text = "email@mail.it";
     widget.phoneController.text = "3232";
-    widget.cityController.text = "citta";
+    widget.filterController.text = "citta";
     widget.passwordController.text = "123456";
-
     return Content();
 
   }
-
-
-
 
   Widget Content(){
     return SingleChildScrollView(
@@ -153,20 +135,19 @@ class UsersManageState extends State<UsersManageWidget> {
                             userEntity.email = widget.emailController.text;
                             userEntity.phoneNumber = widget.phoneController.text;
                             userEntity.password = widget.passwordController.text;
+                          //  userEntity.city = widget.filterController.text;
+
                             if (userEntity.email != "" &&
-                                userEntity.password != "") {
-                              FirebaseAuth.instance
-                                  .createUserWithEmailAndPassword(
+                                userEntity.password != "") {FirebaseAuth.instance.createUserWithEmailAndPassword(
                                   email: userEntity.email ?? "",
-                                  password: userEntity.password ?? "")
-                                  .then((value) async {
+                                  password: userEntity.password ?? "").then((value) async {
                                 if (value.user == null) {
                                   print("Utente nullo");
                                   return; //TODO: Handle error
                                 }
 
                                 print("SALVO SU DB LOCALE");
-                                //_userListCubit.signup(userEntity);
+                                _userListCubit.signup(userEntity);
                                 Navigator.pop(context);
                               });
                             }
@@ -175,13 +156,13 @@ class UsersManageState extends State<UsersManageWidget> {
                           nameController: widget.nameController,
                           emailController: widget.emailController,
                           phoneController: widget.phoneController,
-                          cityController: widget.cityController,
+                          filterController: widget.filterController,
+                          options: cityOptions,
                           lastNameController: widget.lastNameController,
                           passwordController: widget.passwordController,
                           statusChange: setStatusFromDropdown,
                           agencyChange: setAgencyFromDropdown,
-                          roles: UserRoles.values.map((e) => e.name)
-                              .toList(),
+                          roles: UserRoles.values.map((e) => e.name).toList(),
                         ));
               },
               pageTitle: getCurrentLanguageValue(USERS_MANAGE)!,
@@ -224,27 +205,30 @@ class UsersManageState extends State<UsersManageWidget> {
                           nameController: widget.nameController,
                           emailController: widget.emailController,
                           phoneController: widget.phoneController,
-                          cityController: widget.cityController,
+                          filterController: widget.filterController,
+                          options: cityOptions,
                           lastNameController: widget.lastNameController,
                           passwordController: widget.passwordController,
-                          roles: UserRoles.values.map((e) => e.name)
-                              .toList(),
+                          roles: UserRoles.values.map((e) => e.name).toList(),
                         ));
               },
-              showDetail: () {
+              showDetail: (dynamic p) {
+
                 showDialog(
                     context: context,
                     builder: (ctx) =>
                         UsersDetail(
                           cardTitle: getCurrentLanguageValue(USER_DETAIL)!,
-                          name: userEntity.firstName!,
-                          id: userEntity.id!,
-                          email: userEntity.email!,
-                          phoneNumber: userEntity.phoneNumber!,
+                          name: p.firstName!,
+                          id: p.id!,
+                          email: p.email!,
+                          phoneNumber: p.phoneNumber!,
                           city: userEntity.city!.first.toString(),
                           //TODO check if lists or single city
-                          lastName: userEntity.lastName!,
-                          role: userEntity.role!,
+                          lastName: p.lastName!,
+                          role: p.status.toString() == 'UserStatus.active' ? 'Utente' :
+                          p.status.toString() == 'UserStatus.agency' ? 'Agenzia' :
+                          'Amministratore',
                         ));
               },
               detailMessage: widget.detailMessage,
