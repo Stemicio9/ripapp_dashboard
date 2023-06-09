@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
@@ -28,7 +28,7 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
   List<String> headerTitle = ['ID', 'Foto', 'Nome', 'Prezzo',];
   @override
   // TODO: implement context
-  SearchProductCubit get _searchProductCubit => context.read<SearchProductCubit>();
+  SearchProductsOfferedCubit get _searchProductCubit => context.read<SearchProductsOfferedCubit>();
 
 
 
@@ -103,10 +103,10 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
   @override
   Widget build(BuildContext context) {
     return
-      BlocBuilder<SearchProductCubit, SearchProductState>(
+      BlocBuilder<SearchProductsOfferedCubit, SearchProductsOfferedState>(
           builder: (context, state)
     {
-      if (state is SearchProductLoaded) {
+      if (state is SearchProductsOfferedLoaded) {
         products.clear();
         state.productsOffered.forEach((
             productOffered) {

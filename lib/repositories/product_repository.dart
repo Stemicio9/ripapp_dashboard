@@ -15,7 +15,7 @@ class ProductRepository{
   ProductRepository._internal();
   //final String productUrl = "$baseUrl/api/auth/product/fine";
   final String productUrl = "$baseUrl/api/auth/productFromAdmin";
-  final String availableProductsUrl = "$baseUrl/api/auth/all-products";
+  final String allProductsUrl = "$baseUrl/api/auth/all-products";
 
 
   factory ProductRepository() {
@@ -31,13 +31,13 @@ class ProductRepository{
     return response.data;
   }
 
-  Future<dynamic> getAvailableProducts() async {
+  Future<dynamic> getAllProducts() async {
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
     var userId = (user != null) ? user.id : 4;
     Map<String, dynamic>? parameters = {};
     parameters.putIfAbsent("userId", () => userId);
-    var response = await _dio.get(availableProductsUrl, queryParameters: parameters);
-    List<ProductOffered> products = (response.data as List).map((product) => ProductOffered.fromJson(product)).toList();
+    var response = await _dio.get(allProductsUrl, queryParameters: parameters);
+    List<ProductEntity> products = (response.data as List).map((product) => ProductEntity.fromJson(product)).toList();
     return products;
   }
 

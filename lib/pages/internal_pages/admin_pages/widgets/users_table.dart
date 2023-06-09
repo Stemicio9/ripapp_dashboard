@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
-
-
 
 class UsersTable extends StatefulWidget{
   List<String> headerTitle = [
@@ -108,7 +108,7 @@ class UsersTableState extends State<UsersTable>{
     List<DataColumn> res = [];
     for (var i = 0; i <widget.headerTitle.length; i++) {
       res.add(DataColumn(
-        //  onSort: onSort,
+      //  onSort: onSort,
         label: Expanded(
             child: Texth4V2(
               testo: widget.headerTitle[i],

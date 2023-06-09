@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/entities/single_product_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
@@ -7,7 +7,7 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 
 class SingleProduct extends StatelessWidget {
   final SingleProductEntity singleProductEntity;
-  final SearchProductLoaded state;
+  final SearchProductsOfferedLoaded state;
 
   const SingleProduct({Key? key, required this.singleProductEntity, required this.state})
       : super(key: key);
