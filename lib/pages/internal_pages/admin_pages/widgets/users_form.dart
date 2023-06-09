@@ -328,20 +328,12 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
 
                                   AutocompleteWidget(
                                     options: widget.options,
-                                    paddingRight: 0,
+                                    paddingRight: 10,
                                     paddingLeft: 0,
                                     hintText: getCurrentLanguageValue(CITY)!,
                                     filterController: widget.filterController,
                                   )
-                                  /*InputsV2Widget(
-                                    hinttext: getCurrentLanguageValue(CITY)!,
-                                    controller: widget.cityController,
-                                    validator: widget.cityValidator,
-                                    paddingLeft: 0,
-                                    paddingRight: 10,
-                                    borderSide: const BorderSide(color: greyState),
-                                    activeBorderSide: const BorderSide(color: background),
-                                  )*/
+
                                 ],
                               )),
                           Expanded(
