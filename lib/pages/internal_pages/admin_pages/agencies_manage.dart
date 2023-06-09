@@ -38,79 +38,81 @@ class AgenciesManageState extends State<AgenciesManage> {
   final TextEditingController phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Header(
-            deleteProfileOnTap: (){},
-            onTap: () async {
-              showDialog(context: context, builder: (ctx)=> AgencyForm(
-                  cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
-                  nameController: nameController,
-                  emailController: emailController,
-                  phoneController: phoneController,
-                  cityController: cityController,
-                onSubmit: () {
-                  AgencyEntity agencyEntity = AgencyEntity(
-                    agencyName: nameController.text,
-                    city: cityController.text,
-                    email: emailController.text,
-                    phoneNumber: phoneController.text,
-                  );
-                  AgencyRepository().saveAgency(agencyEntity);
-                  print("salvataggio agenzia...");
-                  (_searchAgencyCubit.state as SearchAgencyLoaded).agencies.add(agencyEntity);
-                  _searchAgencyCubit.refreshAgencies();
-                  Navigator.pop(context);
-                },
-              ));
-            },
-            pageTitle: getCurrentLanguageValue(AGENCIES_MANAGE)!,
-            buttonText: getCurrentLanguageValue(ADD_AGENCY)!,
-          ),
-          AgenciesTable(
-            delete: () {
-              showDialog(
-                  context: context,
-                  builder: (ctx) => DeleteMessageDialog(
-                      onConfirm: () {
-                        Navigator.pop(context);
-                      },
-                      onCancel: () {
-                        Navigator.pop(context);
-                      },
-                      message: message));
-            },
-            edit: () {
-              showDialog(context: context, builder: (ctx)=> AgencyForm(
-                  onSubmit: (){
-                    print("aggiornamento operatore agenzia...");
+    return SingleChildScrollView(
+      child: Padding(
+        padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Header(
+              deleteProfileOnTap: (){},
+              onTap: () async {
+                showDialog(context: context, builder: (ctx)=> AgencyForm(
+                    cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
+                    nameController: nameController,
+                    emailController: emailController,
+                    phoneController: phoneController,
+                    cityController: cityController,
+                  onSubmit: () {
+                    AgencyEntity agencyEntity = AgencyEntity(
+                      agencyName: nameController.text,
+                      city: cityController.text,
+                      email: emailController.text,
+                      phoneNumber: phoneController.text,
+                    );
+                    AgencyRepository().saveAgency(agencyEntity);
+                    print("salvataggio agenzia...");
+                    (_searchAgencyCubit.state as SearchAgencyLoaded).agencies.add(agencyEntity);
+                    _searchAgencyCubit.refreshAgencies();
+                    Navigator.pop(context);
                   },
-                  cardTitle: getCurrentLanguageValue(EDIT_AGENCY)!,
-                  nameController: nameController,
-                  emailController: emailController,
-                  phoneController: phoneController,
-                  cityController: cityController));
-            },
-            showDetail: () {
-              showDialog(
-                  context: context,
-                  builder: (ctx) => AgencyDetail(
-                      cardTitle: getCurrentLanguageValue(AGENCY_DETAIL)!,
-                      name: name,
-                      id: id,
-                      email: email,
-                      phoneNumber: phoneNumber,
-                      city: city
-                  ));
-            },
-            detailMessage: detailMessage,
-            editMessage: editMessage,
-            deleteMessage: deleteMessage,
-          )
-        ],
+                ));
+              },
+              pageTitle: getCurrentLanguageValue(AGENCIES_MANAGE)!,
+              buttonText: getCurrentLanguageValue(ADD_AGENCY)!,
+            ),
+            AgenciesTable(
+              delete: () {
+                showDialog(
+                    context: context,
+                    builder: (ctx) => DeleteMessageDialog(
+                        onConfirm: () {
+                          Navigator.pop(context);
+                        },
+                        onCancel: () {
+                          Navigator.pop(context);
+                        },
+                        message: message));
+              },
+              edit: () {
+                showDialog(context: context, builder: (ctx)=> AgencyForm(
+                    onSubmit: (){
+                      print("aggiornamento operatore agenzia...");
+                    },
+                    cardTitle: getCurrentLanguageValue(EDIT_AGENCY)!,
+                    nameController: nameController,
+                    emailController: emailController,
+                    phoneController: phoneController,
+                    cityController: cityController));
+              },
+              showDetail: () {
+                showDialog(
+                    context: context,
+                    builder: (ctx) => AgencyDetail(
+                        cardTitle: getCurrentLanguageValue(AGENCY_DETAIL)!,
+                        name: name,
+                        id: id,
+                        email: email,
+                        phoneNumber: phoneNumber,
+                        city: city
+                    ));
+              },
+              detailMessage: detailMessage,
+              editMessage: editMessage,
+              deleteMessage: deleteMessage,
+            )
+          ],
+        ),
       ),
     );
   }

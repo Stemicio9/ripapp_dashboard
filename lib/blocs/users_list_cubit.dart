@@ -59,10 +59,11 @@ class UsersListCubit extends Cubit<UsersListState> {
       emit(UsersListError());
     }
   }
-  cityList(List<dynamic> city) async{
+
+  cityList() async{
     emit(UsersListLoading());
     try{
-      var result = await UserRepository().cityList(city);
+      var result = await UserRepository().cityList();
       fetchUsersList();
     }catch(e){
       emit(UsersListError());

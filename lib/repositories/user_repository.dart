@@ -125,7 +125,7 @@ class UserRepository {
     List<UserEntity> users = (res.data as List).map((user) => UserEntity.fromJson(user)).toList();
     return users;
   }
-  Future<dynamic> cityList(List<dynamic> city)async{
+  Future<dynamic> cityList()async{
     Response response;
     response = await _dio.get("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
     print(response.data);

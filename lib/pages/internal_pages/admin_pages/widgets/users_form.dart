@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
+import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
@@ -9,7 +10,6 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
-
 import '../../../../widgets/autocomplete.dart';
 
 class UsersForm extends StatelessWidget {
@@ -18,14 +18,11 @@ class UsersForm extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
-  //final TextEditingController cityController;
   final TextEditingController lastNameController;
   final TextEditingController passwordController;
   final TextEditingController filterController;
   final dynamic nameValidator;
   final List<String> options;
-
-  //final dynamic cityValidator;
   final dynamic emailValidator;
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
@@ -43,14 +40,12 @@ class UsersForm extends StatelessWidget {
     this.nameValidator,
     this.emailValidator,
     this.phoneValidator,
-    //this.cityValidator,
     this.lastNameValidator,
     this.passwordValidator,
     required this.nameController,
     required this.emailController,
     required this.filterController,
     required this.phoneController,
-  //  required this.cityController,
     required this.passwordController,
     required this.lastNameController,
     required this.statusChange,
@@ -62,23 +57,21 @@ class UsersForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => SearchAgencyCubit(),
-        child: UsersFormWidget(
-            onTap: onTap,
-          cardTitle: cardTitle,
-          options: options,
-          filterController: filterController,
-          nameController: nameController,
-          phoneController: phoneController,
-          emailController: emailController,
-        //  cityController: cityController,
-
-          passwordController: passwordController,
-          lastNameController: lastNameController,
-          statusChange: statusChange,
-          agencyChange: agencyChange,
-          roles: roles
-        ),
+      create: (_) => SearchAgencyCubit(),
+     child: UsersFormWidget(
+         onTap: onTap,
+         cardTitle: cardTitle,
+         options: options,
+         filterController: filterController,
+         nameController: nameController,
+         phoneController: phoneController,
+         emailController: emailController,
+         passwordController: passwordController,
+         lastNameController: lastNameController,
+         statusChange: statusChange,
+         agencyChange: agencyChange,
+         roles: roles
+     ),
     );
   }
 }
@@ -90,13 +83,11 @@ class UsersFormWidget extends StatefulWidget{
   final TextEditingController nameController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
- // final TextEditingController cityController;
   final TextEditingController lastNameController;
   final TextEditingController filterController;
   final TextEditingController passwordController;
   final dynamic nameValidator;
   final List<String> options;
- // final dynamic cityValidator;
   final dynamic emailValidator;
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
@@ -113,14 +104,12 @@ class UsersFormWidget extends StatefulWidget{
     this.nameValidator,
     this.emailValidator,
     this.phoneValidator,
-   // this.cityValidator,
     this.lastNameValidator,
     this.passwordValidator,
     required this.nameController,
     required this.emailController,
     required this.filterController,
     required this.phoneController,
-   // required this.cityController,
     required this.passwordController,
     required this.lastNameController,
     required this.statusChange,

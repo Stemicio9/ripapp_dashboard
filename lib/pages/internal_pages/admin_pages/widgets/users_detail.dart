@@ -15,6 +15,8 @@ class UsersDetail extends StatelessWidget {
   final String email;
   final String city;
   final String role;
+  final String agencyName;
+  final bool? isAgency;
 
   const UsersDetail({
     super.key,
@@ -26,6 +28,8 @@ class UsersDetail extends StatelessWidget {
     required this.city,
     required this.lastName,
     required this.role,
+    required this.agencyName,
+    this.isAgency = false
   });
 
   @override
@@ -155,6 +159,24 @@ class UsersDetail extends StatelessWidget {
                                   ),
                                 ),
                                 Texth3V2(testo: phoneNumber, color: black),
+
+
+                                Visibility(
+                                  visible: isAgency!,
+                                  child: Padding(
+                                    padding: getPadding(bottom: 5,top: 20),
+                                    child: Text(
+                                      'NOME AGENZIA',
+                                      style: SafeGoogleFont(
+                                        'Montserrat',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: background,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Texth3V2(testo: agencyName, color: black),
                               ],
                             ),
                           ),

@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +13,6 @@ import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_table.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
-
 import '../../../blocs/users_list_cubit.dart';
 
 
@@ -62,12 +60,7 @@ class UsersManageState extends State<UsersManageWidget> {
 
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
 
-  static const List<String> cityOptions = <String>[
-    'Milano',
-    'Roma',
-    'Firenze',
-    'Torino',
-  ];
+  List<String> cityOptions = <String>[];
 
   UserEntity userEntity = new UserEntity(
     id:1,
@@ -101,6 +94,13 @@ class UsersManageState extends State<UsersManageWidget> {
     userEntity.agency = agencyEntity;
   }
 
+
+  @override
+  void initState() {
+
+
+    super.initState();
+  }
 
 
   @override
@@ -218,14 +218,16 @@ class UsersManageState extends State<UsersManageWidget> {
                     context: context,
                     builder: (ctx) =>
                         UsersDetail(
+                          isAgency: p.status.toString() == 'UserStatus.agency' ? true : false,
+                          agencyName: p.status.toString() == 'UserStatus.agency' ? p.agency.agencyName : '',
                           cardTitle: getCurrentLanguageValue(USER_DETAIL)!,
-                          name: p.firstName!,
-                          id: p.id!,
-                          email: p.email!,
-                          phoneNumber: p.phoneNumber!,
+                          name: p.firstName,
+                          id: p.id,
+                          email: p.email,
+                          phoneNumber: p.phoneNumber,
                           city: userEntity.city!.first.toString(),
                           //TODO check if lists or single city
-                          lastName: p.lastName!,
+                          lastName: p.lastName,
                           role: p.status.toString() == 'UserStatus.active' ? 'Utente' :
                           p.status.toString() == 'UserStatus.agency' ? 'Agenzia' :
                           'Amministratore',
