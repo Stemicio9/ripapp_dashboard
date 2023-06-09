@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 class CookiesManager {
   static List<Cookie> cookies = [];
   static List<String> cookiesheader = [];
-  static List<String> headers = [];
+  //static List<String> headers = [];
 
   static final CookiesManager _singleton = CookiesManager._internal();
 
