@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
+import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/blocs/search_users_cubit.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -65,9 +67,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
           providers: [
+            BlocProvider<SearchProductsOfferedCubit>(create: (_) => SearchProductsOfferedCubit()),
             BlocProvider<SearchProductCubit>(create: (_) => SearchProductCubit()),
             BlocProvider<SearchDemiseCubit>(create: (_) => SearchDemiseCubit()),
             BlocProvider<SearchUsersCubit>(create: (_) => SearchUsersCubit()),
+            BlocProvider<SearchAgencyCubit>(create: (_) => SearchAgencyCubit()),
           ],
           child: Builder(
             builder: (context) {

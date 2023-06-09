@@ -1,14 +1,14 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/entities/single_product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/single_product.dart';
 
 class ProductsRow extends StatelessWidget {
 
   final List<SingleProductEntity> products;
-  final SearchProductLoaded state;
+  final SearchProductsOfferedLoaded state;
 
   const ProductsRow({Key? key, required this.products, required this.state}) : super(key: key);
 
