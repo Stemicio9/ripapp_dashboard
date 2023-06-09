@@ -47,11 +47,10 @@ class UsersManageWidget extends StatefulWidget {
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController cityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
+  final TextEditingController filterController = TextEditingController();
 
   @override
   State<StatefulWidget> createState() {
@@ -62,6 +61,13 @@ class UsersManageWidget extends StatefulWidget {
 class UsersManageState extends State<UsersManageWidget> {
 
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
+
+  static const List<String> cityOptions = <String>[
+    'Milano',
+    'Roma',
+    'Firenze',
+    'Torino',
+  ];
 
   UserEntity userEntity = new UserEntity(
     id:1,
@@ -103,14 +109,11 @@ class UsersManageState extends State<UsersManageWidget> {
     widget.lastNameController.text = "cognome";
     widget.emailController.text = "email@mail.it";
     widget.phoneController.text = "3232";
-    widget.cityController.text = "citta";
+    widget.filterController.text = "citta";
     widget.passwordController.text = "123456";
     return Content();
 
   }
-
-
-
 
   Widget Content(){
     return SingleChildScrollView(
@@ -132,7 +135,7 @@ class UsersManageState extends State<UsersManageWidget> {
                             userEntity.email = widget.emailController.text;
                             userEntity.phoneNumber = widget.phoneController.text;
                             userEntity.password = widget.passwordController.text;
-
+                          //  userEntity.city = widget.filterController.text;
 
                             if (userEntity.email != "" &&
                                 userEntity.password != "") {FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -153,7 +156,8 @@ class UsersManageState extends State<UsersManageWidget> {
                           nameController: widget.nameController,
                           emailController: widget.emailController,
                           phoneController: widget.phoneController,
-                          cityController: widget.cityController,
+                          filterController: widget.filterController,
+                          options: cityOptions,
                           lastNameController: widget.lastNameController,
                           passwordController: widget.passwordController,
                           statusChange: setStatusFromDropdown,
@@ -201,7 +205,8 @@ class UsersManageState extends State<UsersManageWidget> {
                           nameController: widget.nameController,
                           emailController: widget.emailController,
                           phoneController: widget.phoneController,
-                          cityController: widget.cityController,
+                          filterController: widget.filterController,
+                          options: cityOptions,
                           lastNameController: widget.lastNameController,
                           passwordController: widget.passwordController,
                           roles: UserRoles.values.map((e) => e.name).toList(),
