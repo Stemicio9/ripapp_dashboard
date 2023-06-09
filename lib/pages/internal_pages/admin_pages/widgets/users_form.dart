@@ -141,6 +141,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
   late String selectedValue;
   late AgencyEntity selectedAgency;
+  List<dynamic> cityList = [];
 
   List<String> agencies = <String>[
     'Seleziona Agenzia',
