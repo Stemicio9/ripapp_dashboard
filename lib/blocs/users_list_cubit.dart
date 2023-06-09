@@ -59,6 +59,15 @@ class UsersListCubit extends Cubit<UsersListState> {
       emit(UsersListError());
     }
   }
+  cityList(List<dynamic> city) async{
+    emit(UsersListLoading());
+    try{
+      var result = await UserRepository().cityList(city);
+      fetchUsersList();
+    }catch(e){
+      emit(UsersListError());
+    }
+  }
   
 
   changeSelectedAgency(UserEntity? userEntity){
