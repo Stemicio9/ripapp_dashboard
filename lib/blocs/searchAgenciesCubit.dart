@@ -42,6 +42,27 @@ class SearchAgencyCubit extends Cubit<SearchAgencyState> {
       }
     }
 
+    saveAgency(AgencyEntity agencyEntity)async{
+    emit(SearchAgencyLoading());
+    try{
+      var result = await AgencyRepository().saveAgency(agencyEntity);
+      fetchAgencies();
+    }catch(e){
+      emit(SearchAgencyError());
+    }
+    }
+  remove(idAgency)async {
+    emit(SearchAgencyLoading());
+    try {
+      var result = await AgencyRepository().removeAgency(idAgency);
+      fetchAgencies();
+    } catch (e) {
+      print("ERRORE");
+      print(e);
+      emit(SearchAgencyError());
+    }
+  }
+
   changeSelectedAgency(AgencyEntity? selectedAgency){
     if(state is SearchAgencyLoaded && selectedAgency != null){
       var a = state as SearchAgencyLoaded;
@@ -49,10 +70,4 @@ class SearchAgencyCubit extends Cubit<SearchAgencyState> {
     }
   }
 
-  refreshAgencies(){
-    if(state is SearchAgencyLoaded){
-      var a = state as SearchAgencyLoaded;
-      emit(a.copyWith());
-    }
-  }
 }

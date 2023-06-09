@@ -96,14 +96,6 @@ class UsersManageState extends State<UsersManageWidget> {
 
 
   @override
-  void initState() {
-
-
-    super.initState();
-  }
-
-
-  @override
   Widget build(BuildContext context) {
     widget.nameController.text = "nome";
     widget.lastNameController.text = "cognome";
@@ -213,7 +205,6 @@ class UsersManageState extends State<UsersManageWidget> {
                         ));
               },
               showDetail: (dynamic p) {
-
                 showDialog(
                     context: context,
                     builder: (ctx) =>

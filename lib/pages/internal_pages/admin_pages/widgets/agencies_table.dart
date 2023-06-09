@@ -56,38 +56,6 @@ class AgenciesTableState extends State<AgenciesTable> {
   ];
 
   List<AgencyEntity> agencies = [];
-  /*
-    AgencyEntity(
-        id: 1,
-        agencyName: 'Agenzia srl',
-        email: 'agenzia@gmail.com',
-        city: 'Roma',
-        phoneNumber: '+39 0987654321'),
-    AgencyEntity(
-        id: 2,
-        agencyName: 'Agenzia srl',
-        email: 'agenzia@gmail.com',
-        city: 'Roma',
-        phoneNumber: '+39 0987654321'),
-    AgencyEntity(
-        id: 3,
-        agencyName: 'Agenzia srl',
-        email: 'agenzia@gmail.com',
-        city: 'Roma',
-        phoneNumber: '+39 0987654321'),
-    AgencyEntity(
-        id: 4,
-        agencyName: 'Agenzia srl',
-        email: 'agenzia@gmail.com',
-        city: 'Roma',
-        phoneNumber: '+39 0987654321'),
-    AgencyEntity(
-        id: 5,
-        agencyName: 'Agenzia srl',
-        email: 'agenzia@gmail.com',
-        city: 'Roma',
-        phoneNumber: '+39 0987654321'),
-  ];*/
 
   final edit;
   final delete;
@@ -102,7 +70,8 @@ class AgenciesTableState extends State<AgenciesTable> {
       required this.showDetail,
       required this.detailMessage,
       required this.editMessage,
-      required this.deleteMessage});
+      required this.deleteMessage
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +168,7 @@ class AgenciesTableState extends State<AgenciesTable> {
               message: detailMessage,
               direction: AxisDirection.down,
               child: GestureDetector(
-                  onTap: showDetail,
+                  onTap: (){showDetail(p);},
                   child: const MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Icon(
@@ -230,7 +199,7 @@ class AgenciesTableState extends State<AgenciesTable> {
                 message: deleteMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(
-                    onTap: delete,
+                    onTap: (){delete(p,agencies);},
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Icon(

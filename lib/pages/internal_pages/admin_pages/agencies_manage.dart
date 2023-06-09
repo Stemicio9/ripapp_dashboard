@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
+import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agency_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agency_form.dart';
@@ -11,24 +12,33 @@ import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 import '../../../models/agency_entity.dart';
+import '../../../models/user_entity.dart';
 
-class AgenciesManage extends StatefulWidget {
+class AgenciesManage extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (_) => UsersListCubit(),
+        child: AgenciesManageWidget(),
+    );
+  }
+
+}
+
+
+class AgenciesManageWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return AgenciesManageState();
+    return AgenciesManageWidgetState();
   }
 }
 
-class AgenciesManageState extends State<AgenciesManage> {
+class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
   final String message = 'Le informazioni riguardanti questa agenzia verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
-  final String name = 'Azienda srl';
-  final String id = '1';
-  final String phoneNumber = '+39 0987654321';
   final String city = 'Roma';
-  final String email = 'aziendasrl@gmail.com';
 
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
 
@@ -36,6 +46,10 @@ class AgenciesManageState extends State<AgenciesManage> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -60,10 +74,8 @@ class AgenciesManageState extends State<AgenciesManage> {
                       email: emailController.text,
                       phoneNumber: phoneController.text,
                     );
-                    AgencyRepository().saveAgency(agencyEntity);
+                    _searchAgencyCubit.saveAgency(agencyEntity);
                     print("salvataggio agenzia...");
-                    (_searchAgencyCubit.state as SearchAgencyLoaded).agencies.add(agencyEntity);
-                    _searchAgencyCubit.refreshAgencies();
                     Navigator.pop(context);
                   },
                 ));
@@ -72,17 +84,23 @@ class AgenciesManageState extends State<AgenciesManage> {
               buttonText: getCurrentLanguageValue(ADD_AGENCY)!,
             ),
             AgenciesTable(
-              delete: () {
+              delete: (dynamic p, dynamic agencies) {
                 showDialog(
                     context: context,
                     builder: (ctx) => DeleteMessageDialog(
                         onConfirm: () {
+                          for(var e in agencies){
+                            if(e.id == p.id){
+                              _searchAgencyCubit.remove(e.id!);
+                            }
+                          }
                           Navigator.pop(context);
                         },
                         onCancel: () {
                           Navigator.pop(context);
                         },
-                        message: message));
+                        message: message
+                    ));
               },
               edit: () {
                 showDialog(context: context, builder: (ctx)=> AgencyForm(
@@ -95,15 +113,15 @@ class AgenciesManageState extends State<AgenciesManage> {
                     phoneController: phoneController,
                     cityController: cityController));
               },
-              showDetail: () {
+              showDetail: (dynamic p) {
                 showDialog(
                     context: context,
                     builder: (ctx) => AgencyDetail(
                         cardTitle: getCurrentLanguageValue(AGENCY_DETAIL)!,
-                        name: name,
-                        id: id,
-                        email: email,
-                        phoneNumber: phoneNumber,
+                        name: p.agencyName,
+                        id: p.id,
+                        email: p.email,
+                        phoneNumber: p.phoneNumber,
                         city: city
                     ));
               },

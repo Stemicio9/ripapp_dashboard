@@ -19,7 +19,7 @@ class AgencyRepository{
   final String allAgenciesUrl = "$baseUrl/api/auth/agencies";
   final String allAgenciesProductsUrl = "$baseUrl/api/auth/products";
   final String allProductsOfferedByAgency = "$baseUrl/api/auth/productsOffered";
-
+  final String deleteAgency ="$baseUrl/api/auth/agency";
   factory AgencyRepository() {
     return _agencyRepository ;
   }
@@ -29,6 +29,8 @@ class AgencyRepository{
     var response = await _dio.post(agencyUrl, data: agencyEntity.toJson());
     return response.data;
   }
+
+
 
   Future<List<AgencyEntity>> getAgencies() async {
     Response res;
@@ -75,6 +77,12 @@ class AgencyRepository{
     myoptions.headers!["app_version"] = appVersion;
 
     _dio.post(allProductsOfferedByAgency, data: productsOffered, queryParameters: parameters, options: myoptions);
+  }
+
+  Future<dynamic> removeAgency(int idAgency) async{
+    String urlDeleteAgency = '$deleteAgency/$idAgency';
+    var response = await _dio.delete(urlDeleteAgency);
+    return response.data;
   }
 
 }

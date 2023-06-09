@@ -1,13 +1,8 @@
 import 'dart:convert';
-
-import 'dart:io';
-
 import 'package:dio/browser.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/constants/rest_path.dart';
 import 'package:ripapp_dashboard/cookies/CookiesManager.dart';
-import 'package:ripapp_dashboard/models/UserEntity.dart';
 import 'package:dio/dio.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
@@ -96,12 +91,6 @@ class UserRepository {
     print("RISPOSTA LOGIN");
     print(response.data);
     print(response.headers);
-
-
-    /*
-      ciaocia@cia.it
-      123456
-     */
 
     var accountResponse = await UserRepository().account();
 
