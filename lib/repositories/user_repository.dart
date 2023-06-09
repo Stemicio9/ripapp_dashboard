@@ -70,6 +70,7 @@ class UserRepository {
     List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
     return userEntityList;
   }
+
   Future<dynamic> deleteUser(int idUser) async{
     String urlDeleteUser = '$deleteUserUrl/$idUser';
     var response = await _dio.delete(urlDeleteUser);
@@ -123,6 +124,12 @@ class UserRepository {
     print("dati = " + res.data.toString());
     List<UserEntity> users = (res.data as List).map((user) => UserEntity.fromJson(user)).toList();
     return users;
+  }
+  Future<dynamic> cityList(List<dynamic> city)async{
+    Response response;
+    response = await _dio.get("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
+    print(response.data);
+    return response.data;
   }
 
 }
