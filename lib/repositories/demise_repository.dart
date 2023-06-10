@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
+import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/constants/rest_path.dart';
 import 'package:ripapp_dashboard/cookies/CookiesManager.dart';
 import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
+import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 
 class DemiseRepository{
@@ -54,7 +56,11 @@ class DemiseRepository{
     Response res;
     try {
       //res = await _dio.post(searchDemisesByCityUrl, data: demisesSearchEntity.toJson(), options: Options(headers: buildHeaders()));
-      res = await _dio.get(searchDemisesIgnorante);
+      UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
+      var userId = (user != null) ? user.id : 4;
+      Map<String, dynamic>? parameters = {};
+      parameters.putIfAbsent("accountId", () => userId);
+      res = await _dio.get(searchDemisesIgnorante, queryParameters: parameters);
       print("esatto2");
     }
     on DioError catch (e) {

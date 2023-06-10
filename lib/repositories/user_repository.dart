@@ -6,6 +6,7 @@ import 'package:ripapp_dashboard/cookies/CookiesManager.dart';
 import 'package:dio/dio.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
+import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
 
 class UserRepository {
   static final UserRepository _userRepository = UserRepository._internal();
@@ -56,14 +57,26 @@ class UserRepository {
     return UserEntity.fromJson(response.data);
   }
   Future<List<UserEntity>> getList() async{
+
+    Map<String, dynamic>? parameters = {};
+    int pageNumber = 0;
+    int pageElements = 9;
+    AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
+    parameters.putIfAbsent("pageNumber", () => searchEntity.pageNumber);
+    parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
+
     Response response;
-    response = await _dio.get(listAccountUrl);
+    response = await _dio.get(listAccountUrl, queryParameters: parameters);
     print("object");
     print(response.data);
     // todo this could be not necessary
     String goodJson = jsonEncode(response.data);
-    List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
-    return userEntityList;
+    //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
+    List<UserEntity> users = ((jsonDecode(goodJson) as Map)["content"] as List).map((user) => UserEntity.fromJson(user)).toList();
+    print("ecco i tuoi utenti" + users.toString() + users.length.toString());
+    //List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
+    //return userEntityList;
+    return users;
   }
 
   Future<dynamic> deleteUser(int idUser) async{
@@ -107,10 +120,20 @@ class UserRepository {
     Map<String, dynamic>? parameters = {};
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
     var userId = (user != null) ? user.id : "4";
-    parameters.putIfAbsent("offset", () => 0);
+    int pageNumber = 0;
+    int pageElements = 10;
+    int offset = pageNumber*pageElements;
+    parameters.putIfAbsent("offset", () => offset);
     parameters.putIfAbsent("userid", () => userId!);
-    Response res = await _dio.get(allUsersUrl, queryParameters: parameters);
+    AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
+    Options myoptions = Options();
+    Map<String, Object>? headers = Map();
+    myoptions.headers = headers;
+    //myoptions.headers!["set-cookie"] = "idtoken=123;";
+    myoptions.headers!["Content-Type"] = "application/json";
+    Response res = await _dio.get(allUsersUrl, data: searchEntity.toJson(), queryParameters: parameters, options: myoptions);
     print("dati = " + res.data.toString());
+    print(res.data);
     List<UserEntity> users = (res.data as List).map((user) => UserEntity.fromJson(user)).toList();
     return users;
   }
