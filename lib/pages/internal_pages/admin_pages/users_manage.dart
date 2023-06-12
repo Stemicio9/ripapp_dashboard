@@ -97,12 +97,12 @@ class UsersManageState extends State<UsersManageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    widget.nameController.text = "nome";
-    widget.lastNameController.text = "cognome";
-    widget.emailController.text = "email@mail.it";
-    widget.phoneController.text = "3232";
-    widget.filterController.text = "citta";
-    widget.passwordController.text = "123456";
+    widget.nameController.text = "";
+    widget.lastNameController.text = "";
+    widget.emailController.text = "";
+    widget.phoneController.text = "";
+    widget.filterController.text = "";
+    widget.passwordController.text = "";
     return Content();
 
   }
@@ -167,7 +167,7 @@ class UsersManageState extends State<UsersManageWidget> {
                         )
                 );
               },
-              edit: () {
+              edit: (dynamic p) {
                 showDialog(
                     context: context,
                     barrierColor: blackTransparent,
@@ -253,7 +253,6 @@ class UsersManageState extends State<UsersManageWidget> {
           ),
         );
         Navigator.pop(context);
-
       });
     }
 

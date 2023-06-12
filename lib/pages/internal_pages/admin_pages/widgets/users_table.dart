@@ -210,7 +210,9 @@ class UsersTableState extends State<UsersTable>{
                 message: widget.editMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(
-                    onTap: widget.edit,
+                    onTap: (){
+                      widget.edit(p);
+                      },
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Icon(

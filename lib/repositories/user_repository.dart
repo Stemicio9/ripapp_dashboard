@@ -19,6 +19,7 @@ class UserRepository {
   final String deleteUrl = "$baseUrl/api/auth/account";
   final String deleteUserUrl = "$baseUrl/api/auth/account";
   final String listAccountUrl = "$baseUrl/api/auth/account/list";
+  final String updateUserUrl = "$baseUrl/api/auth/account";
 
 
 
@@ -146,6 +147,11 @@ class UserRepository {
     response = await _dio.get("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
     print(response.data);
     return response.data;
+  }
+  Future<dynamic> updateUser(int userId, UserEntity userEntity) async{
+    String urlChiamato = '$updateUserUrl/$userId';
+    var response = await _dio.put(urlChiamato);
+    return UserEntity.fromJson(response.data);
   }
 
 }

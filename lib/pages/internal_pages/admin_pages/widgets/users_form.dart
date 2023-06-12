@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
-import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
+import 'package:ripapp_dashboard/constants/app_roles.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
+import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
@@ -57,22 +60,29 @@ class UsersForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SearchAgencyCubit(),
-     child: UsersFormWidget(
-         onTap: onTap,
-         cardTitle: cardTitle,
-         options: options,
-         filterController: filterController,
-         nameController: nameController,
-         phoneController: phoneController,
-         emailController: emailController,
-         passwordController: passwordController,
-         lastNameController: lastNameController,
-         statusChange: statusChange,
-         agencyChange: agencyChange,
-         roles: roles
-     ),
+    return MultiBlocProvider(
+        providers: [
+        BlocProvider(
+        create: (_) => SearchAgencyCubit(),
+        ),
+          BlocProvider(
+            create: (_) => SelectedUserCubit(),
+          ),
+        ],
+        child: UsersFormWidget(
+            onTap: onTap,
+            cardTitle: cardTitle,
+            options: options,
+            filterController: filterController,
+            nameController: nameController,
+            phoneController: phoneController,
+            emailController: emailController,
+            passwordController: passwordController,
+            lastNameController: lastNameController,
+            statusChange: statusChange,
+            agencyChange: agencyChange,
+            roles: roles
+        ),
     );
   }
 }
@@ -81,7 +91,7 @@ class UsersForm extends StatelessWidget {
 class UsersFormWidget extends StatefulWidget{
 
   final String cardTitle;
-  final TextEditingController nameController;
+  late TextEditingController nameController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
   final TextEditingController lastNameController;
@@ -98,7 +108,7 @@ class UsersFormWidget extends StatefulWidget{
   final Function(AgencyEntity selectedAgency) agencyChange;
   final List<String> roles;
 
-  const UsersFormWidget({
+  UsersFormWidget({
     super.key,
     required this.onTap,
     required this.cardTitle,
@@ -133,14 +143,6 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   late AgencyEntity selectedAgency;
   List<dynamic> cityList = [];
 
-  List<String> agencies = <String>[
-    'Seleziona Agenzia',
-    'Agenzia 1',
-    'Agenzia 2',
-    'Agenzia 3',
-    'Agenzia 4',
-    'Agenzia 5',
-  ];
 
   @override
   void initState() {
