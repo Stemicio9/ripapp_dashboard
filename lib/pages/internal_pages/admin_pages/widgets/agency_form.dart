@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
@@ -167,6 +168,7 @@ class AgencyForm extends StatelessWidget {
                                     controller: phoneController,
                                     validator: phoneValidator,
                                     paddingRight: 0,
+                                    inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly,],
                                     paddingLeft: 10,
                                     borderSide: const BorderSide(color: greyState),
                                     activeBorderSide: const BorderSide(color: background),

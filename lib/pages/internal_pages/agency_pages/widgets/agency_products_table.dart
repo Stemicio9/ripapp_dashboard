@@ -1,19 +1,13 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
-import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
-import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
-
-
-
 
 class AgencyProductsTable extends StatefulWidget {
 
@@ -29,76 +23,14 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
   @override
   // TODO: implement context
   SearchProductsOfferedCubit get _searchProductCubit => context.read<SearchProductsOfferedCubit>();
-
-
-
+  List<ProductEntity> products = [];
   File? imageFile;
-
-  /*fetchProducts() async {
-    List<ProductOffered> agencyProductsRetrieved = await AgencyRepository().getAllAgencyProducts();
-    if (agencyProductsRetrieved.length == 0){print("non ci sono prodotti da mostrare");}
-    else{
-      try {
-        emit(SearchProductLoaded(agencyProductsRetrieved));
-      }
-      catch (e){
-        print("error");
-      }
-    }
-  }*/
 
   @override
   void initState() {
     _searchProductCubit.fetchProducts();
     super.initState();
   }
-
-
-  List<ProductEntity> products = [];
-  /*List<ProductEntity> products = [
-    ProductEntity(
-      id: 1,
-      name: 'Prodotto 1',
-      price: 100.00,
-      photoName: ImagesConstants.imgProductPlaceholder,
-    ),
-    ProductEntity(
-      id: 2,
-      name: 'Prodotto 2',
-      price: 100.00,
-      photoName: ImagesConstants.imgProductPlaceholder,
-    ),
-    ProductEntity(
-      id: 3,
-      name: 'Prodotto 3',
-      price: 100.00,
-      photoName: ImagesConstants.imgProductPlaceholder,
-    ),
-    ProductEntity(
-      id: 4,
-      name: 'Prodotto 4',
-      price: 100.00,
-      photoName: ImagesConstants.imgProductPlaceholder,
-    ),
-    ProductEntity(
-      id: 5,
-      name: 'Prodotto 5',
-      price: 100.00,
-      photoName: ImagesConstants.imgProductPlaceholder,
-    ),
-    ProductEntity(
-      id: 6,
-      name: 'Prodotto 6',
-      price: 100.00,
-      photoName: ImagesConstants.imgProductPlaceholder,
-    ),
-    ProductEntity(
-      id: 7,
-      name: 'Prodotto 7',
-      price: 100.00,
-      photoName: ImagesConstants.imgProductPlaceholder,
-    ),
-  ];*/
 
   @override
   Widget build(BuildContext context) {
@@ -115,10 +47,7 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
         });
         return Container(
           padding: getPadding(top: 20),
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           child: DataTable(
             columnSpacing: 30,
             dataRowHeight: 85,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
@@ -347,6 +348,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                     hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
                                     controller: widget.phoneController,
                                     validator: widget.phoneValidator,
+                                    inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly,],
                                     paddingRight: 0,
                                     paddingLeft: 10,
                                     borderSide: const BorderSide(color: greyState),
@@ -463,13 +465,10 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                             else if (state is SearchAgencyLoaded) {
                                               if ((state.agencies as List)
                                                   .length == 0) {
-                                                return ErrorWidget(
-                                                    "lista vuota"); //TODO aggiungere errore
+                                                return ErrorWidget("lista vuota"); //TODO aggiungere errore
                                               }
                                               else {
-                                                List<
-                                                    AgencyEntity> agencies = state
-                                                    .agencies;
+                                                List<AgencyEntity> agencies = state.agencies;
 
                                                 return DropdownButton<AgencyEntity>(
                                                   hint: const Text(
@@ -486,29 +485,21 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                   value: state.selectedAgency,
                                                   onChanged: (
                                                       AgencyEntity? value) {
-                                                    _searchAgencyCubit
-                                                        .changeSelectedAgency(
-                                                        value);
+                                                    _searchAgencyCubit.changeSelectedAgency(value);
                                                     print("valoreeee ");
                                                     print(value.toString());
                                                     if (value != null)
-                                                      widget.agencyChange(
-                                                          value!);
+                                                      widget.agencyChange(value!);
                                                   },
                                                   items: agencies.map((
                                                       AgencyEntity agency) {
-                                                    return DropdownMenuItem<
-                                                        AgencyEntity>(
+                                                    return DropdownMenuItem<AgencyEntity>(
                                                       value: agency,
                                                       child: Padding(
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .only(left: 20),
+                                                        padding: const EdgeInsets.only(left: 20),
                                                         child: Text(
-                                                          agency?.agencyName ??
-                                                              "",
-                                                          style:
-                                                          const TextStyle(
+                                                          agency.agencyName ?? "",
+                                                          style: const TextStyle(
                                                             color: black,
                                                             fontSize: 14,
                                                           ),

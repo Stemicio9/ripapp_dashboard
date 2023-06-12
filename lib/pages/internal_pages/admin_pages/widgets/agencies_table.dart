@@ -199,7 +199,7 @@ class AgenciesTableState extends State<AgenciesTable> {
                 message: deleteMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(
-                    onTap: (){delete(p,agencies);},
+                    onTap: (){delete(p);},
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Icon(

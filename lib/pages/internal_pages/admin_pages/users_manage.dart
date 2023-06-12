@@ -121,29 +121,7 @@ class UsersManageState extends State<UsersManageWidget> {
                     context: context,
                     builder: (ctx) =>
                         UsersForm(
-                          onTap: () {
-                            userEntity.firstName = widget.nameController.text;
-                            userEntity.lastName = widget.lastNameController.text;
-                            userEntity.email = widget.emailController.text;
-                            userEntity.phoneNumber = widget.phoneController.text;
-                            userEntity.password = widget.passwordController.text;
-                          //  userEntity.city = widget.filterController.text;
-
-                            if (userEntity.email != "" &&
-                                userEntity.password != "") {FirebaseAuth.instance.createUserWithEmailAndPassword(
-                                  email: userEntity.email ?? "",
-                                  password: userEntity.password ?? "").then((value) async {
-                                if (value.user == null) {
-                                  print("Utente nullo");
-                                  return; //TODO: Handle error
-                                }
-
-                                print("SALVO SU DB LOCALE");
-                                _userListCubit.signup(userEntity);
-                                Navigator.pop(context);
-                              });
-                            }
-                          },
+                          onTap: (){formSubmit();},
                           cardTitle: getCurrentLanguageValue(ADD_USER)!,
                           nameController: widget.nameController,
                           emailController: widget.emailController,
@@ -162,17 +140,24 @@ class UsersManageState extends State<UsersManageWidget> {
             ),
 
             UsersTable(
-              delete: (dynamic p,dynamic usersList) {
+              delete: (dynamic p) {
                 showDialog(
                     context: context,
                     builder: (ctx) =>
                         DeleteMessageDialog(
                             onConfirm: () {
-                              for(var e in usersList){
-                                if(e.id == p.id){
-                                  _userListCubit.delete(e.id!);
-                                }
-                              }
+                              _userListCubit.delete(p.id);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: green,
+                                  content: const Text('Utente eliminato con successo!'),
+                                  duration: const Duration(milliseconds: 3000),
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                ),
+                              );
                               Navigator.pop(context);
                             },
                             onCancel: () {
@@ -234,6 +219,45 @@ class UsersManageState extends State<UsersManageWidget> {
     );
   }
 
+
+
+
+  formSubmit(){
+    userEntity.firstName = widget.nameController.text;
+    userEntity.lastName = widget.lastNameController.text;
+    userEntity.email = widget.emailController.text;
+    userEntity.phoneNumber = widget.phoneController.text;
+    userEntity.password = widget.passwordController.text;
+    //  userEntity.city = widget.filterController.text;
+
+    if (userEntity.email != "" && userEntity.password != "") {
+      FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: userEntity.email ?? "",
+          password: userEntity.password ?? "").then((value) async {
+        if (value.user == null) {
+          print("Utente nullo");
+          return; //TODO: Handle error
+        }
+
+        print("SALVO SU DB LOCALE");
+        _userListCubit.signup(userEntity);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: green,
+            content: const Text('Utente aggiunto con successo!'),
+            duration: const Duration(milliseconds: 3000),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(3),
+            ),
+          ),
+        );
+        Navigator.pop(context);
+
+      });
+    }
+
+  }
 }
 
 
