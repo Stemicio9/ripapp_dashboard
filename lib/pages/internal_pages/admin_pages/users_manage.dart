@@ -16,6 +16,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 import '../../../blocs/users_list_cubit.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 
 enum UserRoles { Amministratore, Agenzia, Utente }
@@ -26,14 +27,21 @@ class UsersManage extends StatelessWidget{
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
   final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
+  final Function(bool isSomeListShowed) changeIsSomeListShowed;
+
+  const UsersManage({
+    required this.changeIsSomeListShowed,
+  });
+
 
   @override
   Widget build(BuildContext context) {
 
-    return BlocProvider(
+    /*return BlocProvider(
         create: (_) => UsersListCubit(),
-        child: UsersManageWidget()
-    );
+        child: UsersManageWidget(changeIsSomeListShowed: this.changeIsSomeListShowed,)
+    );*/
+    return UsersManageWidget(changeIsSomeListShowed: this.changeIsSomeListShowed,);
   }
 
 }
@@ -51,9 +59,15 @@ class UsersManageWidget extends StatefulWidget {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController filterController = TextEditingController();
+  final Function(bool isSomeListShowed) changeIsSomeListShowed;
+
+  UsersManageWidget({
+    required this.changeIsSomeListShowed,
+  });
 
   @override
   State<StatefulWidget> createState() {
+    changeIsSomeListShowed(true);
     return UsersManageState();
   }
 }
@@ -235,6 +249,7 @@ class UsersManageState extends State<UsersManageWidget> {
               editMessage: widget.editMessage,
               deleteMessage: widget.deleteMessage,
             ),
+            //NumbersPage(),
           ],
         ),
       ),
@@ -242,6 +257,3 @@ class UsersManageState extends State<UsersManageWidget> {
   }
 
 }
-
-
-

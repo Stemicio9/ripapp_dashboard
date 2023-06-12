@@ -37,6 +37,22 @@ class UsersListCubit extends Cubit<UsersListState> {
       emit(UsersListError());
     }
   }
+  fetchUsersListWithIndex(int index) async {
+    emit(UsersListLoading());
+    try {
+      print("FACCIO LA FETCH DEGLI ACCOUNT");
+      // todo manage if agencies is null or empty in response
+      print("Step 1: indice = " + index.toString());
+      var result = await UserRepository().getListWithIndex(index);
+      print("Step 2");
+      emit(UsersListLoaded(result));
+      print("Step 3");
+    }catch(e){
+      print("ERRORE");
+      print(e);
+      emit(UsersListError());
+    }
+  }
 
 
   delete(idUser)async{

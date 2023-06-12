@@ -5,6 +5,8 @@ import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/blocs/search_users_cubit.dart';
+import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
+import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -72,6 +74,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<SearchDemiseCubit>(create: (_) => SearchDemiseCubit()),
             BlocProvider<SearchUsersCubit>(create: (_) => SearchUsersCubit()),
             BlocProvider<SearchAgencyCubit>(create: (_) => SearchAgencyCubit()),
+            BlocProvider<UsersListCubit>(create: (_) => UsersListCubit()),
           ],
           child: Builder(
             builder: (context) {
