@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';

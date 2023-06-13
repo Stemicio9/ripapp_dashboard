@@ -44,10 +44,25 @@ class SearchProductCubit extends Cubit<SearchProductState>{
     }
   }
 
-  void refreshProducts() {
-    if (state is SearchProductLoaded) {
-      var aLoadedState = state as SearchProductLoaded; //prende lo stato corrente
-      emit(aLoadedState.copyWith());
+  delete(idProduct)async{
+    emit(SearchProductLoading());
+    try{
+      var result = await ProductRepository().deleteProduct(idProduct);
+      fetchProducts();
+    }catch(e){
+      print("ERRORE");
+      print(e);
+      emit(SearchProductError());
+    }
+  }
+
+  saveProduct(ProductEntity productEntity) async{
+    emit(SearchProductLoading());
+    try{
+      var result = await ProductRepository().saveProduct(productEntity);
+      fetchProducts();
+    }catch(e){
+      emit(SearchProductError());
     }
   }
 }

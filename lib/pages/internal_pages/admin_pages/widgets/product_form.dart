@@ -90,10 +90,9 @@ class ProductForm extends StatelessWidget {
                                           DecorationImage(
                                             image: FileImage(imageFile!),
                                             fit: BoxFit.contain,
-                                          ) : DecorationImage(
+                                          ) : const DecorationImage(
                                             image: AssetImage(ImagesConstants.imgProductPlaceholder),
                                             fit: BoxFit.cover,
-
                                           ),
                                         ),
                                       ))

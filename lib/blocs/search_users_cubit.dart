@@ -41,10 +41,4 @@ class SearchUsersCubit extends Cubit<SearchUsersState>{
     }
   }
 
-  void refreshUsers() {
-    if (state is SearchUsersLoaded) {
-      var aLoadedState = state as SearchUsersLoaded; //prende lo stato corrente
-      emit(aLoadedState.copyWith());
-    }
-  }
 }

@@ -16,6 +16,7 @@ class ProductRepository{
   //final String productUrl = "$baseUrl/api/auth/product/fine";
   final String productUrl = "$baseUrl/api/auth/productFromAdmin";
   final String allProductsUrl = "$baseUrl/api/auth/all-products";
+  final String deleteProductUrl = "$baseUrl/api/auth/delete";
 
 
   factory ProductRepository() {
@@ -28,6 +29,13 @@ class ProductRepository{
     Map<String, String> values = {};
     values.putIfAbsent("idtoken", () => UserRepository().firebaseToken ?? "");
     var response = await _dio.post(productUrl, data: productEntity.toJson(), options: Options(headers: values));
+    return response.data;
+  }
+
+
+  Future<dynamic> deleteProduct(int idProduct) async{
+    String urlDeleteProduct = '$deleteProductUrl/$idProduct';
+    var response = await _dio.delete(urlDeleteProduct);
     return response.data;
   }
 

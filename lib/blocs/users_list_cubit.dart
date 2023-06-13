@@ -4,16 +4,21 @@ import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 
 @immutable
-class UsersListState{}
-class UsersListLoading extends UsersListState{}
-class UsersListError extends UsersListState{}
-class UsersListLoaded extends UsersListState{
-  final List<UserEntity> accountList;
-   UsersListLoaded(this.accountList);
+class UsersListState {}
 
-  UsersListLoaded copyWith({List<UserEntity>? account, required UserEntity userEntity}) {
+class UsersListLoading extends UsersListState {}
+
+class UsersListError extends UsersListState {}
+
+class UsersListLoaded extends UsersListState {
+  final List<UserEntity> accountList;
+
+  UsersListLoaded(this.accountList);
+
+  UsersListLoaded copyWith(
+      {List<UserEntity>? account, required UserEntity userEntity}) {
     return UsersListLoaded(
-        account ?? this.accountList,
+      account ?? this.accountList,
     );
   }
 }
@@ -31,8 +36,8 @@ class UsersListCubit extends Cubit<UsersListState> {
       print("Step 2");
       emit(UsersListLoaded(result));
       print("Step 3");
-    }catch(e){
-      print("ERRORE");
+    } catch (e) {
+      print("ERRORE1");
       print(e);
       emit(UsersListError());
     }
@@ -54,43 +59,42 @@ class UsersListCubit extends Cubit<UsersListState> {
     }
   }
 
-
-  delete(idUser)async{
+  delete(idUser) async {
     emit(UsersListLoading());
-    try{
+    try {
       var result = await UserRepository().deleteUser(idUser);
       fetchUsersList();
-    }catch(e){
+    } catch (e) {
       print("ERRORE");
       print(e);
       emit(UsersListError());
     }
   }
-  signup(UserEntity userEntity) async{
+
+  signup(UserEntity userEntity) async {
     emit(UsersListLoading());
-    try{
+    try {
       var result = await UserRepository().signup(userEntity);
       fetchUsersList();
-    }catch(e){
+    } catch (e) {
       emit(UsersListError());
     }
   }
-  cityList(List<dynamic> city) async{
-    emit(UsersListLoading());
-    try{
-      var result = await UserRepository().cityList(city);
-      fetchUsersList();
-    }catch(e){
-      emit(UsersListError());
-    }
-  }
-  
 
-  changeSelectedAgency(UserEntity? userEntity){
-    if(state is UsersListLoaded && userEntity != null){
+  cityList() async {
+    emit(UsersListLoading());
+    try {
+      var result = await UserRepository().cityList();
+      fetchUsersList();
+    } catch (e) {
+      emit(UsersListError());
+    }
+  }
+
+  changeSelectedAgency(UserEntity? userEntity) {
+    if (state is UsersListLoaded && userEntity != null) {
       var a = state as UsersListLoaded;
       emit(a.copyWith(userEntity: userEntity));
     }
   }
 }
-

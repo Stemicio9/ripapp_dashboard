@@ -1,13 +1,8 @@
 import 'dart:convert';
-
-import 'dart:io';
-
 import 'package:dio/browser.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/constants/rest_path.dart';
 import 'package:ripapp_dashboard/cookies/CookiesManager.dart';
-import 'package:ripapp_dashboard/models/UserEntity.dart';
 import 'package:dio/dio.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
@@ -24,6 +19,7 @@ class UserRepository {
   final String deleteUrl = "$baseUrl/api/auth/account";
   final String deleteUserUrl = "$baseUrl/api/auth/account";
   final String listAccountUrl = "$baseUrl/api/auth/account/list";
+  final String updateUserUrl = "$baseUrl/api/auth/account";
 
 
 
@@ -72,16 +68,19 @@ class UserRepository {
 
     Response response;
     response = await _dio.get(listAccountUrl, queryParameters: parameters);
+
     print("object");
     print(response.data);
     // todo this could be not necessary
     String goodJson = jsonEncode(response.data);
+
     //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
-    List<UserEntity> users = ((jsonDecode(goodJson) as Map)["content"] as List).map((user) => UserEntity.fromJson(user)).toList();
-    print("ecco i tuoi utenti" + users.toString() + users.length.toString());
-    //List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
-    //return userEntityList;
-    return users;
+    //List<UserEntity> users = ((jsonDecode(goodJson) as Map)["content"] as List).map((user) => UserEntity.fromJson(user)).toList();
+    //print("ecco i tuoi utenti" + users.toString() + users.length.toString());
+
+    List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
+    return userEntityList;
+    //return users;
   }
   Future<List<UserEntity>> getListWithIndex(int pageIndex) async{
 
@@ -107,6 +106,7 @@ class UserRepository {
   }
 
   Future<dynamic> deleteUser(int idUser) async{
+    print('simone');
     String urlDeleteUser = '$deleteUserUrl/$idUser';
     var response = await _dio.delete(urlDeleteUser);
     return response.data;
@@ -131,12 +131,6 @@ class UserRepository {
     print("RISPOSTA LOGIN");
     print(response.data);
     print(response.headers);
-
-
-    /*
-      ciaocia@cia.it
-      123456
-     */
 
     var accountResponse = await UserRepository().account();
 
@@ -170,11 +164,16 @@ class UserRepository {
     List<UserEntity> users = (res.data as List).map((user) => UserEntity.fromJson(user)).toList();
     return users;
   }
-  Future<dynamic> cityList(List<dynamic> city)async{
+  Future<dynamic> cityList()async{
     Response response;
     response = await _dio.get("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
     print(response.data);
     return response.data;
+  }
+  Future<dynamic> updateUser(int userId, UserEntity userEntity) async{
+    String urlChiamato = '$updateUserUrl/$userId';
+    var response = await _dio.put(urlChiamato);
+    return UserEntity.fromJson(response.data);
   }
 
 }

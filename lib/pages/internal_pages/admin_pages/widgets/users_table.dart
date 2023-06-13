@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
-import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
-import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
@@ -19,6 +17,7 @@ class UsersTable extends StatefulWidget{
     'Città',
     'Telefono',
     'Ruolo',
+    'Nome Agenzia',
     ''
   ];
   final edit;
@@ -71,7 +70,6 @@ class UsersTableState extends State<UsersTable>{
                 child: CircularProgressIndicator()
             );
           } else if (state is UsersListLoaded) {
-            print("Egg");
             if ((state.accountList).isEmpty) {
               return ErrorWidget("lista vuota"); //TODO aggiungere errore
             }
@@ -171,6 +169,25 @@ class UsersTableState extends State<UsersTable>{
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
+
+        DataCell(Row(
+          children: [
+            Visibility(
+              visible:  p.status.toString() == 'UserStatus.agency',
+              child: Text(
+                p.status.toString() == 'UserStatus.agency' ? p.agency.agencyName : '',
+                style: SafeGoogleFont('Montserrat',
+                    color: black, fontSize: 12, fontWeight: FontWeight.w700),
+              ),
+            ),
+
+            Visibility(
+              visible: p.status.toString() != 'UserStatus.agency',
+                child: Icon(Icons.cancel_rounded, color: rossoopaco,)
+            )
+          ],
+        )),
+
         DataCell(Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -193,7 +210,9 @@ class UsersTableState extends State<UsersTable>{
                 message: widget.editMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(
-                    onTap: widget.edit,
+                    onTap: (){
+                      widget.edit(p);
+                      },
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Icon(
@@ -210,7 +229,7 @@ class UsersTableState extends State<UsersTable>{
                 direction: AxisDirection.down,
                 child: GestureDetector(
                     onTap: (){
-                      widget.delete(p,usersList);
+                      widget.delete(p);
                       },
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,

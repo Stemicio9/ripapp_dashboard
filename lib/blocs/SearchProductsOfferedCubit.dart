@@ -29,6 +29,8 @@ class SearchProductsOfferedCubit extends Cubit<SearchProductsOfferedState>{
   SearchProductsOfferedCubit() : super(SearchProductsOfferedLoading());
 
   fetchProducts() async {
+    print("entro nei prodotti");
+
     emit(SearchProductsOfferedLoading());
     List<ProductOffered> agencyProductsRetrieved = await AgencyRepository().getAllAgencyProducts();
     if (agencyProductsRetrieved.length == 0){print("non ci sono prodotti da mostrare");}

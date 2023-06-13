@@ -184,9 +184,7 @@ class DeceasedData extends StatelessWidget {
                             ),
                           ),
                           InputsV2Widget(
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
+                            inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly,],
                             maxLenght: 3,
                             hinttext: getCurrentLanguageValue(AGE)!,
                             controller: ageController,

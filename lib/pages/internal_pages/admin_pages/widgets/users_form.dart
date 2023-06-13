@@ -1,15 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
+import 'package:ripapp_dashboard/constants/app_roles.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
+import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
-
 import '../../../../widgets/autocomplete.dart';
 
 class UsersForm extends StatelessWidget {
@@ -18,14 +22,11 @@ class UsersForm extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
-  //final TextEditingController cityController;
   final TextEditingController lastNameController;
   final TextEditingController passwordController;
   final TextEditingController filterController;
   final dynamic nameValidator;
   final List<String> options;
-
-  //final dynamic cityValidator;
   final dynamic emailValidator;
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
@@ -43,14 +44,12 @@ class UsersForm extends StatelessWidget {
     this.nameValidator,
     this.emailValidator,
     this.phoneValidator,
-    //this.cityValidator,
     this.lastNameValidator,
     this.passwordValidator,
     required this.nameController,
     required this.emailController,
     required this.filterController,
     required this.phoneController,
-  //  required this.cityController,
     required this.passwordController,
     required this.lastNameController,
     required this.statusChange,
@@ -61,23 +60,28 @@ class UsersForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return MultiBlocProvider(
+        providers: [
+        BlocProvider(
         create: (_) => SearchAgencyCubit(),
+        ),
+          BlocProvider(
+            create: (_) => SelectedUserCubit(),
+          ),
+        ],
         child: UsersFormWidget(
             onTap: onTap,
-          cardTitle: cardTitle,
-          options: options,
-          filterController: filterController,
-          nameController: nameController,
-          phoneController: phoneController,
-          emailController: emailController,
-        //  cityController: cityController,
-
-          passwordController: passwordController,
-          lastNameController: lastNameController,
-          statusChange: statusChange,
-          agencyChange: agencyChange,
-          roles: roles
+            cardTitle: cardTitle,
+            options: options,
+            filterController: filterController,
+            nameController: nameController,
+            phoneController: phoneController,
+            emailController: emailController,
+            passwordController: passwordController,
+            lastNameController: lastNameController,
+            statusChange: statusChange,
+            agencyChange: agencyChange,
+            roles: roles
         ),
     );
   }
@@ -87,16 +91,14 @@ class UsersForm extends StatelessWidget {
 class UsersFormWidget extends StatefulWidget{
 
   final String cardTitle;
-  final TextEditingController nameController;
+  late TextEditingController nameController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
- // final TextEditingController cityController;
   final TextEditingController lastNameController;
   final TextEditingController filterController;
   final TextEditingController passwordController;
   final dynamic nameValidator;
   final List<String> options;
- // final dynamic cityValidator;
   final dynamic emailValidator;
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
@@ -106,21 +108,19 @@ class UsersFormWidget extends StatefulWidget{
   final Function(AgencyEntity selectedAgency) agencyChange;
   final List<String> roles;
 
-  const UsersFormWidget({
+  UsersFormWidget({
     super.key,
     required this.onTap,
     required this.cardTitle,
     this.nameValidator,
     this.emailValidator,
     this.phoneValidator,
-   // this.cityValidator,
     this.lastNameValidator,
     this.passwordValidator,
     required this.nameController,
     required this.emailController,
     required this.filterController,
     required this.phoneController,
-   // required this.cityController,
     required this.passwordController,
     required this.lastNameController,
     required this.statusChange,
@@ -141,15 +141,8 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
   late String selectedValue;
   late AgencyEntity selectedAgency;
+  List<dynamic> cityList = [];
 
-  List<String> agencies = <String>[
-    'Seleziona Agenzia',
-    'Agenzia 1',
-    'Agenzia 2',
-    'Agenzia 3',
-    'Agenzia 4',
-    'Agenzia 5',
-  ];
 
   @override
   void initState() {
@@ -357,6 +350,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                     hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
                                     controller: widget.phoneController,
                                     validator: widget.phoneValidator,
+                                    inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly,],
                                     paddingRight: 0,
                                     paddingLeft: 10,
                                     borderSide: const BorderSide(color: greyState),
@@ -473,13 +467,10 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                             else if (state is SearchAgencyLoaded) {
                                               if ((state.agencies as List)
                                                   .length == 0) {
-                                                return ErrorWidget(
-                                                    "lista vuota"); //TODO aggiungere errore
+                                                return ErrorWidget("lista vuota"); //TODO aggiungere errore
                                               }
                                               else {
-                                                List<
-                                                    AgencyEntity> agencies = state
-                                                    .agencies;
+                                                List<AgencyEntity> agencies = state.agencies;
 
                                                 return DropdownButton<AgencyEntity>(
                                                   hint: const Text(
@@ -496,29 +487,21 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                   value: state.selectedAgency,
                                                   onChanged: (
                                                       AgencyEntity? value) {
-                                                    _searchAgencyCubit
-                                                        .changeSelectedAgency(
-                                                        value);
+                                                    _searchAgencyCubit.changeSelectedAgency(value);
                                                     print("valoreeee ");
                                                     print(value.toString());
                                                     if (value != null)
-                                                      widget.agencyChange(
-                                                          value!);
+                                                      widget.agencyChange(value!);
                                                   },
                                                   items: agencies.map((
                                                       AgencyEntity agency) {
-                                                    return DropdownMenuItem<
-                                                        AgencyEntity>(
+                                                    return DropdownMenuItem<AgencyEntity>(
                                                       value: agency,
                                                       child: Padding(
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .only(left: 20),
+                                                        padding: const EdgeInsets.only(left: 20),
                                                         child: Text(
-                                                          agency?.agencyName ??
-                                                              "",
-                                                          style:
-                                                          const TextStyle(
+                                                          agency.agencyName ?? "",
+                                                          style: const TextStyle(
                                                             color: black,
                                                             fontSize: 14,
                                                           ),

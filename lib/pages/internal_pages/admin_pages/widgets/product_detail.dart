@@ -12,9 +12,9 @@ import '../../../../widgets/texts.dart';
 
 class ProductDetail extends StatelessWidget {
   final String cardTitle;
-  final String id;
+  final int id;
   final String name;
-  final String price;
+  final double price;
   final String productPhoto;
   final File? imageFile;
 
@@ -84,7 +84,7 @@ class ProductDetail extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Texth3V2(testo: id, color: black),
+                          Texth3V2(testo: id.toString(), color: black),
 
                           Padding(
                             padding: getPadding(bottom: 5,top: 20),
@@ -112,7 +112,10 @@ class ProductDetail extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Texth3V2(testo: price, color: black),
+                          Texth3V2(
+                              testo: '€ $price',
+                              color: black
+                          ),
 
                         ],
                       ),

@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/agencies_manage.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 
 import '../../../blocs/searchAgenciesCubit.dart';
+import 'agencies_manage.dart';
 
 
 class Dashboard extends StatefulWidget {
