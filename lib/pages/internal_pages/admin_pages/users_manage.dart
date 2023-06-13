@@ -60,7 +60,9 @@ class UsersManageState extends State<UsersManageWidget> {
 
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
 
-  List<String> cityOptions = <String>[];
+  List<String> cityOptions = <String>[
+    'Milano'
+  ];
 
   UserEntity userEntity = new UserEntity(
     id:1,

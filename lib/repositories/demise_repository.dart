@@ -28,6 +28,7 @@ class DemiseRepository{
   final String demiseUrl = "$baseUrl/api/auth/demiseWithoutCookie";
   final String searchDemisesByCityUrl = "$baseUrl/api/auth/search/demises";
   final String searchDemisesIgnorante = "$baseUrl/api/auth/demisesIgnorante";
+  final String deleteDemiseUrl = "$baseUrl/api/auth/demise";
 
 
 
@@ -49,6 +50,14 @@ class DemiseRepository{
     myoptions.headers!["app_version"] = appVersion;
     var response = await _dio.post(demiseUrl, data: demiseEntity, options: myoptions);
     //var response = await _dio.post(demiseUrl, data: demiseEntity);
+    return response.data;
+  }
+
+
+  Future<dynamic> deleteDemise(int idDemise) async{
+    print('simone');
+    String urlDeleteDemise = '$deleteDemiseUrl/$idDemise';
+    var response = await _dio.delete(urlDeleteDemise);
     return response.data;
   }
 

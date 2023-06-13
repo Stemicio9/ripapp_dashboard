@@ -21,12 +21,12 @@ class DemiseTable extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => DemiseTableState(
-      edit: this.edit,
-      delete: this.delete,
-      showDetail: this.showDetail,
-      detailMessage: this.detailMessage,
-      editMessage: this.editMessage,
-      deleteMessage: this.deleteMessage,
+    edit: this.edit,
+    delete: this.delete,
+    showDetail: this.showDetail,
+    detailMessage: this.detailMessage,
+    editMessage: this.editMessage,
+    deleteMessage: this.deleteMessage,
   );
 
 }
@@ -53,7 +53,7 @@ class DemiseTableState extends State<DemiseTable>{
   ];
 
   List<DemiseEntity> demises = [];
-    /*DemiseEntity(
+  /*DemiseEntity(
       id: '1',
       firstName: 'Mario',
       lastName: 'Rossi',
@@ -115,34 +115,40 @@ class DemiseTableState extends State<DemiseTable>{
   Widget build(BuildContext context) {
     return
       BlocBuilder<SearchDemiseCubit, SearchDemiseState>(
-          builder: (context, state)
-    {
-      if (state is SearchDemiseLoaded){
-        demises = state.demises;
-        return Container(
-          padding: getPadding(top: 20),
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          child: DataTable(
-            columnSpacing: 30,
-            dataRowColor: MaterialStateColor.resolveWith((states) => white),
-            headingRowColor: MaterialStateColor.resolveWith((
-                states) => background),
-            border: const TableBorder(
-              top: BorderSide(width: 0.5, color: greyState),
-              bottom: BorderSide(width: 0.5, color: greyState),
-              left: BorderSide(width: 0.5, color: greyState),
-              right: BorderSide(width: 0.5, color: greyState),
-              horizontalInside: BorderSide(width: 0.5, color: greyState),
-            ),
-            columns: createHeaderTable(),
-            rows: createRows(),
-          ),
-        );}
-      else return ErrorWidget("amioii");
-    });
+          builder: (context, state) {
+            print("COSTRUISCO LO STATO");
+            print(state.runtimeType.toString());
+            if (state is SearchDemiseLoading) {
+              return const Center(
+                  child: CircularProgressIndicator()
+              );
+            }
+            if (state is SearchDemiseLoaded){
+              demises = state.demises;
+              return Container(
+                padding: getPadding(top: 20),
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                child: DataTable(
+                  columnSpacing: 30,
+                  dataRowColor: MaterialStateColor.resolveWith((states) => white),
+                  headingRowColor: MaterialStateColor.resolveWith((
+                      states) => background),
+                  border: const TableBorder(
+                    top: BorderSide(width: 0.5, color: greyState),
+                    bottom: BorderSide(width: 0.5, color: greyState),
+                    left: BorderSide(width: 0.5, color: greyState),
+                    right: BorderSide(width: 0.5, color: greyState),
+                    horizontalInside: BorderSide(width: 0.5, color: greyState),
+                  ),
+                  columns: createHeaderTable(),
+                  rows: createRows(),
+                ),
+              );}
+            else return ErrorWidget("amioii");
+          });
 
 
 
@@ -252,7 +258,7 @@ class DemiseTableState extends State<DemiseTable>{
                 message: deleteMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(
-                    onTap: delete,
+                    onTap: (){delete(p);},
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Icon(

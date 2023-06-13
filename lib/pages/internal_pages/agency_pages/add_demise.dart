@@ -1,7 +1,9 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
+import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
@@ -10,7 +12,6 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funer
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
-import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:cross_file/cross_file.dart';
@@ -46,6 +47,8 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController relativeController = TextEditingController();
   final TextEditingController filterController = TextEditingController();
   final List<XFile> _list = [];
+
+  SearchDemiseCubit get _searchDemiseCubit => context.read<SearchDemiseCubit>();
   bool _dragging = false;
   Offset? offset;
   DateTime? wakeDate;
@@ -89,21 +92,6 @@ class AddDemiseState extends State<AddDemise> {
 
   @override
   Widget build(BuildContext context) {
-    // nameController.text = "nomedefunto";
-    // lastNameController.text = "cognomedefunto";
-    // cityController.text = "cittadefunto";
-    // phoneController.text = "333";
-    // ageController.text = "89";
-    // deceasedDateController.text = "2020-01-02 03:04:05.000";
-    // addressController.text = "indirizzo";
-    // wakeDateController.text = "2020-01-02 03:04:05.000";
-    // wakeNoteController.text = "note";
-    // funeralAddressController.text = "indirizzo";
-    // funeralDateController.text = "2020-01-02 03:04:05.000";
-    // funeralNoteController.text = "note";
-    // citiesController.text = "citta";
-    // relativeController.text = "parente";
-
     return ScaffoldWidget(
       body: SingleChildScrollView(
         child: Padding(
@@ -372,7 +360,8 @@ class AddDemiseState extends State<AddDemise> {
     //demiseEntity.cities = (citiesController.text);
     //demiseEntity.relative = (relativeController.text);
 
-    DemiseRepository().saveDemise(demiseEntity);
+    _searchDemiseCubit.saveProduct(demiseEntity);
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: green,

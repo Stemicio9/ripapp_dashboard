@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
@@ -8,6 +9,9 @@ import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
+
+import '../../../blocs/search_demises_cubit.dart';
+import '../../../constants/colors.dart';
 
 class DemiseManage extends StatefulWidget {
   @override
@@ -23,14 +27,7 @@ class DemiseManageState extends State<DemiseManage>{
   final String deleteMessage = 'Elimina';
   final String message = 'Le informazioni riguardanti questo decesso verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
 
-  final String name = 'Davide';
-  final String lastName = 'Rossi';
-  final String id = '1';
-  final String phoneNumber = '+39 0987654321';
-  final String city = 'Roma';
-  final String churchName = 'Nome Chiesa';
-  final String churchAddress = 'Via Milano, 46';
-  final String description = 'Descrizione del decesso';
+  SearchDemiseCubit get _searchDemiseCubit => context.read<SearchDemiseCubit>();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -57,11 +54,23 @@ class DemiseManageState extends State<DemiseManage>{
           ),
 
           DemiseTable(
-            delete: (){
+            delete: (dynamic p){
               showDialog(
                   context: context,
                   builder: (ctx) => DeleteMessageDialog(
                       onConfirm: (){
+                        _searchDemiseCubit.delete(p.id);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: green,
+                            content: const Text('Defunto eliminato con successo!'),
+                            duration: const Duration(milliseconds: 3000),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                          ),
+                        );
                         Navigator.pop(context);
                       },
                       onCancel: (){
