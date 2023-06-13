@@ -55,7 +55,7 @@ class UsersTableState extends State<UsersTable>{
   List<UserEntity> usersList = [];
   @override
   void initState() {
-    _userListCubit.fetchUsersList();
+    _userListCubit.fetchUsersListWithIndex(0);
     super.initState();
   }
 
