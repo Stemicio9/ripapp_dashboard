@@ -32,15 +32,12 @@ class SearchProductCubit extends Cubit<SearchProductState>{
 
   fetchProducts() async {
     emit(SearchProductLoading());
-    List<ProductEntity> productsRetrieved = await ProductRepository().getAllProducts();
-    if (productsRetrieved.length == 0){print("non ci sono prodotti da mostrare");}
-    else{
-      try {
-        emit(SearchProductLoaded(productsRetrieved));
-      }
-      catch (e){
-        print("error");
-      }
+    try {
+      var result = await ProductRepository().getAllProducts().then((products) => emit(SearchProductLoaded(products)));
+    }
+    catch (e){
+      print("error");
+
     }
   }
 

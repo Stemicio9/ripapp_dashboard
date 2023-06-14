@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
@@ -5,8 +6,11 @@ import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
+import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/utilities/image_utility.dart';
+
+import '../../authentication/auth_status.dart';
 
 
 
@@ -21,7 +25,19 @@ class ForgotPasswordFormState extends State<ForgotPasswordForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailTextController = TextEditingController();
   final double logoWidth = 250;
+  static final auth = FirebaseAuth.instance;
+  static late AuthStatus _status;
 
+
+  Future<AuthStatus> resetPassword({required String email}) async {
+    await auth
+        .sendPasswordResetEmail(email: email)
+        .then((value) => _status = AuthStatus.successful)
+        .catchError(
+            (e) => _status = AuthExceptionHandler.handleAuthException(e));
+
+    return _status;
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -110,12 +126,20 @@ class ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
   formSubmit() async {
     if (_formKey.currentState!.validate()) {
-  //   var result = await askResetPassword(_emailTextController.text);
-      Navigator.pushNamed(context, RouteConstants.login);
+      final _status = await resetPassword(
+          email: _emailTextController.text.trim());
+      if (_status == AuthStatus.successful) {
+        SuccessSnackbar(
+            context,
+            text: 'Abbiamo inviato una email all\'indirizzo ${_emailTextController.text}'
+        );
+        Navigator.pushNamed(context, RouteConstants.login);
 
-   /*  if(result){
-        // @todo inserire qui il toaster per dire che è stata inviata una mail all'indirizzo ${emailcontroller.text}
-      } */
+      } else {
+        ErrorSnackbar(
+            context,
+            text: 'Non è stato possibile inviare la mail di recupero password!');
+      }
     }
   }
 }

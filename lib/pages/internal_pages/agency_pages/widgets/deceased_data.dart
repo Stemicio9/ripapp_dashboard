@@ -28,6 +28,8 @@ class DeceasedData extends StatelessWidget {
   final dynamic lastNameValidator;
   final dynamic ageValidator;
   final dynamic dateValidator;
+  final dynamic citiesOfInterestValidator;
+  final dynamic cityValidator;
   final iconOnTap;
   final imageOnTap;
   final onDragDone;
@@ -44,6 +46,8 @@ class DeceasedData extends StatelessWidget {
         required this.imageOnTap,
         this.nameValidator,
         this.phoneValidator,
+        this.cityValidator,
+        this.citiesOfInterestValidator,
         this.lastNameValidator,
         this.ageValidator,
         this.dateValidator,
@@ -319,6 +323,7 @@ class DeceasedData extends StatelessWidget {
                             paddingLeft: 0,
                             hintText: getCurrentLanguageValue(CITY)!,
                             filterController: filterController,
+                            validator: cityValidator,
                           )
                         ],
                       )),
@@ -357,6 +362,7 @@ class DeceasedData extends StatelessWidget {
                             paddingLeft: 0,
                             hintText: "Comune di interesse",
                             filterController: citiesController,
+                            validator: citiesOfInterestValidator,
                           )
                         ],
                       )),

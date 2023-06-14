@@ -76,11 +76,21 @@ class ProductsTableState extends State<ProductsTable> {
             );
           }
           else if (state is SearchProductLoaded) {
-            if ((state.products).isEmpty) {
-              return ErrorWidget("lista vuota"); //TODO aggiungere errore
+            products = state.products;
+
+            if (products.isEmpty) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: Texth2V2(
+                      testo: 'Nessun prodotto inserito',
+                      weight: FontWeight.bold,
+                      color: background
+                  ),
+                ),
+              );
             }
             else {
-              products = state.products;
               return Container(
                 padding: getPadding(top: 20),
                 width: MediaQuery.of(context).size.width,

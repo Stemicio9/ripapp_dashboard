@@ -1,9 +1,9 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form.dart';
@@ -12,6 +12,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import '../../../constants/colors.dart';
+import '../../../widgets/snackbars.dart';
 
 class ProductsManage extends StatefulWidget {
   @override
@@ -29,6 +30,9 @@ class ProductsManageState extends State<ProductsManage>{
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   late String imageFile;
+  final _formKey = GlobalKey<FormState>();
+  final _editKey = GlobalKey<FormState>();
+
 
   SearchProductCubit get _searchProductsCubit => context.read<SearchProductCubit>();
 
@@ -45,29 +49,34 @@ class ProductsManageState extends State<ProductsManage>{
               onTap: (){
                 showDialog(
                     context: context,
-                    builder: (ctx)=>ProductForm(
-                        imageOnTap: () async {
-                          Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
-                          var photoName = pickedImage!.semanticLabel;
-                          print('STAMPO NOME FILE PICKATO');
-                          print(photoName);
+                    builder: (ctx)=> Form(
+                      key: _formKey,
+                      child: ProductForm(
+                          imageOnTap: () async {
+                            Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
+                            var photoName = pickedImage!.semanticLabel;
+                            print('STAMPO NOME FILE PICKATO');
+                            print(photoName);
 
-                          setState(() {
-                            imageFile = photoName!;
-                          });
+                            setState(() {
+                              imageFile = photoName!;
+                            });
 
-                          //TODO SALVARE IMMAGINE SU FIRESTORAGE
-                           final storageRef = FirebaseStorage.instance.ref();
-                           final path = "profile_images/products_images/$imageFile";
-                           final imageRef = storageRef.child(path);
-                         //  imageRef.putFile(pickedImage);
+                            //TODO SALVARE IMMAGINE SU FIRESTORAGE
+                           //  final storageRef = FirebaseStorage.instance.ref();
+                            // final path = "profile_images/products_images/$imageFile";
+                            // final imageRef = storageRef.child(path);
+                           //  imageRef.putFile(pickedImage);
 
-                        },
-                    onTap: (){formSubmit();},
-                    cardTitle: getCurrentLanguageValue(ADD_PRODUCT)!,
-                    nameController: nameController,
-                    priceController: priceController
-                ));
+                          },
+                      onTap: (){formSubmit();},
+                      cardTitle: getCurrentLanguageValue(ADD_PRODUCT)!,
+                      nameController: nameController,
+                      priceController: priceController,
+                        nameValidator: notEmptyValidate,
+                        priceValidator: notEmptyValidate,
+                ),
+                    ));
               },
               pageTitle: getCurrentLanguageValue(PRODUCTS_MANAGE)!,
               buttonText: getCurrentLanguageValue(ADD_PRODUCT)!,
@@ -80,17 +89,8 @@ class ProductsManageState extends State<ProductsManage>{
                     builder: (ctx) => DeleteMessageDialog(
                         onConfirm: (){
                           _searchProductsCubit.delete(p.id);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: green,
-                              content: const Text('Prodotto eliminato con successo!'),
-                              duration: const Duration(milliseconds: 3000),
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                            ),
-                          );
+                          SuccessSnackbar(context, text: 'Prodotto eliminato con successo!');
+
                           Navigator.pop(context);
                         },
                         onCancel: (){
@@ -101,16 +101,27 @@ class ProductsManageState extends State<ProductsManage>{
                 );
               },
               edit: (){
-                showDialog(context: context, builder: (ctx)=>ProductForm(
-                    imageOnTap: (){},
+                showDialog(context: context, builder: (ctx)=>
+                    Form(
+                      key: _editKey,
+                      child: ProductForm(
+                      imageOnTap: (){},
+                      onTap: (){
+                      if (_editKey.currentState!.validate()) {
+                        nameController.text = "";
+                        priceController.text = "";
+                        SuccessSnackbar(context, text: 'Prodotto modificato con successo!');
 
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    cardTitle: getCurrentLanguageValue(EDIT_PRODUCT)!,
-                    nameController: nameController,
-                    priceController: priceController
-                ));
+                        Navigator.pop(context);
+                        }
+                      },
+                      cardTitle: getCurrentLanguageValue(EDIT_PRODUCT)!,
+                      nameController: nameController,
+                      priceController: priceController,
+                        nameValidator: notEmptyValidate,
+                        priceValidator: notEmptyValidate,
+                ),
+                    ));
               },
 
 
@@ -134,24 +145,22 @@ class ProductsManageState extends State<ProductsManage>{
     );
   }
 
-  formSubmit(){
-    ProductEntity productEntity = ProductEntity();
-    productEntity.name = nameController.text;
-    productEntity.price = double.tryParse(priceController.text);
-    productEntity.photoName = nameController.text;
-    _searchProductsCubit.saveProduct(productEntity);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: green,
-        content: const Text('Prodotto aggiunto con successo!'),
-        duration: const Duration(milliseconds: 3000),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(3),
-        ),
-      ),
-    );
-    Navigator.pop(context);
-  }
+  formSubmit() {
+    if (_formKey.currentState!.validate()) {
+      ProductEntity productEntity = ProductEntity(
+        name: nameController.text,
+        price: double.tryParse(priceController.text),
+        //TODO SALVARE CORRETTAMENTE LA FOTO
+        photoName:  nameController.text,
+      );
+      _searchProductsCubit.saveProduct(productEntity);
 
+      nameController.text = "";
+      priceController.text = "";
+
+      SuccessSnackbar(context, text: 'Prodotto aggiunto con successo!');
+
+      Navigator.pop(context);
+    }
+  }
 }

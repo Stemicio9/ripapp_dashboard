@@ -35,9 +35,17 @@ class SearchAgencyCubit extends Cubit<SearchAgencyState> {
     try {
       print("FACCIO LA FETCH DELLE AGENZIE");
       // todo manage if agencies is null or empty in response
-        var result = await AgencyRepository().getAgencies().then((agencies) => emit(SearchAgencyLoaded(agencies, agencies.first))).catchError((e) => emit(SearchAgencyError()));
+        var agencies = await AgencyRepository().getAgencies();
+        if(agencies.isEmpty){
+          emit(SearchAgencyLoaded(agencies, null));
+        }else{
+          emit(SearchAgencyLoaded(agencies, agencies.first));
+        }
+
     }catch(e){
         // ignore
+      print("ERRORE SULLA GET");
+      print(e);
       emit(SearchAgencyError());
       }
     }
