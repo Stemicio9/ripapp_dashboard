@@ -125,6 +125,19 @@ class DemiseTableState extends State<DemiseTable>{
             }
             if (state is SearchDemiseLoaded){
               demises = state.demises;
+
+              if(demises.isEmpty){
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: Texth2V2(
+                        testo: 'Nessun decesso inserito',
+                        weight: FontWeight.bold,
+                        color: background
+                    ),
+                  ),
+                );
+              }else{
               return Container(
                 padding: getPadding(top: 20),
                 width: MediaQuery
@@ -146,8 +159,8 @@ class DemiseTableState extends State<DemiseTable>{
                   columns: createHeaderTable(),
                   rows: createRows(),
                 ),
-              );}
-            else return ErrorWidget("amioii");
+              );}}
+            else return ErrorWidget("ERRORE DI CARICAMENTO");
           });
 
 

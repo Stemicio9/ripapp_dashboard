@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ripapp_dashboard/constants/app_roles.dart';
-import 'package:ripapp_dashboard/models/UserEntity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
-import 'package:ripapp_dashboard/repositories/user_repository.dart';
 
 class CustomFirebaseAuthenticationListener with ChangeNotifier {
 

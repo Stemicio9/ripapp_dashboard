@@ -63,18 +63,26 @@ class UsersTableState extends State<UsersTable>{
   Widget build(BuildContext context) {
     return BlocBuilder<UsersListCubit, UsersListState>(
         builder: (context, state) {
-          print("ciao");
-          print(state.runtimeType);
+
           if (state is UsersListLoading) {
             return const Center(
                 child: CircularProgressIndicator()
             );
           } else if (state is UsersListLoaded) {
-            if ((state.accountList).isEmpty) {
-              return ErrorWidget("lista vuota"); //TODO aggiungere errore
+            usersList = state.accountList;
+            if (usersList.isEmpty) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: Texth2V2(
+                      testo: 'Nessun utente inserito',
+                      weight: FontWeight.bold,
+                      color: background
+                  ),
+                ),
+              );
             }
             else {
-              usersList = state.accountList;
               return Container(
                 padding: getPadding(top: 20),
                 width: MediaQuery.of(context).size.width,

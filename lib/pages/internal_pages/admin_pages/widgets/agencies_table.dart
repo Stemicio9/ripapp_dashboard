@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
@@ -85,24 +87,44 @@ class AgenciesTableState extends State<AgenciesTable> {
             }
             if (state is SearchAgencyLoaded){
               agencies = state.agencies;
-              return Container(
-                padding: getPadding(top: 20),
-                width: MediaQuery.of(context).size.width,
-                child: DataTable(
-                  columnSpacing: 30,
-                  dataRowColor: MaterialStateColor.resolveWith((states) => white),
-                  headingRowColor: MaterialStateColor.resolveWith((states) => background),
-                  border: const TableBorder(
-                    top: BorderSide(width: 0.5, color: greyState),
-                    bottom: BorderSide(width: 0.5, color: greyState),
-                    left: BorderSide(width: 0.5, color: greyState),
-                    right: BorderSide(width: 0.5, color: greyState),
-                    horizontalInside: BorderSide(width: 0.5, color: greyState),
+
+              if(agencies.isEmpty){
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: Texth2V2(
+                        testo: 'Nessuna agenzia inserita',
+                        weight: FontWeight.bold,
+                        color: background
+                    ),
                   ),
-                  columns: createHeaderTable(),
-                  rows: createRows(),
-                ),
-              );
+                );
+              }else {
+                return Container(
+                  padding: getPadding(top: 20),
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  child: DataTable(
+                    columnSpacing: 30,
+                    dataRowColor: MaterialStateColor.resolveWith((
+                        states) => white),
+                    headingRowColor: MaterialStateColor.resolveWith((
+                        states) => background),
+                    border: const TableBorder(
+                      top: BorderSide(width: 0.5, color: greyState),
+                      bottom: BorderSide(width: 0.5, color: greyState),
+                      left: BorderSide(width: 0.5, color: greyState),
+                      right: BorderSide(width: 0.5, color: greyState),
+                      horizontalInside: BorderSide(
+                          width: 0.5, color: greyState),
+                    ),
+                    columns: createHeaderTable(),
+                    rows: createRows(),
+                  ),
+                );
+              }
             }
             else return ErrorWidget("ERRORE DI CARICAMENTO");
           });

@@ -147,6 +147,9 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   late String selectedValue;
   late AgencyEntity selectedAgency;
   List<dynamic> cityList = [];
+  List<String> emptyList = [
+    'Seleziona agenzia'
+  ];
 
 
   @override
@@ -467,12 +470,36 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                       child: BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
                                           builder: (context, state){
 
-                                            if (state is SearchAgencyLoading)
-                                              return CircularProgressIndicator();
-                                            else if (state is SearchAgencyLoaded) {
-                                              if ((state.agencies as List)
-                                                  .length == 0) {
-                                                return ErrorWidget("lista vuota"); //TODO aggiungere errore
+                                            if (state is SearchAgencyLoading) {
+                                              return const Center(child: CircularProgressIndicator());
+
+                                            } else if (state is SearchAgencyLoaded) {
+                                              if (state.agencies.isEmpty) {
+                                                return DropdownButton<String>(
+                                                  hint: const Padding(
+                                                    padding: EdgeInsets.only(left: 20),
+                                                    child: Text(
+                                                      "Seleziona agenzia",
+                                                      style: TextStyle(
+                                                        color: black,
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.normal,
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  isExpanded: true,
+                                                  underline: const SizedBox(),
+                                                  onChanged: (String? value) {
+
+                                                  },
+                                                  items: emptyList.map<DropdownMenuItem<String>>((String value) {
+                                                    return DropdownMenuItem<String>(
+                                                      value: value,
+                                                      child: Text(value),
+                                                    );
+                                                  }).toList(),
+                                                );
                                               }
                                               else {
                                                 List<AgencyEntity> agencies = state.agencies;

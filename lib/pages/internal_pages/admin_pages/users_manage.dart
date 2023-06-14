@@ -1,5 +1,8 @@
+import 'dart:js_interop';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
@@ -89,7 +92,6 @@ class UsersManageState extends State<UsersManageWidget> {
   setAgencyFromDropdown(AgencyEntity agencyEntity){
     userEntity.agency = agencyEntity;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -224,38 +226,44 @@ class UsersManageState extends State<UsersManageWidget> {
 
 
   formSubmit(){
-    if(_formKey.currentState!.validate()){
-    userEntity.firstName = nameController.text;
-    userEntity.lastName = lastNameController.text;
-    userEntity.email = emailController.text;
-    userEntity.phoneNumber = phoneController.text;
-    userEntity.password = passwordController.text;
-    //  userEntity.city = widget.filterController.text;
+    if(_formKey.currentState!.validate()) {
+      userEntity.firstName = nameController.text;
+      userEntity.lastName = lastNameController.text;
+      userEntity.email = emailController.text;
+      userEntity.phoneNumber = phoneController.text;
+      userEntity.password = passwordController.text;
+      //  userEntity.city = widget.filterController.text;
 
-    if (userEntity.email != "" && userEntity.password != "") {
-      FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: userEntity.email ?? "",
-          password: userEntity.password ?? "").then((value) async {
-        if (value.user == null) {
-          print("Utente nullo");
-          return; //TODO: Handle error
+
+        if (userEntity.email != "" && userEntity.password != "") {
+          FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: userEntity.email ?? "",
+              password: userEntity.password ?? "").then((value) async {
+            if (value.user == null) {
+              print("Utente nullo");
+              return; //TODO: Handle error
+            }
+
+
+            print("SALVO SU DB LOCALE");
+            _userListCubit.signup(userEntity);
+            nameController.text = "";
+            lastNameController.text = "";
+            passwordController.text = "";
+            emailController.text = "";
+            phoneController.text = "";
+
+            SuccessSnackbar(context, text: 'Utente aggiunto con successo!');
+            Navigator.pop(context);
+          }, onError: (e){
+                print(e);
+                ErrorSnackbar(context, text: 'L\'email inserita è già usata da un altro utente!');
+          });
         }
 
-        print("SALVO SU DB LOCALE");
-        _userListCubit.signup(userEntity);
-        nameController.text = "";
-        lastNameController.text = "";
-        passwordController.text = "";
-        emailController.text = "";
-        phoneController.text = "";
-
-        SuccessSnackbar(context, text: 'Utente aggiunto con successo!');
-        Navigator.pop(context);
-      });
-     }
+      }
     }
 
-  }
 }
 
 

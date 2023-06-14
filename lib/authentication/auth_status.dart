@@ -44,8 +44,7 @@ class AuthExceptionHandler {
         errorMessage = "Your email or password is wrong.";
         break;
       case AuthStatus.emailAlreadyExists:
-        errorMessage =
-        "The email address is already in use by another account.";
+        errorMessage = "The email address is already in use by another account.";
         break;
       default:
         errorMessage = "An error occured. Please try again later.";
