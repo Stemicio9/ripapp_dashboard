@@ -105,7 +105,7 @@ class AddDemiseState extends State<AddDemise> {
 
                 //deceased data
                 DeceasedData(
-                 // imageFile: imageFile,
+                  // imageFile: imageFile,
                   imageOnTap: () async {
                     Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
                     print(pickedImage);
@@ -114,10 +114,10 @@ class AddDemiseState extends State<AddDemise> {
                     });
 
                     //TODO SALVARE IMMAGINE SU FIRESTORAGE
-                   // final storageRef = FirebaseStorage.instance.ref();
-                  //  final path = "profile_images/deceased_images/$imageFile";
-                  //  final imageRef = storageRef.child(path);
-                  //  imageRef.putFile(imageFile);
+                    // final storageRef = FirebaseStorage.instance.ref();
+                    //  final path = "profile_images/deceased_images/$imageFile";
+                    //  final imageRef = storageRef.child(path);
+                    //  imageRef.putFile(imageFile);
 
                   },
 
@@ -146,7 +146,7 @@ class AddDemiseState extends State<AddDemise> {
                         lastDate: DateTime.now().add(const Duration(days: 365)));
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                      DateFormat('dd-MM-yyyy').format(pickedDate);
                       setState(() {
                         deceasedDateController.text = formattedDate;
                       });
@@ -155,11 +155,20 @@ class AddDemiseState extends State<AddDemise> {
                     }
                   },
                   onDragDone: (detail) async {
-                    setState(() {
-                      _list.addAll(detail.files);
-                      print('STAMPO IL FILE PICKATO');
-                      print(detail.files);
-                    });
+                    if(_list.isEmpty){
+                      setState(() {
+                        _list.addAll(detail.files);
+                        print('STAMPO IL FILE PICKATO');
+                        print(detail.files);
+                      });
+                    }else{
+                      setState(() {
+                        _list.removeLast();
+                        _list.addAll(detail.files);
+                        print('STAMPO IL FILE PICKATO');
+                        print(detail.files);
+                      });
+                    }
 
                     debugPrint('onDragDone:');
                     for (final file in detail.files) {
@@ -193,25 +202,25 @@ class AddDemiseState extends State<AddDemise> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         color:
-                            _dragging ? Colors.blue.withOpacity(0.4) : greyDrag,
+                        _dragging ? Colors.blue.withOpacity(0.4) : greyDrag,
                       ),
                       child: Stack(
                         children: [
                           if (_list.isEmpty)
                             Center(
 
-                               child: Texth2V2(
-                                  testo: 'Trascina qui un file',
-                                  color: greyDisabled,
-                                  weight: FontWeight.bold,
-                                ),
+                              child: Texth2V2(
+                                testo: 'Trascina qui un file',
+                                color: greyDisabled,
+                                weight: FontWeight.bold,
+                              ),
                             )
                           else
                             Center(
                               child:  Texth4V2(
-                                  testo: _list.map((e) => e.name).join("\n"),
-                                  color: black,
-                                  weight: FontWeight.bold,
+                                testo: _list.map((e) => e.name).join("\n"),
+                                color: black,
+                                weight: FontWeight.bold,
                               ),
                             ),
                           if (offset != null)
@@ -261,10 +270,10 @@ class AddDemiseState extends State<AddDemise> {
                           initialDate: DateTime.now(),
                           firstDate: DateTime.now(),
                           lastDate:
-                              DateTime.now().add(const Duration(days: 365)));
+                          DateTime.now().add(const Duration(days: 365)));
                       if (pickedDate != null) {
                         String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
+                        DateFormat('dd-MM-yyyy').format(pickedDate);
                         setState(() {
                           wakeDateController.text = formattedDate;
                         });
@@ -308,10 +317,10 @@ class AddDemiseState extends State<AddDemise> {
                           initialDate: DateTime.now(),
                           firstDate: DateTime.now(),
                           lastDate:
-                              DateTime.now().add(const Duration(days: 365)));
+                          DateTime.now().add(const Duration(days: 365)));
                       if (pickedDate != null) {
                         String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
+                        DateFormat('dd-MM-yyyy').format(pickedDate);
                         setState(() {
                           funeralDateController.text = formattedDate;
                         });
@@ -355,28 +364,32 @@ class AddDemiseState extends State<AddDemise> {
 
   formSubmit() {
     if(_formKey.currentState!.validate()){
-    DemiseEntity demiseEntity = DemiseEntity();
-    demiseEntity.firstName = (nameController.text);
-    demiseEntity.lastName = (lastNameController.text);
-    demiseEntity.city = CityEntity(name: cityController.text);
-    demiseEntity.phoneNumber = (phoneController.text);
-    demiseEntity.age = int.parse(ageController.text);
-    demiseEntity.deceasedDate = convertDate(deceasedDateController.text);
-    demiseEntity.wakeAddress = (addressController.text);
-    demiseEntity.wakeDateTime = convertDate(wakeDateController.text);
-    demiseEntity.wakeNote = (wakeNoteController.text);
-    demiseEntity.funeralAddress= (funeralAddressController.text);
-    demiseEntity.funeralDateTime = convertDate(funeralDateController.text);
-    demiseEntity.funeralNotes = (funeralNoteController.text);
-    //demiseEntity.cities = (citiesController.text);
-    //demiseEntity.relative = (relativeController.text);
-    _searchDemiseCubit.saveProduct(demiseEntity);
-    SuccessSnackbar(
-        context,
-        text: 'Defunto aggiunto con successo!'
-    );
-    Navigator.pop(context);
-   }else{
+      if(_list.isEmpty){
+        ErrorSnackbar(context, text: 'Inserire necrologio!');
+      }else{
+        DemiseEntity demiseEntity = DemiseEntity();
+        demiseEntity.firstName = (nameController.text);
+        demiseEntity.lastName = (lastNameController.text);
+        demiseEntity.city = CityEntity(name: cityController.text);
+        demiseEntity.phoneNumber = (phoneController.text);
+        demiseEntity.age = int.parse(ageController.text);
+        demiseEntity.deceasedDate = convertDate(deceasedDateController.text);
+        demiseEntity.wakeAddress = (addressController.text);
+        demiseEntity.wakeDateTime = convertDate(wakeDateController.text);
+        demiseEntity.wakeNote = (wakeNoteController.text);
+        demiseEntity.funeralAddress= (funeralAddressController.text);
+        demiseEntity.funeralDateTime = convertDate(funeralDateController.text);
+        demiseEntity.funeralNotes = (funeralNoteController.text);
+        //demiseEntity.cities = (citiesController.text);
+        //demiseEntity.relative = (relativeController.text);
+        _searchDemiseCubit.saveProduct(demiseEntity);
+        SuccessSnackbar(
+            context,
+            text: 'Defunto aggiunto con successo!'
+        );
+        Navigator.pop(context);
+      }
+    }else{
       ErrorSnackbar(
           context,
           text: 'Impossibile aggiungere defunto!'
@@ -387,12 +400,12 @@ class AddDemiseState extends State<AddDemise> {
   void createNewRelativeRow() {
     selectedValues.add(kinship.first);
     var x = RelativeRow(
-        onChanged: changeDropdown,
-        kinship: kinship,
-        relativeValidator: notEmptyValidate,
-        relativeController: relativeController,
-        deleteRelative: deleteRelative,
-        value: selectedValues.last,
+      onChanged: changeDropdown,
+      kinship: kinship,
+      relativeValidator: notEmptyValidate,
+      relativeController: relativeController,
+      deleteRelative: deleteRelative,
+      value: selectedValues.last,
     );
 
     // RelativeRow(onChanged: (String? value) {

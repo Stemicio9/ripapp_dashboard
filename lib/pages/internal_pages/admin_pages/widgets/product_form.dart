@@ -17,7 +17,6 @@ class ProductForm extends StatelessWidget {
   final String cardTitle;
   final TextEditingController nameController;
   final TextEditingController priceController;
-
   final dynamic nameValidator;
   final dynamic priceValidator;
   final dynamic descriptionValidator;
@@ -143,9 +142,7 @@ class ProductForm extends StatelessWidget {
                                   hinttext: getCurrentLanguageValue(PRICE)!,
                                   controller: priceController,
                                   validator: priceValidator,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ], // O,
+
                                   keyboard: TextInputType.number,
                                   paddingRight: 0,
                                   paddingLeft: 0,

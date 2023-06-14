@@ -76,8 +76,8 @@ class MyProductsState extends State<MyProducts>{
             Header(
               deleteProfileOnTap: (){},
               onTap: (){
-                showDialog(context: context, builder: (ctx)=>
-                     ProductsPopup(
+                showDialog(context: context,
+                    builder: (ctx)=> ProductsPopup(
                       onTap: changeAgencyProducts
                       )
                 );

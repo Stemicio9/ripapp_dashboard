@@ -6,6 +6,7 @@ import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/constants/app_roles.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
@@ -146,6 +147,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
   late String selectedValue;
   late AgencyEntity selectedAgency;
+  late bool _passwordVisible;
   List<dynamic> cityList = [];
   List<String> emptyList = [
     'Seleziona agenzia'
@@ -157,6 +159,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
     selectedValue = widget.roles.first;
     widget.statusChange(selectedValue);
     _searchAgencyCubit.fetchAgencies();
+    _passwordVisible = false;
     super.initState();
   }
 
@@ -291,11 +294,20 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                     ),
                                   ),
                                   InputsV2Widget(
-                                    isPassword: true,
+                                    iconOnTap: (){
+                                      setState(() {
+                                        _passwordVisible = !_passwordVisible;
+                                      });
+                                    },
+                                    isPassword: !_passwordVisible,
                                     hinttext: getCurrentLanguageValue(PASSWORD)!,
                                     controller: widget.passwordController,
                                     validator: widget.passwordValidator,
                                     paddingRight: 0,
+                                    suffixIcon: _passwordVisible ? ImagesConstants.imgPassSee : ImagesConstants.imgPassUnsee,
+                                    isSuffixIcon: true,
+                                    suffixIconHeight: 25,
+                                    suffixIconWidth: 25,
                                     paddingLeft: 10,
                                     borderSide: const BorderSide(color: greyState),
                                     activeBorderSide: const BorderSide(color: background),

@@ -11,5 +11,9 @@ class ImagesConstants{
 
   static String imgDemisePlaceholder = "assets/images/demise_placeholder.jpeg";
 
+  static String imgPassSee = "assets/images/pass_icon_see.png";
+
+  static String imgPassUnsee = "assets/images/pass_icon_unsee.png";
+
 
 }

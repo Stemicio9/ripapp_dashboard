@@ -240,7 +240,7 @@ class DemiseTableState extends State<DemiseTable>{
               message: detailMessage,
               direction: AxisDirection.down,
               child: GestureDetector(
-                  onTap:  (){showDetail(p);},
+                  onTap:  showDetail,
                   child: const MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Icon(

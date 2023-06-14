@@ -38,6 +38,11 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
       BlocBuilder<SearchProductsOfferedCubit, SearchProductsOfferedState>(
           builder: (context, state)
     {
+      if(state is SearchProductsOfferedLoading){
+        return const Center(
+            child: CircularProgressIndicator()
+        );
+      }
       if (state is SearchProductsOfferedLoaded) {
         products.clear();
         state.productsOffered.forEach((
@@ -45,6 +50,20 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
           if (productOffered.offered)
             products.add(productOffered.productEntity);
         });
+
+        if (products.isEmpty) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: Texth2V2(
+                  testo: 'Nessun prodotto selezionato',
+                  weight: FontWeight.bold,
+                  color: background
+              ),
+            ),
+          );
+        }
+
         return Container(
           padding: getPadding(top: 20),
           width: MediaQuery.of(context).size.width,

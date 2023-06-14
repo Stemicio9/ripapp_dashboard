@@ -11,6 +11,8 @@ import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/utilities/image_utility.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../constants/images_constants.dart';
+
 
 class LoginForm extends StatefulWidget {
   @override
@@ -21,12 +23,17 @@ class LoginForm extends StatefulWidget {
 
 
 class LoginFormState extends State<LoginForm>{
-
+  late bool _passwordVisible;
   final _formKey = GlobalKey<FormState>();
   final double logoWidth = 250;
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
 
+  @override
+  void initState() {
+    _passwordVisible = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +86,19 @@ class LoginFormState extends State<LoginForm>{
 
           ),
           InputsV2Widget(
+            iconOnTap: (){
+              setState(() {
+                _passwordVisible = !_passwordVisible;
+              });
+            },
+            isPassword: !_passwordVisible,
             hinttext: getCurrentLanguageValue(PASSWORD)!,
             controller: _passwordTextController,
             validator: validatePassword,
-            isPassword: true,
+            suffixIcon: _passwordVisible ? ImagesConstants.imgPassSee : ImagesConstants.imgPassUnsee,
+            isSuffixIcon: true,
+            suffixIconHeight: 25,
+            suffixIconWidth: 25,
             paddingTop: 10,
           ),
           Padding(
@@ -145,8 +161,9 @@ class LoginFormState extends State<LoginForm>{
 
   formsubmit() async {
    // if (_formKey.currentState!.validate()) {
-    FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailTextController.text, password: _passwordTextController.text).then((value) async {
-      print("TI SALUTO ");
+    FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailTextController.text,
+        password: _passwordTextController.text).then((value) async {
       String token = await value.user!.getIdToken();
       UserRepository().setFirebaseToken(token);
       var response = await UserRepository().loginPreLayer(token);

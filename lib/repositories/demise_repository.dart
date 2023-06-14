@@ -66,7 +66,7 @@ class DemiseRepository{
     try {
       //res = await _dio.post(searchDemisesByCityUrl, data: demisesSearchEntity.toJson(), options: Options(headers: buildHeaders()));
       UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
-      var userId = (user != null) ? user.id : 4;
+      var userId = (user != null) ? user.id : 43;
       Map<String, dynamic>? parameters = {};
       parameters.putIfAbsent("accountId", () => userId);
       res = await _dio.get(searchDemisesIgnorante, queryParameters: parameters);
