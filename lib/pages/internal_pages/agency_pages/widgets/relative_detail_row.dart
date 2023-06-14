@@ -31,7 +31,7 @@ class RelativeDetailRow extends StatelessWidget {
                     Padding(
                       padding: getPadding(bottom: 5),
                       child: Text(
-                        'IL DEFUNTO È:',
+                        'IL PARENTE È:',
                         style: SafeGoogleFont(
                           'Montserrat',
                           fontSize: 14,

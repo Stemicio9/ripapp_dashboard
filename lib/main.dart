@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider<SearchProductsOfferedCubit>(create: (_) => SearchProductsOfferedCubit()),
             BlocProvider<SearchProductCubit>(create: (_) => SearchProductCubit()),
-            BlocProvider<SearchDemiseCubit>(create: (_) => SearchDemiseCubit()),
+            BlocProvider<DemiseCubit>(create: (_) => DemiseCubit()),
             BlocProvider<SearchUsersCubit>(create: (_) => SearchUsersCubit()),
             BlocProvider<SearchAgencyCubit>(create: (_) => SearchAgencyCubit()),
             BlocProvider<UsersListCubit>(create: (_) => UsersListCubit()),

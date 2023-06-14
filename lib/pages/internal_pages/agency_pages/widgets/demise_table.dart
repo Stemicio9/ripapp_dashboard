@@ -33,7 +33,7 @@ class DemiseTable extends StatefulWidget {
 
 
 class DemiseTableState extends State<DemiseTable>{
-  SearchDemiseCubit get _searchDemiseCubit => context.read<SearchDemiseCubit>();
+  DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
 
   @override
   void initState() {
@@ -114,7 +114,7 @@ class DemiseTableState extends State<DemiseTable>{
   @override
   Widget build(BuildContext context) {
     return
-      BlocBuilder<SearchDemiseCubit, SearchDemiseState>(
+      BlocBuilder<DemiseCubit, DemiseState>(
           builder: (context, state) {
             print("COSTRUISCO LO STATO");
             print(state.runtimeType.toString());

@@ -12,6 +12,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_table.dart';
+import 'package:ripapp_dashboard/repositories/kinship_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 import '../../../blocs/users_list_cubit.dart';
@@ -138,7 +139,8 @@ class UsersManageState extends State<UsersManageWidget> {
                     context: context,
                     builder: (ctx) =>
                         UsersForm(
-                          onTap: (){formSubmit();},
+                          onTap: () async {
+                            formSubmit();},
                           cardTitle: getCurrentLanguageValue(ADD_USER)!,
                           nameController: widget.nameController,
                           emailController: widget.emailController,

@@ -7,8 +7,8 @@ import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 
-class SearchDemiseCubit extends Cubit<SearchDemiseState> {
-  SearchDemiseCubit() : super(SearchDemiseState());
+class DemiseCubit extends Cubit<DemiseState> {
+  DemiseCubit() : super(DemiseState());
 
   Future fetchDemises({ List<String> cities = const [], SearchSorting sorting = SearchSorting.date, int offset = 0}) async {
     if(offset == 0) {
@@ -51,14 +51,15 @@ class SearchDemiseCubit extends Cubit<SearchDemiseState> {
   }
 
   saveProduct(DemiseEntity demiseEntity) async{
-    emit(SearchDemiseLoading());
+    emit(SaveDemiseLoading());
     try{
-      var result = await DemiseRepository().saveDemise(demiseEntity);
+      DemiseEntity result = await DemiseRepository().saveDemise(demiseEntity);
+      emit(SaveDemiseLoaded(result));
       fetchDemises();
     }catch(e){
       print("ERRORE DI FETCH");
       print(e);
-      emit(SearchDemiseError());
+      emit(SaveDemiseError());
     }
   }
 
@@ -66,14 +67,21 @@ class SearchDemiseCubit extends Cubit<SearchDemiseState> {
 
 
 @immutable
-class SearchDemiseState{}
+class DemiseState{}
 
-class SearchDemiseLoading extends SearchDemiseState {}
+class SearchDemiseLoading extends DemiseState {}
 
-class SearchDemiseError extends SearchDemiseState {}
+class SearchDemiseError extends DemiseState {}
 
-class SearchDemiseLoaded extends SearchDemiseState {
+class SearchDemiseLoaded extends DemiseState {
   final List<DemiseEntity> demises;
   final bool loadingMore;
   SearchDemiseLoaded(this.demises, this.loadingMore);
 }
+
+class SaveDemiseLoading extends DemiseState {}
+class SaveDemiseLoaded extends DemiseState {
+  final DemiseEntity demiseSaved;
+  SaveDemiseLoaded(this.demiseSaved);
+}
+class SaveDemiseError extends DemiseState {}
