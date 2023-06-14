@@ -51,6 +51,8 @@ dependencies:
   currency_text_input_formatter: ^2.1.9
   meta: ^1.9.1
   flutter_bloc: ^8.1.3
+  number_paginator: ^0.2.3
+  firebase_storage: ^11.2.2
 
 
 dev_dependencies:

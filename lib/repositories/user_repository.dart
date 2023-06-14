@@ -60,7 +60,7 @@ class UserRepository {
   Future<List<UserEntity>> getList() async{
 
     Map<String, dynamic>? parameters = {};
-    int pageNumber = 0;
+    int pageNumber = 1;
     int pageElements = 9;
     AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
     parameters.putIfAbsent("pageNumber", () => searchEntity.pageNumber);
@@ -82,9 +82,30 @@ class UserRepository {
     return userEntityList;
     //return users;
   }
+  Future<List<UserEntity>> getListWithIndex(int pageIndex) async{
+
+    Map<String, dynamic>? parameters = {};
+    int pageNumber = 1;
+    int pageElements = 9;
+    AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
+    parameters.putIfAbsent("pageNumber", () => (pageIndex));
+    parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
+
+    Response response;
+    response = await _dio.get(listAccountUrl, queryParameters: parameters);
+    print("object");
+    print(response.data);
+    // todo this could be not necessary
+    String goodJson = jsonEncode(response.data);
+    //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
+    List<UserEntity> users = ((jsonDecode(goodJson) as Map)["content"] as List).map((user) => UserEntity.fromJson(user)).toList();
+    print("ecco i tuoi utenti" + users.toString() + users.length.toString());
+    //List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
+    //return userEntityList;
+    return users;
+  }
 
   Future<dynamic> deleteUser(int idUser) async{
-    print('simone');
     String urlDeleteUser = '$deleteUserUrl/$idUser';
     var response = await _dio.delete(urlDeleteUser);
     return response.data;

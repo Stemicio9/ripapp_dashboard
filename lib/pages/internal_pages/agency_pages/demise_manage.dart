@@ -27,7 +27,7 @@ class DemiseManageState extends State<DemiseManage>{
   final String deleteMessage = 'Elimina';
   final String message = 'Le informazioni riguardanti questo decesso verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
 
-  SearchDemiseCubit get _searchDemiseCubit => context.read<SearchDemiseCubit>();
+  DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();

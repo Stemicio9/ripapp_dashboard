@@ -42,12 +42,30 @@ class UsersListCubit extends Cubit<UsersListState> {
       emit(UsersListError());
     }
   }
+  fetchUsersListWithIndex(int index) async {
+    emit(UsersListLoading());
+    try {
+      print("FACCIO LA FETCH DEGLI ACCOUNT");
+      // todo manage if agencies is null or empty in response
+      print("Step 1: indice = " + index.toString());
+      var result = await UserRepository().getListWithIndex(index);
+      print("Step 2, risultatoooo = " + result.toString());
+      emit(UsersListLoaded(result));
+      print("Step 3");
+    }catch(e){
+      print("ERRORE");
+      print(e);
+      emit(UsersListError());
+    }
+  }
 
   delete(idUser) async {
     emit(UsersListLoading());
     try {
+      print("l'errore si verifica durante la delete");
       var result = await UserRepository().deleteUser(idUser);
-      fetchUsersList();
+      print("l'errore si verifica durante la fetch");
+      fetchUsersListWithIndex(0);
     } catch (e) {
       print("ERRORE");
       print(e);
@@ -59,7 +77,7 @@ class UsersListCubit extends Cubit<UsersListState> {
     emit(UsersListLoading());
     try {
       var result = await UserRepository().signup(userEntity);
-      fetchUsersList();
+      fetchUsersListWithIndex(0);
     } catch (e) {
       emit(UsersListError());
     }

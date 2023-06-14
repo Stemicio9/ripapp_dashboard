@@ -23,6 +23,12 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard> {
   String title = "";
   int currentPage = 1;
+  bool isSomeListPage = false;
+
+  void changeIsSomeListPage(bool newValue){
+    this.isSomeListPage = newValue;
+    print("cambio il valore di list showed a " + this.isSomeListPage.toString());
+  }
 
  // final UserCubit? userCubit;
 //  DashboardState({this.userCubit});
@@ -91,6 +97,7 @@ class DashboardState extends State<Dashboard> {
         body: _body(size, context),
         toggleTitle: '',
       ),
+      isSomeListShowed: isSomeListPage,
     );
   }
 
@@ -119,7 +126,7 @@ class DashboardState extends State<Dashboard> {
   Widget bodyChild() {
     switch (currentPage) {
       case 1:
-        return UsersManage();
+        return UsersManage(changeIsSomeListShowed: changeIsSomeListPage,);
       case 2:
         return AgenciesManage();
       case 3:

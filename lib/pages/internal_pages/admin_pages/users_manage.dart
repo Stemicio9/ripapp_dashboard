@@ -1,6 +1,7 @@
 import 'dart:js_interop';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,34 +17,59 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_table.dart';
+import 'package:ripapp_dashboard/repositories/kinship_repository.dart';
+import 'package:ripapp_dashboard/utils/AppUtils.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import '../../../blocs/users_list_cubit.dart';
+import 'package:number_paginator/number_paginator.dart';
 
 
 enum UserRoles { Amministratore, Agenzia, Utente }
 
 class UsersManage extends StatelessWidget{
 
+  final String detailMessage = 'Dettagli';
+  final String editMessage = 'Modifica';
+  final String deleteMessage = 'Elimina';
+  final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
+  final Function(bool isSomeListShowed) changeIsSomeListShowed;
+
+  const UsersManage({
+    required this.changeIsSomeListShowed,
+  });
+
+
   @override
   Widget build(BuildContext context) {
 
-    return BlocProvider(
+    /*return BlocProvider(
         create: (_) => UsersListCubit(),
-        child: UsersManageWidget()
-    );
+        child: UsersManageWidget(changeIsSomeListShowed: this.changeIsSomeListShowed,)
+    );*/
+    return UsersManageWidget(changeIsSomeListShowed: this.changeIsSomeListShowed,);
   }
 
 }
 
 class UsersManageWidget extends StatefulWidget {
+
+  final Function(bool isSomeListShowed) changeIsSomeListShowed;
+
+  UsersManageWidget({
+    required this.changeIsSomeListShowed,
+  });
+
   @override
   State<StatefulWidget> createState() {
-    return UsersManageState();
+    changeIsSomeListShowed(true);
+    return UsersManageWidgetState();
   }
 }
 
-class UsersManageState extends State<UsersManageWidget> {
+class UsersManageWidgetState extends State<UsersManageWidget> {
+
+
 
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
   List<String> cityOptions = <String>[
@@ -61,6 +87,8 @@ class UsersManageState extends State<UsersManageWidget> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController filterController = TextEditingController();
+  late Function(bool isSomeListShowed) changeIsSomeListShowed;
+
   UserEntity userEntity = new UserEntity(
     id:1,
     firstName: 'Davide',
@@ -95,6 +123,17 @@ class UsersManageState extends State<UsersManageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    nameController.text = "nome";
+    lastNameController.text = "cognome";
+    emailController.text = "email@mail.it";
+    phoneController.text = "3232";
+    filterController.text = "citta";
+    passwordController.text = "123456";
+    return Content();
+
+  }
+
+  Widget Content(){
     return SingleChildScrollView(
       child: Padding(
         padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
@@ -107,6 +146,7 @@ class UsersManageState extends State<UsersManageWidget> {
                 showDialog(
                     context: context,
                     builder: (ctx) =>
+
                         Form(
                           key:_formKey,
                           child: UsersForm(
@@ -153,7 +193,7 @@ class UsersManageState extends State<UsersManageWidget> {
                         )
                 );
               },
-              edit: (dynamic p) {
+              edit: () {
                 showDialog(
                     context: context,
                     barrierColor: blackTransparent,
@@ -216,6 +256,7 @@ class UsersManageState extends State<UsersManageWidget> {
               editMessage: editMessage,
               deleteMessage: deleteMessage,
             ),
+            //NumbersPage(),
           ],
         ),
       ),
@@ -242,6 +283,8 @@ class UsersManageState extends State<UsersManageWidget> {
             if (value.user == null) {
               print("Utente nullo");
               return; //TODO: Handle error
+            } else {
+              userEntity.idtoken = value.user!.uid;
             }
 
 
@@ -265,6 +308,3 @@ class UsersManageState extends State<UsersManageWidget> {
     }
 
 }
-
-
-
