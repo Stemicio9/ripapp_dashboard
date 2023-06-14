@@ -62,8 +62,10 @@ class UsersListCubit extends Cubit<UsersListState> {
   delete(idUser) async {
     emit(UsersListLoading());
     try {
+      print("l'errore si verifica durante la delete");
       var result = await UserRepository().deleteUser(idUser);
-      fetchUsersList();
+      print("l'errore si verifica durante la fetch");
+      fetchUsersListWithIndex(0);
     } catch (e) {
       print("ERRORE");
       print(e);
@@ -75,7 +77,7 @@ class UsersListCubit extends Cubit<UsersListState> {
     emit(UsersListLoading());
     try {
       var result = await UserRepository().signup(userEntity);
-      fetchUsersList();
+      fetchUsersListWithIndex(0);
     } catch (e) {
       emit(UsersListError());
     }

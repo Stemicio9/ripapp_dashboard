@@ -51,13 +51,23 @@ class UsersManage extends StatelessWidget{
 }
 
 class UsersManageWidget extends StatefulWidget {
+
+  final Function(bool isSomeListShowed) changeIsSomeListShowed;
+
+  UsersManageWidget({
+    required this.changeIsSomeListShowed,
+  });
+
   @override
   State<StatefulWidget> createState() {
+    changeIsSomeListShowed(true);
     return UsersManageWidgetState();
   }
 }
 
 class UsersManageWidgetState extends State<UsersManageWidget> {
+
+
 
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
   List<String> cityOptions = <String>[
@@ -75,26 +85,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController filterController = TextEditingController();
-  final Function(bool isSomeListShowed) changeIsSomeListShowed;
-
-  UsersManageWidget({
-    required this.changeIsSomeListShowed,
-  });
-
-  @override
-  State<StatefulWidget> createState() {
-    changeIsSomeListShowed(true);
-    return UsersManageState();
-  }
-}
-
-class UsersManageState extends State<UsersManageWidget> {
-
-  UsersListCubit get _userListCubit => context.read<UsersListCubit>();
-
-  List<String> cityOptions = <String>[
-    'Milano'
-  ];
+  late Function(bool isSomeListShowed) changeIsSomeListShowed;
 
   UserEntity userEntity = new UserEntity(
     id:1,
@@ -130,12 +121,12 @@ class UsersManageState extends State<UsersManageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    widget.nameController.text = "nome";
-    widget.lastNameController.text = "cognome";
-    widget.emailController.text = "email@mail.it";
-    widget.phoneController.text = "3232";
-    widget.filterController.text = "citta";
-    widget.passwordController.text = "123456";
+    nameController.text = "nome";
+    lastNameController.text = "cognome";
+    emailController.text = "email@mail.it";
+    phoneController.text = "3232";
+    filterController.text = "citta";
+    passwordController.text = "123456";
     return Content();
 
   }
@@ -153,20 +144,7 @@ class UsersManageState extends State<UsersManageWidget> {
                 showDialog(
                     context: context,
                     builder: (ctx) =>
-                        UsersForm(
-                          onTap: () async {
-                            formSubmit();},
-                          cardTitle: getCurrentLanguageValue(ADD_USER)!,
-                          nameController: widget.nameController,
-                          emailController: widget.emailController,
-                          phoneController: widget.phoneController,
-                          filterController: widget.filterController,
-                          options: cityOptions,
-                          lastNameController: widget.lastNameController,
-                          passwordController: widget.passwordController,
-                          statusChange: setStatusFromDropdown,
-                          agencyChange: setAgencyFromDropdown,
-                          roles: UserRoles.values.map((e) => e.name).toList(),
+
                         Form(
                           key:_formKey,
                           child: UsersForm(
@@ -303,6 +281,8 @@ class UsersManageState extends State<UsersManageWidget> {
             if (value.user == null) {
               print("Utente nullo");
               return; //TODO: Handle error
+            } else {
+              userEntity.idtoken = value.user!.uid;
             }
 
 
