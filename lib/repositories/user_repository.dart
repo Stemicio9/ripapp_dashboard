@@ -106,7 +106,6 @@ class UserRepository {
   }
 
   Future<dynamic> deleteUser(int idUser) async{
-    print('simone');
     String urlDeleteUser = '$deleteUserUrl/$idUser';
     var response = await _dio.delete(urlDeleteUser);
     return response.data;
