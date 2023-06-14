@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
@@ -13,17 +14,13 @@ import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_table.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
+import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import '../../../blocs/users_list_cubit.dart';
 
 
 enum UserRoles { Amministratore, Agenzia, Utente }
 
 class UsersManage extends StatelessWidget{
-
-  final String detailMessage = 'Dettagli';
-  final String editMessage = 'Modifica';
-  final String deleteMessage = 'Elimina';
-  final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +34,6 @@ class UsersManage extends StatelessWidget{
 }
 
 class UsersManageWidget extends StatefulWidget {
-
-  final String detailMessage = 'Dettagli';
-  final String editMessage = 'Modifica';
-  final String deleteMessage = 'Elimina';
-  final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
-
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController filterController = TextEditingController();
-
   @override
   State<StatefulWidget> createState() {
     return UsersManageState();
@@ -59,11 +43,21 @@ class UsersManageWidget extends StatefulWidget {
 class UsersManageState extends State<UsersManageWidget> {
 
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
-
   List<String> cityOptions = <String>[
     'Milano'
   ];
-
+  final String detailMessage = 'Dettagli';
+  final String editMessage = 'Modifica';
+  final String deleteMessage = 'Elimina';
+  final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
+  final _formKey = GlobalKey<FormState>();
+  final _editKey = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController filterController = TextEditingController();
   UserEntity userEntity = new UserEntity(
     id:1,
     firstName: 'Davide',
@@ -99,17 +93,6 @@ class UsersManageState extends State<UsersManageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    widget.nameController.text = "";
-    widget.lastNameController.text = "";
-    widget.emailController.text = "";
-    widget.phoneController.text = "";
-    widget.filterController.text = "";
-    widget.passwordController.text = "";
-    return Content();
-
-  }
-
-  Widget Content(){
     return SingleChildScrollView(
       child: Padding(
         padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
@@ -122,19 +105,27 @@ class UsersManageState extends State<UsersManageWidget> {
                 showDialog(
                     context: context,
                     builder: (ctx) =>
-                        UsersForm(
-                          onTap: (){formSubmit();},
-                          cardTitle: getCurrentLanguageValue(ADD_USER)!,
-                          nameController: widget.nameController,
-                          emailController: widget.emailController,
-                          phoneController: widget.phoneController,
-                          filterController: widget.filterController,
-                          options: cityOptions,
-                          lastNameController: widget.lastNameController,
-                          passwordController: widget.passwordController,
-                          statusChange: setStatusFromDropdown,
-                          agencyChange: setAgencyFromDropdown,
-                          roles: UserRoles.values.map((e) => e.name).toList(),
+                        Form(
+                          key:_formKey,
+                          child: UsersForm(
+                            cardTitle: getCurrentLanguageValue(ADD_USER)!,
+                            nameController: nameController,
+                            emailController: emailController,
+                            phoneController: phoneController,
+                            filterController: filterController,
+                            options: cityOptions,
+                            lastNameController: lastNameController,
+                            passwordController: passwordController,
+                            nameValidator: notEmptyValidate,
+                            lastNameValidator: notEmptyValidate,
+                            passwordValidator: validatePassword,
+                            emailValidator: validateEmail,
+                            phoneValidator: notEmptyValidate,
+                            statusChange: setStatusFromDropdown,
+                            agencyChange: setAgencyFromDropdown,
+                            onTap: (){formSubmit();},
+                            roles: UserRoles.values.map((e) => e.name).toList(),
+                          ),
                         ));
               },
               pageTitle: getCurrentLanguageValue(USERS_MANAGE)!,
@@ -149,23 +140,14 @@ class UsersManageState extends State<UsersManageWidget> {
                         DeleteMessageDialog(
                             onConfirm: () {
                               _userListCubit.delete(p.id);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: green,
-                                  content: const Text('Utente eliminato con successo!'),
-                                  duration: const Duration(milliseconds: 3000),
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(3),
-                                  ),
-                                ),
-                              );
+                              SuccessSnackbar(context, text: 'Utente eliminato con successo!');
+
                               Navigator.pop(context);
                             },
                             onCancel: () {
                               Navigator.pop(context);
                             },
-                            message: widget.message
+                            message: message
                         )
                 );
               },
@@ -174,21 +156,38 @@ class UsersManageState extends State<UsersManageWidget> {
                     context: context,
                     barrierColor: blackTransparent,
                     builder: (ctx) =>
-                        UsersForm(
-                          statusChange: setStatusFromDropdown,
-                          agencyChange: setAgencyFromDropdown,
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          cardTitle: getCurrentLanguageValue(EDIT_USER)!,
-                          nameController: widget.nameController,
-                          emailController: widget.emailController,
-                          phoneController: widget.phoneController,
-                          filterController: widget.filterController,
-                          options: cityOptions,
-                          lastNameController: widget.lastNameController,
-                          passwordController: widget.passwordController,
-                          roles: UserRoles.values.map((e) => e.name).toList(),
+                        Form(
+                          key: _editKey,
+                          child: UsersForm(
+                             statusChange: setStatusFromDropdown,
+                            agencyChange: setAgencyFromDropdown,
+                            onTap: () {
+                              if(_editKey.currentState!.validate()) {
+                                nameController.text = "";
+                                lastNameController.text = "";
+                                passwordController.text = "";
+                                emailController.text = "";
+                                phoneController.text = "";
+                                SuccessSnackbar(context, text: 'Utente modificato con successo!');
+
+                                Navigator.pop(context);
+                              }
+                            },
+                            cardTitle: getCurrentLanguageValue(EDIT_USER)!,
+                            nameController: nameController,
+                            emailController: emailController,
+                            phoneController: phoneController,
+                            filterController: filterController,
+                            options: cityOptions,
+                            lastNameController: lastNameController,
+                            passwordController: passwordController,
+                            nameValidator: notEmptyValidate,
+                            lastNameValidator: notEmptyValidate,
+                            passwordValidator: validatePassword,
+                            emailValidator: validateEmail,
+                            phoneValidator: notEmptyValidate,
+                            roles: UserRoles.values.map((e) => e.name).toList(),
+                          ),
                         ));
               },
               showDetail: (dynamic p) {
@@ -211,9 +210,9 @@ class UsersManageState extends State<UsersManageWidget> {
                           'Amministratore',
                         ));
               },
-              detailMessage: widget.detailMessage,
-              editMessage: widget.editMessage,
-              deleteMessage: widget.deleteMessage,
+              detailMessage: detailMessage,
+              editMessage: editMessage,
+              deleteMessage: deleteMessage,
             ),
           ],
         ),
@@ -225,11 +224,12 @@ class UsersManageState extends State<UsersManageWidget> {
 
 
   formSubmit(){
-    userEntity.firstName = widget.nameController.text;
-    userEntity.lastName = widget.lastNameController.text;
-    userEntity.email = widget.emailController.text;
-    userEntity.phoneNumber = widget.phoneController.text;
-    userEntity.password = widget.passwordController.text;
+    if(_formKey.currentState!.validate()){
+    userEntity.firstName = nameController.text;
+    userEntity.lastName = lastNameController.text;
+    userEntity.email = emailController.text;
+    userEntity.phoneNumber = phoneController.text;
+    userEntity.password = passwordController.text;
     //  userEntity.city = widget.filterController.text;
 
     if (userEntity.email != "" && userEntity.password != "") {
@@ -243,19 +243,16 @@ class UsersManageState extends State<UsersManageWidget> {
 
         print("SALVO SU DB LOCALE");
         _userListCubit.signup(userEntity);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: green,
-            content: const Text('Utente aggiunto con successo!'),
-            duration: const Duration(milliseconds: 3000),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(3),
-            ),
-          ),
-        );
+        nameController.text = "";
+        lastNameController.text = "";
+        passwordController.text = "";
+        emailController.text = "";
+        phoneController.text = "";
+
+        SuccessSnackbar(context, text: 'Utente aggiunto con successo!');
         Navigator.pop(context);
       });
+     }
     }
 
   }

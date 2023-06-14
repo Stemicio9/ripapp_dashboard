@@ -6,6 +6,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/profi
 
 import '../../../constants/colors.dart';
 import '../../../constants/language.dart';
+import '../../../constants/validators.dart';
 import '../../../utils/size_utils.dart';
 import '../header.dart';
 
@@ -27,6 +28,8 @@ class AgencyProfileState extends State<AgencyProfile>{
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   late Image imageFile;
+  final _formKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,49 +60,60 @@ class AgencyProfileState extends State<AgencyProfile>{
             onTap: (){
               showDialog(
                   context: context,
-                  builder: (ctx) => EditProfileForm(
-                      changePassword:(){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: green,
-                            content: const Text('Ti abbiamo inviato una mail per il reset della password!'),
-                            duration: const Duration(milliseconds: 3000),
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3),
+                  builder: (ctx) => Form(
+                    key: _formKey,
+                    child: EditProfileForm(
+                        cardTitle: getCurrentLanguageValue(EDIT_PROFILE) ?? "",
+                        nameController: nameController,
+                        lastNameController: lastNameController,
+                        emailController: emailController,
+                        phoneController: phoneController,
+                        phoneValidator: notEmptyValidate,
+                        emailValidator: validateEmail,
+                        lastNameValidator: notEmptyValidate,
+                        nameValidator: notEmptyValidate,
+                        changePassword:(){
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: green,
+                              content: const Text('Ti abbiamo inviato una mail per il reset della password!'),
+                              duration: const Duration(milliseconds: 3000),
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3),
+                              ),
                             ),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      } ,
-                      imageOnTap: () async {
-                        //TODO: IMPLEMENTARE IMAGEPICKER
-                        // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
-                        Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
-                        print(pickedImage);
-                        setState(() {
-                          imageFile = pickedImage!;
-                        });
-                      },
-                      onTap: (){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: green,
-                            content: const Text('Profilo modificato con successo!'),
-                            duration: const Duration(milliseconds: 3000),
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      },
-                      cardTitle: getCurrentLanguageValue(EDIT_PROFILE) ?? "",
-                      nameController: nameController,
-                      lastNameController: lastNameController,
-                      emailController: emailController,
-                      phoneController: phoneController
+                          );
+                          Navigator.pop(context);
+                        } ,
+                        imageOnTap: () async {
+                          //TODO: IMPLEMENTARE IMAGEPICKER
+                          // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
+                          Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
+                          print(pickedImage);
+                          setState(() {
+                            imageFile = pickedImage!;
+                          });
+                        },
+                        onTap: (){
+                          if(_formKey.currentState!.validate()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: green,
+                                content: const Text(
+                                    'Profilo modificato con successo!'),
+                                duration: const Duration(milliseconds: 3000),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              ),
+                            );
+                            Navigator.pop(context);
+                          }
+                        }
+
+                    ),
                   )
               );
             },

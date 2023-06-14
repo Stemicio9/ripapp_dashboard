@@ -14,6 +14,7 @@ class InputsV2Widget extends StatelessWidget {
   bool autofocus;
   TextInputType keyboard;
   bool? enabled = true;
+  final TextStyle errorStyle;
   final textInputAction;
   final prefixIcon;
   final bool isPrefixIcon;
@@ -50,46 +51,48 @@ class InputsV2Widget extends StatelessWidget {
 
   InputsV2Widget(
       {required hinttext,
-      required this.controller,
-      this.isPassword = false,
-      this.borderRadius = 3,
-      this.elevation = 0,
-      this.textAlign = TextAlign.start,
-      this.contentPaddingLeft = 20,
-      this.contentPaddingTop = 0,
-      this.contentPaddingRight = 0,
-      this.validator = defaultValidator,
-      this.onChanged = funzioneCostante,
-      this.autofocus = false,
-      this.keyboard = TextInputType.text,
-      this.enabled,
-      this.textInputAction = TextInputAction.next,
-      this.prefixIcon,
-      this.multiline = false,
-      this.maxLine = 4,
-      this.fontSize = 14,
-      this.fontHintSize = 14,
-      this.paddingRight = 20,
-      this.paddingTop = 0,
-      this.paddingLeft = 20,
-      this.paddingBottom = 0,
-      this.focusNode,
-      this.onTap,
-      this.readOnly = false,
-      this.isPrefixIcon = false,
-      this.prefixIconHeight = 25,
-      this.prefixIconWidth = 25,
-      this.isSuffixIcon = false,
-      this.suffixIconHeight = 25,
-      this.suffixIconWidth = 25,
-      this.suffixIcon,
-      this.svgPath = '',
-      this.iconOnTap,
-      this.inputFormatters,
+        required this.controller,
+        this.isPassword = false,
+        this.borderRadius = 3,
+        this.errorStyle = const TextStyle(color: Colors.redAccent),
+        this.elevation = 0,
+        this.textAlign = TextAlign.start,
+        this.contentPaddingLeft = 20,
+        this.contentPaddingTop = 0,
+        this.contentPaddingRight = 0,
+        this.validator = defaultValidator,
+        this.onChanged = funzioneCostante,
+        this.autofocus = false,
+        this.keyboard = TextInputType.text,
+        this.enabled,
+        this.textInputAction = TextInputAction.next,
+        this.prefixIcon,
+        this.multiline = false,
+        this.maxLine = 4,
+        this.fontSize = 14,
+        this.fontHintSize = 14,
+        this.paddingRight = 20,
+        this.paddingTop = 0,
+        this.paddingLeft = 20,
+        this.paddingBottom = 0,
+        this.focusNode,
+        this.onTap,
+        this.readOnly = false,
+        this.isPrefixIcon = false,
+        this.prefixIconHeight = 25,
+        this.prefixIconWidth = 25,
+        this.isSuffixIcon = false,
+        this.suffixIconHeight = 25,
+        this.suffixIconWidth = 25,
+        this.suffixIcon,
+        this.svgPath = '',
+        this.iconOnTap,
+        this.inputFormatters,
         this.maxLenght = 999999999,
-      this.borderSide = BorderSide.none,
+        this.borderSide = BorderSide.none,
         this.mouseCursor = SystemMouseCursors.text,
-      this.activeBorderSide = BorderSide.none})
+        this.activeBorderSide = BorderSide.none
+      })
       : hintText = hinttext;
 
   @override
@@ -131,50 +134,50 @@ class InputsV2Widget extends StatelessWidget {
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: borderSide,
+              borderSide: BorderSide(color: rossoopaco),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: activeBorderSide,
+              borderSide: BorderSide(color: rossoopaco),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             hintText: hintText,
             hoverColor: white,
+            errorStyle: errorStyle,
             counterText: "",
             hintStyle: TextStyle(color: darkGrey, fontSize: fontHintSize),
             filled: true,
-            errorStyle: const TextStyle(color: redAccent),
             prefixIcon: isPrefixIcon ? Align(
-                    widthFactor: 1.0,
-                    heightFactor: 1.0,
-                    child: CustomImageView(
-                      imagePath: prefixIcon,
-                      svgPath: svgPath,
-                      height: getSize(
-                        prefixIconHeight,
-                      ),
-                      width: getSize(
-                        prefixIconWidth,
-                      ),
-                    ),
-                  )
+              widthFactor: 1.0,
+              heightFactor: 1.0,
+              child: CustomImageView(
+                imagePath: prefixIcon,
+                svgPath: svgPath,
+                height: getSize(
+                  prefixIconHeight,
+                ),
+                width: getSize(
+                  prefixIconWidth,
+                ),
+              ),
+            )
                 : null,
             suffixIcon: isSuffixIcon
                 ? Align(
-                    widthFactor: 1.0,
-                    heightFactor: 1.0,
-                    child: CustomImageView(
-                      imagePath: suffixIcon,
-                      height: getSize(
-                        suffixIconHeight,
-                      ),
-                      width: getSize(
-                        suffixIconWidth,
-                      ),
-                      svgPath: svgPath,
-                      onTap: iconOnTap,
-                    ),
-                  )
+              widthFactor: 1.0,
+              heightFactor: 1.0,
+              child: CustomImageView(
+                imagePath: suffixIcon,
+                height: getSize(
+                  suffixIconHeight,
+                ),
+                width: getSize(
+                  suffixIconWidth,
+                ),
+                svgPath: svgPath,
+                onTap: iconOnTap,
+              ),
+            )
                 : null,
             contentPadding: EdgeInsets.only(
                 left: contentPaddingLeft,

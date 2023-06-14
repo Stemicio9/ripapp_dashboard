@@ -4,6 +4,7 @@ import '../constants/colors.dart';
 class AutocompleteWidget extends StatelessWidget{
 
   final List<String> options;
+  final dynamic validator;
   final String hintText;
   final double paddingLeft; //40
   final double paddingRight; //40
@@ -16,6 +17,7 @@ class AutocompleteWidget extends StatelessWidget{
     required this.options,
     required this.hintText,
     required this.filterController,
+    this.validator,
     this.paddingBottom = 0,
     this.paddingTop = 0,
     this.paddingLeft = 40,
@@ -44,6 +46,7 @@ class AutocompleteWidget extends StatelessWidget{
        fieldViewBuilder: (BuildContext context, TextEditingController textEditingController,
             FocusNode focusNode, VoidCallback onFieldSubmitted) {
           return TextFormField(
+            validator: validator,
             controller: textEditingController,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(

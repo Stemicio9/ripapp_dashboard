@@ -81,7 +81,12 @@ class UsersForm extends StatelessWidget {
             lastNameController: lastNameController,
             statusChange: statusChange,
             agencyChange: agencyChange,
-            roles: roles
+            roles: roles,
+            nameValidator: nameValidator,
+            lastNameValidator: lastNameValidator,
+          emailValidator: emailValidator,
+          passwordValidator: passwordValidator,
+          phoneValidator: phoneValidator,
         ),
     );
   }
