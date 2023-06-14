@@ -39,7 +39,7 @@ class AutocompleteWidget extends StatelessWidget{
             return const Iterable<String>.empty();
           }
           return options.where((String option) {
-            return option.contains(textEditingValue.text.toLowerCase());
+            return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
           });
         },
 

@@ -9,6 +9,8 @@ import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
 
+import '../../../../widgets/autocomplete.dart';
+
 class AgencyForm extends StatelessWidget {
   final String cardTitle;
   final TextEditingController nameController;
@@ -20,9 +22,12 @@ class AgencyForm extends StatelessWidget {
   final dynamic emailValidator;
   final dynamic phoneValidator;
   final Function() onSubmit;
+  final List<String> cityOptions;
+
 
   const AgencyForm({
     super.key,
+    required this.cityOptions,
     required this.cardTitle,
     this.nameValidator,
     this.emailValidator,
@@ -100,14 +105,13 @@ class AgencyForm extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  InputsV2Widget(
-                                    hinttext: getCurrentLanguageValue(CITY)!,
-                                    controller: cityController,
+                                  AutocompleteWidget(
+                                    options: cityOptions,
+                                    paddingRight: 20,
+                                    paddingLeft: 0,
+                                    hintText: "Comune di interesse",
+                                    filterController: cityController,
                                     validator: cityValidator,
-                                    paddingRight: 0,
-                                    paddingLeft: 10,
-                                    borderSide: const BorderSide(color: greyState),
-                                    activeBorderSide: const BorderSide(color: background),
                                   )
                                 ],
                               )),

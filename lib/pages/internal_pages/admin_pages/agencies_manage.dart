@@ -46,6 +46,12 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
 
+  static const List<String> cityOptions = <String>[
+    'Milano',
+    'Roma',
+    'Firenze',
+    'Torino',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +67,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                 showDialog(context: context, builder: (ctx)=> Form(
                   key: _formKey,
                   child: AgencyForm(
+                    cityOptions: cityOptions,
                     cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
                     nameController: nameController,
                     emailController: emailController,
@@ -111,6 +118,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                       }
 
                     },
+                    cityOptions: cityOptions,
                     cardTitle: getCurrentLanguageValue(EDIT_AGENCY)!,
                     nameController: nameController,
                     emailController: emailController,
