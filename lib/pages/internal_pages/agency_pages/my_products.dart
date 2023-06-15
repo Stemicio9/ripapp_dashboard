@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
-import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/agency_products_table.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/products_popup.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 
@@ -49,10 +43,6 @@ class MyProductsState extends State<MyProducts>{
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
   final String message = 'Le informazioni riguardanti questo prodotto verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
-
-  final String name = 'Nome del prodotto';
-  final String id = '1';
-  final String price = '50';
   final String productPhoto = 'Foto del prodotto';
 
   final TextEditingController nameController = TextEditingController();

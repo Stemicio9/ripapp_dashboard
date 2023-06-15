@@ -123,17 +123,6 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = "nome";
-    lastNameController.text = "cognome";
-    emailController.text = "email@mail.it";
-    phoneController.text = "3232";
-    filterController.text = "citta";
-    passwordController.text = "123456";
-    return Content();
-
-  }
-
-  Widget Content(){
     return SingleChildScrollView(
       child: Padding(
         padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),

@@ -381,8 +381,9 @@ class AddDemiseState extends State<AddDemise> {
                 padding: const EdgeInsets.only(top: 20),
                 child: AddRelative(
                   relativeRows: relativeRows,
-                  addRelative: () async {
-                    await KinshipRepository().getAllKinship();
+                  addRelative: ()  {
+                    //TODO PRENDERE LISTA KINSHIP
+                  //  await KinshipRepository().getAllKinship();
                     setState(() {
                       createNewRelativeRow();
                     });
@@ -409,10 +410,10 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   formSubmit() {
-    if(_formKey.currentState!.validate()){
-      if(_list.isEmpty){
+    if (_formKey.currentState!.validate()) {
+      if (_list.isEmpty) {
         ErrorSnackbar(context, text: 'Inserire necrologio!');
-      }else {
+      } else {
         DemiseEntity demiseEntity = DemiseEntity();
         demiseEntity.firstName = (nameController.text);
         demiseEntity.lastName = (lastNameController.text);
@@ -487,13 +488,15 @@ class AddDemiseState extends State<AddDemise> {
             context,
             text: 'Defunto aggiunto con successo!'
         );
-      Navigator.pop(context);
-    }else{
+        Navigator.pop(context);
+      }
+    } else {
       ErrorSnackbar(
           context,
           text: 'Impossibile aggiungere defunto!'
       );
     }
+
   }
 
   void createNewRelativeRow() {

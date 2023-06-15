@@ -1,3 +1,7 @@
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
@@ -11,7 +15,6 @@ import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
-import '../../../constants/colors.dart';
 import '../../../widgets/snackbars.dart';
 
 class ProductsManage extends StatefulWidget {
@@ -29,7 +32,7 @@ class ProductsManageState extends State<ProductsManage>{
   final String productPhoto = 'Foto del prodotto';
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-  late String imageFile;
+  String imageFile = "";
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
 
@@ -53,22 +56,24 @@ class ProductsManageState extends State<ProductsManage>{
                       key: _formKey,
                       child: ProductForm(
                           imageOnTap: () async {
-                            Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
-                            var photoName = pickedImage!.semanticLabel;
-                            print('STAMPO NOME FILE PICKATO');
-                            print(photoName);
 
-                            setState(() {
-                              imageFile = photoName!;
-                            });
+                            FilePickerResult? result = await FilePicker.platform.pickFiles();
+                            //TODO SALVARE IMMAGINE SU FIRESTORAGE E MOSTRARE L'IMMAGINE PICKATA NEL BOX
+                            if (result != null) {
+                              Uint8List fileBytes = result.files.first.bytes!;
+                              String fileName = result.files.first.name;
+                              print('STAMPO IL FILE PICKATO');
+                              print(fileName);
+                              setState(() {
+                                imageFile = fileName;
+                                print('STAMPO IMMAGINE NEL BOX');
+                                print(imageFile);
+                              });
 
-                            //TODO SALVARE IMMAGINE SU FIRESTORAGE
-                           //  final storageRef = FirebaseStorage.instance.ref();
-                            // final path = "profile_images/products_images/$imageFile";
-                            // final imageRef = storageRef.child(path);
-                           //  imageRef.putFile(pickedImage);
-
+                              await FirebaseStorage.instance.ref('profile_images/products_images/$fileName').putData(fileBytes);
+                            }
                           },
+                        imageFile: imageFile,
                       onTap: (){formSubmit();},
                       cardTitle: getCurrentLanguageValue(ADD_PRODUCT)!,
                       nameController: nameController,
@@ -105,6 +110,7 @@ class ProductsManageState extends State<ProductsManage>{
                     Form(
                       key: _editKey,
                       child: ProductForm(
+                        imageFile:imageFile,
                       imageOnTap: (){},
                       onTap: (){
                       if (_editKey.currentState!.validate()) {
@@ -150,8 +156,7 @@ class ProductsManageState extends State<ProductsManage>{
       ProductEntity productEntity = ProductEntity(
         name: nameController.text,
         price: double.tryParse(priceController.text),
-        //TODO SALVARE CORRETTAMENTE LA FOTO
-        photoName:  nameController.text,
+        photoName: imageFile,
       );
       _searchProductsCubit.saveProduct(productEntity);
 

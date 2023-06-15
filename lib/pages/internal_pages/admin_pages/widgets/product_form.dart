@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,8 +10,6 @@ import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
 
-import '../../../../widgets/texts.dart';
-
 class ProductForm extends StatelessWidget {
   final String cardTitle;
   final TextEditingController nameController;
@@ -22,12 +19,12 @@ class ProductForm extends StatelessWidget {
   final dynamic descriptionValidator;
   final onTap;
   final imageOnTap;
-  final File? imageFile;
+  final String imageFile;
 
 
   const ProductForm({
     super.key,
-    this.imageFile,
+    required this.imageFile,
     required this.imageOnTap,
     required this.onTap,
     required this.cardTitle,
@@ -83,18 +80,30 @@ class ProductForm extends StatelessWidget {
                                         width: 130,
                                         decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(Radius.circular(3)),
-                                          color: greyDrag,
                                           border: Border.all(color: background, width: 1),
-                                          image: imageFile != null ?
-                                          DecorationImage(
-                                            image: FileImage(imageFile!),
+                                          image: imageFile != "" ? DecorationImage(
+                                            image: NetworkImage(imageFile),
                                             fit: BoxFit.contain,
                                           ) : const DecorationImage(
                                             image: AssetImage(ImagesConstants.imgProductPlaceholder),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
-                                      ))
+                                       /* child:  CustomImageView(
+                                          url: imageFile,
+                                          height: getSize(
+                                            190,
+                                          ),
+                                          width: getSize(
+                                            190,
+                                          ),
+                                          alignment: Alignment.center,
+                                          fit: BoxFit.cover,
+                                          placeHolder: ImagesConstants.placeholderUserUrl,
+                                        ), */
+                                      )
+
+                                  )
                                 ],
                               ),
                             )),
@@ -142,8 +151,20 @@ class ProductForm extends StatelessWidget {
                                   hinttext: getCurrentLanguageValue(PRICE)!,
                                   controller: priceController,
                                   validator: priceValidator,
+                                  keyboard: TextInputType.numberWithOptions(decimal: true, signed: false),
+                                  inputFormatters: [
 
-                                  keyboard: TextInputType.number,
+                                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+
+                                    TextInputFormatter.withFunction((oldValue, newValue) {
+                                      try {
+                                        final text = newValue.text;
+                                        if (text.isNotEmpty) double.parse(text);
+                                        return newValue;
+                                      } catch (e) {}
+                                      return oldValue;
+                                    }),
+                                  ],
                                   paddingRight: 0,
                                   paddingLeft: 0,
                                   borderSide: const BorderSide(color: greyState),
