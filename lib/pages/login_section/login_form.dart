@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -20,7 +22,7 @@ class LoginForm extends StatefulWidget {
 }
 
 
-class LoginFormState extends State<LoginForm>{
+class LoginFormState extends State<LoginForm> {
 
   final _formKey = GlobalKey<FormState>();
   final double logoWidth = 250;
@@ -30,6 +32,7 @@ class LoginFormState extends State<LoginForm>{
 
   @override
   Widget build(BuildContext context) {
+    //final authService = watch(Provider.of<CustomFirebaseAuthenticationListener>(context).value);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Form(
