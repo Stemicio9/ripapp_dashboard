@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
+import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
@@ -53,6 +54,7 @@ class AddDemiseState extends State<AddDemise> {
   final List<XFile> _list = [];
 
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
+  SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
   bool _dragging = false;
   Offset? offset;
   DateTime? wakeDate;
@@ -69,7 +71,7 @@ class AddDemiseState extends State<AddDemise> {
     'Firenze',
     'Torino',
   ];
-  static const List<String> kinship = <String>[
+  static List<String> kinship = <String>[
     'Madre',
     'Padre',
     'Fratello',
@@ -381,9 +383,7 @@ class AddDemiseState extends State<AddDemise> {
                 padding: const EdgeInsets.only(top: 20),
                 child: AddRelative(
                   relativeRows: relativeRows,
-                  addRelative: ()  {
-                    //TODO PRENDERE LISTA KINSHIP
-                  //  await KinshipRepository().getAllKinship();
+                  addRelative: () async {
                     setState(() {
                       createNewRelativeRow();
                     });
@@ -517,7 +517,6 @@ class AddDemiseState extends State<AddDemise> {
     // }, kinship: kinship, relativeController: relativeController, deleteRelative: (){}, value: dropdownValue);
 
     relativeRows.add(x);
-
   }
 
   changeDropdown(RelativeRow relativeRow, value){

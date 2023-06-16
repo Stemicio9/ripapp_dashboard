@@ -133,10 +133,10 @@ class UserRepository {
 
     var accountResponse = await UserRepository().account();
 
-    print("STATUS");
-    print(accountResponse.status);
 
     CustomFirebaseAuthenticationListener().role = userStatusToString(accountResponse.status);
+    print("STATUS");
+    print(accountResponse.status);
     CustomFirebaseAuthenticationListener().userEntity = accountResponse;
 
 

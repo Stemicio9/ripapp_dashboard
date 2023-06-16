@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
+import 'package:ripapp_dashboard/blocs/current_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
+import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/blocs/search_users_cubit.dart';
-import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -76,7 +80,11 @@ class MyApp extends StatelessWidget {
   }
 */
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return MultiProvider (
+      providers: [
+        ChangeNotifierProvider<CustomFirebaseAuthenticationListener>(create: (_) => CustomFirebaseAuthenticationListener()),
+      ],
+      child: MultiBlocProvider(
           providers: [
             BlocProvider<SearchProductsOfferedCubit>(create: (_) => SearchProductsOfferedCubit()),
             BlocProvider<SearchProductCubit>(create: (_) => SearchProductCubit()),
@@ -84,6 +92,10 @@ class MyApp extends StatelessWidget {
             BlocProvider<SearchUsersCubit>(create: (_) => SearchUsersCubit()),
             BlocProvider<SearchAgencyCubit>(create: (_) => SearchAgencyCubit()),
             BlocProvider<UsersListCubit>(create: (_) => UsersListCubit()),
+            BlocProvider<SearchKinshipCubit>(create: (_) => SearchKinshipCubit()),
+            BlocProvider<CurrentUserCubit>(create: (_) => CurrentUserCubit()),
+            BlocProvider<SelectedDemiseCubit>(create: (_) => SelectedDemiseCubit()),
+            BlocProvider<SelectedUserCubit>(create: (_) => SelectedUserCubit()),
           ],
           child: Builder(
             builder: (context) {
@@ -107,8 +119,7 @@ class MyApp extends StatelessWidget {
     );
             },
           ),
-        );
-}
-
-
+        )
+    );
+  }
 }

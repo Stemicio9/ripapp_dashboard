@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
+import 'package:ripapp_dashboard/constants/kinships.dart';
 
 import '../../../../constants/colors.dart';
 import '../../../../constants/language.dart';
@@ -62,45 +65,54 @@ class RelativeRow extends StatelessWidget {
                             borderRadius: BorderRadius.circular(3),
                             border: Border.all(color: greyState)
                         ),
-                        child: DropdownButton<String>(
-                          hint: const Text(
-                            "Seleziona parentela",
-                            style: TextStyle(
-                              color: black,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
+                        child: BlocBuilder<SearchKinshipCubit, SearchKinshipState>(
+                        builder: (context, state) {
 
-                          isExpanded: true,
-                          underline:  const SizedBox(),
-                          value: value,
-                          onChanged: (element){
-                            print("element");
-                            print(element);
-                            onChanged(this, element);
-                            },
-                          items: kinship.map((String kinship) {
-                            return  DropdownMenuItem<String>(
-                              value: kinship,
-                              child:  Padding(
-                                padding: const EdgeInsets.only(left: 20),
-                                child: Text(
-                                  "$kinship di",
-                                  style: const TextStyle(
-                                    color: black,
-                                    fontSize: 14.0,
-                                  ),
+                          if (state is SearchKinshipLoading){
+                            return const Center(child: CircularProgressIndicator());
+                          }
+                          else if (state is SearchKinshipLoaded){
+                            List<Kinship> kinships = state.kinships;
+                            return DropdownButton<String>(
+                              hint: const Text(
+                                "Seleziona parentela",
+                                style: TextStyle(
+                                  color: black,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.normal,
                                 ),
                               ),
+
+                              isExpanded: true,
+                              underline: const SizedBox(),
+                              value: value,
+                              onChanged: (element) {
+                                print("element");
+                                print(element);
+                                onChanged(this, element);
+                              },
+                              items: kinships.map((Kinship kinship) {
+                                return DropdownMenuItem<String>(
+                                  value: kinship.name.toString(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: Text(
+                                      "$kinship di",
+                                      style: const TextStyle(
+                                        color: black,
+                                        fontSize: 14.0,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                             );
-                          }).toList(),
-                        ),
+                          }
+                          else return ErrorWidget("eccezione");
+                        }
                       ),
                     ),
-
-
-
+                 )
                 ],
               )),
           Expanded(

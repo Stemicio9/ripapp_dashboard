@@ -87,5 +87,20 @@ class UserEntity {
         "agency": agency?.toJson()
       };
 
+
+  factory UserEntity.defaultUser() => UserEntity(
+      id: 0,
+      firstName: "",
+      lastName: "",
+      email: "",
+      city: [],
+      phoneNumber: "",
+      idtoken: "",
+      status: UserStatus.notfound,
+      role: "",
+  );
+
+  factory UserEntity.emptyUser() => UserEntity();
+
 // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
 }

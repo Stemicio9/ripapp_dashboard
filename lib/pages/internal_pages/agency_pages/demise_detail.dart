@@ -1,5 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_detail.dart';
@@ -18,8 +21,8 @@ class DemiseDetail extends StatefulWidget {
 }
 
 class DemiseDetailState extends State<DemiseDetail> {
-  final String firstName = "Mario";
-  final String lastName = "Rossi";
+  String firstName = "Mario";
+  String lastName = "Rossi";
   final String age = "89";
   final String id = "67";
   final String deceasedDate = "22-03-2023";
@@ -51,72 +54,84 @@ class DemiseDetailState extends State<DemiseDetail> {
   @override
   Widget build(BuildContext context) {
     createRelative();
-    return ScaffoldWidget(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: getPadding(top: 40, bottom: 40, left: 5, right: 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Header(
-                deleteProfileOnTap: (){},
-                leftPadding: const EdgeInsets.only(left: 5),
-                showBackButton: true,
-                onTap: null,
-                showPageTitle: false,
-                isVisible: false,
-              ),
+    return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
+        builder: (context, state)
+    {
+      firstName = state.selectedDemise.firstName ?? "";
+      lastName = state.selectedDemise.lastName ?? "";
+      return
 
-              //deceased data
-              DeceasedDetail(
-                  downloadObituary: (){},
-                  obituaryName: obituaryName,
-                  id: id,
-                  age: age,
-                  lastName: lastName,
-                  firstName: firstName,
-                  phoneNumber: phoneNumber,
-                  city: city,
-                  cityOfInterest: cityOfInterest,
-                  deceasedDate: deceasedDate,
-              ),
 
-              //wake data
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: WakeDetail(
-                    wakeDate: wakeDate,
-                    wakeNote: wakeNote,
-                    wakeHour: wakeHour,
-                    wakeAddress: wakeAddress
+        ScaffoldWidget(
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: getPadding(top: 40, bottom: 40, left: 5, right: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Header(
+                    deleteProfileOnTap: () {},
+                    leftPadding: const EdgeInsets.only(left: 5),
+                    showBackButton: true,
+                    onTap: null,
+                    showPageTitle: false,
+                    isVisible: false,
+                  ),
 
-               ),
-              ),
+                  //deceased data
+                  DeceasedDetail(
+                    downloadObituary: () {},
+                    obituaryName: obituaryName,
+                    id: id,
+                    age: age,
+                    lastName: lastName,
+                    firstName: firstName,
+                    phoneNumber: phoneNumber,
+                    city: city,
+                    cityOfInterest: cityOfInterest,
+                    deceasedDate: deceasedDate,
+                  ),
 
-              //funeral data
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: FuneralDetail(
-                    funeralDate: funeralDate,
-                    funeralNote: funeralNote,
-                    funeralHour: funeralHour,
-                    funeralAddress: funeralAddress
-                )
-              ),
+                  //wake data
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: WakeDetail(
+                        wakeDate: wakeDate,
+                        wakeNote: wakeNote,
+                        wakeHour: wakeHour,
+                        wakeAddress: wakeAddress
 
-              //add relative
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: AddRelative(
-                  isDetail: true,
-                  relativeRows: relativeRows,
-                ),
+                    ),
+                  ),
+
+                  //funeral data
+                  Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: FuneralDetail(
+                          funeralDate: funeralDate,
+                          funeralNote: funeralNote,
+                          funeralHour: funeralHour,
+                          funeralAddress: funeralAddress
+                      )
+                  ),
+
+                  //add relative
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: AddRelative(
+                      isDetail: true,
+                      relativeRows: relativeRows,
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        );
+    });
+
+
+
   }
 
   createRelative(){

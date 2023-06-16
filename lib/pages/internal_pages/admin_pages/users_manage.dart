@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
@@ -71,6 +72,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
 
 
 
+  SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
   List<String> cityOptions = <String>[
     'Milano'
@@ -182,7 +184,8 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                         )
                 );
               },
-              edit: () {
+              edit: (dynamic p) {
+                _selectedUserCubit.selectUser(p);
                 showDialog(
                     context: context,
                     barrierColor: blackTransparent,
@@ -200,6 +203,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                                 emailController.text = "";
                                 phoneController.text = "";
                                 SuccessSnackbar(context, text: 'Utente modificato con successo!');
+
 
                                 Navigator.pop(context);
                               }

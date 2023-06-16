@@ -16,16 +16,16 @@ class SearchKinshipError extends SearchKinshipState {}
 
 class SearchKinshipLoaded extends SearchKinshipState {
   final List<Kinship> kinships;
-  final Kinship? selectedKinship;
+  List<Kinship> selectedValues = [];
   //final bool loadingMore;
   //SearchAgencyLoaded(this.agencies, this.loadingMore);
-  SearchKinshipLoaded(this.kinships, this.selectedKinship);
+  SearchKinshipLoaded(this.kinships, this.selectedValues);
 
 
-  SearchKinshipLoaded copyWith({List<Kinship>? kinships, Kinship? selectedKinship,}) {
+  SearchKinshipLoaded copyWith({List<Kinship>? kinships, List<Kinship>? selectedValues,}) {
     return SearchKinshipLoaded(
         kinships ?? this.kinships,
-        selectedKinship ?? this.selectedKinship
+        selectedValues ?? this.selectedValues
     );
   }
 }
@@ -33,7 +33,7 @@ class SearchKinshipLoaded extends SearchKinshipState {
 class SearchKinshipCubit extends Cubit<SearchKinshipState> {
   SearchKinshipCubit() : super(SearchKinshipLoading());
 
-  fetchAgencies() async {
+  fetchKinships() async {
     emit(SearchKinshipLoading());
     try {
       print("FACCIO LA FETCH DELLE kinship");
@@ -45,10 +45,10 @@ class SearchKinshipCubit extends Cubit<SearchKinshipState> {
     }
   }
 
-  changeSelectedAgency(Kinship? selectedKinship){
-    if(state is SearchKinshipLoaded && selectedKinship != null){
+  changeSelectedAgency(List<Kinship>? selectedValues,){
+    if(state is SearchKinshipLoaded && selectedValues != null){
       var a = state as SearchKinshipLoaded;
-      emit(a.copyWith(selectedKinship: selectedKinship));
+      emit(a.copyWith(selectedValues: selectedValues));
     }
   }
 

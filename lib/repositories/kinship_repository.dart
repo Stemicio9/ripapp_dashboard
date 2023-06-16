@@ -14,7 +14,7 @@ class KinshipRepository{
     return _kinshipRepository ;
   }
 
-  Future<dynamic> getAllKinship() async {
+  Future<List<Kinship>> getAllKinship() async {
     print("qui ci arrivo!");
     Response res = await _dio.get(allKinshipUrl);
 
@@ -24,10 +24,11 @@ class KinshipRepository{
     List<Kinship> productsOffered =  (jsonDecode(jsonEncode(res.data)) as List).map((e) => ProductOffered.fromJson(e)).toList();
     print(productsOffered);
     List<ProductOffered> products = (res.data as List).map((product) => ProductOffered.fromJson(product)).toList();*/
-    print(res);
+    List<Kinship> kinships = (res.data as List).map((kinship) => Kinship.fromJson(kinship)).toList();
+    //print(res);
 
     //List<Kinship> kinships = (jsonDecode(jsonEncode(res.data)) as List).map((e) => Kinship.fromJson(e)).toList();;
-    return null;
+    return kinships;
   }
 
 }
