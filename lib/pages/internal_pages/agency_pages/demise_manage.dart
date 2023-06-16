@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
@@ -28,6 +29,7 @@ class DemiseManageState extends State<DemiseManage>{
   final String message = 'Le informazioni riguardanti questo decesso verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
 
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
+  SelectedDemiseCubit get _selectedDemiseCubit => context.read<SelectedDemiseCubit>();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -80,9 +82,9 @@ class DemiseManageState extends State<DemiseManage>{
                   )
               );
             },
-            edit: (){
+            edit: (dynamic p){
               Navigator.pushNamed(context, RouteConstants.editDemise);
-
+              _selectedDemiseCubit.selectUser(p);
             },
             showDetail: (){
               Navigator.pushNamed(context, RouteConstants.demiseDetail);

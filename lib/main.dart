@@ -10,6 +10,7 @@ import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/blocs/search_users_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -94,6 +95,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<UsersListCubit>(create: (_) => UsersListCubit()),
             BlocProvider<SearchKinshipCubit>(create: (_) => SearchKinshipCubit()),
             BlocProvider<CurrentUserCubit>(create: (_) => CurrentUserCubit()),
+            BlocProvider<SelectedDemiseCubit>(create: (_) => SelectedDemiseCubit()),
           ],
           child: Builder(
             builder: (context) {
