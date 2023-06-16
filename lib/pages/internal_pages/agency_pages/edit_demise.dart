@@ -78,7 +78,6 @@ class EditDemiseState extends State<EditDemise> {
   ];
 
   late Image imageFile;
-  SelectedDemiseCubit get _selectedDemiseCubit => context.read<SelectedDemiseCubit>();
   final List<Widget> relativeRows = [];
 
   @override

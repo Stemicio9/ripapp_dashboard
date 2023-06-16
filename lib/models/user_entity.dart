@@ -100,7 +100,7 @@ class UserEntity {
       role: "",
   );
 
-
+  factory UserEntity.emptyUser() => UserEntity();
 
 // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
 }
