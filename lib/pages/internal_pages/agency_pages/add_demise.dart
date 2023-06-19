@@ -20,6 +20,7 @@ import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import '../../../constants/colors.dart';
+import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
 import '../../../utils/size_utils.dart';
 import 'package:intl/intl.dart';
@@ -71,7 +72,7 @@ class AddDemiseState extends State<AddDemise> {
     'Firenze',
     'Torino',
   ];
-  static List<String> kinship = <String>[
+  static const List<String> kinship = <String>[
     'Madre',
     'Padre',
     'Fratello',
@@ -466,11 +467,10 @@ class AddDemiseState extends State<AddDemise> {
     selectedValues.add(kinship.first);
     var x = RelativeRow(
         onChanged: changeDropdown,
-        kinship: kinship,
         relativeValidator: notEmptyValidate,
         relativeController: relativeController,
-        deleteRelative: deleteRelative,
-        value: selectedValues.last,
+        deleteRelative: deleteRelative, changeKinship: (Kinship selectedKinship) {  }, statusChange: (String selectedValue) {  }, isDetail: false, selectedKinship: Kinship.brother, listKinship: const ['nonno'],
+        
     );
 
     // RelativeRow(onChanged: (String? value) {
@@ -484,8 +484,11 @@ class AddDemiseState extends State<AddDemise> {
 
   changeDropdown(RelativeRow relativeRow, value){
     setState(() {
+      print("ILPARENTE");
+      print(value);
       var index = relativeRows.indexOf(relativeRow);
       selectedValues[index] = value;
+      changeDropdown(relativeRow, value);
     });
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
@@ -12,22 +13,41 @@ import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 import '../../../blocs/search_demises_cubit.dart';
 import '../../../constants/colors.dart';
+import '../admin_pages/users_manage.dart';
 
-class DemiseManage extends StatefulWidget {
+
+class DemiseMenage extends StatelessWidget{
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => SelectedDemiseCubit(),
+        ),
+
+      ],
+      child: DemiseManageWidget(),
+    );
+  }
+}
+
+class DemiseManageWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return DemiseManageState();
+    return DemiseManageWidgetState();
   }
 }
 
 
-class DemiseManageState extends State<DemiseManage>{
+class DemiseManageWidgetState extends State<DemiseManageWidget>{
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
   final String message = 'Le informazioni riguardanti questo decesso verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
 
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
+  SelectedDemiseCubit get _selectedDemise => context.read<SelectedDemiseCubit>();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -80,12 +100,18 @@ class DemiseManageState extends State<DemiseManage>{
                   )
               );
             },
-            edit: (){
-              Navigator.pushNamed(context, RouteConstants.editDemise);
+            edit: (dynamic p){
+              print("Defunto");
+              print(p);
+              Navigator.pushNamed(context, RouteConstants.editDemise,
+                      arguments:_selectedDemise.selectedDemise(p)
+
+              );
 
             },
             showDetail: (){
-              Navigator.pushNamed(context, RouteConstants.demiseDetail);
+              Navigator.pushNamed(context, RouteConstants.demiseDetail,
+              );
 
             },
             detailMessage: detailMessage,

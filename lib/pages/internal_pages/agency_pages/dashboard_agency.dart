@@ -106,7 +106,7 @@ class DashboardAgencyState extends State<DashboardAgency> {
       case 1:
         return MyProducts();
       case 2:
-        return DemiseManage();
+        return DemiseMenage();
       case 3:
         return AgencyProfile();
       default:

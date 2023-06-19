@@ -10,27 +10,60 @@ import '../../../../utils/size_utils.dart';
 import '../../../../utils/style_utils.dart';
 import '../../../../widgets/input.dart';
 
-class RelativeRow extends StatelessWidget {
 
-  final onChanged;
-  final List<String> kinship;
-  final String value;
+
+  class RelativeRow extends StatefulWidget{
+    final onChanged;
   final deleteRelative;
   final TextEditingController relativeController;
   final dynamic relativeValidator;
+  final Function (Kinship selectedKinship) changeKinship;
+  final Function(String selectedValue) statusChange;
   final bool isDetail;
+   final Kinship selectedKinship;
+   final List<String> listKinship;
 
-
-  const RelativeRow({
-    Key? key,
-    required this.onChanged,
-    required this. kinship,
-    this.relativeValidator,
+  RelativeRow({
+  super.key,
+    this.onChanged,
+    this.deleteRelative,
     required this.relativeController,
-    required this.deleteRelative,
-    this.isDetail = false,
-    required this.value,
-  }) : super(key: key);
+    this.relativeValidator,
+    required this.statusChange,
+    required this.isDetail,
+    required this.changeKinship,
+    required this.selectedKinship,
+    required this.listKinship,
+
+
+  });
+    @override
+    State<StatefulWidget> createState() {
+      // TODO: implement createState
+      return RelativeRowState();
+    }
+
+  }
+  class RelativeRowState extends State<RelativeRow> {
+  late String selectedValue;
+  late Kinship selectedKinship;
+  bool first = true;
+
+
+  SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
+
+
+  @override
+  void initState() {
+  super.initState();
+  _searchKinshipCubit.fetchKinships();
+  if(first) {
+    selectedValue = widget.listKinship.first;
+    widget.statusChange(selectedValue);
+    first = false;
+  }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,62 +90,70 @@ class RelativeRow extends StatelessWidget {
                     ),
                   ),
 
-                 Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Container(
-                        height: 48,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(3),
-                            border: Border.all(color: greyState)
-                        ),
-                        child: BlocBuilder<SearchKinshipCubit, SearchKinshipState>(
-                        builder: (context, state) {
-
-                          if (state is SearchKinshipLoading){
-                            return const Center(child: CircularProgressIndicator());
-                          }
-                          else if (state is SearchKinshipLoaded){
-                            List<Kinship> kinships = state.kinships;
-                            return DropdownButton<String>(
-                              hint: const Text(
-                                "Seleziona parentela",
-                                style: TextStyle(
-                                  color: black,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Container(
+                      height: 48,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(3),
+                          border: Border.all(color: greyState)
+                      ),
+                      child: BlocBuilder<SearchKinshipCubit, SearchKinshipState>(
+                          builder: (context, state) {
+                            print("LE KINSHIP");
+                            if (state is SearchKinshipLoading){
+                              print("FA IL LOADING");
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            else if (state is SearchKinshipLoaded){
+                              print("VA IN LOADED");
+                              List<Kinship> kinships = state.kinships;
+                              print("valori delle kinship del cubit"+ state.kinships.toString());
+                              print("KINSHIP SELEZIONATA");
+                              print(state.selectedKinship);
+                              return DropdownButton<String>(
+                                hint: const Text(
+                                  "Seleziona parentela",
+                                  style: TextStyle(
+                                    color: black,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                                 ),
-                              ),
 
-                              isExpanded: true,
-                              underline: const SizedBox(),
-                              value: value,
-                              onChanged: (element) {
-                                print("element");
-                                print(element);
-                                onChanged(this, element);
-                              },
-                              items: kinships.map((Kinship kinship) {
-                                return DropdownMenuItem<String>(
-                                  value: kinship.name.toString(),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: Text(
-                                      "$kinship di",
-                                      style: const TextStyle(
-                                        color: black,
-                                        fontSize: 14.0,
+                                isExpanded: true,
+                                underline:  const SizedBox(),
+                                value: state.selectedKinship?.name,
+                                onChanged: (String? value) {
+                                  _searchKinshipCubit.changeSelectedKinship(kinshipFromString(value ?? ""));
+
+                                //onChanged: (value){
+                                  //print("element");
+                                  //print(value);
+                                 // onChanged(this, value);
+                                },
+                                items: kinships.map<DropdownMenuItem<String>>((Kinship kinship) {
+                                  return  DropdownMenuItem<String>(
+                                    value: kinship.name,
+                                    child:  Padding(
+                                      padding: const EdgeInsets.only(left: 20),
+                                      child: Text(
+                                        kinship.name,
+                                        style: const TextStyle(
+                                          color: black,
+                                          fontSize: 14.0,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              }).toList(),
-                            );
-                          }
-                          else return ErrorWidget("eccezione");
-                        }
+                                  );
+                                }).toList(),
+                              );
+                            }   else{
+                              return ErrorWidget("errore di connessione"); //TODO aggiungere errore
+                            }}
                       ),
                     ),
-                 )
+                  )
                 ],
               )),
           Expanded(
@@ -134,19 +175,19 @@ class RelativeRow extends StatelessWidget {
                   ),
 
 
-                 InputsV2Widget(
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      hinttext: getCurrentLanguageValue(RELATIVE_NUMBER) ?? "",
-                      controller: relativeController,
-                      validator: relativeValidator,
-                      paddingLeft: 0,
-                      paddingRight: 0,
-                      borderSide: const BorderSide(color: greyState),
-                      activeBorderSide:
-                      const BorderSide(color: background),
-                    ),
+                  InputsV2Widget(
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    hinttext: getCurrentLanguageValue(RELATIVE_NUMBER) ?? "",
+                    controller: widget.relativeController,
+                    validator: widget.relativeValidator,
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                    borderSide: const BorderSide(color: greyState),
+                    activeBorderSide:
+                    const BorderSide(color: background),
+                  ),
 
                 ],
               )),
@@ -161,7 +202,7 @@ class RelativeRow extends StatelessWidget {
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
-                          onTap: (){deleteRelative(this);},
+                          onTap: (){widget.deleteRelative(this);},
                           child: Icon(
                             Icons.delete_rounded,
                             color: rossoopaco,
@@ -178,3 +219,4 @@ class RelativeRow extends StatelessWidget {
     );
   }
 }
+
