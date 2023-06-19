@@ -1,11 +1,10 @@
 import 'dart:typed_data';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
@@ -35,8 +34,7 @@ class ProductsManageState extends State<ProductsManage>{
   String imageFile = "";
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
-
-
+  SelectedProductCubit get _selectedProductCubit => context.read<SelectedProductCubit>();
   SearchProductCubit get _searchProductsCubit => context.read<SearchProductCubit>();
 
   @override
@@ -105,19 +103,21 @@ class ProductsManageState extends State<ProductsManage>{
                     )
                 );
               },
-              edit: (){
-                showDialog(context: context, builder: (ctx)=>
+              edit: (dynamic p){
+                _selectedProductCubit.selectProduct(p);
+                showDialog(
+                    context: context,
+                    builder: (ctx)=>
                     Form(
                       key: _editKey,
                       child: ProductForm(
                         imageFile:imageFile,
-                      imageOnTap: (){},
+                        imageOnTap: (){},
                       onTap: (){
                       if (_editKey.currentState!.validate()) {
                         nameController.text = "";
                         priceController.text = "";
                         SuccessSnackbar(context, text: 'Prodotto modificato con successo!');
-
                         Navigator.pop(context);
                         }
                       },
@@ -132,11 +132,12 @@ class ProductsManageState extends State<ProductsManage>{
 
 
               showDetail: (dynamic p){
-                showDialog(context: context, builder: (ctx)=>ProductDetail(
+                _selectedProductCubit.selectProduct(p);
+                showDialog(
+                    context: context,
+                    builder: (ctx)=> ProductDetail(
                     cardTitle: getCurrentLanguageValue(PRODUCT_DETAIL)!,
-                    name: p.name,
-                    id: p.id,
-                    price: p.price,
+                    //TODO IMPLEMENTARE FOTO
                     productPhoto: productPhoto
                 )
                 );

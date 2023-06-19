@@ -15,5 +15,7 @@ class ImagesConstants{
 
   static String imgPassUnsee = "assets/images/pass_icon_unsee.png";
 
+  static String imgEuro= "assets/images/euro.png";
+
 
 }

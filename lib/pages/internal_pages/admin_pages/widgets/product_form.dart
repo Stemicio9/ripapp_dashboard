@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
@@ -37,7 +39,12 @@ class ProductForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return BlocBuilder<SelectedProductCubit, SelectedProductState>(
+        builder: (context, state) {
+      if (state is SelectedProductState) {
+        nameController.text = state.selectedProduct.name ?? "";
+        priceController.text = state.selectedProduct.price.toString();
+        return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -148,22 +155,16 @@ class ProductForm extends StatelessWidget {
                                   ),
                                 ),
                                 InputsV2Widget(
+                                /*  prefixIconHeight: 18,
+                                  prefixIconWidth: 18,
+                                  prefixIcon: ImagesConstants.imgEuro,
+                                  isPrefixIcon: true, */
                                   hinttext: getCurrentLanguageValue(PRICE)!,
                                   controller: priceController,
                                   validator: priceValidator,
-                                  keyboard: TextInputType.numberWithOptions(decimal: true, signed: false),
+                                 // keyboard: TextInputType.numberWithOptions(decimal: true, signed: false),
                                   inputFormatters: [
-
                                     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-
-                                    TextInputFormatter.withFunction((oldValue, newValue) {
-                                      try {
-                                        final text = newValue.text;
-                                        if (text.isNotEmpty) double.parse(text);
-                                        return newValue;
-                                      } catch (e) {}
-                                      return oldValue;
-                                    }),
                                   ],
                                   paddingRight: 0,
                                   paddingLeft: 0,
@@ -172,7 +173,8 @@ class ProductForm extends StatelessWidget {
                                 )
 
                               ],
-                            )),
+                            )
+                        ),
                       ],
                     ),
                     Padding(
@@ -192,5 +194,8 @@ class ProductForm extends StatelessWidget {
 
       ),
     );
+      }
+      else return ErrorWidget("exception");
+        });
   }
 }

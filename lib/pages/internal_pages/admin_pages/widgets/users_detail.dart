@@ -1,40 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
-
 import '../../../../widgets/texts.dart';
 
 class UsersDetail extends StatelessWidget {
   final String cardTitle;
-  final int id;
-  final String name;
-  final String lastName;
-  final String phoneNumber;
-  final String email;
-  final String city;
-  final String role;
-  final String agencyName;
+  late int id;
+  late String name;
+  late String lastName;
+  late String phoneNumber;
+  late String email;
+  late String city;
+  late String role;
+  late String agencyName;
   final bool? isAgency;
 
-  const UsersDetail({
+   UsersDetail({
     super.key,
     required this.cardTitle,
-    required this.name,
-    required this.id,
-    required this.email,
-    required this.phoneNumber,
-    required this.city,
-    required this.lastName,
-    required this.role,
-    required this.agencyName,
+     this.name = "",
+     this.id = 0,
+     this.email = "",
+     this.phoneNumber ="",
+     this.city ="",
+     this.lastName="",
+     this.role = "",
+     this.agencyName = "",
     this.isAgency = false
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BlocBuilder<SelectedUserCubit, SelectedUserState>(
+        builder: (context, state) {
+      if (state is SelectedUserState) {
+        id = state.selectedUser.id ?? 0;
+        name = state.selectedUser.firstName ?? "";
+        lastName = state.selectedUser.lastName ?? "";
+        email = state.selectedUser.email ?? "";
+        phoneNumber = state.selectedUser.phoneNumber ?? "";
+        agencyName = state.selectedUser.agency!.agencyName ?? "";
+        role = state.selectedUser.status.toString() == 'UserStatus.active' ? 'Utente' :
+        state.selectedUser.status.toString() == 'UserStatus.agency' ? 'Agenzia' :
+        'Amministratore';
+        //TODO IMPLEMENTARE CITTA
+      //  city = state.selectedUser.city ?? "";
+
+
+        return Container(
       padding: getPadding(left: 20, right: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -189,5 +206,9 @@ class UsersDetail extends StatelessWidget {
         ],
       ),
     );
+      }
+      else return ErrorWidget("exception");
+
+        });
   }
 }

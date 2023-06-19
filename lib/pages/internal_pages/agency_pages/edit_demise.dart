@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
-import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_data.dart';
@@ -18,7 +17,6 @@ import 'package:ripapp_dashboard/widgets/texts.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/language.dart';
 import '../../../constants/validators.dart';
-import '../../../models/CityEntity.dart';
 import '../../../utils/size_utils.dart';
 import 'package:intl/intl.dart';
 
@@ -100,6 +98,7 @@ class EditDemiseState extends State<EditDemise> {
             //funeralTimeController.text = state.selectedDemise.funeralDateTime.toString() ?? "";
             //funeralNoteController.text = state.selectedDemise.funeralNotes.toString() ?? "";
             //relativeController.text = state.selectedDemise.relative.toString() ?? "";
+
             return ScaffoldWidget(
                 body: SingleChildScrollView(
                   child: Padding(
@@ -200,10 +199,7 @@ class EditDemiseState extends State<EditDemise> {
                               strokeWidth: 1,
                               child: Container(
                                 height: 200,
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width,
+                                width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
                                   color:
                                   _dragging

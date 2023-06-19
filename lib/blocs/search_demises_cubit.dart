@@ -21,7 +21,6 @@ class DemiseCubit extends Cubit<DemiseState> {
         // ignore
       }
     }
-    print("esatto");
     try{
       /*
       DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset))

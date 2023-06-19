@@ -44,4 +44,7 @@ class ProductEntity {
     "urlImage": photoName,
     "price": price,
   };
+
+  factory ProductEntity.emptyProduct() => ProductEntity();
+
 }

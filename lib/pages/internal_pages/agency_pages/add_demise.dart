@@ -240,50 +240,6 @@ class AddDemiseState extends State<AddDemise> {
                   ),
                 ),
 
-              //wake data
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: WakeData(
-                  timeController: wakeTimeController,
-                  addressController: addressController,
-                  dateController: wakeDateController,
-                  wakeNoteController: wakeNoteController,
-                  showWakeTimePicker: () async {
-                    TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                      confirmText: getCurrentLanguageValue(CONFIRM) ?? "",
-                      cancelText: getCurrentLanguageValue(CANCEL) ?? "",
-                    );
-                    print("picked time = " + pickedTime.toString());
-                    if (pickedTime != null) {
-                      setState(() {
-                        wakeTimeController.text =
-                            pickedTime.format(context).toString();
-                      });
-                    } else {
-                      print("Time is not selected");
-                    }
-                  },
-                  showWakeDatePicker: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate:
-                            DateTime.now().add(const Duration(days: 365)));
-                    if (pickedDate != null) {
-                      String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
-                      setState(() {
-                        wakeDateController.text = formattedDate;
-                      });
-                    } else {
-                      print("Date is not selected");
-                    }
-                  },
-                ),
-              ),
                 //wake data
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
@@ -397,7 +353,7 @@ class AddDemiseState extends State<AddDemise> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      ActionButtonV2(action: formSubmit, text: 'Crea'),
+                      ActionButtonV2(action: formSubmit, text: getCurrentLanguageValue(SAVE) ?? ""),
                     ],
                   ),
                 ),
@@ -414,25 +370,23 @@ class AddDemiseState extends State<AddDemise> {
       if (_list.isEmpty) {
         ErrorSnackbar(context, text: 'Inserire necrologio!');
       } else {
+
         DemiseEntity demiseEntity = DemiseEntity();
         demiseEntity.firstName = (nameController.text);
         demiseEntity.lastName = (lastNameController.text);
         demiseEntity.city = CityEntity(name: cityController.text);
         demiseEntity.phoneNumber = (phoneController.text);
-        demiseEntity.age =
-        ageController.text != "" ? int.parse(ageController.text) : null;
-        demiseEntity.deceasedDate = (deceasedDateController.text != "" &&
-            deceasedDateController.text != null) ? convertDate(
-            deceasedDateController.text) : null;
-        demiseEntity.funeralDateTime =
-        (funeralDateController.text != "" && funeralDateController.text != null)
-            ? convertDate(funeralDateController.text)
-            : null;
-        demiseEntity.wakeDateTime =
-        (wakeDateController.text != "" && wakeDateController.text != null)
-            ? convertDate(wakeDateController.text)
-            : null;
+        demiseEntity.age = ageController.text != "" ? int.parse(ageController.text) : null;
+        demiseEntity.deceasedDate = (deceasedDateController.text != "" && deceasedDateController.text != null) ? convertDate(deceasedDateController.text) : null;
+        demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
+        demiseEntity.wakeDateTime = (wakeDateController.text != "" && wakeDateController.text != null) ? convertDate(wakeDateController.text) : null;
         demiseEntity.wakeAddress = (addressController.text);
+        demiseEntity.wakeNote = (wakeNoteController.text);
+        demiseEntity.funeralAddress = (funeralAddressController.text);
+        demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
+        demiseEntity.funeralNotes = (funeralNoteController.text);
+        //demiseEntity.cities = (citiesController.text);
+        //demiseEntity.relative = (relativeController.text);
 
         String wakeTimeString = wakeTimeController.text;
         if (wakeTimeString != null && wakeTimeString != "") {
@@ -461,27 +415,10 @@ class AddDemiseState extends State<AddDemise> {
                 funeralMinutes);
           }
         }
-        if (demiseEntity.deceasedDate != null &&
-            demiseEntity.wakeDateTime != null &&
-            demiseEntity.funeralDateTime != null) {
-          if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) ||
-              demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!))
+        if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
+          if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!))
             throw new Exception("incoherent dates");
         }
-
-
-        demiseEntity.wakeNote = (wakeNoteController.text);
-        demiseEntity.funeralAddress = (funeralAddressController.text);
-        demiseEntity.funeralDateTime =
-        (funeralDateController.text != "" && funeralDateController.text != null)
-            ? convertDate(funeralDateController.text)
-            : null;
-        demiseEntity.funeralNotes = (funeralNoteController.text);
-        //demiseEntity.cities = (citiesController.text);
-        //demiseEntity.relative = (relativeController.text);
-
-        //_searchDemiseCubit.saveProduct(demiseEntity);
-
 
         _searchDemiseCubit.saveProduct(demiseEntity);
         SuccessSnackbar(
