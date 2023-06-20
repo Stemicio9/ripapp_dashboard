@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
+import 'package:ripapp_dashboard/blocs/current_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
+import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
 
@@ -51,25 +54,27 @@ class UsersTable extends StatefulWidget{
 
 class UsersTableState extends State<UsersTable>{
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
+  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
 
   List<UserEntity> usersList = [];
   @override
   void initState() {
-    _userListCubit.fetchUsersListWithIndex(0);
+    //_userListCubit.fetchUsersListWithIndex(0);
+    //_currentPageCubit.findResult(ScaffoldWidgetState.users_page, 0);
+    _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, 0);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UsersListCubit, UsersListState>(
+    return BlocBuilder<CurrentPageCubit, CurrentPageState>(
         builder: (context, state) {
-
-          if (state is UsersListLoading) {
+          if (state.loading) {
             return const Center(
                 child: CircularProgressIndicator()
             );
-          } else if (state is UsersListLoaded) {
-            usersList = state.accountList;
+          } else {
+            usersList = state.resultSet as List<UserEntity>;
             if (usersList.isEmpty) {
               return Center(
                 child: Padding(
@@ -103,11 +108,10 @@ class UsersTableState extends State<UsersTable>{
                   //   sortColumnIndex: sortColumnIndex,
                 ),
               );
-            }}
-          else{
-            return ErrorWidget("errore di connessione"); //TODO aggiungere errore
+            }
           }
-        });}
+        });
+  }
 
 
 

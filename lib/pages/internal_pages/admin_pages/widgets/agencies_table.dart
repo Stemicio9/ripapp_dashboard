@@ -2,11 +2,13 @@ import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
+import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
 
@@ -40,11 +42,11 @@ class AgenciesTable extends StatefulWidget {
 class AgenciesTableState extends State<AgenciesTable> {
 
 
-  SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
+  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
 
   @override
   void initState() {
-    _searchAgencyCubit.fetchAgencies();
+    _currentPageCubit.loadPage(ScaffoldWidgetState.agencies_page, 0);
     super.initState();
   }
 
@@ -78,15 +80,15 @@ class AgenciesTableState extends State<AgenciesTable> {
   @override
   Widget build(BuildContext context) {
     return
-      BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
+      BlocBuilder<CurrentPageCubit, CurrentPageState>(
           builder: (context, state) {
-            if (state is SearchAgencyLoading) {
+            if (state.loading) {
               return const Center(
                   child: CircularProgressIndicator()
               );
             }
-            if (state is SearchAgencyLoaded){
-              agencies = state.agencies;
+            else {
+              agencies = state.resultSet as List<AgencyEntity>;
 
               if(agencies.isEmpty){
                 return Center(
@@ -126,7 +128,6 @@ class AgenciesTableState extends State<AgenciesTable> {
                 );
               }
             }
-            else return ErrorWidget("ERRORE DI CARICAMENTO");
           });
   }
 

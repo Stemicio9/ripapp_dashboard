@@ -662,7 +662,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
             );
           }
           else
-            return ErrorWidget("exception");
+            return ErrorWidget("exception2");
         });
   }
 }

@@ -11,10 +11,13 @@ import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
+import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import '../../../constants/colors.dart';
 import '../../../widgets/snackbars.dart';
 
 class ProductsManage extends StatefulWidget {
+
+
   @override
   State<StatefulWidget> createState() {
     return ProductsManageState();

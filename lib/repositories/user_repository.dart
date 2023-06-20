@@ -54,7 +54,7 @@ class UserRepository {
     var response = await _dio.get(accountUrl, options: Options(headers: buildHeaders()));
 
     print("ATTUALE UTENTE");
-    print(response.data);
+    //print(response.data);
     return UserEntity.fromJson(response.data);
   }
   Future<List<UserEntity>> getList() async{
@@ -94,12 +94,12 @@ class UserRepository {
     Response response;
     response = await _dio.get(listAccountUrl, queryParameters: parameters);
     print("object");
-    print(response.data);
+    //print(response.data);
     // todo this could be not necessary
     String goodJson = jsonEncode(response.data);
     //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
     List<UserEntity> users = ((jsonDecode(goodJson) as Map)["content"] as List).map((user) => UserEntity.fromJson(user)).toList();
-    print("ecco i tuoi utenti" + users.toString() + users.length.toString());
+    //print("ecco i tuoi utenti" + users.toString() + users.length.toString());
     //List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
     //return userEntityList;
     return users;

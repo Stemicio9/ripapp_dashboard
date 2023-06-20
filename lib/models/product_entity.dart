@@ -1,4 +1,6 @@
-class ProductEntity {
+import 'package:ripapp_dashboard/utils/ResultSet.dart';
+
+class ProductEntity implements ResultEntity {
   int? id;
   String? name;
   String? photoName;

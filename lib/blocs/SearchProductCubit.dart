@@ -62,4 +62,15 @@ class SearchProductCubit extends Cubit<SearchProductState>{
       emit(SearchProductError());
     }
   }
+
+  void fetchProductsWithIndex(int pageIndex) async{
+    emit(SearchProductLoading());
+    try {
+      var result = await ProductRepository().getAllProductsWithIndex(pageIndex).then((products) => emit(SearchProductLoaded(products)));
+    }
+    catch (e){
+      print("error");
+
+    }
+  }
 }
