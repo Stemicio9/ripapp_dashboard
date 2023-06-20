@@ -43,7 +43,9 @@ class ProductForm extends StatelessWidget {
         builder: (context, state) {
       if (state is SelectedProductState) {
         nameController.text = state.selectedProduct.name ?? "";
-        priceController.text = state.selectedProduct.price.toString();
+        if(state.selectedProduct.price != null){
+          priceController.text = state.selectedProduct.price.toString();
+        }
         return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(

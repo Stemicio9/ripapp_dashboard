@@ -79,6 +79,7 @@ class DemiseRepository{
       return List.empty(growable: true);
     }
     List<DemiseEntity> demises = (res.data as List).map((e) => DemiseEntity.fromJson(e)).toList();
+
     print(" demises"+ demises.toString());
     return demises;
   }

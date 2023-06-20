@@ -38,18 +38,21 @@ class EditDemiseState extends State<EditDemise> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController deceasedDateController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
+  final TextEditingController citiesController = TextEditingController();
+  final TextEditingController filterController = TextEditingController();
+
+
   final TextEditingController wakeDateController = TextEditingController();
   final TextEditingController wakeTimeController = TextEditingController();
   final TextEditingController wakeNoteController = TextEditingController();
-  final TextEditingController wakwAddressController = TextEditingController();
+  final TextEditingController wakeAddressController = TextEditingController();
+
   final TextEditingController funeralAddressController = TextEditingController();
   final TextEditingController funeralDateController = TextEditingController();
   final TextEditingController funeralTimeController = TextEditingController();
   final TextEditingController funeralNoteController = TextEditingController();
-  final TextEditingController citiesController = TextEditingController();
+
   final TextEditingController relativeController = TextEditingController();
-  final TextEditingController filterController = TextEditingController();
   final List<XFile> _list = [];
   bool _dragging = false;
   final _formKey = GlobalKey<FormState>();
@@ -84,19 +87,29 @@ class EditDemiseState extends State<EditDemise> {
         builder: (context, state)
         {
           if (state is SelectedDemiseState) {
-            nameController.text = state.selectedDemise.firstName?? "";
-            lastNameController.text = state.selectedDemise.lastName??"";
-            phoneController.text = state.selectedDemise.phoneNumber!?? "";
-            //ageController.text = state.selectedDemise.age!.toString()?? "";
-            //deceasedDateController.text = state.selectedDemise.deceasedDate!.toString()?? "";
-            //addressController.text = state.selectedDemise.funeralAddress!?? "";
-            //wakeDateController.text = state.selectedDemise.wakeDateTime.toString()!?? "";
-            //wakeTimeController.text = state.selectedDemise.wakeDateTime!.toString()?? "";
-            //wakeNoteController.text = state.selectedDemise.wakeNote! ?? "";
-            //funeralAddressController.text = state.selectedDemise.funeralAddress!;
-            //funeralDateController.text = state.selectedDemise.funeralDateTime!.toString() ?? "";
+            nameController.text = state.selectedDemise.firstName?? nameController.text;
+            lastNameController.text = state.selectedDemise.lastName?? lastNameController.text;
+            phoneController.text = state.selectedDemise.phoneNumber ?? phoneController.text ;
+            if(state.selectedDemise.age != null){
+              ageController.text = state.selectedDemise.age.toString();
+            }
+            deceasedDateController.text = state.selectedDemise.deceasedDate.toString();
+
+
+
+          //  DateTime datetime = state.selectedDemise.wakeDateTime!;
+         //   wakeDateController.text =  DateTime(datetime.year, datetime.month, datetime.day).toString();
+         //   wakeTimeController.text = state.selectedDemise.wakeDateTime!.hour.toString() + state.selectedDemise.wakeDateTime!.minute.toString();
+            wakeAddressController.text = state.selectedDemise.wakeAddress ?? wakeAddressController.text;
+            wakeNoteController.text = state.selectedDemise.wakeNotes ?? wakeNoteController.text;
+
+
+           // funeralDateController.text = state.selectedDemise.funeralDateTime!.toString() ?? "";
             //funeralTimeController.text = state.selectedDemise.funeralDateTime.toString() ?? "";
-            //funeralNoteController.text = state.selectedDemise.funeralNotes.toString() ?? "";
+            funeralNoteController.text = state.selectedDemise.funeralNotes ?? funeralNoteController.text;
+            funeralAddressController.text = state.selectedDemise.funeralAddress ??  funeralAddressController.text;
+
+
             //relativeController.text = state.selectedDemise.relative.toString() ?? "";
 
             return ScaffoldWidget(
@@ -249,12 +262,12 @@ class EditDemiseState extends State<EditDemise> {
                             padding: const EdgeInsets.only(top: 20),
                             child: WakeData(
                               timeController: wakeTimeController,
-                              addressController: addressController,
+                              wakeAddressController: wakeAddressController,
                               dateController: wakeDateController,
                               wakeNoteController: wakeNoteController,
                               timeValidator: notEmptyValidate,
                               dateValidator: notEmptyValidate,
-                              addressValidator: notEmptyValidate,
+                              wakeAddressValidator: notEmptyValidate,
                               showWakeTimePicker: () async {
                                 TimeOfDay? pickedTime = await showTimePicker(
                                   context: context,

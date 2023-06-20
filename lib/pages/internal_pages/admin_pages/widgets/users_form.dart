@@ -138,43 +138,35 @@ class UsersFormWidget extends StatefulWidget{
   }
 }
 
-
 class UsersFormWidgetState extends State<UsersFormWidget> {
 
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
   SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
-  late AgencyEntity selectedAgency;
   late bool _passwordVisible;
   List<dynamic> cityList = [];
   List<String> emptyList = [
     'Seleziona agenzia'
   ];
 
-
   @override
   void initState() {
-
     _searchAgencyCubit.fetchAgencies();
     _passwordVisible = false;
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
-
-
     return BlocBuilder<SelectedUserCubit, SelectedUserState>(
         builder: (context, state) {
           if (state is SelectedUserState) {
-            widget.nameController.text = state.selectedUser.firstName ?? "";
-            widget.lastNameController.text = state.selectedUser.lastName ?? "";
-            widget.phoneController.text = state.selectedUser.phoneNumber ?? "";
+            widget.nameController.text = state.selectedUser.firstName ?? widget.nameController.text;
+            widget.lastNameController.text = state.selectedUser.lastName ?? widget.lastNameController.text;
+            widget.phoneController.text = state.selectedUser.phoneNumber ?? widget.phoneController.text;
             return Padding(
                 padding: getPadding(left: 20, right: 20),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
                       Container(
                         padding: getPadding(left: 20, right: 20),
                         child: Column(
@@ -390,8 +382,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                       validator: widget.phoneValidator,
                                                       inputFormatters: <
                                                           TextInputFormatter>[
-                                                        FilteringTextInputFormatter
-                                                            .digitsOnly,
+                                                        FilteringTextInputFormatter.digitsOnly,
                                                       ],
                                                       paddingRight: 0,
                                                       paddingLeft: 10,
@@ -479,14 +470,12 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                 )),
                                             Expanded(
                                                 flex: 1,
-                                                child: state.selectedUser.status?.name.toLowerCase() == 'agency'
-                                                    ? Column(
-                                                  crossAxisAlignment: CrossAxisAlignment
-                                                      .start,
+                                                child: state.selectedUser.status?.name.toLowerCase() == 'agency' ?
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Padding(
-                                                      padding: getPadding(
-                                                          bottom: 5, left: 4),
+                                                      padding: getPadding(bottom: 5, left: 4),
                                                       child: Text(
                                                         'AGENZIA',
                                                         style: SafeGoogleFont(
@@ -499,24 +488,17 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                     ),
 
                                                     Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          left: 10),
+                                                      padding: const EdgeInsets.only(left: 10),
                                                       child: Container(
                                                         height: 48,
                                                         decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius
-                                                                .circular(
-                                                                3),
-                                                            border: Border.all(
-                                                                color: greyState)
+                                                            borderRadius: BorderRadius.circular(3),
+                                                            border: Border.all(color: greyState)
                                                         ),
-                                                        child: BlocBuilder<
-                                                            SearchAgencyCubit,
-                                                            SearchAgencyState>(
+                                                        child: BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
                                                             builder: (context, agencyState) {
                                                               if (agencyState is SearchAgencyLoading) {
-                                                                return const Center(
-                                                                    child: CircularProgressIndicator());
+                                                                return const Center(child: CircularProgressIndicator());
                                                               } else
                                                               if (agencyState is SearchAgencyLoaded) {
                                                                 if (agencyState.agencies.isEmpty) {

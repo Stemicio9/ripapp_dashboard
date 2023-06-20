@@ -1,7 +1,6 @@
 import 'dart:js_interop';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
@@ -126,7 +125,6 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                 showDialog(
                     context: context,
                     builder: (ctx) =>
-
                         Form(
                           key:_formKey,
                           child: UsersForm(

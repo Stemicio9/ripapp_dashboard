@@ -43,7 +43,9 @@ class UsersDetail extends StatelessWidget {
         lastName = state.selectedUser.lastName ?? "";
         email = state.selectedUser.email ?? "";
         phoneNumber = state.selectedUser.phoneNumber ?? "";
-        agencyName = state.selectedUser.agency!.agencyName ?? "";
+        if (state.selectedUser.agency != null ) {
+          agencyName =  state.selectedUser.agency!.agencyName ?? "";
+        }
         role = state.selectedUser.status.toString() == 'UserStatus.active' ? 'Utente' :
         state.selectedUser.status.toString() == 'UserStatus.agency' ? 'Agenzia' :
         'Amministratore';

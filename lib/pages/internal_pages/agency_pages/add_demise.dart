@@ -245,12 +245,12 @@ class AddDemiseState extends State<AddDemise> {
                   padding: const EdgeInsets.only(top: 20),
                   child: WakeData(
                     timeController: wakeTimeController,
-                    addressController: addressController,
+                    wakeAddressController: addressController,
                     dateController: wakeDateController,
                     wakeNoteController: wakeNoteController,
                     timeValidator: notEmptyValidate,
                     dateValidator: notEmptyValidate,
-                    addressValidator: notEmptyValidate,
+                    wakeAddressValidator: notEmptyValidate,
                     showWakeTimePicker: () async {
                       TimeOfDay? pickedTime = await showTimePicker(
                         context: context,
@@ -381,7 +381,7 @@ class AddDemiseState extends State<AddDemise> {
         demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
         demiseEntity.wakeDateTime = (wakeDateController.text != "" && wakeDateController.text != null) ? convertDate(wakeDateController.text) : null;
         demiseEntity.wakeAddress = (addressController.text);
-        demiseEntity.wakeNote = (wakeNoteController.text);
+        demiseEntity.wakeNotes = (wakeNoteController.text);
         demiseEntity.funeralAddress = (funeralAddressController.text);
         demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
         demiseEntity.funeralNotes = (funeralNoteController.text);
