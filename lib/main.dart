@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
@@ -18,6 +19,7 @@ import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ripapp_dashboard/routing/routes.dart';
 import 'package:ripapp_dashboard/utils/AppUtils.dart';
 import 'firebase_options.dart';
 
@@ -25,10 +27,11 @@ import 'firebase_options.dart';
 void main() async {
   String initialRoute = "/";
   WidgetsFlutterBinding.ensureInitialized();
-  runApp( MyApp(initialRoute: initialRoute));
+  runApp( MyApp());
   AppUtils.firebaseApplication = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  CustomFirebaseAuthenticationListener().onAppStart();
   /*
   var credential = Credentials.applicationDefault();
   credential ??= await Credentials.login();
@@ -40,8 +43,9 @@ void main() async {
 class MyApp extends StatelessWidget {
 
 
-  final String initialRoute;
   static const int primaryColor = 0xFF412268;
+  final RouterManager routerManager = RouterManager();
+
 
   final MaterialColor primary = const MaterialColor(primaryColor,
     <int, Color>{
@@ -57,7 +61,6 @@ class MyApp extends StatelessWidget {
       900: Color(0xFF311B92),
   });
 
-  const MyApp({super.key,required this.initialRoute});
 
   @override
   /*
@@ -86,6 +89,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider (
       providers: [
         ChangeNotifierProvider<CustomFirebaseAuthenticationListener>(create: (_) => CustomFirebaseAuthenticationListener()),
+        Provider<RouterManager>(create: (_) => RouterManager()),
       ],
       child: MultiBlocProvider(
           providers: [
@@ -105,7 +109,8 @@ class MyApp extends StatelessWidget {
           ],
           child: Builder(
             builder: (context) {
-              return MaterialApp(
+              final GoRouter goRouter = Provider.of<RouterManager>(context, listen: false).goRouter;
+              return MaterialApp.router(
                 localizationsDelegates: const [
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,
@@ -120,9 +125,8 @@ class MyApp extends StatelessWidget {
 
                   primarySwatch: primary
                 ),
-                routes: RouteConstants.route(context) ,
-                initialRoute: initialRoute,
-              );
+                routerConfig: routerManager.goRouter,
+    );
             },
           ),
         )

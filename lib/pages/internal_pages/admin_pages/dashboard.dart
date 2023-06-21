@@ -1,5 +1,6 @@
 
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
@@ -24,8 +25,6 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard> {
   String title = "";
   int currentPage = 1;
-  //bool isSomeListPage = false;
-  late String isSomeListPage = "";
 
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
 
@@ -72,7 +71,8 @@ class DashboardState extends State<Dashboard> {
         icon: Icons.logout_rounded,
         onPressed: () {
         //  logoutFromAll();
-          Navigator.pushReplacementNamed(context, RouteConstants.login);
+          FirebaseAuth.instance.signOut();
+
         },
         isSelected: currentPage == 4,
       ),
