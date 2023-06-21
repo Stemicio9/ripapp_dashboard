@@ -96,19 +96,10 @@ class LoginFormState extends State<LoginForm> {
                 color: white,
                 textColor: background,
                // text: getCurrentLanguageValue(LOGIN)!,
-               text: "Login admin"
+               text: "Login"
             ),
           ),
-          Padding(
-            padding: getPadding(top: 10),
-            child: ActionButtonV2(
-              maxWidth: 240,
-              action: loginAgency,
-              color: white,
-              textColor: background,
-              text: 'Login agenzia',
-            ),
-          ),
+
         ],
       ),
     );
