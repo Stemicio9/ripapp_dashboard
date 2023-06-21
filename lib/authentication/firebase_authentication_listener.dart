@@ -40,10 +40,14 @@ class CustomFirebaseAuthenticationListener with ChangeNotifier {
 
 
   setCurrentAuthState(User? user) async {
+    print("questo viene chiamato al logout?");
+    print("USER ATTUALE");
+    print(user);
     if (user == null) {
       _user = null;
       _loginState = false;
       _tokenId = null;
+      _userEntity = null;
       // _role = await getCurrentRole();
     } else {
       _user = user;

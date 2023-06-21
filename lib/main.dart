@@ -30,6 +30,7 @@ void main() async {
   AppUtils.firebaseApplication = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  CustomFirebaseAuthenticationListener().onAppStart();
   /*
   var credential = Credentials.applicationDefault();
   credential ??= await Credentials.login();

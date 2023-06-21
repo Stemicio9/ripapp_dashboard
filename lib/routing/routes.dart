@@ -41,8 +41,7 @@ class RouterManager {
 
         print("SONO NEL REDIRECT, STATO ATTUALE");
         print(auth.userEntity);
-        bool authPath = state.location.contains("scaffold");
-        print("a zi ma che asciugamano");
+        bool authPath = state.location.contains("dashboard");
 
         print(state.location);
         if (auth.userEntity == null && !authPath) {
@@ -52,7 +51,6 @@ class RouterManager {
           return AppPage.login.path;
         }
         if(state.location == "/") {
-          print("eallora buonasera");
           return getPageByRole(auth.role);
         }
         return state.location;

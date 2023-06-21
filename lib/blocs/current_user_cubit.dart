@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 
-class CurrentUserCubit extends Cubit<CurrentUserState> {
+class CurrentUserCubit extends Cubit<CurrentUserState> with ChangeNotifier {
   CurrentUserCubit() :
         super(CurrentUserState(CustomFirebaseAuthenticationListener().userEntity ?? UserEntity.defaultUser()))
   {
