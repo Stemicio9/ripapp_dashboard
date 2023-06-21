@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
+import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
 String userEntityToJson(UserEntity data) => json.encode(data.toJson());
 
-class UserEntity {
+class UserEntity implements ResultEntity {
   int? id;
   String? firstName;
   String? lastName;

@@ -1,5 +1,7 @@
 
-class AgencyEntity {
+import 'package:ripapp_dashboard/utils/ResultSet.dart';
+
+class AgencyEntity implements ResultEntity {
   int? id;
   String? agencyName;
   String? email;

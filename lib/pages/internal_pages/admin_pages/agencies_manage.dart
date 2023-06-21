@@ -11,11 +11,14 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agenci
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
+import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import '../../../blocs/selected_agency_cubit.dart';
 import '../../../models/agency_entity.dart';
 
 class AgenciesManage extends StatelessWidget{
+
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -26,6 +29,7 @@ class AgenciesManage extends StatelessWidget{
 }
 
 class AgenciesManageWidget extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() {
     return AgenciesManageWidgetState();

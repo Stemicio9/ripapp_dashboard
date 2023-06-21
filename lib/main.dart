@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/blocs/current_user_cubit.dart';
@@ -100,6 +101,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<SelectedUserCubit>(create: (_) => SelectedUserCubit()),
             BlocProvider<SelectedAgencyCubit>(create: (_) => SelectedAgencyCubit()),
             BlocProvider<SelectedProductCubit>(create: (_) => SelectedProductCubit()),
+            BlocProvider<CurrentPageCubit>(create: (_) => CurrentPageCubit()),
           ],
           child: Builder(
             builder: (context) {

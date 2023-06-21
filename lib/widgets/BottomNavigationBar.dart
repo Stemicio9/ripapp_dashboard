@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:number_paginator/number_paginator.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 
 class BottomNavigationBarExample extends StatefulWidget {
-  final Function(int index) changePageHandle;
-  const BottomNavigationBarExample({super.key, required this.changePageHandle});
+  final Function(String page, int index) changePageHandle;
+  const BottomNavigationBarExample({super.key, required this.changePageHandle, });
 
   @override
   State<BottomNavigationBarExample> createState() =>
@@ -13,7 +15,8 @@ class BottomNavigationBarExample extends StatefulWidget {
 class _BottomNavigationBarExampleState
     extends State<BottomNavigationBarExample> {
   final int _numPages = 10;
-  int _currentPage = 0;
+  int _currentPageNumber = 0;
+  CurrentPageCubit get _currentPageCubit  => context.read<CurrentPageCubit>();
 
 
 
@@ -27,9 +30,9 @@ class _BottomNavigationBarExampleState
         numberPages: _numPages,
         onPageChange: (int index) {
           setState(() {
-            _currentPage = index;
+            _currentPageNumber = index;
             //passare l'indice
-            widget.changePageHandle(_currentPage);
+            widget.changePageHandle(_currentPageCubit.state.page, _currentPageNumber);
           });
         },
       ),

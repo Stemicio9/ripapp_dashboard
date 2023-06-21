@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
+import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
 
@@ -42,11 +44,11 @@ class ProductsTableState extends State<ProductsTable> {
   List<String> headerTitle = ['ID', 'Foto', 'Nome', 'Prezzo', ''];
   List<ProductEntity> products = [];
   File? imageFile;
-  SearchProductCubit get _searchProductsCubit => context.read<SearchProductCubit>();
+  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
 
   @override
   void initState() {
-    _searchProductsCubit.fetchProducts();
+    _currentPageCubit.loadPage(ScaffoldWidgetState.products_page, 0);
     super.initState();
   }
 
@@ -68,15 +70,15 @@ class ProductsTableState extends State<ProductsTable> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchProductCubit, SearchProductState>(
+    return BlocBuilder<CurrentPageCubit, CurrentPageState>(
         builder: (context, state) {
-          if (state is SearchProductLoading) {
+          if (state.loading) {
             return const Center(
                 child: CircularProgressIndicator()
             );
           }
-          else if (state is SearchProductLoaded) {
-            products = state.products;
+          else {
+            products = state.resultSet as List<ProductEntity>;
 
             if (products.isEmpty) {
               return Center(
@@ -111,8 +113,6 @@ class ProductsTableState extends State<ProductsTable> {
                   rows: createRows(),
                 ),
               );}
-          } else {
-            return ErrorWidget("exception");
           }
         });
   }
