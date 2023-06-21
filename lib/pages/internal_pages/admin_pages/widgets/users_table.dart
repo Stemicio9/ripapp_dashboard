@@ -14,7 +14,6 @@ class UsersTable extends StatefulWidget{
     'Nome',
     'Cognome',
     'Email',
-    'Città',
     'Telefono',
     'Ruolo',
     'Nome Agenzia',
@@ -157,11 +156,6 @@ class UsersTableState extends State<UsersTable>{
         )),
         DataCell(Text(
           p.email,
-          style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.w700),
-        )),
-        DataCell(Text(
-          p.city.toString(),
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),

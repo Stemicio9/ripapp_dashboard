@@ -30,6 +30,7 @@ class AutocompleteWidget extends StatelessWidget{
         padding: EdgeInsets.only(
             left: paddingLeft,
             right: paddingRight,
+
             top: paddingTop,
             bottom: paddingBottom
         ),

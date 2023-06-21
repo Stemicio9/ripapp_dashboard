@@ -17,6 +17,7 @@ import 'package:ripapp_dashboard/widgets/texts.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/language.dart';
 import '../../../constants/validators.dart';
+import '../../../models/demise_entity.dart';
 import '../../../utils/size_utils.dart';
 import 'package:intl/intl.dart';
 
@@ -398,6 +399,19 @@ class EditDemiseState extends State<EditDemise> {
 
   formSubmit() {
     if(_formKey.currentState!.validate()){
+
+      DemiseEntity demiseEntity = DemiseEntity();
+
+
+      if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
+        if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {
+          return ErrorSnackbar(
+              context,
+              text: 'Date selezionate incoerenti!'
+          );
+        }
+      }
+
       SuccessSnackbar(
           context,
           text: 'Defunto modificato con successo!'

@@ -416,8 +416,12 @@ class AddDemiseState extends State<AddDemise> {
           }
         }
         if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
-          if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!))
-            throw new Exception("incoherent dates");
+          if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {
+            return ErrorSnackbar(
+                context,
+                text: 'Date selezionate incoerenti!'
+            );
+          }
         }
 
         _searchDemiseCubit.saveProduct(demiseEntity);

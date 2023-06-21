@@ -349,11 +349,9 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                       options: widget.options,
                                                       paddingRight: 10,
                                                       paddingLeft: 0,
-                                                      hintText: getCurrentLanguageValue(
-                                                          CITY)!,
+                                                      hintText: getCurrentLanguageValue(CITY)!,
                                                       filterController: widget.filterController,
                                                     )
-
                                                   ],
                                                 )),
                                             Expanded(
