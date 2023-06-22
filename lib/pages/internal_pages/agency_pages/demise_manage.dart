@@ -47,7 +47,7 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
   final String message = 'Le informazioni riguardanti questo decesso verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
 
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
-  SelectedDemiseCubit get _selectedDemise => context.read<SelectedDemiseCubit>();
+  SelectedDemiseCubit get _selectedDemiseCubit => context.read<SelectedDemiseCubit>();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -101,18 +101,12 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
               );
             },
             edit: (dynamic p){
-              print("Defunto");
-              print(p);
-              Navigator.pushNamed(context, RouteConstants.editDemise,
-                      arguments:_selectedDemise.selectedDemise(p)
-
-              );
-
+              Navigator.pushNamed(context, RouteConstants.editDemise);
+              _selectedDemiseCubit.selectUser(p);
             },
-            showDetail: (){
-              Navigator.pushNamed(context, RouteConstants.demiseDetail,
-              );
-
+            showDetail: (dynamic p){
+              _selectedDemiseCubit.selectUser(p);
+              Navigator.pushNamed(context, RouteConstants.demiseDetail);
             },
             detailMessage: detailMessage,
             editMessage: editMessage,

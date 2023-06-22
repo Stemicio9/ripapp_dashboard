@@ -199,7 +199,7 @@ class ProductsTableState extends State<ProductsTable> {
                 message: editMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(
-                    onTap: edit,
+                    onTap: (){edit(p);},
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Icon(

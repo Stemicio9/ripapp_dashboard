@@ -1,9 +1,7 @@
 import 'dart:js_interop';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
@@ -18,12 +16,9 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_table.dart';
-import 'package:ripapp_dashboard/repositories/kinship_repository.dart';
-import 'package:ripapp_dashboard/utils/AppUtils.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import '../../../blocs/users_list_cubit.dart';
-import 'package:number_paginator/number_paginator.dart';
 
 
 enum UserRoles { Amministratore, Agenzia, Utente }
@@ -43,18 +38,6 @@ class UsersManage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-   /* return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => UsersListCubit(),
-        ),
-        BlocProvider(
-          create: (_) => SelectedUserCubit(),
-        )
-      ],
-      child: UsersManageWidget(
-      ),
-    );;*/
     return UsersManageWidget(changeIsSomeListShowed: this.changeIsSomeListShowed,);
   }
 
@@ -77,9 +60,8 @@ class UsersManageWidget extends StatefulWidget {
 
 class UsersManageWidgetState extends State<UsersManageWidget> {
 
-
-  UsersListCubit get _userListCubit => context.read<UsersListCubit>();
   SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
+  UsersListCubit get _userListCubit => context.read<UsersListCubit>();
 
   List<String> cityOptions = <String>[
     'Milano'
@@ -132,12 +114,6 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text =  "nome";
-    lastNameController.text = "Cognome";
-    emailController.text = "Email";
-    phoneController.text = "Telefono";
-    filterController.text = "";
-    passwordController.text = "Passwaord";
     return SingleChildScrollView(
       child: Padding(
         padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
@@ -150,7 +126,6 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                 showDialog(
                     context: context,
                     builder: (ctx) =>
-
                         Form(
                           key:_formKey,
                           child: UsersForm(
@@ -170,7 +145,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                             statusChange: setStatusFromDropdown,
                             agencyChange: setAgencyFromDropdown,
                             onTap: (){formSubmit();},
-                            roles: UserRoles.values.map((e) => e.name).toList(),
+                            roles: UserRoles.values,
                           ),
                         ));
               },
@@ -197,13 +172,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                         )
                 );
               },
-
               edit: (dynamic p) {
-                print("UTENTE SELEZIONATO");
-                print(p);
-                print("FORSE FUNZIONA");
-                print(_selectedUserCubit.selectUser(p));
-                print("FUNZIONA");
                 _selectedUserCubit.selectUser(p);
                 showDialog(
                     context: context,
@@ -216,16 +185,17 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                             agencyChange: setAgencyFromDropdown,
                             onTap: () {
                               if(_editKey.currentState!.validate()) {
+
                                 nameController.text = "";
                                 lastNameController.text = "";
                                 passwordController.text = "";
                                 emailController.text = "";
                                 phoneController.text = "";
                                 SuccessSnackbar(context, text: 'Utente modificato con successo!');
-
                                 Navigator.pop(context);
                               }
                             },
+                            isAddPage: false,
                             cardTitle: getCurrentLanguageValue(EDIT_USER)!,
                             nameController: nameController,
                             emailController: emailController,
@@ -236,31 +206,19 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                             passwordController: passwordController,
                             nameValidator: notEmptyValidate,
                             lastNameValidator: notEmptyValidate,
-                            passwordValidator: validatePassword,
-                            emailValidator: validateEmail,
                             phoneValidator: notEmptyValidate,
-                            roles: UserRoles.values.map((e) => e.name).toList(),
+                            roles: UserRoles.values,
                           ),
                         ));
               },
               showDetail: (dynamic p) {
+                _selectedUserCubit.selectUser(p);
                 showDialog(
                     context: context,
                     builder: (ctx) =>
                         UsersDetail(
                           isAgency: p.status.toString() == 'UserStatus.agency' ? true : false,
-                          agencyName: p.status.toString() == 'UserStatus.agency' ? p.agency.agencyName : '',
                           cardTitle: getCurrentLanguageValue(USER_DETAIL)!,
-                          name: p.firstName,
-                          id: p.id,
-                          email: p.email,
-                          phoneNumber: p.phoneNumber,
-                          city: userEntity.city!.first.toString(),
-                          //TODO check if lists or single city
-                          lastName: p.lastName,
-                          role: p.status.toString() == 'UserStatus.active' ? 'Utente' :
-                          p.status.toString() == 'UserStatus.agency' ? 'Agenzia' :
-                          'Amministratore',
                         ));
               },
               detailMessage: detailMessage,

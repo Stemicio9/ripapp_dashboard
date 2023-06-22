@@ -348,7 +348,7 @@ class DeceasedData extends StatelessWidget {
                           Padding(
                             padding: getPadding(bottom: 5),
                             child: Text(
-                              'COMUNE DI INTERESSE',
+                              'COMUNI DI INTERESSE',
                               style: SafeGoogleFont(
                                 'Montserrat',
                                 fontSize: 14,
@@ -361,7 +361,7 @@ class DeceasedData extends StatelessWidget {
                             options: citiesOfInterestOptions,
                             paddingRight: 20,
                             paddingLeft: 0,
-                            hintText: "Comune di interesse",
+                            hintText: "Comuni di interesse",
                             filterController: citiesController,
                             validator: citiesOfInterestValidator,
                           )

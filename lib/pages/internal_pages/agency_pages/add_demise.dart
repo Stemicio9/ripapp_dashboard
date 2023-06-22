@@ -114,7 +114,7 @@ class AddDemiseState extends State<AddDemise> {
 
                 //deceased data
                 DeceasedData(
-                 // imageFile: imageFile,
+                  // imageFile: imageFile,
                   imageOnTap: () async {
                     Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
                     print(pickedImage);
@@ -123,10 +123,10 @@ class AddDemiseState extends State<AddDemise> {
                     });
 
                     //TODO SALVARE IMMAGINE SU FIRESTORAGE
-                   // final storageRef = FirebaseStorage.instance.ref();
-                  //  final path = "profile_images/deceased_images/$imageFile";
-                  //  final imageRef = storageRef.child(path);
-                  //  imageRef.putFile(imageFile);
+                    // final storageRef = FirebaseStorage.instance.ref();
+                    //  final path = "profile_images/deceased_images/$imageFile";
+                    //  final imageRef = storageRef.child(path);
+                    //  imageRef.putFile(imageFile);
 
                   },
 
@@ -155,7 +155,7 @@ class AddDemiseState extends State<AddDemise> {
                         lastDate: DateTime.now().add(const Duration(days: 365)));
                     if (pickedDate != null) {
                       String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
+                      DateFormat('dd-MM-yyyy').format(pickedDate);
                       setState(() {
                         deceasedDateController.text = formattedDate;
                       });
@@ -164,11 +164,20 @@ class AddDemiseState extends State<AddDemise> {
                     }
                   },
                   onDragDone: (detail) async {
-                    setState(() {
-                      _list.addAll(detail.files);
-                      print('STAMPO IL FILE PICKATO');
-                      print(detail.files);
-                    });
+                    if(_list.isEmpty){
+                      setState(() {
+                        _list.addAll(detail.files);
+                        print('STAMPO IL FILE PICKATO');
+                        print(detail.files);
+                      });
+                    }else{
+                      setState(() {
+                        _list.removeLast();
+                        _list.addAll(detail.files);
+                        print('STAMPO IL FILE PICKATO');
+                        print(detail.files);
+                      });
+                    }
 
                     debugPrint('onDragDone:');
                     for (final file in detail.files) {
@@ -202,25 +211,25 @@ class AddDemiseState extends State<AddDemise> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         color:
-                            _dragging ? Colors.blue.withOpacity(0.4) : greyDrag,
+                        _dragging ? Colors.blue.withOpacity(0.4) : greyDrag,
                       ),
                       child: Stack(
                         children: [
                           if (_list.isEmpty)
                             Center(
 
-                               child: Texth2V2(
-                                  testo: 'Trascina qui un file',
-                                  color: greyDisabled,
-                                  weight: FontWeight.bold,
-                                ),
+                              child: Texth2V2(
+                                testo: 'Trascina qui un file',
+                                color: greyDisabled,
+                                weight: FontWeight.bold,
+                              ),
                             )
                           else
                             Center(
                               child:  Texth4V2(
-                                  testo: _list.map((e) => e.name).join("\n"),
-                                  color: black,
-                                  weight: FontWeight.bold,
+                                testo: _list.map((e) => e.name).join("\n"),
+                                color: black,
+                                weight: FontWeight.bold,
                               ),
                             ),
                           if (offset != null)
@@ -237,61 +246,17 @@ class AddDemiseState extends State<AddDemise> {
                   ),
                 ),
 
-              //wake data
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: WakeData(
-                  timeController: wakeTimeController,
-                  addressController: addressController,
-                  dateController: wakeDateController,
-                  wakeNoteController: wakeNoteController,
-                  showWakeTimePicker: () async {
-                    TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                      confirmText: getCurrentLanguageValue(CONFIRM) ?? "",
-                      cancelText: getCurrentLanguageValue(CANCEL) ?? "",
-                    );
-                    print("picked time = " + pickedTime.toString());
-                    if (pickedTime != null) {
-                      setState(() {
-                        wakeTimeController.text =
-                            pickedTime.format(context).toString();
-                      });
-                    } else {
-                      print("Time is not selected");
-                    }
-                  },
-                  showWakeDatePicker: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate:
-                            DateTime.now().add(const Duration(days: 365)));
-                    if (pickedDate != null) {
-                      String formattedDate =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
-                      setState(() {
-                        wakeDateController.text = formattedDate;
-                      });
-                    } else {
-                      print("Date is not selected");
-                    }
-                  },
-                ),
-              ),
                 //wake data
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: WakeData(
                     timeController: wakeTimeController,
-                    addressController: addressController,
+                    wakeAddressController: addressController,
                     dateController: wakeDateController,
                     wakeNoteController: wakeNoteController,
                     timeValidator: notEmptyValidate,
                     dateValidator: notEmptyValidate,
-                    addressValidator: notEmptyValidate,
+                    wakeAddressValidator: notEmptyValidate,
                     showWakeTimePicker: () async {
                       TimeOfDay? pickedTime = await showTimePicker(
                         context: context,
@@ -314,10 +279,10 @@ class AddDemiseState extends State<AddDemise> {
                           initialDate: DateTime.now(),
                           firstDate: DateTime.now(),
                           lastDate:
-                              DateTime.now().add(const Duration(days: 365)));
+                          DateTime.now().add(const Duration(days: 365)));
                       if (pickedDate != null) {
                         String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
+                        DateFormat('dd-MM-yyyy').format(pickedDate);
                         setState(() {
                           wakeDateController.text = formattedDate;
                         });
@@ -361,10 +326,10 @@ class AddDemiseState extends State<AddDemise> {
                           initialDate: DateTime.now(),
                           firstDate: DateTime.now(),
                           lastDate:
-                              DateTime.now().add(const Duration(days: 365)));
+                          DateTime.now().add(const Duration(days: 365)));
                       if (pickedDate != null) {
                         String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
+                        DateFormat('dd-MM-yyyy').format(pickedDate);
                         setState(() {
                           funeralDateController.text = formattedDate;
                         });
@@ -382,7 +347,6 @@ class AddDemiseState extends State<AddDemise> {
                   relativeRows: relativeRows,
                   addRelative: () async {
                     setState(() {
-                      _searchKinshipCubit.fetchKinships();
                       createNewRelativeRow();
                     });
                   },
@@ -395,7 +359,7 @@ class AddDemiseState extends State<AddDemise> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      ActionButtonV2(action: formSubmit, text: 'Crea'),
+                      ActionButtonV2(action: formSubmit, text: getCurrentLanguageValue(SAVE) ?? ""),
                     ],
                   ),
                 ),
@@ -408,64 +372,78 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   formSubmit() {
-    if(_formKey.currentState!.validate()){
-    DemiseEntity demiseEntity = DemiseEntity();
-    demiseEntity.firstName = (nameController.text);
-    demiseEntity.lastName = (lastNameController.text);
-    demiseEntity.city = CityEntity(name: cityController.text);
-    demiseEntity.phoneNumber = (phoneController.text);
-    demiseEntity.age = ageController.text != "" ? int.parse(ageController.text) : null;
-    demiseEntity.deceasedDate = (deceasedDateController.text != "" && deceasedDateController.text != null) ? convertDate(deceasedDateController.text) : null;
-    demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
-    demiseEntity.wakeDateTime = (wakeDateController.text != "" && wakeDateController.text != null) ? convertDate(wakeDateController.text) : null;
-    demiseEntity.wakeAddress = (addressController.text);
+    if (_formKey.currentState!.validate()) {
+      if (_list.isEmpty) {
+        ErrorSnackbar(context, text: 'Inserire necrologio!');
+      } else {
 
-    String wakeTimeString = wakeTimeController.text;
-    if (wakeTimeString != null && wakeTimeString != ""){
-      List<String> timeParts = wakeTimeString.split(":");
-      int? wakeHours = int.tryParse(timeParts[0]);
-      int? wakeMinutes = int.tryParse(timeParts[1]);
-      if (wakeMinutes != null && wakeHours != null && demiseEntity.wakeDateTime != null){
-        demiseEntity.wakeDateTime = DateTime(demiseEntity.wakeDateTime!.year, demiseEntity.wakeDateTime!.month, demiseEntity.wakeDateTime!.day, wakeHours, wakeMinutes);
+        DemiseEntity demiseEntity = DemiseEntity();
+        demiseEntity.firstName = (nameController.text);
+        demiseEntity.lastName = (lastNameController.text);
+        demiseEntity.city = CityEntity(name: cityController.text);
+        demiseEntity.phoneNumber = (phoneController.text);
+        demiseEntity.age = ageController.text != "" ? int.parse(ageController.text) : null;
+        demiseEntity.deceasedDate = (deceasedDateController.text != "" && deceasedDateController.text != null) ? convertDate(deceasedDateController.text) : null;
+        demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
+        demiseEntity.wakeDateTime = (wakeDateController.text != "" && wakeDateController.text != null) ? convertDate(wakeDateController.text) : null;
+        demiseEntity.wakeAddress = (addressController.text);
+        demiseEntity.wakeNotes = (wakeNoteController.text);
+        demiseEntity.funeralAddress = (funeralAddressController.text);
+        demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
+        demiseEntity.funeralNotes = (funeralNoteController.text);
+        //demiseEntity.cities = (citiesController.text);
+        //demiseEntity.relative = (relativeController.text);
+
+        String wakeTimeString = wakeTimeController.text;
+        if (wakeTimeString != null && wakeTimeString != "") {
+          List<String> timeParts = wakeTimeString.split(":");
+          int? wakeHours = int.tryParse(timeParts[0]);
+          int? wakeMinutes = int.tryParse(timeParts[1]);
+          if (wakeMinutes != null && wakeHours != null &&
+              demiseEntity.wakeDateTime != null) {
+            demiseEntity.wakeDateTime = DateTime(
+                demiseEntity.wakeDateTime!.year,
+                demiseEntity.wakeDateTime!.month,
+                demiseEntity.wakeDateTime!.day, wakeHours, wakeMinutes);
+          }
+        }
+        String funeralTimeString = funeralTimeController.text;
+        if (funeralTimeString != null && funeralTimeString != "") {
+          List<String> timeParts = funeralTimeString.split(":");
+          int? funeralHours = int.tryParse(timeParts[0]);
+          int? funeralMinutes = int.tryParse(timeParts[1]);
+          if (funeralMinutes != null && funeralHours != null &&
+              demiseEntity.funeralDateTime != null) {
+            demiseEntity.funeralDateTime = DateTime(
+                demiseEntity.funeralDateTime!.year,
+                demiseEntity.funeralDateTime!.month,
+                demiseEntity.funeralDateTime!.day, funeralHours,
+                funeralMinutes);
+          }
+        }
+        if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
+          if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {
+            return ErrorSnackbar(
+                context,
+                text: 'Date selezionate incoerenti!'
+            );
+          }
+        }
+
+        _searchDemiseCubit.saveProduct(demiseEntity);
+        SuccessSnackbar(
+            context,
+            text: 'Defunto aggiunto con successo!'
+        );
+        Navigator.pop(context);
       }
-    }
-    String funeralTimeString = funeralTimeController.text;
-    if (funeralTimeString != null && funeralTimeString != ""){
-      List<String> timeParts = funeralTimeString.split(":");
-      int? funeralHours = int.tryParse(timeParts[0]);
-      int? funeralMinutes = int.tryParse(timeParts[1]);
-      if (funeralMinutes != null && funeralHours != null && demiseEntity.funeralDateTime != null){
-        demiseEntity.funeralDateTime = DateTime(demiseEntity.funeralDateTime!.year, demiseEntity.funeralDateTime!.month, demiseEntity.funeralDateTime!.day, funeralHours, funeralMinutes);
-      }
-    }
-    if ( demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null){
-      if ( demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!) )
-        throw new Exception("incoherent dates");
-    }
-
-
-    demiseEntity.wakeNote = (wakeNoteController.text);
-    demiseEntity.funeralAddress= (funeralAddressController.text);
-    demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
-    demiseEntity.funeralNotes = (funeralNoteController.text);
-    //demiseEntity.cities = (citiesController.text);
-    //demiseEntity.relative = (relativeController.text);
-
-    //_searchDemiseCubit.saveProduct(demiseEntity);
-
-
-    _searchDemiseCubit.saveProduct(demiseEntity);
-    SuccessSnackbar(
-        context,
-        text: 'Defunto aggiunto con successo!'
-    );
-    Navigator.pop(context);
-   }else{
+    } else {
       ErrorSnackbar(
           context,
           text: 'Impossibile aggiungere defunto!'
       );
     }
+
   }
 
   void createNewRelativeRow() {
@@ -475,7 +453,7 @@ class AddDemiseState extends State<AddDemise> {
         relativeValidator: notEmptyValidate,
         relativeController: relativeController,
         deleteRelative: deleteRelative, changeKinship: (Kinship selectedKinship) {  }, statusChange: (String selectedValue) {  }, isDetail: false, selectedKinship: Kinship.brother, listKinship: const ['nonno'],
-        
+
     );
 
     // RelativeRow(onChanged: (String? value) {

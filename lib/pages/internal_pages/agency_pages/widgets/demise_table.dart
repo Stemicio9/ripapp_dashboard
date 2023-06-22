@@ -53,52 +53,7 @@ class DemiseTableState extends State<DemiseTable>{
   ];
 
   List<DemiseEntity> demises = [];
-  /*DemiseEntity(
-      id: '1',
-      firstName: 'Mario',
-      lastName: 'Rossi',
-      phoneNumber: '+39 0987654321',
-      city: CityEntity(name: "Roma"),
-      wakeAddress: 'Via Milano, 46',
-      funeralAddress: 'Via Roma, 74',
-    ),
-    DemiseEntity(
-      id: '2',
-      firstName: 'Mario',
-      lastName: 'Rossi',
-      phoneNumber: '+39 0987654321',
-      city: CityEntity(name: "Roma"),
-      wakeAddress: 'Via Milano, 46',
-      funeralAddress: 'Via Roma, 74',
-    ),
-    DemiseEntity(
-      id: '3',
-      firstName: 'Mario',
-      lastName: 'Rossi',
-      phoneNumber: '+39 0987654321',
-      city: CityEntity(name: "Roma"),
-      wakeAddress: 'Via Milano, 46',
-      funeralAddress: 'Via Roma, 74',
-    ),
-    DemiseEntity(
-      id: '4',
-      firstName: 'Mario',
-      lastName: 'Rossi',
-      phoneNumber: '+39 0987654321',
-      city: CityEntity(name: "Roma"),
-      wakeAddress: 'Via Milano, 46',
-      funeralAddress: 'Via Roma, 74',
-    ),
-    DemiseEntity(
-      id: '5',
-      firstName: 'Mario',
-      lastName: 'Rossi',
-      phoneNumber: '+39 0987654321',
-      city: CityEntity(name: "Roma"),
-      wakeAddress: 'Via Milano, 46',
-      funeralAddress: 'Via Roma, 74',
-    ),
-  ];*/
+
 
   final edit;
   final delete;

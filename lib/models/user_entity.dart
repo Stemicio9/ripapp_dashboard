@@ -70,8 +70,9 @@ class UserEntity {
         city: city ?? this.city,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         idtoken: idtoken ?? this.idtoken,
-      //  status: status ?? this.status,
-        role: role ?? this.role);
+         status: status ?? this.status,
+     //   role: role ?? this.role
+    );
   }
 
   Map<String, dynamic> toJson() => {
@@ -83,7 +84,6 @@ class UserEntity {
         "phone": phoneNumber,
         "idtoken": idtoken,
         "status":  status?.toJson(),
-        //"role": role ?? "",
         "agency": agency?.toJson()
       };
 
@@ -100,6 +100,7 @@ class UserEntity {
       role: "",
   );
 
+  factory UserEntity.emptyUser() => UserEntity();
 
   factory UserEntity.emptyUser() => UserEntity();
 // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;

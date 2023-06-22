@@ -103,7 +103,7 @@ class UserRepository {
     // todo this could be not necessary
     String goodJson = jsonEncode(response.data);
     //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
-    List<UserEntity> users = ((jsonDecode(goodJson) as Map)["content"] as List).map((user) => UserEntity.fromJson(user)).toList();
+    List<UserEntity> users = ((jsonDecode(goodJson) as List)).map((user) => UserEntity.fromJson(user)).toList();
     print("ecco i tuoi utenti" + users.toString() + users.length.toString());
     //List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
     //return userEntityList;
@@ -138,10 +138,10 @@ class UserRepository {
 
     var accountResponse = await UserRepository().account();
 
-    print("STATUS");
-    print(accountResponse.status);
 
     CustomFirebaseAuthenticationListener().role = userStatusToString(accountResponse.status);
+    print("STATUS");
+    print(accountResponse.status);
     CustomFirebaseAuthenticationListener().userEntity = accountResponse;
 
 
@@ -150,7 +150,7 @@ class UserRepository {
   Future<List<UserEntity>> getAllUsers() async {
     Map<String, dynamic>? parameters = {};
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
-    var userId = (user != null) ? user.id : "4";
+    var userId = (user != null) ? user.id : "48";
     int pageNumber = 0;
     int pageElements = 10;
     int offset = pageNumber*pageElements;

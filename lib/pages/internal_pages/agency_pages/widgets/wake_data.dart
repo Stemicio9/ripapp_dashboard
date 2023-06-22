@@ -10,12 +10,12 @@ import '../../../../widgets/texts.dart';
 class WakeData extends StatelessWidget{
 
 
-  final TextEditingController addressController;
+  final TextEditingController wakeAddressController;
   final TextEditingController timeController;
   final TextEditingController dateController;
   final TextEditingController wakeNoteController;
 
-  final dynamic addressValidator;
+  final dynamic wakeAddressValidator;
   final dynamic timeValidator;
   final dynamic dateValidator;
   final dynamic wakeNoteValidator;
@@ -24,11 +24,11 @@ class WakeData extends StatelessWidget{
 
   const WakeData({
     super.key,
-    this.addressValidator,
+    this.wakeAddressValidator,
     this.timeValidator,
     this.dateValidator,
     this.wakeNoteValidator,
-    required this.addressController,
+    required this.wakeAddressController,
     required this.timeController,
     required this.dateController,
     required this.wakeNoteController,
@@ -139,8 +139,8 @@ class WakeData extends StatelessWidget{
 
                           InputsV2Widget(
                             hinttext: getCurrentLanguageValue(ADDRESS)!,
-                            controller: addressController,
-                            validator: addressValidator,
+                            controller: wakeAddressController,
+                            validator: wakeAddressValidator,
                             paddingRight: 0,
                             borderSide: const BorderSide(color: greyState),
                             activeBorderSide: const BorderSide(color: background),

@@ -52,7 +52,7 @@ class AgencyRepository{
   Future<List<ProductOffered>> getAllAgencyProducts() async {
     Map<String, dynamic>? parameters = {};
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
-    var userId = (user != null) ? user.id : "4";
+    var userId = (user != null) ? user.id : "48";
     parameters.putIfAbsent("offset", () => 0);
     parameters.putIfAbsent("userid", () => userId!);
     Response res = await _dio.get(allProductsOfferedByAgency, queryParameters: parameters);
@@ -65,7 +65,7 @@ class AgencyRepository{
 
   void setAgencyProducts(List<ProductOffered> productsOffered) async {
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
-    var userId = (user != null) ? user.id : "4";
+    var userId = (user != null) ? user.id : "48";
     Map<String, dynamic>? parameters = {};
     parameters.putIfAbsent("userid", () => userId);
 

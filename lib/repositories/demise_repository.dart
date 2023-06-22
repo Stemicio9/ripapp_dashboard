@@ -66,7 +66,7 @@ class DemiseRepository{
     try {
       //res = await _dio.post(searchDemisesByCityUrl, data: demisesSearchEntity.toJson(), options: Options(headers: buildHeaders()));
       UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
-      var userId = (user != null) ? user.id : 4;
+      var userId = (user != null) ? user.id : 48;
       Map<String, dynamic>? parameters = {};
       parameters.putIfAbsent("accountId", () => userId);
       res = await _dio.get(searchDemisesIgnorante, queryParameters: parameters);
@@ -79,6 +79,7 @@ class DemiseRepository{
       return List.empty(growable: true);
     }
     List<DemiseEntity> demises = (res.data as List).map((e) => DemiseEntity.fromJson(e)).toList();
+
     print(" demises"+ demises.toString());
     return demises;
   }

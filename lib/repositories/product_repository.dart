@@ -40,7 +40,7 @@ class ProductRepository{
   }
   Future<dynamic> getAllProducts() async {
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
-    var userId = (user != null) ? user.id : 4;
+    var userId = (user != null) ? user.id : 48;
     Map<String, dynamic>? parameters = {};
     parameters.putIfAbsent("userId", () => userId);
     var response = await _dio.get(allProductsUrl, queryParameters: parameters);

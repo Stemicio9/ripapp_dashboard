@@ -12,7 +12,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
-import '../../../constants/colors.dart';
+import '../../../blocs/selected_agency_cubit.dart';
 import '../../../models/agency_entity.dart';
 
 class AgenciesManage extends StatelessWidget{
@@ -45,7 +45,14 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   final TextEditingController phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
+  SelectedAgencyCubit get _selectedAgencyCubit => context.read<SelectedAgencyCubit>();
 
+  static const List<String> cityOptions = <String>[
+    'Milano',
+    'Roma',
+    'Firenze',
+    'Torino',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +68,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                 showDialog(context: context, builder: (ctx)=> Form(
                   key: _formKey,
                   child: AgencyForm(
+                    cityOptions: cityOptions,
                     cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
                     nameController: nameController,
                     emailController: emailController,
@@ -94,12 +102,14 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                         message: message
                     ));
               },
-              edit: () {
+              edit: (dynamic p) {
+                _selectedAgencyCubit.selectUser(p);
                 showDialog(context: context, builder: (ctx)=> Form(
                   key: _editKey,
                   child: AgencyForm(
                     onSubmit: (){
                       if (_editKey.currentState!.validate()) {
+
                         nameController.text = "";
                         emailController.text = "";
                         phoneController.text = "";
@@ -111,13 +121,14 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                       }
 
                     },
+                    isAddPage: false,
+                    cityOptions: cityOptions,
                     cardTitle: getCurrentLanguageValue(EDIT_AGENCY)!,
                     nameController: nameController,
                     emailController: emailController,
                     phoneController: phoneController,
                     cityController: cityController,
                     nameValidator: notEmptyValidate,
-                    emailValidator: validateEmail,
                     cityValidator: notEmptyValidate,
                     phoneValidator: notEmptyValidate,
 
@@ -125,15 +136,11 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                 ));
               },
               showDetail: (dynamic p) {
+                _selectedAgencyCubit.selectUser(p);
                 showDialog(
                     context: context,
                     builder: (ctx) => AgencyDetail(
                         cardTitle: getCurrentLanguageValue(AGENCY_DETAIL)!,
-                        name: p.agencyName,
-                        id: p.id,
-                        email: p.email,
-                        phoneNumber: p.phoneNumber,
-                        city: city
                     ));
               },
               detailMessage: detailMessage,
