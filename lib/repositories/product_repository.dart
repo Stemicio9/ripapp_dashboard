@@ -43,7 +43,10 @@ class ProductRepository{
     print("b1");
     var response = await _dio.delete(urlDeleteProduct);
     print("response è " + response.data.toString());
-    return DeleteProductMessage.fromJson(response.data);
+    DeleteProductMessage deleteProductMessage = DeleteProductMessage.fromJson(response.data);
+    if (deleteProductMessage.message!.startsWith("il prodotto è già in uso da parte di"))
+      throw new Exception(deleteProductMessage.message);
+    return deleteProductMessage;
   }
 
   Future<dynamic> getAllProducts() async {

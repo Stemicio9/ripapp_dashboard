@@ -10,6 +10,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/produc
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
+import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import '../../../constants/colors.dart';
@@ -96,10 +97,17 @@ class ProductsManageState extends State<ProductsManage>{
                     context: context,
                     builder: (ctx) => DeleteMessageDialog(
                         onConfirm: (){
-                          _searchProductsCubit.delete(p.id);
+                          //_searchProductsCubit.delete(p.id);
+                          ProductRepository().deleteProduct(p.id).then((deleteProductMessage) {
+                            SuccessSnackbar(context, text: "Prodotto eliminato con successo");
+                          }, onError: (e) {
+                            if (e.toString().contains("il prodotto è già in uso da parte di"))
+                              ErrorSnackbar(context, text: 'Prodotto usato da agenzie');
+                              }
+                          );
 
                           Navigator.pop(context);
-                          BlocBuilder<SearchProductCubit, SearchProductState>(
+                          /*BlocBuilder<SearchProductCubit, SearchProductState>(
                              builder: (context, state) {
                             if (state is SearchProductError) {
                                return SnackBar(
@@ -144,7 +152,7 @@ class ProductsManageState extends State<ProductsManage>{
                               );
                             }
                             return Container();
-                          });
+                          });*/
 
 
 
