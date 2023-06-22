@@ -1,5 +1,6 @@
 
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
@@ -61,7 +62,8 @@ class DashboardAgencyState extends State<DashboardAgency> {
         icon: Icons.logout_rounded,
         onPressed: () {
           //  logoutFromAll();
-          Navigator.pushReplacementNamed(context, RouteConstants.login);
+          FirebaseAuth.instance.signOut();
+          //Navigator.pushReplacementNamed(context, RouteConstants.login);
         },
         isSelected: currentPage == 4,
       ),

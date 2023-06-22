@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -11,8 +14,7 @@ class ScaffoldWidget extends StatefulWidget {
     final Widget body;
     final Widget? title;
     final bool showAppBar;
-    final bool isSomeListShowed;
-    ScaffoldWidget ({Key? key, required this.body, this.title, this.showAppBar = false, this.isSomeListShowed = false,
+    ScaffoldWidget ({Key? key, required this.body, this.title, this.showAppBar = false,
     }) : super(key: key);
 
   @override
@@ -22,7 +24,11 @@ class ScaffoldWidget extends StatefulWidget {
 
 class ScaffoldWidgetState extends State<ScaffoldWidget> {
 
-  UsersListCubit get _userListCubit => context.read<UsersListCubit>();
+
+  CurrentPageCubit get _currentPageCubit  => context.read<CurrentPageCubit>();
+  static const String users_page = "users_list";
+  static const String agencies_page = "agencies_list";
+  static const String products_page = "products_list";
 
 
   @override
@@ -36,7 +42,9 @@ class ScaffoldWidgetState extends State<ScaffoldWidget> {
           widget.body
         ],
       )),
-      bottomNavigationBar: widget.isSomeListShowed ? bottomPagesBar() : null,
+      bottomNavigationBar: (_currentPageCubit.state.page == ScaffoldWidgetState.users_page ||
+          _currentPageCubit.state.page == ScaffoldWidgetState.agencies_page ||
+          _currentPageCubit.state.page == ScaffoldWidgetState.products_page ) ? bottomPagesBar() : null,
     );
   }
 
@@ -69,14 +77,17 @@ class ScaffoldWidgetState extends State<ScaffoldWidget> {
     ) : null;
   }
 
-  void changePageHandleUser(int pageIndex){
-    _userListCubit.fetchUsersListWithIndex(pageIndex);
+  void changePageHandleUser(String page, int pageIndex){
+    _currentPageCubit.loadPage(page, pageIndex);
   }
 
 
 
   Widget bottomPagesBar(){
-    return widget.isSomeListShowed ? BottomNavigationBarExample(changePageHandle: changePageHandleUser,) : ErrorWidget("exception");
+    return BlocBuilder<CurrentPageCubit, CurrentPageState>(
+        builder: (context, state){
+      return (state.page == ScaffoldWidgetState.users_page || state.page == ScaffoldWidgetState.agencies_page || state.page == ScaffoldWidgetState.products_page) ? BottomNavigationBarExample(changePageHandle: changePageHandleUser) : ErrorWidget("exception4");
+    });
   }
 
 

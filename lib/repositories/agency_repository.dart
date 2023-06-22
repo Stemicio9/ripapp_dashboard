@@ -9,6 +9,7 @@ import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
+import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
 
 
 class AgencyRepository{
@@ -19,6 +20,7 @@ class AgencyRepository{
   final String allAgenciesUrl = "$baseUrl/api/auth/agencies";
   final String allAgenciesProductsUrl = "$baseUrl/api/auth/products";
   final String allProductsOfferedByAgency = "$baseUrl/api/auth/productsOffered";
+  final String indexedAgenciesUrl =  "$baseUrl/api/auth/agenciesWithIndex";
   final String deleteAgency ="$baseUrl/api/auth/agency";
   factory AgencyRepository() {
     return _agencyRepository ;
@@ -65,6 +67,8 @@ class AgencyRepository{
 
   void setAgencyProducts(List<ProductOffered> productsOffered) async {
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
+    print("utente agenzia che tenta di cambiare i prodotti: " + user.toString());
+    print("utente che vado effettivamente a modificare: " + userId.toString());
     var userId = (user != null) ? user.id : "48";
     Map<String, dynamic>? parameters = {};
     parameters.putIfAbsent("userid", () => userId);
@@ -83,6 +87,21 @@ class AgencyRepository{
     String urlDeleteAgency = '$deleteAgency/$idAgency';
     var response = await _dio.delete(urlDeleteAgency);
     return response.data;
+  }
+
+  Future<List<AgencyEntity>> getAgenciesWithIndex(int pageIndex) async {
+    Map<String, dynamic>? parameters = {};
+    int pageNumber = 1;
+    int pageElements = 9;
+    AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
+    parameters.putIfAbsent("pageNumber", () => (pageIndex));
+    parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
+    Response response;
+    response = await _dio.get(indexedAgenciesUrl, queryParameters: parameters);
+    String goodJson = jsonEncode(response.data);
+    //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
+    List<AgencyEntity> agencies = ((jsonDecode(goodJson) as Map)["content"] as List).map((agency) => AgencyEntity.fromJson(agency)).toList();
+    return agencies;
   }
 
 }

@@ -111,19 +111,10 @@ class LoginFormState extends State<LoginForm>{
                 color: white,
                 textColor: background,
                // text: getCurrentLanguageValue(LOGIN)!,
-               text: "Login admin"
+               text: "Login"
             ),
           ),
-          Padding(
-            padding: getPadding(top: 10),
-            child: ActionButtonV2(
-              maxWidth: 240,
-              action: loginAgency,
-              color: white,
-              textColor: background,
-              text: 'Login agenzia',
-            ),
-          ),
+
         ],
       ),
     );
@@ -170,14 +161,14 @@ class LoginFormState extends State<LoginForm>{
       UserRepository().setFirebaseToken(token);
       var response = await UserRepository().loginPreLayer(token);
     });
-    Navigator.pushNamed(context, RouteConstants.dashboard);
+    //Navigator.pushNamed(context, RouteConstants.dashboard);
 
 
    // }
   }
   loginAgency() async {
     //  if (_formKey.currentState!.validate()) {
-    Navigator.pushNamed(context, RouteConstants.dashboardAgency);
+    //Navigator.pushNamed(context, RouteConstants.dashboardAgency);
 
 
     //  }

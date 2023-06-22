@@ -1,7 +1,9 @@
 
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -23,12 +25,9 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard> {
   String title = "";
   int currentPage = 1;
-  bool isSomeListPage = false;
 
-  void changeIsSomeListPage(bool newValue){
-    this.isSomeListPage = newValue;
-    print("cambio il valore di list showed a " + this.isSomeListPage.toString());
-  }
+  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
+
 
  // final UserCubit? userCubit;
 //  DashboardState({this.userCubit});
@@ -40,6 +39,7 @@ class DashboardState extends State<Dashboard> {
         text: getCurrentLanguageValue(USERS_MANAGE)!,
         icon: Icons.person_rounded,
         onPressed: () => setState(() {
+          _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.users_page);
           title = getCurrentLanguageValue(USERS_MANAGE)!;
           currentPage = 1;
         }),
@@ -49,6 +49,7 @@ class DashboardState extends State<Dashboard> {
         text: getCurrentLanguageValue(AGENCIES_MANAGE)!,
         icon: Icons.business_rounded,
         onPressed: () => setState(() {
+          _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agencies_page);
           title = getCurrentLanguageValue(AGENCIES_MANAGE)!;
           currentPage = 2;
         }),
@@ -58,6 +59,7 @@ class DashboardState extends State<Dashboard> {
         text: getCurrentLanguageValue(PRODUCTS_MANAGE)!,
         icon: Icons.table_rows,
         onPressed: () => setState(() {
+          _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.products_page);
           title = getCurrentLanguageValue(PRODUCTS_MANAGE)!;
           currentPage = 3;
         }),
@@ -69,7 +71,8 @@ class DashboardState extends State<Dashboard> {
         icon: Icons.logout_rounded,
         onPressed: () {
         //  logoutFromAll();
-          Navigator.pushReplacementNamed(context, RouteConstants.login);
+          FirebaseAuth.instance.signOut();
+
         },
         isSelected: currentPage == 4,
       ),
@@ -97,17 +100,13 @@ class DashboardState extends State<Dashboard> {
         body: _body(size, context),
         toggleTitle: '',
       ),
-      isSomeListShowed: isSomeListPage,
     );
   }
 
 
   Widget _body(Size size, BuildContext context) {
-    return MultiBlocProvider (
-        providers: [
-          BlocProvider<SearchAgencyCubit>(create: (_) => SearchAgencyCubit()),
-        ],
-        child: Builder(
+    return
+        Builder(
           builder: (context) {
             return Container(
               height: double.infinity,
@@ -116,24 +115,25 @@ class DashboardState extends State<Dashboard> {
               child: bodyChild(),
             );
           },
-        ),
     );
   }
 
 
-
-
   Widget bodyChild() {
-    switch (currentPage) {
-      case 1:
-        return UsersManage(changeIsSomeListShowed: changeIsSomeListPage,);
-      case 2:
-        return AgenciesManage();
-      case 3:
-        return ProductsManage();
-      default:
-        return Container();
-    }
+    return BlocBuilder<CurrentPageCubit, CurrentPageState>(
+        builder: (context, state)
+    {
+      switch (state.page) {
+        case ScaffoldWidgetState.users_page:
+          return UsersManage();
+        case ScaffoldWidgetState.agencies_page:
+          return AgenciesManage();
+        case ScaffoldWidgetState.products_page:
+          return ProductsManage();
+        default:
+          return Container();
+      }
+    });
   }
 
  /* void logoutFromAll() {

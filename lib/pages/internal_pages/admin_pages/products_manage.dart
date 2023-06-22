@@ -11,7 +11,6 @@ import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
-import 'package:ripapp_dashboard/image_uploads/image_uploads_product.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form.dart';
@@ -19,9 +18,13 @@ import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
+import 'package:ripapp_dashboard/widgets/scaffold.dart';
+import '../../../constants/colors.dart';
 import '../../../widgets/snackbars.dart';
 
 class ProductsManage extends StatefulWidget {
+
+
   @override
   State<StatefulWidget> createState() {
     return ProductsManageState();
