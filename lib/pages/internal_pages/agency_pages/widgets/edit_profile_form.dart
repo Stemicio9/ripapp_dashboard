@@ -29,12 +29,12 @@ class EditProfileForm extends StatefulWidget{
   bool showConfirmPassword;
   final Function() imageOnTap;
   final Function() changePassword;
-  final File? imageFile;
+  final String imageFile;
 
 
    EditProfileForm({
     super.key,
-    this.imageFile,
+    required this.imageFile,
     required this.imageOnTap,
     required this.onTap,
     required this.cardTitle,
@@ -109,8 +109,8 @@ class EditProfileFormState extends State<EditProfileForm>{
                                           borderRadius: const BorderRadius.all(Radius.circular(3)),
                                           color: greyDrag,
                                           border: Border.all(color: background, width: 1),
-                                          image: widget.imageFile != null ? DecorationImage(
-                                            image: FileImage(widget.imageFile!),
+                                          image: widget.imageFile != "" ? DecorationImage(
+                                            image: NetworkImage(widget.imageFile),
                                             fit: BoxFit.contain,
                                           ) : DecorationImage(
                                             image: AssetImage(ImagesConstants.imgDemisePlaceholder),

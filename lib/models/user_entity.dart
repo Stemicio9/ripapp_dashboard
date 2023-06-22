@@ -102,7 +102,5 @@ class UserEntity implements ResultEntity {
   );
 
   factory UserEntity.emptyUser() => UserEntity();
-
-  factory UserEntity.emptyUser() => UserEntity();
-// this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
+  // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
 }

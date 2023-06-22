@@ -1,10 +1,12 @@
 
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
-import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
@@ -78,35 +80,19 @@ class EditDemiseWidgetState extends State<EditDemiseWidget> {
   final List<XFile> _list = [];
   bool _dragging = false;
   final _formKey = GlobalKey<FormState>();
-  late DemiseEntity demiseEntity;
-
-
   Offset? offset;
   DateTime? wakeDate;
   DateTime? funeralDate;
-
-  /*static const List<String> cityOptions = <String>[
-    'Milano',
-    'Roma',
-    'Firenze',
-    'Torino',
-  ];
-  static const List<String> citiesOfInterestOptions = <String>[
-    'Milano',
-    'Roma',
-    'Firenze',
-    'Torino',
-  ];*/
-
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   static const List<String> kinship = <String>[
     'Madre',
     'Padre',
   ];
 
-  late Image imageFile;
+  String imageFile = "";
   final List<Widget> relativeRows = [];
 
   @override
@@ -160,16 +146,26 @@ class EditDemiseWidgetState extends State<EditDemiseWidget> {
 
                           //deceased data
                           DeceasedData(
-                            //imageFile: imageFile,
+                            imageFile: imageFile,
                             imageOnTap: () async {
-                              //TODO: IMPLEMENTARE IMAGEPICKER
-                              // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
-                              Image? pickedImage = await ImagePickerWeb
-                                  .getImageAsWidget();
-                              print(pickedImage);
-                              setState(() {
-                                imageFile = pickedImage!;
-                              });
+                              FilePickerResult? result = await FilePicker.platform.pickFiles();
+                              //TODO SALVARE IMMAGINE SU FIRESTORAGE E MOSTRARE L'IMMAGINE PICKATA NEL BOX
+                              if (result != null) {
+                                Uint8List fileBytes = result.files.first.bytes!;
+                                String fileName = result.files.first.name;
+                                print('STAMPO IL FILE PICKATO');
+                                print(fileName);
+
+                                setState(() {
+                                  imageFile = fileBytes.toString();
+                                  print('STAMPO IMMAGINE NEL BOX');
+                                  print(imageFile);
+                                });
+                                final User user = auth.currentUser!;
+                                final uid = user.uid;
+                                var path = 'profile_images/users_images/$uid/$fileName';
+                                await FirebaseStorage.instance.ref(path).putData(fileBytes);
+                              }
                             },
 
                             filterController: filterController,

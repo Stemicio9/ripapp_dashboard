@@ -1,4 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,26 +59,13 @@ class AddDemiseState extends State<AddDemise> {
   final List<XFile> _list = [];
 
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
-  SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
   bool _dragging = false;
   Offset? offset;
   DateTime? wakeDate;
   DateTime? funeralDate;
-  /*static const List<String> cityOptions = <String>[
-    'Milano',
-    'Roma',
-    'Firenze',
-    'Torino',
-  ];
-  static const List<String> citiesOfInterestOptions = <String>[
-    'Milano',
-    'Roma',
-    'Firenze',
-    'Torino',
-  ];*/
-
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   static const List<String> kinship = <String>[
     'Madre',
@@ -88,7 +78,7 @@ class AddDemiseState extends State<AddDemise> {
     'Nonna',
   ];
 
-  late Image imageFile;
+  String imageFile = "";
   final _formKey = GlobalKey<FormState>();
   final List<Widget> relativeRows = [];
 
@@ -114,19 +104,26 @@ class AddDemiseState extends State<AddDemise> {
 
                 //deceased data
                 DeceasedData(
-                  // imageFile: imageFile,
+                  imageFile: imageFile,
                   imageOnTap: () async {
-                    Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
-                    print(pickedImage);
-                    setState(() {
-                      imageFile = pickedImage!;
-                    });
+                    FilePickerResult? result = await FilePicker.platform.pickFiles();
+                    //TODO SALVARE IMMAGINE SU FIRESTORAGE E MOSTRARE L'IMMAGINE PICKATA NEL BOX
+                    if (result != null) {
+                      Uint8List fileBytes = result.files.first.bytes!;
+                      String fileName = result.files.first.name;
+                      print('STAMPO IL FILE PICKATO');
+                      print(fileName);
 
-                    //TODO SALVARE IMMAGINE SU FIRESTORAGE
-                    // final storageRef = FirebaseStorage.instance.ref();
-                    //  final path = "profile_images/deceased_images/$imageFile";
-                    //  final imageRef = storageRef.child(path);
-                    //  imageRef.putFile(imageFile);
+                      setState(() {
+                        imageFile = fileBytes.toString();
+                        print('STAMPO IMMAGINE NEL BOX');
+                        print(imageFile);
+                      });
+                      final User user = auth.currentUser!;
+                      final uid = user.uid;
+                      var path = 'profile_images/users_images/$uid/$fileName';
+                      await FirebaseStorage.instance.ref(path).putData(fileBytes);
+                    }
 
                   },
 

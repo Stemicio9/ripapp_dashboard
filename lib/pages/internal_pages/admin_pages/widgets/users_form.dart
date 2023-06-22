@@ -99,6 +99,7 @@ class UsersForm extends StatelessWidget {
   }
 }
 
+
 class UsersFormWidget extends StatefulWidget {
   final String cardTitle;
   late TextEditingController nameController;
@@ -150,6 +151,8 @@ class UsersFormWidget extends StatefulWidget {
 
 class UsersFormWidgetState extends State<UsersFormWidget> {
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
+  SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
+  late bool _passwordVisible;
 
   CityListCubit get _cityListCubit => context.read<CityListCubit>();
   late String selectedValue;
@@ -157,13 +160,12 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   List<CityFromAPI> cityList = [];
   List<String> emptyList = ['Seleziona agenzia'];
   late UserEntity userEntity;
-  SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
-  late bool _passwordVisible;
+
   @override
   void initState() {
     _searchAgencyCubit.fetchAgencies();
-    _passwordVisible = false;
     _cityListCubit.fetchCityList();
+    _passwordVisible = false;
     super.initState();
   }
   @override

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
+import 'package:ripapp_dashboard/constants/app_pages.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
@@ -67,7 +69,7 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
           Header(
             deleteProfileOnTap: (){},
             onTap: (){
-              Navigator.pushNamed(context, RouteConstants.addDemise);
+              context.go(AppPage.addDemise.path);
             },
             pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
             buttonText: getCurrentLanguageValue(ADD_DEMISE)!,
@@ -101,12 +103,12 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
               );
             },
             edit: (dynamic p){
-              Navigator.pushNamed(context, RouteConstants.editDemise);
+              context.go(AppPage.editDemise.path);
               _selectedDemiseCubit.selectUser(p);
             },
             showDetail: (dynamic p){
               _selectedDemiseCubit.selectUser(p);
-              Navigator.pushNamed(context, RouteConstants.demiseDetail);
+              context.go(AppPage.demiseDetail.path);
             },
             detailMessage: detailMessage,
             editMessage: editMessage,

@@ -4,6 +4,7 @@ import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agency_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agency_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
@@ -50,13 +51,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
   SelectedAgencyCubit get _selectedAgencyCubit => context.read<SelectedAgencyCubit>();
-
-  static const List<String> cityOptions = <String>[
-    'Milano',
-    'Roma',
-    'Firenze',
-    'Torino',
-  ];
+  late List<CityFromAPI> cityOptions;
 
   @override
   Widget build(BuildContext context) {
