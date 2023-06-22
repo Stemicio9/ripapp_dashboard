@@ -15,6 +15,7 @@ import 'package:ripapp_dashboard/blocs/selected_agency_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -106,6 +107,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<SelectedAgencyCubit>(create: (_) => SelectedAgencyCubit()),
             BlocProvider<SelectedProductCubit>(create: (_) => SelectedProductCubit()),
             BlocProvider<CurrentPageCubit>(create: (_) => CurrentPageCubit()),
+            BlocProvider<SelectedUserCubit>(create: (_) => SelectedUserCubit()),
           ],
           child: Builder(
             builder: (context) {

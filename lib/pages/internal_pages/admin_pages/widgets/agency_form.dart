@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/selected_agency_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
@@ -26,7 +27,7 @@ final dynamic cityValidator;
 final dynamic emailValidator;
 final dynamic phoneValidator;
 final Function() onSubmit;
-final List<String> cityOptions;
+final List<CityFromAPI> cityOptions;
 final bool isAddPage;
 
 

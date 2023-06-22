@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 
+import '../models/CityEntity.dart';
+
 @immutable
 class UsersListState {}
 
@@ -12,6 +14,7 @@ class UsersListError extends UsersListState {}
 
 class UsersListLoaded extends UsersListState {
   final List<UserEntity> accountList;
+
 
   UsersListLoaded(this.accountList);
 
@@ -83,15 +86,6 @@ class UsersListCubit extends Cubit<UsersListState> {
     }
   }
 
-  cityList() async {
-    emit(UsersListLoading());
-    try {
-      var result = await UserRepository().cityList();
-      fetchUsersList();
-    } catch (e) {
-      emit(UsersListError());
-    }
-  }
 
   changeSelectedAgency(UserEntity? userEntity) {
     if (state is UsersListLoaded && userEntity != null) {

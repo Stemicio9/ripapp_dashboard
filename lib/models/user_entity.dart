@@ -11,7 +11,7 @@ class UserEntity implements ResultEntity {
   String? firstName;
   String? lastName;
   String? email;
-  List<CityEntity>? city;
+  List<dynamic>? city;
   String? phoneNumber;
   String? idtoken;
   UserStatus? status;
@@ -44,7 +44,7 @@ class UserEntity implements ResultEntity {
       firstName: json["name"] ?? "",
       lastName: json["surname"] ?? "",
       email: json["email"] ?? "",
-      city: (json["city"] as List).map((e) => CityEntity.fromJson(e)).toList() ?? List.empty(),
+      city: (json["city"]).map((e) => CityEntity.fromJson(e)).toList() ?? List.empty(),
       phoneNumber: json["phone"] ?? "",
       idtoken: json["idtoken"] ?? "",
        // status: json["status"] != null && (json["status"] as String).isNotEmpty ? UserStatus.values.firstWhere((e) => e.toString() == json["status"]) : UserStatus.active,
@@ -58,7 +58,7 @@ class UserEntity implements ResultEntity {
       String? firstName,
       String? lastName,
       String? email,
-      List<CityEntity>? city,
+      List<dynamic>? city,
       String? phoneNumber,
       String? idtoken,
       String? role,
@@ -102,6 +102,5 @@ class UserEntity implements ResultEntity {
   );
 
   factory UserEntity.emptyUser() => UserEntity();
-
-// this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
+  // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
 }

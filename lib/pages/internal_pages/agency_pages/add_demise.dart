@@ -1,4 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +10,7 @@ import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
@@ -20,6 +24,7 @@ import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import '../../../constants/colors.dart';
+import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
 import '../../../utils/size_utils.dart';
 import 'package:intl/intl.dart';
@@ -54,24 +59,15 @@ class AddDemiseState extends State<AddDemise> {
   final List<XFile> _list = [];
 
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
-  SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
   bool _dragging = false;
   Offset? offset;
   DateTime? wakeDate;
   DateTime? funeralDate;
-  static const List<String> cityOptions = <String>[
-    'Milano',
-    'Roma',
-    'Firenze',
-    'Torino',
-  ];
-  static const List<String> citiesOfInterestOptions = <String>[
-    'Milano',
-    'Roma',
-    'Firenze',
-    'Torino',
-  ];
-  static List<String> kinship = <String>[
+  List<CityFromAPI> cityOptions = <CityFromAPI>[];
+  List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+  static const List<String> kinship = <String>[
     'Madre',
     'Padre',
     'Fratello',
@@ -82,7 +78,7 @@ class AddDemiseState extends State<AddDemise> {
     'Nonna',
   ];
 
-  late Image imageFile;
+  String imageFile = "";
   final _formKey = GlobalKey<FormState>();
   final List<Widget> relativeRows = [];
 
@@ -108,19 +104,26 @@ class AddDemiseState extends State<AddDemise> {
 
                 //deceased data
                 DeceasedData(
-                  // imageFile: imageFile,
+                  imageFile: imageFile,
                   imageOnTap: () async {
-                    Image? pickedImage = await ImagePickerWeb.getImageAsWidget();
-                    print(pickedImage);
-                    setState(() {
-                      imageFile = pickedImage!;
-                    });
+                    FilePickerResult? result = await FilePicker.platform.pickFiles();
+                    //TODO SALVARE IMMAGINE SU FIRESTORAGE E MOSTRARE L'IMMAGINE PICKATA NEL BOX
+                    if (result != null) {
+                      Uint8List fileBytes = result.files.first.bytes!;
+                      String fileName = result.files.first.name;
+                      print('STAMPO IL FILE PICKATO');
+                      print(fileName);
 
-                    //TODO SALVARE IMMAGINE SU FIRESTORAGE
-                    // final storageRef = FirebaseStorage.instance.ref();
-                    //  final path = "profile_images/deceased_images/$imageFile";
-                    //  final imageRef = storageRef.child(path);
-                    //  imageRef.putFile(imageFile);
+                      setState(() {
+                        imageFile = fileBytes.toString();
+                        print('STAMPO IMMAGINE NEL BOX');
+                        print(imageFile);
+                      });
+                      final User user = auth.currentUser!;
+                      final uid = user.uid;
+                      var path = 'profile_images/users_images/$uid/$fileName';
+                      await FirebaseStorage.instance.ref(path).putData(fileBytes);
+                    }
 
                   },
 
@@ -443,12 +446,11 @@ class AddDemiseState extends State<AddDemise> {
   void createNewRelativeRow() {
     selectedValues.add(kinship.first);
     var x = RelativeRow(
-      onChanged: changeDropdown,
-      kinship: kinship,
-      relativeValidator: notEmptyValidate,
-      relativeController: relativeController,
-      deleteRelative: deleteRelative,
-      value: selectedValues.last,
+        onChanged: changeDropdown,
+        relativeValidator: notEmptyValidate,
+        relativeController: relativeController,
+        deleteRelative: deleteRelative, changeKinship: (Kinship selectedKinship) {  }, statusChange: (String selectedValue) {  }, isDetail: false, selectedKinship: Kinship.brother, listKinship: const ['nonno'],
+
     );
 
     // RelativeRow(onChanged: (String? value) {
@@ -462,8 +464,11 @@ class AddDemiseState extends State<AddDemise> {
 
   changeDropdown(RelativeRow relativeRow, value){
     setState(() {
+      print("ILPARENTE");
+      print(value);
       var index = relativeRows.indexOf(relativeRow);
       selectedValues[index] = value;
+      changeDropdown(relativeRow, value);
     });
   }
 

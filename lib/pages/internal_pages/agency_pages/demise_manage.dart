@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
+import 'package:ripapp_dashboard/constants/app_pages.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
@@ -13,16 +15,34 @@ import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 import '../../../blocs/search_demises_cubit.dart';
 import '../../../constants/colors.dart';
+import '../admin_pages/users_manage.dart';
 
-class DemiseManage extends StatefulWidget {
+
+class DemiseMenage extends StatelessWidget{
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => SelectedDemiseCubit(),
+        ),
+
+      ],
+      child: DemiseManageWidget(),
+    );
+  }
+}
+
+class DemiseManageWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return DemiseManageState();
+    return DemiseManageWidgetState();
   }
 }
 
 
-class DemiseManageState extends State<DemiseManage>{
+class DemiseManageWidgetState extends State<DemiseManageWidget>{
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
@@ -49,7 +69,7 @@ class DemiseManageState extends State<DemiseManage>{
           Header(
             deleteProfileOnTap: (){},
             onTap: (){
-              Navigator.pushNamed(context, RouteConstants.addDemise);
+              context.go(AppPage.addDemise.path);
             },
             pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
             buttonText: getCurrentLanguageValue(ADD_DEMISE)!,
@@ -83,12 +103,12 @@ class DemiseManageState extends State<DemiseManage>{
               );
             },
             edit: (dynamic p){
-              Navigator.pushNamed(context, RouteConstants.editDemise);
+              context.go(AppPage.editDemise.path);
               _selectedDemiseCubit.selectUser(p);
             },
             showDetail: (dynamic p){
               _selectedDemiseCubit.selectUser(p);
-              Navigator.pushNamed(context, RouteConstants.demiseDetail);
+              context.go(AppPage.demiseDetail.path);
             },
             detailMessage: detailMessage,
             editMessage: editMessage,

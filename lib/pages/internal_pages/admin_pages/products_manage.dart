@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
@@ -14,8 +15,6 @@ import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
-import 'package:ripapp_dashboard/widgets/scaffold.dart';
-import '../../../constants/colors.dart';
 import '../../../widgets/snackbars.dart';
 
 class ProductsManage extends StatefulWidget {
@@ -60,7 +59,7 @@ class ProductsManageState extends State<ProductsManage>{
                           imageOnTap: () async {
 
                             FilePickerResult? result = await FilePicker.platform.pickFiles();
-                            //TODO SALVARE IMMAGINE SU FIRESTORAGE E MOSTRARE L'IMMAGINE PICKATA NEL BOX
+                            // TODO SALVARE IMMAGINE SU FIRESTORAGE E MOSTRARE L'IMMAGINE PICKATA NEL BOX
                             if (result != null) {
                               Uint8List fileBytes = result.files.first.bytes!;
                               String fileName = result.files.first.name;

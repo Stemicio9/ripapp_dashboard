@@ -1,10 +1,15 @@
 
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
+import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_data.dart';
@@ -15,6 +20,7 @@ import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import '../../../constants/colors.dart';
+import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
 import '../../../constants/validators.dart';
 import '../../../models/demise_entity.dart';
@@ -24,15 +30,32 @@ import 'package:intl/intl.dart';
 import '../../../widgets/action_button.dart';
 import '../../../widgets/snackbars.dart';
 
-class EditDemise extends StatefulWidget {
+
+class EditDemise extends StatelessWidget{
 
   @override
-  State<StatefulWidget> createState() {
-    return EditDemiseState();
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => SelectedDemiseCubit(),
+        ),
+
+      ],
+      child: EditDemiseWidget(),
+    );
   }
 }
 
-class EditDemiseState extends State<EditDemise> {
+class EditDemiseWidget extends StatefulWidget {
+
+  @override
+  State<StatefulWidget> createState() {
+    return EditDemiseWidgetState();
+  }
+}
+
+class EditDemiseWidgetState extends State<EditDemiseWidget> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
@@ -57,29 +80,19 @@ class EditDemiseState extends State<EditDemise> {
   final List<XFile> _list = [];
   bool _dragging = false;
   final _formKey = GlobalKey<FormState>();
-
-
   Offset? offset;
   DateTime? wakeDate;
   DateTime? funeralDate;
-  static const List<String> cityOptions = <String>[
-    'Milano',
-    'Roma',
-    'Firenze',
-    'Torino',
-  ];
-  static const List<String> citiesOfInterestOptions = <String>[
-    'Milano',
-    'Roma',
-    'Firenze',
-    'Torino',
-  ];
+  List<CityFromAPI> cityOptions = <CityFromAPI>[];
+  List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   static const List<String> kinship = <String>[
     'Madre',
     'Padre',
   ];
 
-  late Image imageFile;
+  String imageFile = "";
   final List<Widget> relativeRows = [];
 
   @override
@@ -133,16 +146,26 @@ class EditDemiseState extends State<EditDemise> {
 
                           //deceased data
                           DeceasedData(
-                            //imageFile: imageFile,
+                            imageFile: imageFile,
                             imageOnTap: () async {
-                              //TODO: IMPLEMENTARE IMAGEPICKER
-                              // Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
-                              Image? pickedImage = await ImagePickerWeb
-                                  .getImageAsWidget();
-                              print(pickedImage);
-                              setState(() {
-                                imageFile = pickedImage!;
-                              });
+                              FilePickerResult? result = await FilePicker.platform.pickFiles();
+                              //TODO SALVARE IMMAGINE SU FIRESTORAGE E MOSTRARE L'IMMAGINE PICKATA NEL BOX
+                              if (result != null) {
+                                Uint8List fileBytes = result.files.first.bytes!;
+                                String fileName = result.files.first.name;
+                                print('STAMPO IL FILE PICKATO');
+                                print(fileName);
+
+                                setState(() {
+                                  imageFile = fileBytes.toString();
+                                  print('STAMPO IMMAGINE NEL BOX');
+                                  print(imageFile);
+                                });
+                                final User user = auth.currentUser!;
+                                final uid = user.uid;
+                                var path = 'profile_images/users_images/$uid/$fileName';
+                                await FirebaseStorage.instance.ref(path).putData(fileBytes);
+                              }
                             },
 
                             filterController: filterController,
@@ -430,11 +453,14 @@ class EditDemiseState extends State<EditDemise> {
     selectedValues.add(kinship.first);
     var x = RelativeRow(
         onChanged: changeDropdown,
-        kinship: kinship,
         relativeController: relativeController,
         deleteRelative: deleteRelative,
         relativeValidator: notEmptyValidate,
-        value: selectedValues.last
+
+      statusChange: (String selectedValue) {  },
+      isDetail: false, changeKinship: (Kinship selectedKinship) {  }, selectedKinship: kinship as Kinship, listKinship: ['nonno'],
+       /*statusChange: (String selectedValue) {  }, kinChange: (Kinship selectedKinship)*/
+
     );
 
     // RelativeRow(onChanged: (String? value) {

@@ -50,7 +50,6 @@ class AddRelative extends StatelessWidget{
                 ),
               ),
             ),
-
         ...relativeRows.map((e) => e).toList()
 
           ],

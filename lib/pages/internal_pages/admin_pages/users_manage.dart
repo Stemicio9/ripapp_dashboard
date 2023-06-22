@@ -35,6 +35,18 @@ class UsersManage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+   /* return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => UsersListCubit(),
+        ),
+        BlocProvider(
+          create: (_) => SelectedUserCubit(),
+        )
+      ],
+      child: UsersManageWidget(
+      ),
+    );;*/
     return UsersManageWidget();
   }
 
@@ -53,6 +65,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
 
   SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
+
   List<String> cityOptions = <String>[
     'Milano'
   ];
