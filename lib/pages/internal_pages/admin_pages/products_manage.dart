@@ -1,9 +1,14 @@
+
+import 'dart:html';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
+import 'package:ripapp_dashboard/image_uploads/image_uploads_product.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form.dart';
@@ -11,7 +16,6 @@ import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
-import '../../../constants/colors.dart';
 import '../../../widgets/snackbars.dart';
 
 class ProductsManage extends StatefulWidget {
@@ -32,6 +36,8 @@ class ProductsManageState extends State<ProductsManage>{
   late String imageFile;
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
+  late ImageUploadsProduct _imageUploadsProduct;
+
 
 
   SearchProductCubit get _searchProductsCubit => context.read<SearchProductCubit>();
@@ -59,7 +65,11 @@ class ProductsManageState extends State<ProductsManage>{
                             print(photoName);
 
                             setState(() {
-                              imageFile = photoName!;
+                              print("CARICO");
+                              print(photoName);
+                              if(photoName!= null) {
+                                imageFile = photoName!;
+                              }
                             });
 
                             //TODO SALVARE IMMAGINE SU FIRESTORAGE

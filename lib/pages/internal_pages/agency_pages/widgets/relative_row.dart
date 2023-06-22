@@ -106,10 +106,7 @@ import '../../../../widgets/input.dart';
                               return const Center(child: CircularProgressIndicator());
                             }
                             else if (state is SearchKinshipLoaded){
-                              print("VA IN LOADED");
                               List<Kinship> kinships = state.kinships;
-                              print("valori delle kinship del cubit"+ state.kinships.toString());
-                              print("KINSHIP SELEZIONATA");
                               print(state.selectedKinship);
                               return DropdownButton<String>(
                                 hint: const Text(

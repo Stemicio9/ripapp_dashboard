@@ -5,26 +5,21 @@ import 'package:ripapp_dashboard/models/user_entity.dart';
 import '../repositories/user_repository.dart';
 
 @immutable
-class SelectedUserState {}
+class SelectedUserState {
+  final UserEntity selectedUser;
 
-class SelectedUserLoaded extends SelectedUserState {}
-class SelectedUserError extends SelectedUserState{}
+  const SelectedUserState({required this.selectedUser});
+}
+
+
 
 class SelectedUserCubit extends Cubit<SelectedUserState> {
-  SelectedUserCubit() : super(SelectedUserLoaded());
+  SelectedUserCubit() : super(SelectedUserState(selectedUser: UserEntity.emptyUser()));
 
-  fetchSelectedUser(int userId, UserEntity userEntity) async {
-    emit(SelectedUserLoaded());
-    try {
-      print("RIEMPIO LA MODIFICA UTENTE");
-      // todo manage if agencies is null or empty in response
-      print("Step 1");
-      var result = await UserRepository().updateUser(userId, userEntity);
-      print("Step 2");
-    } catch (e) {
-      print("ERRORE1");
-      print(e);
-      emit(SelectedUserError());
-    }
+  selectUser(UserEntity selectedUser)async{
+    print("ciao4");
+    emit(SelectedUserState(selectedUser: selectedUser));
+    print(selectedUser);
+    print("CIAO5555");
   }
 }

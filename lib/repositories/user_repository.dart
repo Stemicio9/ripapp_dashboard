@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:html';
 import 'package:dio/browser.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/constants/rest_path.dart';
 import 'package:ripapp_dashboard/cookies/CookiesManager.dart';
 import 'package:dio/dio.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
 
@@ -20,7 +22,7 @@ class UserRepository {
   final String deleteUserUrl = "$baseUrl/api/auth/account";
   final String listAccountUrl = "$baseUrl/api/auth/account/list";
   final String updateUserUrl = "$baseUrl/api/auth/account";
-
+  final String cityListUrl = "$baseUrl/api/auth/publicCityList";
 
 
   factory UserRepository() {
@@ -30,7 +32,10 @@ class UserRepository {
   UserRepository._internal();
 
   String? firebaseToken;
-  setFirebaseToken(String token) {firebaseToken = token;}
+
+  setFirebaseToken(String token) {
+    firebaseToken = token;
+  }
 
   Map<String, dynamic> buildHeaders() {
     return {
@@ -105,7 +110,7 @@ class UserRepository {
     return users;
   }
 
-  Future<dynamic> deleteUser(int idUser) async{
+  Future<dynamic> deleteUser(int idUser) async {
     String urlDeleteUser = '$deleteUserUrl/$idUser';
     var response = await _dio.delete(urlDeleteUser);
     return response.data;
@@ -163,15 +168,17 @@ class UserRepository {
     List<UserEntity> users = (res.data as List).map((user) => UserEntity.fromJson(user)).toList();
     return users;
   }
-  Future<dynamic> cityList()async{
-    Response response;
-    response = await _dio.get("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
-    print(response.data);
-    return response.data;
+  Future<List<CityFromAPI>> cityList() async {
+    Response res;
+    res = await _dio.get(cityListUrl);
+    List<CityFromAPI> cityList = (res.data as List).map((e) => CityFromAPI.fromJson(e)).toList();
+    print("ECCO LE CITTà - simone");
+    return cityList;
   }
+
   Future<dynamic> updateUser(int userId, UserEntity userEntity) async{
     String urlChiamato = '$updateUserUrl/$userId';
-    var response = await _dio.put(urlChiamato);
+    var response = await _dio.put(urlChiamato, data: userEntity.toJson());
     return UserEntity.fromJson(response.data);
   }
 

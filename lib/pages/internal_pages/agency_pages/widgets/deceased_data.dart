@@ -4,6 +4,7 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/widgets/autocomplete.dart';
 
 import '../../../../constants/colors.dart';
@@ -38,8 +39,8 @@ class DeceasedData extends StatelessWidget {
   final onDragExited;
   final Widget child;
   final File? imageFile;
-  final List<String> options;
-  final List<String> citiesOfInterestOptions;
+  final List<CityFromAPI> options;
+  final List<CityFromAPI> citiesOfInterestOptions;
 
   const DeceasedData(
       {super.key,

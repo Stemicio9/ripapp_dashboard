@@ -38,7 +38,6 @@ class ProductRepository{
     var response = await _dio.delete(urlDeleteProduct);
     return response.data;
   }
-
   Future<dynamic> getAllProducts() async {
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
     var userId = (user != null) ? user.id : 4;

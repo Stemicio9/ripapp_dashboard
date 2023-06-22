@@ -7,6 +7,7 @@ import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
@@ -60,7 +61,7 @@ class AddDemiseState extends State<AddDemise> {
   Offset? offset;
   DateTime? wakeDate;
   DateTime? funeralDate;
-  static const List<String> cityOptions = <String>[
+  /*static const List<String> cityOptions = <String>[
     'Milano',
     'Roma',
     'Firenze',
@@ -71,7 +72,11 @@ class AddDemiseState extends State<AddDemise> {
     'Roma',
     'Firenze',
     'Torino',
-  ];
+  ];*/
+
+  List<CityFromAPI> cityOptions = <CityFromAPI>[];
+  List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+
   static const List<String> kinship = <String>[
     'Madre',
     'Padre',

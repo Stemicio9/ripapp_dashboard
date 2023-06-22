@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
@@ -27,7 +28,7 @@ import '../../../widgets/action_button.dart';
 import '../../../widgets/snackbars.dart';
 
 
-class EditeDemise extends StatelessWidget{
+class EditDemise extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,8 @@ class EditDemiseWidgetState extends State<EditDemiseWidget> {
   Offset? offset;
   DateTime? wakeDate;
   DateTime? funeralDate;
-  static const List<String> cityOptions = <String>[
+
+  /*static const List<String> cityOptions = <String>[
     'Milano',
     'Roma',
     'Firenze',
@@ -89,7 +91,11 @@ class EditDemiseWidgetState extends State<EditDemiseWidget> {
     'Roma',
     'Firenze',
     'Torino',
-  ];
+  ];*/
+
+  List<CityFromAPI> cityOptions = <CityFromAPI>[];
+  List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+
   static const List<String> kinship = <String>[
     'Madre',
     'Padre',

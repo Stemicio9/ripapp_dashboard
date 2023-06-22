@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
@@ -42,11 +43,18 @@ class UsersManage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-
-    /*return BlocProvider(
-        create: (_) => UsersListCubit(),
-        child: UsersManageWidget(changeIsSomeListShowed: this.changeIsSomeListShowed,)
-    );*/
+   /* return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => UsersListCubit(),
+        ),
+        BlocProvider(
+          create: (_) => SelectedUserCubit(),
+        )
+      ],
+      child: UsersManageWidget(
+      ),
+    );;*/
     return UsersManageWidget(changeIsSomeListShowed: this.changeIsSomeListShowed,);
   }
 
@@ -70,8 +78,9 @@ class UsersManageWidget extends StatefulWidget {
 class UsersManageWidgetState extends State<UsersManageWidget> {
 
 
-
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
+  SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
+
   List<String> cityOptions = <String>[
     'Milano'
   ];
@@ -123,17 +132,12 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = "nome";
-    lastNameController.text = "cognome";
-    emailController.text = "email@mail.it";
-    phoneController.text = "3232";
-    filterController.text = "citta";
-    passwordController.text = "123456";
-    return Content();
-
-  }
-
-  Widget Content(){
+    nameController.text =  "nome";
+    lastNameController.text = "Cognome";
+    emailController.text = "Email";
+    phoneController.text = "Telefono";
+    filterController.text = "";
+    passwordController.text = "Passwaord";
     return SingleChildScrollView(
       child: Padding(
         padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
@@ -193,7 +197,14 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                         )
                 );
               },
-              edit: () {
+
+              edit: (dynamic p) {
+                print("UTENTE SELEZIONATO");
+                print(p);
+                print("FORSE FUNZIONA");
+                print(_selectedUserCubit.selectUser(p));
+                print("FUNZIONA");
+                _selectedUserCubit.selectUser(p);
                 showDialog(
                     context: context,
                     barrierColor: blackTransparent,
