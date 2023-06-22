@@ -6,10 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/repositories/product_repository.dart';
+import 'package:ripapp_dashboard/utils/DeleteProductMessage.dart';
 @immutable
 class SearchProductState{}
 class SearchProductLoading extends SearchProductState {}
-class SearchProductError extends SearchProductState {}
+class SearchProductError extends SearchProductState {
+  String errorMessage;
+  SearchProductError(this.errorMessage);
+}
 class SearchProductLoaded extends SearchProductState {
 
   final List<ProductEntity> products;
@@ -38,15 +42,18 @@ class SearchProductCubit extends Cubit<SearchProductState>{
     }
   }
 
-  delete(idProduct)async{
+   delete(idProduct)async{
     emit(SearchProductLoading());
     try{
-      var result = await ProductRepository().deleteProduct(idProduct);
+      DeleteProductMessage deleteMessage = await ProductRepository().deleteProduct(idProduct);
+      print("b3, "+ deleteMessage.toString());
+      if (deleteMessage.message!.startsWith("il prodotto è già in uso da parte di"))
+        throw new Exception(deleteMessage.message);
       fetchProducts();
     }catch(e){
       print("ERRORE");
       print(e);
-      emit(SearchProductError());
+      emit(SearchProductError(e.toString()));
     }
   }
 
@@ -56,7 +63,7 @@ class SearchProductCubit extends Cubit<SearchProductState>{
       var result = await ProductRepository().saveProduct(productEntity);
       fetchProducts();
     }catch(e){
-      emit(SearchProductError());
+      emit(SearchProductError(e.toString()));
     }
   }
 

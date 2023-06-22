@@ -9,6 +9,7 @@ import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
+import 'package:ripapp_dashboard/utils/DeleteProductMessage.dart';
 
 import '../constants/rest_path.dart';
 
@@ -37,10 +38,12 @@ class ProductRepository{
   }
 
 
-  Future<dynamic> deleteProduct(int idProduct) async{
+  Future<DeleteProductMessage> deleteProduct(int idProduct) async{
     String urlDeleteProduct = '$deleteProductUrl/$idProduct';
+    print("b1");
     var response = await _dio.delete(urlDeleteProduct);
-    return response.data;
+    print("response è " + response.data.toString());
+    return DeleteProductMessage.fromJson(response.data);
   }
   Future<dynamic> getAllProducts() async {
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;

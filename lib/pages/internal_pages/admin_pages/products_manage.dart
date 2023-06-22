@@ -42,7 +42,12 @@ class ProductsManageState extends State<ProductsManage>{
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return
+
+      //BlocBuilder<SearchProductCubit, SearchProductState>(
+      //    builder: (context, state) {
+
+      SingleChildScrollView(
       child: Padding(
         padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
         child: Column(
@@ -95,9 +100,58 @@ class ProductsManageState extends State<ProductsManage>{
                     builder: (ctx) => DeleteMessageDialog(
                         onConfirm: (){
                           _searchProductsCubit.delete(p.id);
-                          SuccessSnackbar(context, text: 'Prodotto eliminato con successo!');
 
                           Navigator.pop(context);
+                          BlocBuilder<SearchProductCubit, SearchProductState>(
+                             builder: (context, state) {
+                            if (state is SearchProductError) {
+                               return SnackBar(
+                                backgroundColor: rossoopaco,
+                                content:  Row(
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(right: 10),
+                                      child: Icon(Icons.warning_amber_rounded, color: white),
+                                    ),
+                                    Text('Prodotto non eliminato perchè ' + state.errorMessage),
+                                  ],
+                                ),
+                                duration: const Duration(milliseconds: 4000),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              );
+
+                              //ErrorSnackbar(context,
+                              //    text: 'Prodotto non eliminato perchè ' +
+                              //        state.errorMessage);
+                            }
+                            else {
+                              return SnackBar(
+                                backgroundColor: green,
+                                content: Row(
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(right: 10),
+                                      child: Icon(Icons.check_circle_outline_rounded, color: white),
+                                    ),
+                                    Text('Prodotto eliminato con successo!'),
+                                  ],
+                                ),
+                                duration: const Duration(milliseconds: 4000),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              );
+                            }
+                            return Container();
+                          });
+
+
+
+
                         },
                         onCancel: (){
                           Navigator.pop(context);
@@ -153,6 +207,9 @@ class ProductsManageState extends State<ProductsManage>{
         ),
       ),
     );
+
+         // });
+
   }
 
   formSubmit() {
