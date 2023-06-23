@@ -10,6 +10,7 @@ import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
+import 'package:ripapp_dashboard/utils/SaveAgencyMessage.dart';
 
 
 class AgencyRepository{
@@ -29,7 +30,10 @@ class AgencyRepository{
   Future<dynamic> saveAgency(AgencyEntity agencyEntity) async {
     //print(agencyEntity.toJson());
     var response = await _dio.post(agencyUrl, data: agencyEntity.toJson());
-    return response.data;
+    SaveAgencyMessage saveAgencyMessage = SaveAgencyMessage.fromJson(response.data);
+    if (saveAgencyMessage.message!.startsWith("Duplicate entry"))
+      throw new Exception(saveAgencyMessage.message);
+    return saveAgencyMessage;
   }
 
 
