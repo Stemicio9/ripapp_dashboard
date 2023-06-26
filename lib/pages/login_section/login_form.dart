@@ -6,6 +6,7 @@ import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
+import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
@@ -149,7 +150,11 @@ class LoginFormState extends State<LoginForm> {
       var response = await UserRepository().loginPreLayer(token);
     });
     //Navigator.pushNamed(context, RouteConstants.dashboard);
-    _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber);
+    //if (CustomFirebaseAuthenticationListener().userEntity!.status == UserStatus.admin){
+      _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber);
+    //}
+    /*else if (CustomFirebaseAuthenticationListener().userEntity!.status == UserStatus.admin)
+      _currentPageCubit.loadPage(ScaffoldWidgetState.agency_products_page, _currentPageCubit.state.pageNumber);*/
    // }
   }
   loginAgency() async {
