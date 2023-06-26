@@ -62,19 +62,18 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: getPadding(top: 60, left: 5, right: 5),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Header(
-              deleteProfileOnTap: (){},
-              onTap: (){
-                context.go(AppPage.addDemise.path);
-              },
-              pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
-              buttonText: getCurrentLanguageValue(ADD_DEMISE)!,
-            ),
+      padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Header(
+            deleteProfileOnTap: (){},
+            onTap: (){
+              context.go(RouteConstants.addDemise);
+            },
+            pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
+            buttonText: getCurrentLanguageValue(ADD_DEMISE)!,
+          ),
 
             DemiseTable(
               delete: (dynamic p){
@@ -116,8 +115,7 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
               deleteMessage: deleteMessage,
             )
 
-          ],
-        ),
+        ],
       ),
     );
   }

@@ -47,8 +47,6 @@ class SearchProductCubit extends Cubit<SearchProductState>{
     try{
       DeleteProductMessage deleteMessage = await ProductRepository().deleteProduct(idProduct);
       print("b3, "+ deleteMessage.toString());
-      if (deleteMessage.message!.startsWith("il prodotto è già in uso da parte di"))
-        throw new Exception(deleteMessage.message);
       fetchProducts();
     }catch(e){
       print("ERRORE");

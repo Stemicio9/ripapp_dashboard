@@ -59,8 +59,8 @@ class UsersTableState extends State<UsersTable>{
   @override
   void initState() {
     //_userListCubit.fetchUsersListWithIndex(0);
-    //_currentPageCubit.findResult(ScaffoldWidgetState.users_page, 0);
-    _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, 0);
+    //_currentPageCubit.loadPage(ScaffoldWidgetState.users_page, 0);
+    _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber);
     super.initState();
   }
 

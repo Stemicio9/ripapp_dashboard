@@ -48,7 +48,8 @@ class ProductsTableState extends State<ProductsTable> {
 
   @override
   void initState() {
-    _currentPageCubit.loadPage(ScaffoldWidgetState.products_page, 0);
+    //_currentPageCubit.loadPage(ScaffoldWidgetState.products_page, 0);
+    _currentPageCubit.loadPage(ScaffoldWidgetState.products_page, _currentPageCubit.state.pageNumber);
     super.initState();
   }
 

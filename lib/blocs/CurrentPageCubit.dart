@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
-import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
@@ -11,22 +9,25 @@ import 'package:ripapp_dashboard/widgets/scaffold.dart';
 @immutable
 class CurrentPageState {
   final String page;
+  final int pageNumber;
   final List<ResultEntity> resultSet;
   final bool loading;
-  CurrentPageState(this.page, this.resultSet, this.loading);
 
-  CurrentPageState copyWith({String? page, List<ResultEntity>? resultSet, bool? loading}) {
+  CurrentPageState(this.page, this.resultSet, this.loading, this.pageNumber);
+
+  CurrentPageState copyWith({String? page, List<ResultEntity>? resultSet, bool? loading, int? pageNumber}) {
     return CurrentPageState(
         page ?? this.page,
         resultSet ?? this.resultSet,
-        loading ?? true
+        loading ?? this.loading,
+        pageNumber ?? this.pageNumber,
     );
   }
 }
 
 
 class CurrentPageCubit extends Cubit<CurrentPageState> {
-  CurrentPageCubit() : super(CurrentPageState(ScaffoldWidgetState.users_page, [], true));
+  CurrentPageCubit() : super(CurrentPageState("", [], true, 0));
 
 
   Future<List<ResultEntity>?> findResult(String pageName, int index) async {
@@ -44,12 +45,14 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
   }
 
   void loadPage(String page, int index) async {
-    emit(CurrentPageState(page, [], true));
-      List<ResultEntity>? resultSet = await findResult(page, index);
-      emit(CurrentPageState(page, resultSet!, false));
+    print("piccola chiamata 1");
+    emit(CurrentPageState(page, [], true, index));
+    List<ResultEntity>? resultSet = await findResult(page, index);
+    emit(CurrentPageState(page, resultSet!, false, index));
   }
 
-  void changeCurrentPage(String agencies_page) {
-    emit(state.copyWith(page: agencies_page));
+  void changeCurrentPage(String page) {
+    print("piccola chiamata 2");
+    emit(state.copyWith(page: page));
   }
 }

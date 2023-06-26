@@ -2,6 +2,8 @@
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -24,6 +26,7 @@ class DashboardAgencyState extends State<DashboardAgency> {
   int currentPage = 1;
   String agencyName = 'Nome agenzia';
   String image = "assets/images/profiledefault.jpeg";
+  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
   // final UserCubit? userCubit;
   //  DashboardState({this.userCubit});
 
@@ -62,7 +65,8 @@ class DashboardAgencyState extends State<DashboardAgency> {
         icon: Icons.logout_rounded,
         onPressed: () {
           //  logoutFromAll();
-          FirebaseAuth.instance.signOut();
+          _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.login_page);
+          FirebaseAuth.instance.signOut().then((value) => FirebaseAuth.instance.signOut());
           //Navigator.pushReplacementNamed(context, RouteConstants.login);
         },
         isSelected: currentPage == 4,

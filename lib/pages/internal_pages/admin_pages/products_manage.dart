@@ -96,8 +96,14 @@ class ProductsManageState extends State<ProductsManage>{
                     context: context,
                     builder: (ctx) => DeleteMessageDialog(
                         onConfirm: (){
-                          _searchProductsCubit.delete(p.id);
-                          SuccessSnackbar(context, text: 'Prodotto eliminato con successo!');
+                          //_searchProductsCubit.delete(p.id);
+                          ProductRepository().deleteProduct(p.id).then((deleteProductMessage) {
+                            SuccessSnackbar(context, text: "Prodotto eliminato con successo");
+                          }, onError: (e) {
+                            if (e.toString().contains("il prodotto è già in uso da parte di"))
+                              ErrorSnackbar(context, text: 'Prodotto usato da agenzie');
+                              }
+                          );
 
                           Navigator.pop(context);
                           BlocBuilder<SearchProductCubit, SearchProductState>(

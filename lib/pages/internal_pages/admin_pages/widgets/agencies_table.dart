@@ -46,7 +46,8 @@ class AgenciesTableState extends State<AgenciesTable> {
 
   @override
   void initState() {
-    _currentPageCubit.loadPage(ScaffoldWidgetState.agencies_page, 0);
+    //_currentPageCubit.loadPage(ScaffoldWidgetState.agencies_page, 0);
+    _currentPageCubit.loadPage(ScaffoldWidgetState.agencies_page, _currentPageCubit.state.pageNumber);
     super.initState();
   }
 

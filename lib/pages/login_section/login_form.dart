@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
-import 'package:ripapp_dashboard/constants/app_pages.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
+import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
+import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/utilities/image_utility.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../../constants/images_constants.dart';
 
 
 class LoginForm extends StatefulWidget {
@@ -26,21 +25,18 @@ class LoginForm extends StatefulWidget {
 }
 
 
-class LoginFormState extends State<LoginForm>{
-  late bool _passwordVisible;
+class LoginFormState extends State<LoginForm> {
+
   final _formKey = GlobalKey<FormState>();
   final double logoWidth = 250;
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
+  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
 
-  @override
-  void initState() {
-    _passwordVisible = false;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    //final authService = watch(Provider.of<CustomFirebaseAuthenticationListener>(context).value);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Form(
@@ -90,19 +86,11 @@ class LoginFormState extends State<LoginForm>{
 
           ),
           InputsV2Widget(
-            iconOnTap: (){
-              setState(() {
-                _passwordVisible = !_passwordVisible;
-              });
-            },
-            isPassword: !_passwordVisible,
             hinttext: getCurrentLanguageValue(PASSWORD)!,
             controller: _passwordTextController,
             validator: validatePassword,
-            suffixIcon: _passwordVisible ? ImagesConstants.imgPassSee : ImagesConstants.imgPassUnsee,
-            isSuffixIcon: true,
-            suffixIconHeight: 25,
-            suffixIconWidth: 25,
+            isPassword: true,
+            paddingTop: 10,
           ),
           Padding(
             padding: getPadding(top: 40),
@@ -131,7 +119,7 @@ class LoginFormState extends State<LoginForm>{
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: (){
-                   context.go(AppPage.forgotPassword.path);
+                    Navigator.pushNamed(context, RouteConstants.forgotPassword);
                   },
                   child:  Texth4V2(
                     testo: getCurrentLanguageValue(FORGOT_PASSWORD)!,
@@ -154,15 +142,20 @@ class LoginFormState extends State<LoginForm>{
 
 
   formsubmit() async {
-   if (_formKey.currentState!.validate()) {
-    FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailTextController.text,
-        password: _passwordTextController.text).then((value) async {
+   // if (_formKey.currentState!.validate()) {
+    FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailTextController.text, password: _passwordTextController.text).then((value) async {
+      print("TI SALUTO ");
       String token = await value.user!.getIdToken();
       UserRepository().setFirebaseToken(token);
       var response = await UserRepository().loginPreLayer(token);
     });
-   }
+    //Navigator.pushNamed(context, RouteConstants.dashboard);
+    //if (CustomFirebaseAuthenticationListener().userEntity!.status == UserStatus.admin){
+      _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber);
+    //}
+    /*else if (CustomFirebaseAuthenticationListener().userEntity!.status == UserStatus.admin)
+      _currentPageCubit.loadPage(ScaffoldWidgetState.agency_products_page, _currentPageCubit.state.pageNumber);*/
+   // }
   }
   loginAgency() async {
     //  if (_formKey.currentState!.validate()) {

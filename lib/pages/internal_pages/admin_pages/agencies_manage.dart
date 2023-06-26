@@ -159,14 +159,22 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
         email: emailController.text,
         phoneNumber: phoneController.text,
       );
-      _searchAgencyCubit.saveAgency(agencyEntity);
+
+      AgencyRepository().saveAgency(agencyEntity).then((savedAgency) {
+        SuccessSnackbar(context, text: "Agenzia salvata con successo");
+      }, onError: (e) {
+        if (e.toString().contains("Duplicate entry"))
+          ErrorSnackbar(context, text: 'Questa email è già in uso da un\'altra agenzia');
+      }
+      );
+
       print("salvataggio agenzia...");
 
       nameController.text = "";
       emailController.text = "";
       phoneController.text = "";
       cityController.text = "";
-      SuccessSnackbar(context, text: 'Agenzia aggiunta con successo!');
+      //SuccessSnackbar(context, text: 'Agenzia aggiunta con successo!');
 
       Navigator.pop(context);
     }

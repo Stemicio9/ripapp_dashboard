@@ -40,6 +40,7 @@ class DashboardState extends State<Dashboard> {
         icon: Icons.person_rounded,
         onPressed: () => setState(() {
           _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.users_page);
+          //_currentPageCubit.loadPage(ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber);
           title = getCurrentLanguageValue(USERS_MANAGE)!;
           currentPage = 1;
         }),
@@ -50,6 +51,7 @@ class DashboardState extends State<Dashboard> {
         icon: Icons.business_rounded,
         onPressed: () => setState(() {
           _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agencies_page);
+          //_currentPageCubit.loadPage(ScaffoldWidgetState.agencies_page, _currentPageCubit.state.pageNumber);
           title = getCurrentLanguageValue(AGENCIES_MANAGE)!;
           currentPage = 2;
         }),
@@ -60,6 +62,7 @@ class DashboardState extends State<Dashboard> {
         icon: Icons.table_rows,
         onPressed: () => setState(() {
           _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.products_page);
+          //_currentPageCubit.loadPage(ScaffoldWidgetState.products_page, _currentPageCubit.state.pageNumber);
           title = getCurrentLanguageValue(PRODUCTS_MANAGE)!;
           currentPage = 3;
         }),
@@ -71,8 +74,7 @@ class DashboardState extends State<Dashboard> {
         icon: Icons.logout_rounded,
         onPressed: () {
         //  logoutFromAll();
-          FirebaseAuth.instance.signOut();
-
+          FirebaseAuth.instance.signOut().then((value) => _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.login_page));
         },
         isSelected: currentPage == 4,
       ),

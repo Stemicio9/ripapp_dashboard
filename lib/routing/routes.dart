@@ -60,6 +60,10 @@ class RouterManager {
             ),
           ]
         ),
+        GoRoute(
+            path: RouteConstants.addDemise,
+            builder: (context, state) => AddDemise(),
+        ),
       ],
       redirect: (context , state) async {
         var auth = CustomFirebaseAuthenticationListener();

@@ -25,10 +25,13 @@ class ScaffoldWidget extends StatefulWidget {
 class ScaffoldWidgetState extends State<ScaffoldWidget> {
 
 
+
   CurrentPageCubit get _currentPageCubit  => context.read<CurrentPageCubit>();
   static const String users_page = "users_list";
   static const String agencies_page = "agencies_list";
   static const String products_page = "products_list";
+  static const String login_page = "login_page";
+  static const String agency_products_page = "agency_products_list";
 
 
   @override
@@ -84,6 +87,7 @@ class ScaffoldWidgetState extends State<ScaffoldWidget> {
 
 
   Widget bottomPagesBar(){
+    print("bru, la pagina è " + _currentPageCubit.state.page.toString());
     return BlocBuilder<CurrentPageCubit, CurrentPageState>(
         builder: (context, state){
       return (state.page == ScaffoldWidgetState.users_page || state.page == ScaffoldWidgetState.agencies_page || state.page == ScaffoldWidgetState.products_page) ? BottomNavigationBarExample(changePageHandle: changePageHandleUser) : ErrorWidget("exception4");
