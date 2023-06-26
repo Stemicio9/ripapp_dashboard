@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
+import 'package:ripapp_dashboard/constants/app_pages.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
-import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
@@ -32,7 +34,7 @@ class LoginFormState extends State<LoginForm> {
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
-
+  late bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -86,11 +88,20 @@ class LoginFormState extends State<LoginForm> {
 
           ),
           InputsV2Widget(
-            hinttext: getCurrentLanguageValue(PASSWORD)!,
+            hinttext: getCurrentLanguageValue(PASSWORD) ?? "",
+            iconOnTap: (){
+              setState(() {
+                _passwordVisible = !_passwordVisible;
+              });
+            },
+
+            isPassword: !_passwordVisible,
             controller: _passwordTextController,
+            suffixIcon: _passwordVisible ? ImagesConstants.imgPassSee : ImagesConstants.imgPassUnsee,
+            isSuffixIcon: true,
+            suffixIconHeight: 25,
+            suffixIconWidth: 25,
             validator: validatePassword,
-            isPassword: true,
-            paddingTop: 10,
           ),
           Padding(
             padding: getPadding(top: 40),
@@ -110,39 +121,37 @@ class LoginFormState extends State<LoginForm> {
   }
 
   Widget forgotPasswordSection() {
-    return Container(
-      child: Column(
-        children: [
-          Expanded(
-              flex: 2,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: (){
-                    Navigator.pushNamed(context, RouteConstants.forgotPassword);
-                  },
-                  child:  Texth4V2(
-                    testo: getCurrentLanguageValue(FORGOT_PASSWORD)!,
-                    color: white,
-                    weight: FontWeight.w600,
-                    underline: true,
-                  ),
+    return Column(
+      children: [
+        Expanded(
+            flex: 2,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: (){
+                   context.push(AppPage.forgotPassword.path);
+                },
+                child:  Texth4V2(
+                  testo: getCurrentLanguageValue(FORGOT_PASSWORD)!,
+                  color: white,
+                  weight: FontWeight.w600,
+                  underline: true,
                 ),
-              )
-          ),
-          Expanded(
-            flex: 4,
-            child: Container(),
-          )
-        ],
-      ),
+              ),
+            )
+        ),
+        Expanded(
+          flex: 4,
+          child: Container(),
+        )
+      ],
     );
 
   }
 
 
   formsubmit() async {
-   // if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
     FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailTextController.text, password: _passwordTextController.text).then((value) async {
       print("TI SALUTO ");
       String token = await value.user!.getIdToken();
@@ -155,7 +164,7 @@ class LoginFormState extends State<LoginForm> {
     //}
     /*else if (CustomFirebaseAuthenticationListener().userEntity!.status == UserStatus.admin)
       _currentPageCubit.loadPage(ScaffoldWidgetState.agency_products_page, _currentPageCubit.state.pageNumber);*/
-   // }
+   }
   }
   loginAgency() async {
     //  if (_formKey.currentState!.validate()) {

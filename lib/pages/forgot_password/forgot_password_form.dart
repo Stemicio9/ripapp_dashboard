@@ -86,42 +86,43 @@ class ForgotPasswordFormState extends State<ForgotPasswordForm> {
             controller: _emailTextController,
             validator: validateEmail,
           ),
-          ActionButtonV2(
-              maxWidth: 240,
-              color: white,
-              textColor: background,
-              action: formSubmit, text: getCurrentLanguageValue(CONFIRM)!),
+          Padding(
+            padding: const EdgeInsets.only(top: 40),
+            child: ActionButtonV2(
+                maxWidth: 240,
+                color: white,
+                textColor: background,
+                action: formSubmit, text: getCurrentLanguageValue(CONFIRM)!),
+          ),
         ],
       ),
     );
   }
 
   Widget backButtonSection() {
-    return Container(
-      child: Column(
-        children: [
-          Expanded(
-              flex: 2,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    context.pop();
-                  },
-                  child: Texth4V2(
-                    testo: getCurrentLanguageValue(BACK)!,
-                    color: white,
-                    weight: FontWeight.w700,
-                    underline: true,
-                  ),
+    return Column(
+      children: [
+        Expanded(
+            flex: 2,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  context.pop();
+                },
+                child: Texth4V2(
+                  testo: getCurrentLanguageValue(BACK)!,
+                  color: white,
+                  weight: FontWeight.w700,
+                  underline: true,
                 ),
-              )),
-          Expanded(
-            flex: 4,
-            child: Container(),
-          )
-        ],
-      ),
+              ),
+            )),
+        Expanded(
+          flex: 4,
+          child: Container(),
+        )
+      ],
     );
   }
 

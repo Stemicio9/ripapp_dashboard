@@ -17,9 +17,6 @@ class Header extends StatelessWidget {
   final bool showDeleteProfile;
   final EdgeInsetsGeometry leftPadding;
 
-  // final TextEditingController filterController;
-  //final Function optionSelected;
-  //final List<String> kOptions;
 
   Header(
       {
@@ -33,9 +30,6 @@ class Header extends StatelessWidget {
         this.iconVisible = true,
         this.showBackButton = false,
         this.showDeleteProfile = false
-      //  required this.filterController,
-       // this.kOptions = const [],
-      //  required this.optionSelected
      });
 
 

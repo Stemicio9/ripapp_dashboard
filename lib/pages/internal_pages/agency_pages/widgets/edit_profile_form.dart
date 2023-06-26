@@ -38,7 +38,6 @@ class EditProfileForm extends StatefulWidget{
 
    EditProfileForm({
     super.key,
-
     required this.imageOnTap,
     required this.onTap,
     required this.cardTitle,

@@ -103,13 +103,15 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
                 );
               },
               edit: (dynamic p){
-                context.go(AppPage.editDemise.path);
+                context.push(AppPage.editDemise.path);
                 _selectedDemiseCubit.selectUser(p);
               },
+
               showDetail: (dynamic p){
                 _selectedDemiseCubit.selectUser(p);
-                context.go(AppPage.demiseDetail.path);
+                context.push(AppPage.demiseDetail.path);
               },
+
               detailMessage: detailMessage,
               editMessage: editMessage,
               deleteMessage: deleteMessage,
