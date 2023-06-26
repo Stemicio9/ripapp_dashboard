@@ -29,6 +29,7 @@ class ScaffoldWidgetState extends State<ScaffoldWidget> {
   static const String users_page = "users_list";
   static const String agencies_page = "agencies_list";
   static const String products_page = "products_list";
+  static const String login_page = "login_page";
 
 
   @override

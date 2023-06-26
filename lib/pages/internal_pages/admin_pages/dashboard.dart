@@ -74,7 +74,7 @@ class DashboardState extends State<Dashboard> {
         icon: Icons.logout_rounded,
         onPressed: () {
         //  logoutFromAll();
-          FirebaseAuth.instance.signOut().then((value) => _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber));
+          FirebaseAuth.instance.signOut().then((value) => _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.login_page));
         },
         isSelected: currentPage == 4,
       ),

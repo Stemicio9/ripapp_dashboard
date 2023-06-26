@@ -27,7 +27,7 @@ class CurrentPageState {
 
 
 class CurrentPageCubit extends Cubit<CurrentPageState> {
-  CurrentPageCubit() : super(CurrentPageState(ScaffoldWidgetState.users_page, [], true, 0));
+  CurrentPageCubit() : super(CurrentPageState("", [], true, 0));
 
 
   Future<List<ResultEntity>?> findResult(String pageName, int index) async {
