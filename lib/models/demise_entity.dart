@@ -101,10 +101,9 @@ class DemiseEntity {
     funeralAddress: json["funeraladdress"] ?? "",
     funeralDateTime: json["funeralts"] == null ? null : DateTime.parse(json["funeralts"]),
     funeralNotes: json["funeralnotes"] ?? "",
-    /*cities: json["cities"] todo aggiungere questi due campi!!
-        .map((data) => CityEntity.fromJson(data))
+    cities: json["cities"].map((data) => CityEntity.fromJson(data))
         .toList(),
-      relative: json["relatives"] ?? "",*/
+      /*relative: json["relatives"] ?? "",*/
   );
 
   DemiseEntity copyWith({

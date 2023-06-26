@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/city_list_cubit.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
@@ -16,14 +17,21 @@ import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import '../../../blocs/selected_agency_cubit.dart';
 import '../../../models/agency_entity.dart';
+import '../../../models/city_from_API.dart';
 
 class AgenciesManage extends StatelessWidget{
 
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return MultiBlocProvider(
+        providers:[
+      BlocProvider(
       create: (_) => UsersListCubit(),
+      ),
+          BlocProvider(
+              create: (_)=> CityListCubit())
+        ],
       child: AgenciesManageWidget(),
     );
   }
@@ -51,7 +59,8 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
   SelectedAgencyCubit get _selectedAgencyCubit => context.read<SelectedAgencyCubit>();
-  late List<CityFromAPI> cityOptions;
+  CityListCubit get _cityFromApi => context.read<CityListCubit>();
+  List<CityFromAPI> cityList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +76,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                 showDialog(context: context, builder: (ctx)=> Form(
                   key: _formKey,
                   child: AgencyForm(
-                    cityOptions: cityOptions,
+                    cityOptions: cityList,
                     cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
                     nameController: nameController,
                     emailController: emailController,
@@ -121,7 +130,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
 
                     },
                     isAddPage: false,
-                    cityOptions: cityOptions,
+                    cityOptions: cityList,
                     cardTitle: getCurrentLanguageValue(EDIT_AGENCY)!,
                     nameController: nameController,
                     emailController: emailController,
@@ -158,10 +167,12 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
         city: cityController.text,
         email: emailController.text,
         phoneNumber: phoneController.text,
+
       );
       _searchAgencyCubit.saveAgency(agencyEntity);
       print("salvataggio agenzia...");
 
+      _cityFromApi.fetchCityList();
       nameController.text = "";
       emailController.text = "";
       phoneController.text = "";
@@ -177,3 +188,4 @@ Future saveAgency(AgencyEntity agencyEntity) async {
   var response = await AgencyRepository().saveAgency(agencyEntity);
   print(response);
 }
+

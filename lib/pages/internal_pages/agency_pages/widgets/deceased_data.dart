@@ -2,10 +2,12 @@
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/widgets/autocomplete.dart';
 
+import '../../../../blocs/city_list_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/language.dart';
 import '../../../../utils/size_utils.dart';
@@ -41,33 +43,152 @@ class DeceasedData extends StatelessWidget {
   final List<CityFromAPI> options;
   final List<CityFromAPI> citiesOfInterestOptions;
 
-  const DeceasedData(
-      {super.key,
-        required this.imageOnTap,
-        this.nameValidator,
-        this.phoneValidator,
-        this.cityValidator,
-        this.citiesOfInterestValidator,
-        this.lastNameValidator,
-        this.ageValidator,
-        this.dateValidator,
-        required this.child,
-        required this.onDragDone,
-        required this.onDragEntered,
-        required this.onDragExited,
-        required this.onDragUpdated,
-        required this.iconOnTap,
-        required this.citiesController,
-        required this.nameController,
-        required this.phoneController,
-        required this.cityController,
-        required this.filterController,
-        required this.lastNameController,
-        required this.ageController,
-        required this.options,
-        required this.citiesOfInterestOptions,
-        required this.imageFile,
-        required this.dateController});
+  const DeceasedData({super.key,
+    required this.imageOnTap,
+    this.nameValidator,
+    this.phoneValidator,
+    this.cityValidator,
+    this.citiesOfInterestValidator,
+    this.lastNameValidator,
+    this.ageValidator,
+    this.dateValidator,
+    required this.child,
+    required this.onDragDone,
+    required this.onDragEntered,
+    required this.onDragExited,
+    required this.onDragUpdated,
+    required this.iconOnTap,
+    required this.citiesController,
+    required this.nameController,
+    required this.phoneController,
+    required this.cityController,
+    required this.filterController,
+    required this.lastNameController,
+    required this.ageController,
+    required this.options,
+    required this.citiesOfInterestOptions,
+    required this.imageFile,
+    required this.dateController});
+
+  @override
+  Widget build(BuildContext context) {
+   return MultiBlocProvider(
+       providers: [
+     BlocProvider(
+         create: (_)=> CityListCubit())
+       ],
+       child: DeceasedDataWidget(
+       imageOnTap: imageOnTap,
+       nameValidator: nameValidator,
+       phoneValidator               :phoneValidator,
+       cityValidator                 :cityValidator,
+       citiesOfInterestValidator     :citiesOfInterestValidator,
+       lastNameValidator       :lastNameValidator,
+       ageValidator            : ageValidator,
+       dateValidator           : dateValidator,
+       child                   : child,
+       onDragDone              : onDragDone,
+       onDragEntered           : onDragEntered,
+       onDragExited            : onDragExited,
+       onDragUpdated           : onDragUpdated,
+       iconOnTap               : iconOnTap,
+       citiesController        : citiesController,
+       nameController          : nameController,
+       phoneController         : phoneController,
+       cityController          : cityController,
+       filterController        : filterController,
+       lastNameController      : lastNameController,
+       ageController           : ageController,
+       options                 : options,
+       citiesOfInterestOptions : citiesOfInterestOptions,
+       imageFile               : imageFile,
+       dateController          : dateController
+       ));
+
+
+  }
+
+}
+
+
+  class DeceasedDataWidget extends StatefulWidget {
+    final TextEditingController nameController;
+    final TextEditingController phoneController;
+    final TextEditingController cityController;
+    final TextEditingController lastNameController;
+    final TextEditingController ageController;
+    final TextEditingController dateController;
+    final TextEditingController citiesController;
+    final TextEditingController filterController;
+
+    final dynamic nameValidator;
+    final dynamic phoneValidator;
+    final dynamic lastNameValidator;
+    final dynamic ageValidator;
+    final dynamic dateValidator;
+    final dynamic citiesOfInterestValidator;
+    final dynamic cityValidator;
+    final iconOnTap;
+    final imageOnTap;
+    final onDragDone;
+    final onDragUpdated;
+    final onDragEntered;
+    final onDragExited;
+    final Widget child;
+    final String imageFile;
+    final List<CityFromAPI> options;
+    final List<CityFromAPI> citiesOfInterestOptions;
+
+
+
+    DeceasedDataWidget({
+      super.key,
+      required this.imageOnTap,
+      this.nameValidator,
+      this.phoneValidator,
+      this.cityValidator,
+      this.citiesOfInterestValidator,
+      this.lastNameValidator,
+      this.ageValidator,
+      this.dateValidator,
+      required this.child,
+      required this.onDragDone,
+      required this.onDragEntered,
+      required this.onDragExited,
+      required this.onDragUpdated,
+      required this.iconOnTap,
+      required this.citiesController,
+      required this.nameController,
+      required this.phoneController,
+      required this.cityController,
+      required this.filterController,
+      required this.lastNameController,
+      required this.ageController,
+      required this.options,
+      required this.citiesOfInterestOptions,
+      required this.imageFile,
+      required this.dateController
+    });
+
+    @override
+    State<StatefulWidget> createState() {
+      return DeceasedDataWidgetState();
+    }
+  }
+
+
+  class DeceasedDataWidgetState extends State<DeceasedDataWidget> {
+  CityListCubit get _cityListCubit => context.read<CityListCubit>();
+  List<CityFromAPI> cityList = [];
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    _cityListCubit.fetchCityList();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +231,7 @@ class DeceasedData extends StatelessWidget {
                             ),
                           ),
                           InkWell(
-                            onTap: imageOnTap,
+                            onTap: widget.imageOnTap,
                             child: Container(
                               height: 138,
                               width: 138,
@@ -118,9 +239,9 @@ class DeceasedData extends StatelessWidget {
                                 borderRadius: const BorderRadius.all(Radius.circular(3)),
                                 color: greyDrag,
                                 border: Border.all(color: background, width: 1),
-                                image: imageFile != "" ?
+                                image: widget.imageFile != "" ?
                                 DecorationImage(
-                                  image: NetworkImage(imageFile),
+                                  image: NetworkImage(widget.imageFile),
                                   fit: BoxFit.contain,
                                 )
                                     : DecorationImage(
@@ -168,8 +289,8 @@ class DeceasedData extends StatelessWidget {
                               FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
                             ],
                             hinttext: getCurrentLanguageValue(NAME)!,
-                            controller: nameController,
-                            validator: nameValidator,
+                            controller:widget.nameController,
+                            validator: widget.nameValidator,
                             paddingLeft: 0,
                             borderSide: const BorderSide(color: greyState),
                             activeBorderSide: const BorderSide(color: background),
@@ -191,8 +312,8 @@ class DeceasedData extends StatelessWidget {
                             inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly,],
                             maxLenght: 3,
                             hinttext: getCurrentLanguageValue(AGE)!,
-                            controller: ageController,
-                            validator: ageValidator,
+                            controller: widget.ageController,
+                            validator: widget.ageValidator,
                             paddingLeft: 0,
                             borderSide: const BorderSide(color: greyState),
                             activeBorderSide: const BorderSide(color: background),
@@ -221,8 +342,8 @@ class DeceasedData extends StatelessWidget {
                               FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
                             ],
                             hinttext: getCurrentLanguageValue(LAST_NAME)!,
-                            controller: lastNameController,
-                            validator: lastNameValidator,
+                            controller: widget.lastNameController,
+                            validator: widget.lastNameValidator,
                             paddingRight: 0,
                             paddingLeft: 0,
                             borderSide: const BorderSide(color: greyState),
@@ -247,8 +368,8 @@ class DeceasedData extends StatelessWidget {
                               FilteringTextInputFormatter.digitsOnly,
                             ],
                             hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
-                            controller: phoneController,
-                            validator: phoneValidator,
+                            controller: widget.phoneController,
+                            validator: widget.phoneValidator,
                             paddingLeft: 0,
                             paddingRight: 0,
                             borderSide: const BorderSide(color: greyState),
@@ -287,11 +408,11 @@ class DeceasedData extends StatelessWidget {
                             ),
                           ),
                           InputsV2Widget(
-                            iconOnTap: iconOnTap,
+                            iconOnTap: widget.iconOnTap,
                             readOnly: true,
                             hinttext: "Data del decesso",
-                            controller: dateController,
-                            validator: dateValidator,
+                            controller: widget.dateController,
+                            validator: widget.dateValidator,
                             paddingLeft: 0,
                             suffixIcon: ImagesConstants.imgCalendar,
                             isSuffixIcon: true,
@@ -302,7 +423,18 @@ class DeceasedData extends StatelessWidget {
                       )),
                   Expanded(
                       flex: 2,
-                      child: Column(
+                      child:BlocBuilder<CityListCubit, CityListState>(
+                          builder: (context, cityState) {
+                            print("STIAMO ANDANDO IN LOADING");
+                            if (cityState is CityListLoading) {
+                              return const Center(
+                                  child: CircularProgressIndicator()
+                              );
+                            } else if (cityState is CityListLoaded) {
+                              print("FATTO LOADED CITYYY");
+                              cityList = cityState.listCity;
+                              if (cityList.isNotEmpty) {
+                                return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
@@ -318,15 +450,19 @@ class DeceasedData extends StatelessWidget {
                             ),
                           ),
                           AutocompleteWidget(
-                            options: options,
+                            options: cityList ,
                             paddingRight: 0,
                             paddingLeft: 0,
                             hintText: getCurrentLanguageValue(CITY)!,
-                            filterController: filterController,
-                            validator: cityValidator,
+                            filterController: widget.filterController,
+                            validator: widget.cityValidator,
                           )
                         ],
-                      )),
+                      );
+  }
+                   }return ErrorWidget("errore di connessione");
+
+                }),),
                 ],
               ),
 
@@ -341,7 +477,18 @@ class DeceasedData extends StatelessWidget {
                   Expanded(flex:1,child: Container()),
                   Expanded(
                       flex: 2,
-                      child: Column(
+                      child: BlocBuilder<CityListCubit, CityListState>(
+                          builder: (context, cityState) {
+                            print("STIAMO ANDANDO IN LOADING");
+                            if (cityState is CityListLoading) {
+                              return const Center(
+                                  child: CircularProgressIndicator()
+                              );
+                            } else if (cityState is CityListLoaded) {
+                              print("FATTO LOADED CITYYY");
+                              cityList = cityState.listCity;
+                              if (cityList.isNotEmpty) {
+                                return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
@@ -357,15 +504,21 @@ class DeceasedData extends StatelessWidget {
                             ),
                           ),
                           AutocompleteWidget(
-                            options: citiesOfInterestOptions,
+                            options: cityList,
                             paddingRight: 20,
                             paddingLeft: 0,
                             hintText: "Comuni di interesse",
-                            filterController: citiesController,
-                            validator: citiesOfInterestValidator,
+                            filterController: widget.citiesController,
+                            validator: widget.citiesOfInterestValidator,
                           )
                         ],
-                      )),
+                      );
+                   }
+                 }return ErrorWidget("errore di connessione");
+
+                   }),
+
+                  ),
                   Expanded(
                       flex: 2,
                       child:  Column(
@@ -385,11 +538,11 @@ class DeceasedData extends StatelessWidget {
                           ),
 
                          DropTarget(
-                              onDragDone: onDragDone,
-                              onDragUpdated: onDragUpdated,
-                              onDragEntered: onDragEntered,
-                              onDragExited: onDragExited,
-                              child: child,
+                              onDragDone: widget.onDragDone,
+                              onDragUpdated: widget.onDragUpdated,
+                              onDragEntered: widget.onDragEntered,
+                              onDragExited: widget.onDragExited,
+                              child: widget.child,
                             ),
 
                         ],

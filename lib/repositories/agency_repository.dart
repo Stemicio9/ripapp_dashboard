@@ -7,6 +7,7 @@ import 'package:ripapp_dashboard/authentication/firebase_authentication_listener
 import 'package:ripapp_dashboard/constants/rest_path.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
@@ -46,8 +47,8 @@ class AgencyRepository{
       return List.empty(growable: true);
     }
     List<AgencyEntity> agencies = (res.data as List).map((agency) => AgencyEntity.fromJson(agency)).toList();
-    //print("listaaaaaaa");
-    //print(agencies);
+    print("listaaaaaaa");
+    print(agencies);
     return agencies;
   }
 
@@ -67,9 +68,8 @@ class AgencyRepository{
 
   void setAgencyProducts(List<ProductOffered> productsOffered) async {
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
-    var userId = (user != null) ? user.id : "48";
     print("utente agenzia che tenta di cambiare i prodotti: " + user.toString());
-    print("utente che vado effettivamente a modificare: " + userId.toString());
+    var userId = (user != null) ? user.id : "48";
     Map<String, dynamic>? parameters = {};
     parameters.putIfAbsent("userid", () => userId);
 

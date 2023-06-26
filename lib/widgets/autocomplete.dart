@@ -110,9 +110,7 @@ class AutocompleteWidget extends StatelessWidget {
           ),
         ),
         onSelected: (CityFromAPI selection) {
-
           debugPrint('You just selected $selection');
-
         }
       ),
     );

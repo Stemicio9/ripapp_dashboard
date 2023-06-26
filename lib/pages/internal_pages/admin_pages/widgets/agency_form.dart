@@ -10,8 +10,8 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
+import '../../../../blocs/city_list_cubit.dart';
 import '../../../../widgets/autocomplete.dart';
-
 
 
 class AgencyForm extends StatelessWidget {
@@ -46,15 +46,81 @@ required this.cityController,
 required this.onSubmit,
 this.isAddPage = true,
 });
+@override
+Widget build(BuildContext context) {
+  return MultiBlocProvider(
+    providers: [
+
+      BlocProvider(create: (_) => CityListCubit()),
+    ],
+    child: AgencyFormWidget(
+    cardTitle      : cardTitle,
+    nameController : nameController,
+    phoneController: phoneController,
+    emailController: emailController,
+    cityController : cityController,
+    cityOptions    : cityOptions,
+    isAddPage      : isAddPage,
+    onSubmit: onSubmit,
+  ),
+  );
+}
+}
+class AgencyFormWidget extends StatefulWidget {
+  final String cardTitle;
+  final TextEditingController nameController;
+  final TextEditingController phoneController;
+  final TextEditingController emailController;
+  final TextEditingController cityController;
+  final dynamic nameValidator;
+  final dynamic cityValidator;
+  final dynamic emailValidator;
+  final dynamic phoneValidator;
+  final Function() onSubmit;
+  final List<CityFromAPI> cityOptions;
+  final bool isAddPage;
+
+
+  AgencyFormWidget({
+ super.key,
+  required this.cardTitle,
+  required this.nameController,
+  required this.phoneController,
+  required this.emailController,
+  required this.cityController,
+  this.nameValidator,
+  this.cityValidator,
+  this.emailValidator,
+  this.phoneValidator,
+  required this.onSubmit,
+  required this.cityOptions,
+  required this.isAddPage
+  });
+
+  @override
+  State<StatefulWidget> createState() {
+    return AgencyFormWidgetState();
+  }
+}
+
+class AgencyFormWidgetState extends State<AgencyFormWidget> {
+  CityListCubit get _cityListCubit => context.read<CityListCubit>();
+  List<CityFromAPI> cityList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _cityListCubit.fetchCityList();
+  }
+
+
   @override
   Widget build(BuildContext context) {
-
-
     return BlocBuilder<SelectedAgencyCubit, SelectedAgencyState>(
         builder: (context, state) {
           if (state is SelectedAgencyState) {
-            nameController.text = state.selectedAgency.agencyName ?? "";
-            phoneController.text = state.selectedAgency.phoneNumber ?? "";
+            widget.nameController.text = state.selectedAgency.agencyName ?? "";
+            widget.phoneController.text = state.selectedAgency.phoneNumber ?? "";
 
             return Container(
               padding: getPadding(left: 20, right: 20),
@@ -67,12 +133,13 @@ this.isAddPage = true,
                           cancelIcon: true,
                           paddingLeft: 10,
                           paddingRight: 10,
-                          cardTitle: cardTitle,
+                          cardTitle: widget.cardTitle,
                           child: Column(
                             children: [
                               Padding(
                                 padding: getPadding(bottom: 30),
-                                child: Row(
+                                child:
+                                Row(
                                   children: [
                                     Expanded(
                                         flex: 1,
@@ -93,8 +160,8 @@ this.isAddPage = true,
                                             ),
                                             InputsV2Widget(
                                               hinttext: getCurrentLanguageValue(NAME)!,
-                                              controller: nameController,
-                                              validator: nameValidator,
+                                              controller: widget.nameController,
+                                              validator: widget.nameValidator,
                                               paddingLeft: 0,
                                               paddingRight: 10,
                                               borderSide: const BorderSide(color: greyState),
@@ -104,7 +171,16 @@ this.isAddPage = true,
                                         )),
                                     Expanded(
                                         flex: 1,
-                                        child: Column(
+                                        child: BlocBuilder<CityListCubit, CityListState>(
+                                            builder: (context, cityState) {
+                                              if (cityState is CityListLoading) {
+                                                return const Center(
+                                                    child: CircularProgressIndicator()
+                                                );
+                                              } else if (cityState is CityListLoaded) {
+                                                cityList = cityState.listCity;
+                                                if (cityList.isNotEmpty) {
+                                                  return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Padding(
@@ -120,17 +196,23 @@ this.isAddPage = true,
                                               ),
                                             ),
                                             AutocompleteWidget(
-                                              options: cityOptions,
+                                              options: cityList,
                                               paddingRight: 0,
                                               paddingLeft: 10,
                                               hintText: "Città",
-                                              filterController: cityController,
-                                              validator: cityValidator,
+                                              filterController: widget.cityController,
+                                              validator: widget.cityValidator,
                                             )
                                           ],
-                                        )),
+                                        );
+                                      }
+                                      }return ErrorWidget("errore di connessione");
+
+                                    }),),
                                   ],
+
                                 ),
+
                               ),
                               Padding(
                                 padding: getPadding(bottom: 40),
@@ -155,8 +237,8 @@ this.isAddPage = true,
                                             ),
                                             InputsV2Widget(
                                               hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
-                                              controller: phoneController,
-                                              validator: phoneValidator,
+                                              controller: widget.phoneController,
+                                              validator: widget.phoneValidator,
                                               paddingLeft: 0,
                                               paddingRight: 10,
                                               inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly,],
@@ -167,7 +249,7 @@ this.isAddPage = true,
                                         )),
                                     Expanded(
                                         flex: 1,
-                                        child: isAddPage ? Column(
+                                        child: widget.isAddPage ? Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Padding(
@@ -184,8 +266,8 @@ this.isAddPage = true,
                                             ),
                                             InputsV2Widget(
                                               hinttext: getCurrentLanguageValue(EMAIL)!,
-                                              controller:emailController,
-                                              validator: emailValidator,
+                                              controller: widget.emailController,
+                                              validator: widget.emailValidator,
                                               paddingRight: 0,
                                               paddingLeft: 10,
                                               borderSide: const BorderSide(color: greyState),
@@ -200,7 +282,7 @@ this.isAddPage = true,
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: ActionButtonV2(
-                                  action: onSubmit,
+                                  action: widget.onSubmit,
                                   text: getCurrentLanguageValue(SAVE)!,
                                 ),
                               )
