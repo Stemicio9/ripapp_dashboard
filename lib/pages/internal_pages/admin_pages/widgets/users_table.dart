@@ -68,6 +68,7 @@ class UsersTableState extends State<UsersTable>{
   Widget build(BuildContext context) {
     return BlocBuilder<CurrentPageCubit, CurrentPageState>(
         builder: (context, state) {
+
           if (state.loading) {
             return const Center(
                 child: CircularProgressIndicator()

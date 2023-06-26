@@ -149,7 +149,7 @@ class AddDemiseState extends State<AddDemise> {
                     DateTime? pickedDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
+                        firstDate: DateTime.now().add(const Duration(days: -365 * 10)),
                         lastDate: DateTime.now().add(const Duration(days: 365)));
                     if (pickedDate != null) {
                       String formattedDate =

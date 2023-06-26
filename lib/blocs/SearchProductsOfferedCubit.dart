@@ -8,6 +8,7 @@ import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 class SearchProductsOfferedState{}
 class SearchProductsOfferedLoading extends SearchProductsOfferedState {}
 class SearchProductsOfferedError extends SearchProductsOfferedState {}
+class SearchProductsOfferedEmpty extends SearchProductsOfferedState {}
 class SearchProductsOfferedLoaded extends SearchProductsOfferedState {
 
   final List<ProductOffered> productsOffered;
@@ -30,7 +31,11 @@ class SearchProductsOfferedCubit extends Cubit<SearchProductsOfferedState>{
 
     emit(SearchProductsOfferedLoading());
     List<ProductOffered> agencyProductsRetrieved = await AgencyRepository().getAllAgencyProducts();
-    if (agencyProductsRetrieved.length == 0){print("non ci sono prodotti da mostrare");}
+    if (agencyProductsRetrieved.length == 0){
+      print("non ci sono prodotti da mostrare");
+      emit(SearchProductsOfferedEmpty());
+      return;
+    }
     else{
       try {
         emit(SearchProductsOfferedLoaded(agencyProductsRetrieved));

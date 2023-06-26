@@ -49,6 +49,8 @@ class MyProductsState extends State<MyProducts>{
   final TextEditingController priceController = TextEditingController();
   late Image imageFile;
 
+
+
   void changeAgencyProducts(List<ProductOffered> productsOffered){
     AgencyRepository().setAgencyProducts(productsOffered);
     Navigator.pop(context);

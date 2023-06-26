@@ -19,7 +19,6 @@ import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import '../../../widgets/snackbars.dart';
 
-
 class ProductsManage extends StatefulWidget {
 
 
@@ -45,12 +44,7 @@ class ProductsManageState extends State<ProductsManage>{
 
   @override
   Widget build(BuildContext context) {
-    return
-
-      //BlocBuilder<SearchProductCubit, SearchProductState>(
-      //    builder: (context, state) {
-
-      SingleChildScrollView(
+    return SingleChildScrollView(
       child: Padding(
         padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
         child: Column(
@@ -102,8 +96,9 @@ class ProductsManageState extends State<ProductsManage>{
                     context: context,
                     builder: (ctx) => DeleteMessageDialog(
                         onConfirm: (){
-
                           _searchProductsCubit.delete(p.id);
+                          SuccessSnackbar(context, text: 'Prodotto eliminato con successo!');
+
                           Navigator.pop(context);
                           BlocBuilder<SearchProductCubit, SearchProductState>(
                              builder: (context, state) {
@@ -210,9 +205,6 @@ class ProductsManageState extends State<ProductsManage>{
         ),
       ),
     );
-
-         // });
-
   }
 
   formSubmit() {
