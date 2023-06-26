@@ -9,6 +9,7 @@ import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
+import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
 import '../../../../constants/colors.dart';
 import '../../../../utils/size_utils.dart';
 import '../../../../utils/style_utils.dart';
@@ -172,13 +173,11 @@ class EditProfileFormState extends State<EditProfileForm>{
                                           borderRadius: const BorderRadius.all(Radius.circular(3)),
                                           color: greyDrag,
                                           border: Border.all(color: background, width: 1),
-                                          image: imageFile != null ? DecorationImage(
-                                            image: NetworkImage(imageFile),
+                                          image: DecorationImage(
+                                            // todo here implement boolean logic and memory/network differences
+                                            image: NetworkMemoryImageUtility(isNetwork: true, networkUrl: imageFile, memoryImage: null).provide(),
                                             fit: BoxFit.cover,
-                                          ) : DecorationImage(
-                                              image: AssetImage(ImagesConstants.imgDemisePlaceholder),
-                                              fit: BoxFit.cover,
-                                          ),
+                                          )
                                         ),
                                       ) : Container()
                                   )
