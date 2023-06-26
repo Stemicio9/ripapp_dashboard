@@ -49,26 +49,21 @@ class AgencyProfileState extends State<AgencyProfileWidget> {
 
   Future<dynamic> downloadUrlImage(String uid) async {
     var fileList = await FirebaseStorage.instance.ref('profile_images/users_images/$uid/').listAll();
-    print("LA LISTA INTERA DEI FILE DI $uid");
     for (var element in fileList.items) {
       print(element.name);
     }
 
     if (fileList.items.isEmpty) {
-      print("NON CI SONO FILE NELLA LISTA");
-      var fileList = await FirebaseStorage.instance.ref('demise_placeholder.jpeg').listAll();
+      var fileList = await FirebaseStorage.instance.ref('profile_images/demise_placeholder.jpeg').listAll();
       var file = fileList.items[0];
       var result = await file.getDownloadURL();
       return result;
     }
 
-    print("CI SONO FILE NELLA LISTA");
 
     var file = fileList.items[0];
     var result = await file.getDownloadURL();
 
-    print("HO APPENA PESCATO IMMAGINE DI UTENTE $uid");
-    print("URL IMMAGINE = $result");
 
     return result;
   }
@@ -76,16 +71,10 @@ class AgencyProfileState extends State<AgencyProfileWidget> {
   void func(value){
     _profileImageCubit.changeLoaded(true);
     imageFile = value;
-    print('DIO $imageFile');
   }
-  
+
   @override
   void initState() {
-    final User user = FirebaseAuth.instance.currentUser!;
-    final uid = user.uid;
-    downloadUrlImage(uid).then((value) => func(value));
-
-    print("qui ci arrivo?");
     userEntity = CustomFirebaseAuthenticationListener().userEntity!;
     nameController.text = userEntity.firstName!;
     lastNameController.text = userEntity.lastName!;
@@ -97,8 +86,9 @@ class AgencyProfileState extends State<AgencyProfileWidget> {
 
   @override
   Widget build(BuildContext context) {
-
-
+    final User user = FirebaseAuth.instance.currentUser!;
+    final uid = user.uid;
+    downloadUrlImage(uid).then((value) => func(value));
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, state) {
         print("il nostro link è " + imageFile.toString());
@@ -158,6 +148,9 @@ class AgencyProfileState extends State<AgencyProfileWidget> {
                                 if (_formKey.currentState!.validate()) {
                                   SuccessSnackbar(context, text: 'Profilo modificato con successo!');
                                   Navigator.pop(context);
+                                  setState(() {
+
+                                  });
                                 }
                               }),
                         ));

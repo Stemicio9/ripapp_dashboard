@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
@@ -52,8 +53,7 @@ class Header extends StatelessWidget {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: (){
-                    //TODO fixare pop quando si ricarica la pagina da browser
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   child: const Icon(
                     Icons.arrow_back_ios_new_rounded,

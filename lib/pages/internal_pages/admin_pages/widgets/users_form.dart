@@ -11,7 +11,6 @@ import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
-import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
@@ -375,8 +374,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                         Expanded(
                                                             flex: 1,
                                                             child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment
-                                                                  .start,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
                                                                 Padding(
                                                                   padding: getPadding(
