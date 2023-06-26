@@ -6,11 +6,13 @@ import 'package:ripapp_dashboard/authentication/firebase_authentication_listener
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
+import 'package:ripapp_dashboard/blocs/city_list_cubit.dart';
 import 'package:ripapp_dashboard/blocs/current_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/blocs/search_users_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -59,7 +61,7 @@ class MyApp extends StatelessWidget {
       900: Color(0xFF311B92),
   });
 
-  const MyApp({super.key,required this.initialRoute});
+   MyApp({super.key,required this.initialRoute});
 
   @override
   /*
@@ -103,6 +105,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<SelectedDemiseCubit>(create: (_) => SelectedDemiseCubit()),
             BlocProvider<SelectedUserCubit>(create: (_) => SelectedUserCubit()),
             BlocProvider<CurrentPageCubit>(create: (_) => CurrentPageCubit()),
+            BlocProvider<CityListCubit>(create: (_) => CityListCubit()),
           ],
           child: Builder(
             builder: (context) {

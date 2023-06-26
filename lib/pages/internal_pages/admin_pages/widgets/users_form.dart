@@ -416,7 +416,9 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                   ],
                                 );
                               }
-                            }return ErrorWidget("errore di connessione");
+                            }
+                              return ErrorWidget("errore di connessione");
+
 
                           }),
                         ),
@@ -631,7 +633,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                         }).toList(),
                                                       );
                                                     }
-                                                  } else
+                                                  }
                                                     return ErrorWidget(
                                                         "errore di connessione"); //TODO aggiungere errore
                                                 }),

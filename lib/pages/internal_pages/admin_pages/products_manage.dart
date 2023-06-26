@@ -8,7 +8,6 @@ import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
-import 'package:ripapp_dashboard/image_uploads/image_uploads_product.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form.dart';
@@ -39,7 +38,6 @@ class ProductsManageState extends State<ProductsManage>{
   late String imageFile;
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
-  late ImageUploadsProduct _imageUploadsProduct;
 
 
 
