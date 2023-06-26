@@ -9,13 +9,13 @@ import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
+import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
 import 'package:ripapp_dashboard/utils/SaveAgencyMessage.dart';
 
 
 class AgencyRepository{
   static final AgencyRepository _agencyRepository = AgencyRepository._internal();
-  final Dio _dio = Dio()..httpClientAdapter = BrowserHttpClientAdapter(withCredentials: true);
   AgencyRepository._internal();
   final String agencyUrl = "$baseUrl/api/auth/agency";
   final String allAgenciesUrl = "$baseUrl/api/auth/agencies";
@@ -29,7 +29,7 @@ class AgencyRepository{
 
   Future<dynamic> saveAgency(AgencyEntity agencyEntity) async {
     //print(agencyEntity.toJson());
-    var response = await _dio.post(agencyUrl, data: agencyEntity.toJson());
+    var response = await globalDio.post(agencyUrl, data: agencyEntity.toJson());
     SaveAgencyMessage saveAgencyMessage = SaveAgencyMessage.fromJson(response.data);
     if (saveAgencyMessage.message!.startsWith("Duplicate entry"))
       throw new Exception(saveAgencyMessage.message);
@@ -41,7 +41,7 @@ class AgencyRepository{
   Future<List<AgencyEntity>> getAgencies() async {
     Response res;
     try {
-      res = await _dio.get(allAgenciesUrl);
+      res = await globalDio.get(allAgenciesUrl);
     }
     on DioError catch (e) {
       return List.empty(growable: true);
@@ -61,7 +61,7 @@ class AgencyRepository{
     var userId = (user != null) ? user.id : "48";
     parameters.putIfAbsent("offset", () => 0);
     parameters.putIfAbsent("userid", () => userId!);
-    Response res = await _dio.get(allProductsOfferedByAgency, queryParameters: parameters);
+    Response res = await globalDio.get(allProductsOfferedByAgency, queryParameters: parameters);
     print("qualcosa");
     List<ProductOffered> productsOffered =  (jsonDecode(jsonEncode(res.data)) as List).map((e) => ProductOffered.fromJson(e)).toList();
     print(productsOffered);
@@ -84,12 +84,12 @@ class AgencyRepository{
     myoptions.headers!["Content-Type"] = "application/json";
     myoptions.headers!["app_version"] = appVersion;
 
-    _dio.post(allProductsOfferedByAgency, data: productsOffered, queryParameters: parameters, options: myoptions);
+    globalDio.post(allProductsOfferedByAgency, data: productsOffered, queryParameters: parameters, options: myoptions);
   }
 
   Future<dynamic> removeAgency(int idAgency) async{
     String urlDeleteAgency = '$deleteAgency/$idAgency';
-    var response = await _dio.delete(urlDeleteAgency);
+    var response = await globalDio.delete(urlDeleteAgency);
     return response.data;
   }
 
@@ -102,7 +102,7 @@ class AgencyRepository{
     parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
     Response response;
     print("sto facendo la richiesta con indice: $pageIndex");
-    response = await _dio.get(indexedAgenciesUrl, queryParameters: parameters);
+    response = await globalDio.get(indexedAgenciesUrl, queryParameters: parameters);
     String goodJson = jsonEncode(response.data);
     //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
     List<AgencyEntity> agencies = ((jsonDecode(goodJson) as Map)["content"] as List).map((agency) => AgencyEntity.fromJson(agency)).toList();

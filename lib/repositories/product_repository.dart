@@ -15,7 +15,6 @@ import '../constants/rest_path.dart';
 
 class ProductRepository{
   static final ProductRepository _productRepository = ProductRepository._internal();
-  final Dio _dio = Dio()..httpClientAdapter = BrowserHttpClientAdapter(withCredentials: true);
   ProductRepository._internal();
   //final String productUrl = "$baseUrl/api/auth/product/fine";
   final String productUrl = "$baseUrl/api/auth/productFromAdmin";
@@ -33,7 +32,7 @@ class ProductRepository{
     print(productEntity);
     Map<String, String> values = {};
     values.putIfAbsent("idtoken", () => UserRepository().firebaseToken ?? "");
-    var response = await _dio.post(productUrl, data: productEntity.toJson(), options: Options(headers: values));
+    var response = await globalDio.post(productUrl, data: productEntity.toJson(), options: Options(headers: values));
     return response.data;
   }
 
@@ -41,7 +40,7 @@ class ProductRepository{
   Future<DeleteProductMessage> deleteProduct(int idProduct) async{
     String urlDeleteProduct = '$deleteProductUrl/$idProduct';
     print("b1");
-    var response = await _dio.delete(urlDeleteProduct);
+    var response = await globalDio.delete(urlDeleteProduct);
     print("response è " + response.data.toString());
     DeleteProductMessage deleteProductMessage = DeleteProductMessage.fromJson(response.data);
     if (deleteProductMessage.message!.startsWith("il prodotto è già in uso da parte di"))
@@ -53,7 +52,7 @@ class ProductRepository{
     var userId = (user != null) ? user.id : 48;
     Map<String, dynamic>? parameters = {};
     parameters.putIfAbsent("userId", () => userId);
-    var response = await _dio.get(allProductsUrl, queryParameters: parameters);
+    var response = await globalDio.get(allProductsUrl, queryParameters: parameters);
     List<ProductEntity> products = (response.data as List).map((product) => ProductEntity.fromJson(product)).toList();
     return products;
   }
@@ -66,7 +65,7 @@ class ProductRepository{
     parameters.putIfAbsent("pageNumber", () => (pageIndex));
     parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
     Response response;
-    response = await _dio.get(indexedProductsUrl, queryParameters: parameters);
+    response = await globalDio.get(indexedProductsUrl, queryParameters: parameters);
     String goodJson = jsonEncode(response.data);
     //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
     List<ProductEntity> products = ((jsonDecode(goodJson) as Map)["content"] as List).map((product) => ProductEntity.fromJson(product)).toList();

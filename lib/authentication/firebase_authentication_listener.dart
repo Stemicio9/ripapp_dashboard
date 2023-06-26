@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:dio/browser.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ripapp_dashboard/constants/app_roles.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
+import 'package:ripapp_dashboard/repositories/user_repository.dart';
 
 class CustomFirebaseAuthenticationListener with ChangeNotifier {
 
@@ -70,6 +73,7 @@ class CustomFirebaseAuthenticationListener with ChangeNotifier {
   }
 
   void logout(){
+    globalDio = Dio()..httpClientAdapter = BrowserHttpClientAdapter(withCredentials: true);
     FirebaseAuth.instance.signOut();
   }
 

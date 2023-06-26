@@ -64,13 +64,9 @@ class ProfileData extends StatelessWidget {
                           width: 1,
                         ),
                         image: imageFile != null ?
-
-
-
-
                         DecorationImage(
                           image: NetworkImage(imageFile),
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fill,
                         ) : DecorationImage(
                           image: AssetImage(ImagesConstants.imgDemisePlaceholder),
                           fit: BoxFit.cover,

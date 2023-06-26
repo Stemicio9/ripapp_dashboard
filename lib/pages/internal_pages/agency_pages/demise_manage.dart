@@ -69,7 +69,7 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
           Header(
             deleteProfileOnTap: (){},
             onTap: (){
-              context.go(RouteConstants.addDemise);
+              context.push(AppPage.addDemise.path);
             },
             pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
             buttonText: getCurrentLanguageValue(ADD_DEMISE)!,

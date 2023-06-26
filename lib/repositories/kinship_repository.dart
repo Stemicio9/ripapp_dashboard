@@ -2,10 +2,10 @@ import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:ripapp_dashboard/constants/kinships.dart';
 import 'package:ripapp_dashboard/constants/rest_path.dart';
+import 'package:ripapp_dashboard/repositories/user_repository.dart';
 
 class KinshipRepository{
   static final KinshipRepository _kinshipRepository = KinshipRepository._internal();
-  final Dio _dio = Dio()..httpClientAdapter = BrowserHttpClientAdapter(withCredentials: true);
   KinshipRepository._internal();
   final String allKinshipUrl = "$baseUrl/api/auth/kinships";
 
@@ -16,7 +16,7 @@ class KinshipRepository{
 
   Future<List<Kinship>> getAllKinship() async {
     print("qui ci arrivo!");
-    Response res = await _dio.get(allKinshipUrl);
+    Response res = await globalDio.get(allKinshipUrl);
     List<Kinship> kinship = (res.data as List).map((kinship) => Kinship.fromJson(kinship)).toList();
     return kinship ;
 

@@ -13,7 +13,7 @@ import 'package:ripapp_dashboard/repositories/user_repository.dart';
 class DemiseRepository{
   static final DemiseRepository _demiseRepository = DemiseRepository._internal();
 
-  final Dio _dio = Dio()..httpClientAdapter = BrowserHttpClientAdapter(withCredentials: true);
+
 
   DemiseRepository._internal();
 
@@ -26,7 +26,7 @@ class DemiseRepository{
   }
 
   final String demiseUrl = "$baseUrl/api/auth/demise";
-  final String searchDemisesByCityUrl = "$baseUrl/api/auth/search/demises";
+  final String searchDemisesByCityUrl = "$baseUrl/api/auth/demises";
   final String searchDemisesIgnorante = "$baseUrl/api/auth/demisesIgnorante";
   final String deleteDemiseUrl = "$baseUrl/api/auth/demise";
 
@@ -51,7 +51,8 @@ class DemiseRepository{
     myoptions.headers!["Content-Type"] = "application/json";
     myoptions.headers!["app_version"] = appVersion;
     print("ciao4");
-    var response = await _dio.post(demiseUrl, data: demiseEntity, options: myoptions);
+
+    var response = await globalDio.post(demiseUrl, data: demiseEntity, options: myoptions);
 
     //var response = await _dio.post(demiseUrl, data: demiseEntity);
 
@@ -61,13 +62,7 @@ class DemiseRepository{
 
   Future<dynamic> deleteDemise(int idDemise) async{
     String urlDeleteDemise = '$deleteDemiseUrl/$idDemise';
-    Options myoptions = Options();
-    Map<String, Object>? headers = Map();
-    myoptions.headers = headers;
-    //myoptions.headers!["set-cookie"] = "idtoken=123;";
-    myoptions.headers!["Content-Type"] = "application/json";
-    myoptions.headers!["app_version"] = appVersion;
-    var response = await _dio.delete(urlDeleteDemise, options: myoptions);
+    var response = await globalDio.delete(urlDeleteDemise);
     return response.data;
   }
 
@@ -80,8 +75,8 @@ class DemiseRepository{
       UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
       var userId = (user != null) ? user.id : 48;
       Map<String, dynamic>? parameters = {};
-      parameters.putIfAbsent("accountId", () => userId);
-      res = await _dio.get(searchDemisesIgnorante, queryParameters: parameters);
+      parameters.putIfAbsent("userid", () => userId);
+      res = await globalDio.get(searchDemisesByCityUrl, queryParameters: parameters);
       print("esatto2");
     }
     on DioError catch (e) {

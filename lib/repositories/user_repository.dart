@@ -10,9 +10,12 @@ import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
 
+
+ Dio globalDio = Dio()..httpClientAdapter = BrowserHttpClientAdapter(withCredentials: true);
+
 class UserRepository {
   static final UserRepository _userRepository = UserRepository._internal();
-  final Dio _dio = Dio()..httpClientAdapter = BrowserHttpClientAdapter(withCredentials: true);
+
 
   final String loginUrl = "$baseUrl/api/auth/login";
   final String accountUrl = "$baseUrl/api/auth/account";
@@ -51,12 +54,12 @@ class UserRepository {
     print("TOKEN FIREBASE");
     print(token);
     values.putIfAbsent("idtoken", () => token);
-    var response = await _dio.post(loginUrl, data: values);
+    var response = await globalDio.post(loginUrl, data: values);
     return response;
   }
 
   Future<UserEntity> account() async {
-    var response = await _dio.get(accountUrl, options: Options(headers: buildHeaders()));
+    var response = await globalDio.get(accountUrl, options: Options(headers: buildHeaders()));
 
     print("ATTUALE UTENTE");
     print(response.data);
@@ -72,7 +75,7 @@ class UserRepository {
     parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
 
     Response response;
-    response = await _dio.get(listAccountUrl, queryParameters: parameters);
+    response = await globalDio.get(listAccountUrl, queryParameters: parameters);
 
     print("object");
     print(response.data);
@@ -97,15 +100,14 @@ class UserRepository {
     parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
 
     Response response;
-    response = await _dio.get(listAccountUrl, queryParameters: parameters);
+    response = await globalDio.get(listAccountUrl, queryParameters: parameters);
     print("object");
     print(response.data);
     // todo this could be not necessary
     String goodJson = jsonEncode(response.data);
-    print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
-    print('STAMPOOOOOOO');
-    print((jsonDecode(goodJson) ));
-    List<UserEntity> users = ((jsonDecode(goodJson) as List)).map((user) => UserEntity.fromJson(user)).toList();
+
+    var list = (jsonDecode(goodJson) as Map)["content"] as List;
+    List<UserEntity> users = (list).map((user) => UserEntity.fromJson(user)).toList();
     print("ecco i tuoi utenti" + users.toString() + users.length.toString());
     //List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
     //return userEntityList;
@@ -114,7 +116,7 @@ class UserRepository {
 
   Future<dynamic> deleteUser(int idUser) async {
     String urlDeleteUser = '$deleteUserUrl/$idUser';
-    var response = await _dio.delete(urlDeleteUser);
+    var response = await globalDio.delete(urlDeleteUser);
     return response.data;
   }
 
@@ -126,13 +128,15 @@ class UserRepository {
     print("USER si: ");
     print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO");
     print(userEntity.toJson());
-    var response = await _dio.post(signupUrl,data: userEntity.toJson(), options: Options(headers: buildHeaders()));
+    var response = await globalDio.post(signupUrl,data: userEntity.toJson(), options: Options(headers: buildHeaders()));
     return response.data;
   }
 
   Future loginPreLayer(String token) async {
-    var response = await UserRepository().login(token);
     CookiesManager.clear();
+    print("SONO NEL LOGIN PRE LAYER");
+    print(token);
+    var response = await UserRepository().login(token);
 
     print("RISPOSTA LOGIN");
     print(response.data);
@@ -164,7 +168,7 @@ class UserRepository {
     myoptions.headers = headers;
     //myoptions.headers!["set-cookie"] = "idtoken=123;";
     myoptions.headers!["Content-Type"] = "application/json";
-    Response res = await _dio.get(allUsersUrl, data: searchEntity.toJson(), queryParameters: parameters, options: myoptions);
+    Response res = await globalDio.get(allUsersUrl, data: searchEntity.toJson(), queryParameters: parameters, options: myoptions);
     print("dati = " + res.data.toString());
     print(res.data);
     List<UserEntity> users = (res.data as List).map((user) => UserEntity.fromJson(user)).toList();
@@ -172,7 +176,7 @@ class UserRepository {
   }
   Future<List<CityFromAPI>> cityList() async {
     Response res;
-    res = await _dio.get(cityListUrl);
+    res = await globalDio.get(cityListUrl);
     List<CityFromAPI> cityList = (res.data as List).map((e) => CityFromAPI.fromJson(e)).toList();
     print("ECCO LE CITTà - simone");
     return cityList;
@@ -180,7 +184,7 @@ class UserRepository {
 
   Future<dynamic> updateUser(int userId, UserEntity userEntity) async{
     String urlChiamato = '$updateUserUrl/$userId';
-    var response = await _dio.put(urlChiamato, data: userEntity.toJson());
+    var response = await globalDio.put(urlChiamato, data: userEntity.toJson());
     return UserEntity.fromJson(response.data);
   }
 
