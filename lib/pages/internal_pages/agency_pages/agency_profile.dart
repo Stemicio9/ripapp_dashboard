@@ -10,6 +10,7 @@ import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/edit_profile_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/profile_data.dart';
+import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 
 import '../../../constants/colors.dart';
@@ -62,8 +63,15 @@ class AgencyProfileState extends State<AgencyProfile> {
               showDialog(
                   context: context,
                   builder: (ctx) => DeleteMessageDialog(
-                      onConfirm: () {
-                        Navigator.pop(context);
+                      onConfirm: () async {
+                        var id = CustomFirebaseAuthenticationListener().userEntity?.id ?? 0;
+                        try{
+                          UserRepository().deleteUser(id);
+                          CustomFirebaseAuthenticationListener().logout();
+                        }catch(e){
+                          // ignore
+                          Navigator.pop(context);
+                        }
                       },
                       onCancel: () {
                         Navigator.pop(context);
@@ -116,7 +124,15 @@ class AgencyProfileState extends State<AgencyProfile> {
                             },
                             onTap: () {
                               if (_formKey.currentState!.validate()) {
-                                SuccessSnackbar(context, text: 'Profilo modificato con successo!');
+                                var id = CustomFirebaseAuthenticationListener().userEntity?.id ?? 0;
+                                try{
+                                  UserRepository().updateUser(id, compileUserEntity());
+                                  SuccessSnackbar(context, text: 'Profilo modificato con successo!');
+                                }catch(e){
+                                  // ignore
+                                  ErrorSnackbar(context, text: "Errore generico durante la modifica dell'utente, contattare il team di sviluppo");
+                                }
+
                                 Navigator.pop(context);
                               }
                             }),
@@ -133,5 +149,15 @@ class AgencyProfileState extends State<AgencyProfile> {
         ],
       ),
     );
+  }
+
+
+  UserEntity compileUserEntity(){
+    UserEntity result = CustomFirebaseAuthenticationListener().userEntity!;
+    result.firstName = nameController.text;
+    result.lastName = lastNameController.text;
+    result.email = emailController.text;
+    result.phoneNumber = phoneController.text;
+    return result;
   }
 }

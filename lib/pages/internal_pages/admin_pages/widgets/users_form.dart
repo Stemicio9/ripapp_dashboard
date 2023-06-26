@@ -571,7 +571,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
 
                                                                     isExpanded: true,
                                                                     underline: const SizedBox(),
-                                                                    value: state.selectedUser.agency,
+                                                                    value: state.selectedUser.agency ?? agencyState.selectedAgency,
                                                                     onChanged: (AgencyEntity? value) {
                                                                       _searchAgencyCubit.changeSelectedAgency(value);
                                                                       if (value != null) {

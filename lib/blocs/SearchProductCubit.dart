@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/repositories/product_repository.dart';
+import 'package:ripapp_dashboard/widgets/snackbars.dart';
 @immutable
 class SearchProductState{}
 class SearchProductLoading extends SearchProductState {}
@@ -38,14 +39,17 @@ class SearchProductCubit extends Cubit<SearchProductState>{
     }
   }
 
-  delete(idProduct)async{
+  delete(idProduct, BuildContext context)async{
     emit(SearchProductLoading());
     try{
       var result = await ProductRepository().deleteProduct(idProduct);
+      SuccessSnackbar(context, text: 'Prodotto eliminato con successo!');
       fetchProducts();
     }catch(e){
       print("ERRORE");
       print(e);
+      // todo capire l'errore ed in base all'errore mostrare la snackbar corretta
+      ErrorSnackbar(context, text: 'Non puoi eliminare il prodotto perchè è presente nel catalogo di alcune agenzie');
       emit(SearchProductError());
     }
   }

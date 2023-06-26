@@ -2,12 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
+import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/entities/single_product_entity.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/products_row.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
+import 'package:ripapp_dashboard/widgets/texts.dart';
 
 import '../../../../constants/language.dart';
 import '../../../../widgets/action_button.dart';
@@ -107,7 +109,7 @@ class _ProductsPopupState extends State<ProductsPopup> {
                           if(state is SearchProductsOfferedLoading){
                             return const Center(child: CircularProgressIndicator());
                           }
-                          if (state is SearchProductsOfferedLoaded) {
+                          else if (state is SearchProductsOfferedLoaded) {
                             products.clear();
                             state.productsOffered.forEach((
                                 productOffered) {
@@ -149,8 +151,21 @@ class _ProductsPopupState extends State<ProductsPopup> {
                                 ],
                               );
                           }
-                          else
+                          else if(state is SearchProductsOfferedEmpty) {
+                            return Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 40),
+                                child: Texth2V2(
+                                    testo: 'Non ci sono prodotti da mostrare',
+                                    weight: FontWeight.bold,
+                                    color: background
+                                ),
+                              ),
+                            );
+                          }
+                          else {
                             return ErrorWidget("errore");
+                          }
                         }),
                   )),
                 )],

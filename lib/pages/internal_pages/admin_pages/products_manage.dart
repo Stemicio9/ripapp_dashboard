@@ -94,8 +94,8 @@ class ProductsManageState extends State<ProductsManage>{
                     context: context,
                     builder: (ctx) => DeleteMessageDialog(
                         onConfirm: (){
-                          _searchProductsCubit.delete(p.id);
-                          SuccessSnackbar(context, text: 'Prodotto eliminato con successo!');
+                          _searchProductsCubit.delete(p.id, context);
+                        // SuccessSnackbar(context, text: 'Prodotto eliminato con successo!');
 
                           Navigator.pop(context);
                         },
@@ -170,6 +170,8 @@ class ProductsManageState extends State<ProductsManage>{
       SuccessSnackbar(context, text: 'Prodotto aggiunto con successo!');
 
       Navigator.pop(context);
+
+
     }
   }
 }

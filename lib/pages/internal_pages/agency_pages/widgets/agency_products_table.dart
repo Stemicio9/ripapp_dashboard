@@ -20,8 +20,7 @@ class AgencyProductsTable extends StatefulWidget {
 
 class AgencyProductsTableState extends State<AgencyProductsTable> {
   List<String> headerTitle = ['ID', 'Foto', 'Nome', 'Prezzo',];
-  @override
-  // TODO: implement context
+
   SearchProductsOfferedCubit get _searchProductCubit => context.read<SearchProductsOfferedCubit>();
   List<ProductEntity> products = [];
   File? imageFile;
@@ -43,6 +42,18 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
             child: CircularProgressIndicator()
         );
       }
+      if(state is SearchProductsOfferedEmpty){
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 40),
+            child: Texth2V2(
+                testo: 'Nessun prodotto selezionato',
+                weight: FontWeight.bold,
+                color: background
+            ),
+          ),
+        );
+      }
       if (state is SearchProductsOfferedLoaded) {
         products.clear();
         state.productsOffered.forEach((
@@ -51,6 +62,7 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
             products.add(productOffered.productEntity);
         });
 
+        print("products: $products");
         if (products.isEmpty) {
           return Center(
             child: Padding(
