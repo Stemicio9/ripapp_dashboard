@@ -6,6 +6,8 @@ import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/dashboard.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/dashboard_agency.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/demise_detail.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/edit_demise.dart';
 import 'package:ripapp_dashboard/pages/login_section/login.dart';
 
 class RouterManager {
@@ -40,6 +42,14 @@ class RouterManager {
         GoRoute(
             path: RouteConstants.addDemise,
             builder: (context, state) => AddDemise(),
+        ),
+        GoRoute(
+            path: RouteConstants.demiseDetail,
+            builder: (context, state) => DemiseDetail(),
+        ),
+        GoRoute(
+            path: RouteConstants.editDemise,
+            builder: (context, state) => EditDemise(),
         ),
       ],
       redirect: (context , state) async {

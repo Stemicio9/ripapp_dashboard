@@ -448,6 +448,7 @@ class AddDemiseState extends State<AddDemise> {
     //_searchDemiseCubit.saveProduct(demiseEntity);
 
 
+    print("ciao fraterno, la demise entity è fatta nel seguente modo: " + demiseEntity.toString());
     _searchDemiseCubit.saveProduct(demiseEntity);
     SuccessSnackbar(
         context,

@@ -84,12 +84,12 @@ class DemiseManageState extends State<DemiseManage>{
               );
             },
             edit: (dynamic p){
-              Navigator.pushNamed(context, RouteConstants.editDemise);
               _selectedDemiseCubit.selectUser(p);
+              context.go(RouteConstants.editDemise);
             },
             showDetail: (dynamic p){
               _selectedDemiseCubit.selectUser(p);
-              Navigator.pushNamed(context, RouteConstants.demiseDetail);
+              context.go(RouteConstants.demiseDetail);
             },
             detailMessage: detailMessage,
             editMessage: editMessage,
