@@ -1,4 +1,3 @@
-import 'package:firebase_admin/firebase_admin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +11,6 @@ import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/blocs/search_users_cubit.dart';
-import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -26,7 +24,7 @@ import 'firebase_options.dart';
 void main() async {
   String initialRoute = "/";
   WidgetsFlutterBinding.ensureInitialized();
-  runApp( MyApp());
+  runApp( MyApp(initialRoute: initialRoute));
   AppUtils.firebaseApplication = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -42,6 +40,7 @@ void main() async {
 class MyApp extends StatelessWidget {
 
 
+  final String initialRoute;
   static const int primaryColor = 0xFF412268;
   final RouterManager routerManager = RouterManager();
 
@@ -60,6 +59,7 @@ class MyApp extends StatelessWidget {
       900: Color(0xFF311B92),
   });
 
+  const MyApp({super.key,required this.initialRoute});
 
   @override
   /*

@@ -117,6 +117,5 @@ relative*/
   "cities": cities?.map((e) => e.toJson()).toList() ?? [],
   "relatives":relative?.toJson() ?? null,
   };
-
-  factory DemiseEntity.emptyDemise() => DemiseEntity();
+  factory DemiseEntity.emptyUser() => DemiseEntity();
 }

@@ -20,7 +20,7 @@ class CityEntity {
 
   factory CityEntity.defaultCity() => CityEntity(
     cityid: 0,
-    name: "Seleziona Città",
+    name: "",
   );
 
 

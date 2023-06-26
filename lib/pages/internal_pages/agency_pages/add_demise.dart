@@ -7,6 +7,7 @@ import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
@@ -20,6 +21,7 @@ import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import '../../../constants/colors.dart';
+import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
 import '../../../utils/size_utils.dart';
 import 'package:intl/intl.dart';
@@ -59,7 +61,7 @@ class AddDemiseState extends State<AddDemise> {
   Offset? offset;
   DateTime? wakeDate;
   DateTime? funeralDate;
-  static const List<String> cityOptions = <String>[
+  /*static const List<String> cityOptions = <String>[
     'Milano',
     'Roma',
     'Firenze',
@@ -70,8 +72,12 @@ class AddDemiseState extends State<AddDemise> {
     'Roma',
     'Firenze',
     'Torino',
-  ];
-  static List<String> kinship = <String>[
+  ];*/
+
+  List<CityFromAPI> cityOptions = <CityFromAPI>[];
+  List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+
+  static const List<String> kinship = <String>[
     'Madre',
     'Padre',
     'Fratello',
@@ -467,11 +473,10 @@ class AddDemiseState extends State<AddDemise> {
     selectedValues.add(kinship.first);
     var x = RelativeRow(
         onChanged: changeDropdown,
-        kinship: kinship,
         relativeValidator: notEmptyValidate,
         relativeController: relativeController,
-        deleteRelative: deleteRelative,
-        value: selectedValues.last,
+        deleteRelative: deleteRelative, changeKinship: (Kinship selectedKinship) {  }, statusChange: (String selectedValue) {  }, isDetail: false, selectedKinship: Kinship.brother, listKinship: const ['nonno'],
+        
     );
 
     // RelativeRow(onChanged: (String? value) {
@@ -485,8 +490,11 @@ class AddDemiseState extends State<AddDemise> {
 
   changeDropdown(RelativeRow relativeRow, value){
     setState(() {
+      print("ILPARENTE");
+      print(value);
       var index = relativeRows.indexOf(relativeRow);
       selectedValues[index] = value;
+      changeDropdown(relativeRow, value);
     });
   }
 

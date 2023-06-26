@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import '../constants/colors.dart';
 
-class AutocompleteWidget extends StatelessWidget{
-
-  final List<String> options;
+class AutocompleteWidget extends StatelessWidget {
+  final List<CityFromAPI> options;
   final dynamic validator;
   final String hintText;
   final double paddingLeft; //40
@@ -27,24 +27,25 @@ class AutocompleteWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(
-            left: paddingLeft,
-            right: paddingRight,
-            top: paddingTop,
-            bottom: paddingBottom
-        ),
-        child: Autocomplete<String>(
+      padding: EdgeInsets.only(
+          left: paddingLeft,
+          right: paddingRight,
+          top: paddingTop,
+          bottom: paddingBottom),
+      child: Autocomplete<CityFromAPI>(
         optionsBuilder: (TextEditingValue textEditingValue) {
           if (textEditingValue.text == '') {
-            return const Iterable<String>.empty();
+            return const Iterable<CityFromAPI>.empty();
           }
-          return options.where((String option) {
-            return option.contains(textEditingValue.text.toLowerCase());
+          return options.where((CityFromAPI option) {
+            return option.nome!.toLowerCase().contains(textEditingValue.text.toLowerCase());
           });
         },
 
-       fieldViewBuilder: (BuildContext context, TextEditingController textEditingController,
-            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        fieldViewBuilder: (BuildContext context,
+            TextEditingController textEditingController,
+            FocusNode focusNode,
+            VoidCallback onFieldSubmitted) {
           return TextFormField(
             validator: validator,
             controller: textEditingController,
@@ -58,11 +59,11 @@ class AutocompleteWidget extends StatelessWidget{
                 borderRadius: BorderRadius.circular(3),
               ),
               errorBorder: OutlineInputBorder(
-                borderSide:  BorderSide(color: rossoopaco),
+                borderSide: BorderSide(color: rossoopaco),
                 borderRadius: BorderRadius.circular(3),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                borderSide:  BorderSide(color: rossoopaco),
+                borderSide: BorderSide(color: rossoopaco),
                 borderRadius: BorderRadius.circular(3),
               ),
               hintText: hintText,
@@ -72,6 +73,7 @@ class AutocompleteWidget extends StatelessWidget{
               contentPadding: const EdgeInsets.only(left: 20),
               fillColor: white,
               floatingLabelBehavior: FloatingLabelBehavior.never,
+
             ),
             focusNode: focusNode,
             onFieldSubmitted: (String value) {
@@ -80,38 +82,39 @@ class AutocompleteWidget extends StatelessWidget{
             },
           );
         },
-          optionsViewBuilder: (context, onSelected, options) => Align(
-            alignment: Alignment.topLeft,
-            child: Material(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(4.0)),
-              ),
-              child: Container(
-                height: 52.0 * options.length,
-                width: MediaQuery.of(context).size.width/3.37,
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: options.length,
-                  shrinkWrap: false,
-                  itemBuilder: (BuildContext context, int index) {
-                    final String option = options.elementAt(index);
-                    return InkWell(
-                      onTap: () => onSelected(option),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(option),
-                      ),
-                    );
-                  },
-                ),
+        optionsViewBuilder: (context, onSelected, options) => Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(4.0)),
+            ),
+            child: Container(
+              height: 52.0 * options.length,
+              width: MediaQuery.of(context).size.width / 3.37,
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: options.length,
+                shrinkWrap: false,
+                itemBuilder: (BuildContext context, int index) {
+                  final CityFromAPI option = options.elementAt(index);
+                  return InkWell(
+                    onTap: () => onSelected(option),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(option.nome!),
+                    ),
+                  );
+                },
               ),
             ),
           ),
-        onSelected: (String selection) {
+        ),
+        onSelected: (CityFromAPI selection) {
+
           debugPrint('You just selected $selection');
-        },
+
+        }
       ),
     );
   }
-
 }

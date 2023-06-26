@@ -1,3 +1,8 @@
+
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meta/meta.dart';
+import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
@@ -12,15 +17,15 @@ class SelectedDemiseState {
   const SelectedDemiseState({required this.selectedDemise});
 }
 
+  class SelectedDemiseCubit extends Cubit<SelectedDemiseState>{
+  SelectedDemiseCubit() : super(SelectedDemiseState(selectedDemise: DemiseEntity.emptyUser()));
 
-
-class SelectedDemiseCubit extends Cubit<SelectedDemiseState> {
-  SelectedDemiseCubit() : super(SelectedDemiseState(selectedDemise: DemiseEntity.emptyDemise()));
-
-  selectUser(DemiseEntity selectedDemise)async{
-    print("ciao4");
+  selectedDemise(DemiseEntity selectedDemise){
+    print("SELEZIONA DEFUNTO");
     emit(SelectedDemiseState(selectedDemise: selectedDemise));
     print(selectedDemise);
-    print("CIAO5555");
+    print("DEFUNTO SELEZIONATO");
   }
-}
+
+
+  }

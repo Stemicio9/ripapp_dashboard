@@ -48,7 +48,6 @@ class ProductRepository{
       throw new Exception(deleteProductMessage.message);
     return deleteProductMessage;
   }
-
   Future<dynamic> getAllProducts() async {
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
     var userId = (user != null) ? user.id : 4;

@@ -14,23 +14,41 @@ import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 import '../../../blocs/search_demises_cubit.dart';
 import '../../../constants/colors.dart';
+import '../admin_pages/users_manage.dart';
 
-class DemiseManage extends StatefulWidget {
+
+class DemiseMenage extends StatelessWidget{
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => SelectedDemiseCubit(),
+        ),
+
+      ],
+      child: DemiseManageWidget(),
+    );
+  }
+}
+
+class DemiseManageWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return DemiseManageState();
+    return DemiseManageWidgetState();
   }
 }
 
 
-class DemiseManageState extends State<DemiseManage>{
+class DemiseManageWidgetState extends State<DemiseManageWidget>{
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
   final String message = 'Le informazioni riguardanti questo decesso verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
 
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
-  SelectedDemiseCubit get _selectedDemiseCubit => context.read<SelectedDemiseCubit>();
+  SelectedDemiseCubit get _selectedDemise => context.read<SelectedDemiseCubit>();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -50,7 +68,8 @@ class DemiseManageState extends State<DemiseManage>{
           Header(
             deleteProfileOnTap: (){},
             onTap: (){
-              context.go(RouteConstants.addDemise);
+              //context.go(RouteConstants.addDemise);
+              Navigator.pushNamed(context, RouteConstants.addDemise);
             },
             pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
             buttonText: getCurrentLanguageValue(ADD_DEMISE)!,
@@ -84,12 +103,21 @@ class DemiseManageState extends State<DemiseManage>{
               );
             },
             edit: (dynamic p){
-              _selectedDemiseCubit.selectUser(p);
-              context.go(RouteConstants.editDemise);
+              print("Defunto");
+              print(p);
+              //context.go(RouteConstants.editDemise);
+              Navigator.pushNamed(context, RouteConstants.editDemise,
+                      arguments:_selectedDemise.selectedDemise(p)
+
+              );
+
             },
-            showDetail: (dynamic p){
-              _selectedDemiseCubit.selectUser(p);
-              context.go(RouteConstants.demiseDetail);
+            showDetail: (){
+              /*_selectedDemiseCubit.selectUser(p);
+              context.go(RouteConstants.demiseDetail);*/
+              Navigator.pushNamed(context, RouteConstants.demiseDetail,
+              );
+
             },
             detailMessage: detailMessage,
             editMessage: editMessage,
