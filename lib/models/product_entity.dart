@@ -46,4 +46,7 @@ class ProductEntity implements ResultEntity {
     "urlImage": photoName,
     "price": price,
   };
+
+  factory ProductEntity.emptyProduct() => ProductEntity();
+
 }

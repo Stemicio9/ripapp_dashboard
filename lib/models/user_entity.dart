@@ -47,7 +47,6 @@ class UserEntity implements ResultEntity {
       city: (json["city"]).map((e) => CityEntity.fromJson(e)).toList() ?? List.empty(),
       phoneNumber: json["phone"] ?? "",
       idtoken: json["idtoken"] ?? "",
-       // status: json["status"] != null && (json["status"] as String).isNotEmpty ? UserStatus.values.firstWhere((e) => e.toString() == json["status"]) : UserStatus.active,
       agency: json["agency"] != null ? AgencyEntity.fromJson(json["agency"]) : null,
       role: json["role"] ?? "",
       status: UserStatus.fromJson(json['status'])
@@ -71,8 +70,9 @@ class UserEntity implements ResultEntity {
         city: city ?? this.city,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         idtoken: idtoken ?? this.idtoken,
-      //  status: status ?? this.status,
-        role: role ?? this.role);
+         status: status ?? this.status,
+     //   role: role ?? this.role
+    );
   }
 
   Map<String, dynamic> toJson() => {
@@ -84,7 +84,6 @@ class UserEntity implements ResultEntity {
         "phone": phoneNumber,
         "idtoken": idtoken,
         "status":  status?.toJson(),
-        //"role": role ?? "",
         "agency": agency?.toJson()
       };
 
@@ -103,6 +102,5 @@ class UserEntity implements ResultEntity {
 
   factory UserEntity.emptyUser() => UserEntity();
 
-  factory UserEntity.emptyUser() => UserEntity();
 // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
 }

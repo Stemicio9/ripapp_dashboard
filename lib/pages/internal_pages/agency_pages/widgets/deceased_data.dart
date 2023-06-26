@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +37,7 @@ class DeceasedData extends StatelessWidget {
   final onDragEntered;
   final onDragExited;
   final Widget child;
-  final File? imageFile;
+  final String imageFile;
   final List<CityFromAPI> options;
   final List<CityFromAPI> citiesOfInterestOptions;
 
@@ -67,7 +66,7 @@ class DeceasedData extends StatelessWidget {
         required this.ageController,
         required this.options,
         required this.citiesOfInterestOptions,
-        this.imageFile,
+        required this.imageFile,
         required this.dateController});
 
   @override
@@ -119,9 +118,9 @@ class DeceasedData extends StatelessWidget {
                                 borderRadius: const BorderRadius.all(Radius.circular(3)),
                                 color: greyDrag,
                                 border: Border.all(color: background, width: 1),
-                                image: imageFile != null ?
+                                image: imageFile != "" ?
                                 DecorationImage(
-                                  image: FileImage(imageFile!),
+                                  image: NetworkImage(imageFile),
                                   fit: BoxFit.contain,
                                 )
                                     : DecorationImage(
@@ -348,7 +347,7 @@ class DeceasedData extends StatelessWidget {
                           Padding(
                             padding: getPadding(bottom: 5),
                             child: Text(
-                              'COMUNE DI INTERESSE',
+                              'COMUNI DI INTERESSE',
                               style: SafeGoogleFont(
                                 'Montserrat',
                                 fontSize: 14,
@@ -361,7 +360,7 @@ class DeceasedData extends StatelessWidget {
                             options: citiesOfInterestOptions,
                             paddingRight: 20,
                             paddingLeft: 0,
-                            hintText: "Comune di interesse",
+                            hintText: "Comuni di interesse",
                             filterController: citiesController,
                             validator: citiesOfInterestValidator,
                           )

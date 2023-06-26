@@ -1,3 +1,5 @@
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage.dart';
+
 enum UserStatus { agency, active, disabled, notfound, admin;
 
   String toJson() => name;
@@ -18,4 +20,21 @@ UserStatus userStatusFromString(String type) {
   return UserStatus.values.firstWhere(
       (element) => element.toString().split(".").last == type,
       orElse: null);
+}
+
+UserRoles fromUserStatus(UserStatus status){
+  switch(status){
+    case UserStatus.agency: return UserRoles.Agenzia;
+    case UserStatus.admin: return UserRoles.Amministratore;
+    default: return UserRoles.Utente;
+  }
+}
+
+UserStatus fromUserRole(UserRoles role){
+  switch(role){
+    case UserRoles.Utente: return UserStatus.active;
+    case UserRoles.Amministratore: return UserStatus.admin;
+    case UserRoles.Agenzia: return UserStatus.agency;
+    default: return UserStatus.active;
+  }
 }

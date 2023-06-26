@@ -7,10 +7,16 @@ import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/blocs/current_user_cubit.dart';
+import 'package:ripapp_dashboard/blocs/firebase_storage/firebase_storage_bloc.dart';
+import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/blocs/search_users_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_agency_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -24,7 +30,7 @@ import 'firebase_options.dart';
 void main() async {
   String initialRoute = "/";
   WidgetsFlutterBinding.ensureInitialized();
-  runApp( MyApp(initialRoute: initialRoute));
+  runApp( MyApp());
   AppUtils.firebaseApplication = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -40,7 +46,6 @@ void main() async {
 class MyApp extends StatelessWidget {
 
 
-  final String initialRoute;
   static const int primaryColor = 0xFF412268;
   final RouterManager routerManager = RouterManager();
 
@@ -59,7 +64,6 @@ class MyApp extends StatelessWidget {
       900: Color(0xFF311B92),
   });
 
-  const MyApp({super.key,required this.initialRoute});
 
   @override
   /*
@@ -102,7 +106,12 @@ class MyApp extends StatelessWidget {
             BlocProvider<CurrentUserCubit>(create: (_) => CurrentUserCubit()),
             BlocProvider<SelectedDemiseCubit>(create: (_) => SelectedDemiseCubit()),
             BlocProvider<SelectedUserCubit>(create: (_) => SelectedUserCubit()),
+            BlocProvider<SelectedAgencyCubit>(create: (_) => SelectedAgencyCubit()),
+            BlocProvider<SelectedProductCubit>(create: (_) => SelectedProductCubit()),
             BlocProvider<CurrentPageCubit>(create: (_) => CurrentPageCubit()),
+            BlocProvider<SelectedUserCubit>(create: (_) => SelectedUserCubit()),
+            BlocProvider<ProfileImageCubit>(create: (_) => ProfileImageCubit()),
+            BlocProvider<FirebaseStorageCubit>(create: (_) => FirebaseStorageCubit()),
           ],
           child: Builder(
             builder: (context) {

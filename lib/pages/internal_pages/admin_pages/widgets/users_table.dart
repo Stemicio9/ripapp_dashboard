@@ -17,7 +17,6 @@ class UsersTable extends StatefulWidget{
     'Nome',
     'Cognome',
     'Email',
-    'Città',
     'Telefono',
     'Ruolo',
     'Nome Agenzia',
@@ -69,6 +68,7 @@ class UsersTableState extends State<UsersTable>{
   Widget build(BuildContext context) {
     return BlocBuilder<CurrentPageCubit, CurrentPageState>(
         builder: (context, state) {
+
           if (state.loading) {
             return const Center(
                 child: CircularProgressIndicator()
@@ -165,11 +165,6 @@ class UsersTableState extends State<UsersTable>{
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.city.toString(),
-          style: SafeGoogleFont('Montserrat',
-              color: black, fontSize: 12, fontWeight: FontWeight.w700),
-        )),
-        DataCell(Text(
           p.phoneNumber,
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
@@ -222,9 +217,7 @@ class UsersTableState extends State<UsersTable>{
                 message: widget.editMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(
-                    onTap: (){
-                      widget.edit(p);
-                      },
+                    onTap: (){widget.edit(p);},
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Icon(

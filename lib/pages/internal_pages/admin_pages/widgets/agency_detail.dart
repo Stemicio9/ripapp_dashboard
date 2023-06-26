@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_agency_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
@@ -8,25 +10,35 @@ import '../../../../widgets/texts.dart';
 
 class AgencyDetail extends StatelessWidget {
   final String cardTitle;
-  final int id;
-  final String name;
-  final String phoneNumber;
-  final String email;
-  final String city;
+  late int id;
+  late String name;
+  late String phoneNumber;
+  late String email;
+  late String city;
 
-  const AgencyDetail({
+   AgencyDetail({
     super.key,
     required this.cardTitle,
-    required this.name,
-    required this.id,
-    required this.email,
-    required this.phoneNumber,
-    required this.city,
+     this.name = "",
+     this.id = 0,
+     this.email = "",
+     this.phoneNumber = "",
+     this.city = "",
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BlocBuilder<SelectedAgencyCubit, SelectedAgencyState>(
+        builder: (context, state) {
+      if (state is SelectedAgencyState) {
+        id = state.selectedAgency.id ?? 0;
+        name = state.selectedAgency.agencyName ?? "";
+        email = state.selectedAgency.email ?? "";
+        phoneNumber = state.selectedAgency.phoneNumber ?? "";
+        city = state.selectedAgency.city ?? "";
+
+
+        return Container(
       padding: getPadding(left: 20, right: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -136,5 +148,9 @@ class AgencyDetail extends StatelessWidget {
         ],
       ),
     );
+      }
+      else return ErrorWidget("exception");
+
+        });
   }
 }

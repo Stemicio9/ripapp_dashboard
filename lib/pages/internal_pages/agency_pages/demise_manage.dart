@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
+import 'package:ripapp_dashboard/constants/app_pages.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
@@ -48,7 +49,7 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
   final String message = 'Le informazioni riguardanti questo decesso verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
 
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
-  SelectedDemiseCubit get _selectedDemise => context.read<SelectedDemiseCubit>();
+  SelectedDemiseCubit get _selectedDemiseCubit => context.read<SelectedDemiseCubit>();
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -68,61 +69,51 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
           Header(
             deleteProfileOnTap: (){},
             onTap: (){
-              //context.go(RouteConstants.addDemise);
-              Navigator.pushNamed(context, RouteConstants.addDemise);
+              context.go(RouteConstants.addDemise);
             },
             pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
             buttonText: getCurrentLanguageValue(ADD_DEMISE)!,
           ),
 
-          DemiseTable(
-            delete: (dynamic p){
-              showDialog(
-                  context: context,
-                  builder: (ctx) => DeleteMessageDialog(
-                      onConfirm: (){
-                        _searchDemiseCubit.delete(p.id);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: green,
-                            content: const Text('Defunto eliminato con successo!'),
-                            duration: const Duration(milliseconds: 3000),
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3),
+            DemiseTable(
+              delete: (dynamic p){
+                showDialog(
+                    context: context,
+                    builder: (ctx) => DeleteMessageDialog(
+                        onConfirm: (){
+                          _searchDemiseCubit.delete(p.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: green,
+                              content: const Text('Defunto eliminato con successo!'),
+                              duration: const Duration(milliseconds: 3000),
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3),
+                              ),
                             ),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      },
-                      onCancel: (){
-                        Navigator.pop(context);
-                      },
-                      message: message
-                  )
-              );
-            },
-            edit: (dynamic p){
-              print("Defunto");
-              print(p);
-              //context.go(RouteConstants.editDemise);
-              Navigator.pushNamed(context, RouteConstants.editDemise,
-                      arguments:_selectedDemise.selectedDemise(p)
-
-              );
-
-            },
-            showDetail: (){
-              /*_selectedDemiseCubit.selectUser(p);
-              context.go(RouteConstants.demiseDetail);*/
-              Navigator.pushNamed(context, RouteConstants.demiseDetail,
-              );
-
-            },
-            detailMessage: detailMessage,
-            editMessage: editMessage,
-            deleteMessage: deleteMessage,
-          )
+                          );
+                          Navigator.pop(context);
+                        },
+                        onCancel: (){
+                          Navigator.pop(context);
+                        },
+                        message: message
+                    )
+                );
+              },
+              edit: (dynamic p){
+                context.go(AppPage.editDemise.path);
+                _selectedDemiseCubit.selectUser(p);
+              },
+              showDetail: (dynamic p){
+                _selectedDemiseCubit.selectUser(p);
+                context.go(AppPage.demiseDetail.path);
+              },
+              detailMessage: detailMessage,
+              editMessage: editMessage,
+              deleteMessage: deleteMessage,
+            )
 
         ],
       ),

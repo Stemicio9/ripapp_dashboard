@@ -21,7 +21,6 @@ class DemiseCubit extends Cubit<DemiseState> {
         // ignore
       }
     }
-    print("esatto");
     try{
       /*
       DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset))
@@ -50,11 +49,12 @@ class DemiseCubit extends Cubit<DemiseState> {
     }
   }
 
-  saveProduct(DemiseEntity demiseEntity) async{
+  saveDemise(DemiseEntity demiseEntity) async{
     emit(SaveDemiseLoading());
     try{
-      DemiseEntity result = await DemiseRepository().saveDemise(demiseEntity);
-      emit(SaveDemiseLoaded(result));
+      await DemiseRepository().saveDemise(demiseEntity);
+      //emit(SaveDemiseLoaded(result));
+      print("HO SALVATO LA DEMISE, FACCIO LA FETCH");
       fetchDemises();
     }catch(e){
       print("ERRORE DI FETCH");

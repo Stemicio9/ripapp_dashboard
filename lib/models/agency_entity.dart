@@ -58,4 +58,13 @@ class AgencyEntity implements ResultEntity {
     "telephoneNumber": phoneNumber,
 
   };
+
+  factory AgencyEntity.emptyAgency() => AgencyEntity();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is AgencyEntity &&
+              runtimeType == other.runtimeType &&
+              id == other.id;
 }

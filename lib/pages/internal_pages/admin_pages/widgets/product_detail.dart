@@ -1,36 +1,42 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
-
 import '../../../../constants/images_constants.dart';
-import '../../../../constants/language.dart';
 import '../../../../widgets/texts.dart';
 
 class ProductDetail extends StatelessWidget {
   final String cardTitle;
-  final int id;
-  final String name;
-  final double price;
+  late int id;
+  late String name;
+  late double price;
   final String productPhoto;
   final File? imageFile;
 
-  const ProductDetail({
+   ProductDetail({
     super.key,
     required this.cardTitle,
-    required this.name,
-    required this.id,
-    required this.price,
+     this.name = "",
+     this.id = 0,
+     this.price = 0,
     required this.productPhoto,
     this.imageFile
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BlocBuilder<SelectedProductCubit, SelectedProductState>(
+        builder: (context, state) {
+      if (state is SelectedProductState) {
+        id = state.selectedProduct.id ?? 0;
+        name = state.selectedProduct.name ?? "";
+        price = state.selectedProduct.price ?? 0;
+        return Container(
       padding: getPadding(left: 20, right: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -129,5 +135,8 @@ class ProductDetail extends StatelessWidget {
         ],
       ),
     );
+      }
+      else return ErrorWidget("exception");
+        });
   }
 }

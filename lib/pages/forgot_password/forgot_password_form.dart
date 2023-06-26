@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -105,7 +106,7 @@ class ForgotPasswordFormState extends State<ForgotPasswordForm> {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                    context.pop();
                   },
                   child: Texth4V2(
                     testo: getCurrentLanguageValue(BACK)!,

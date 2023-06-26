@@ -2,6 +2,10 @@ enum AppPage {
   login,
   adminScaffold,
   agencyScaffold,
+  addDemise,
+  editDemise,
+  demiseDetail,
+  forgotPassword
 }
 
 extension AppPageExtension on AppPage {
@@ -13,6 +17,14 @@ extension AppPageExtension on AppPage {
         return "/dashboard";
       case AppPage.agencyScaffold:
         return "/dashboardagency";
+      case AppPage.addDemise:
+        return "/dashboardagency/adddemise";
+      case AppPage.editDemise:
+        return "/dashboardagency/editdemise";
+      case AppPage.demiseDetail:
+        return "/dashboardagency/demisedetail";
+      case AppPage.forgotPassword:
+        return "/forgotpassword";
     }
   }
 
@@ -24,6 +36,14 @@ extension AppPageExtension on AppPage {
         return "AdminScaffold";
       case AppPage.agencyScaffold:
         return "AgencyScaffold";
+      case AppPage.addDemise:
+        return "AddDemise";
+        case AppPage.editDemise:
+      return "EditDemise";
+      case AppPage.demiseDetail:
+      return "DemiseDetail";
+      case AppPage.forgotPassword:
+        return "ForgotPassword";
     }
   }
 
@@ -35,6 +55,14 @@ extension AppPageExtension on AppPage {
         return "Admin";
       case AppPage.agencyScaffold:
         return "Agency";
+      case AppPage.addDemise:
+        return "Add Demise";
+      case AppPage.editDemise:
+        return "Edit Demise";
+      case AppPage.demiseDetail:
+        return "Demise Detail";
+      case AppPage.forgotPassword:
+        return "Forgot Password";
     }
   }
 }

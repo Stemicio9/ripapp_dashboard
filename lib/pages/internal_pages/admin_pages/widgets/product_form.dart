@@ -1,7 +1,8 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
@@ -11,24 +12,21 @@ import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
 
-import '../../../../widgets/texts.dart';
-
 class ProductForm extends StatelessWidget {
   final String cardTitle;
   final TextEditingController nameController;
   final TextEditingController priceController;
-
   final dynamic nameValidator;
   final dynamic priceValidator;
   final dynamic descriptionValidator;
   final onTap;
   final imageOnTap;
-  final File? imageFile;
+  final String imageFile;
 
 
   const ProductForm({
     super.key,
-    this.imageFile,
+    required this.imageFile,
     required this.imageOnTap,
     required this.onTap,
     required this.cardTitle,
@@ -41,7 +39,14 @@ class ProductForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return BlocBuilder<SelectedProductCubit, SelectedProductState>(
+        builder: (context, state) {
+      if (state is SelectedProductState) {
+        nameController.text = state.selectedProduct.name ?? "";
+        if(state.selectedProduct.price != null){
+          priceController.text = state.selectedProduct.price.toString();
+        }
+        return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -84,18 +89,30 @@ class ProductForm extends StatelessWidget {
                                         width: 130,
                                         decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(Radius.circular(3)),
-                                          color: greyDrag,
                                           border: Border.all(color: background, width: 1),
-                                          image: imageFile != null ?
-                                          DecorationImage(
-                                            image: FileImage(imageFile!),
+                                          image: imageFile != "" ? DecorationImage(
+                                            image: NetworkImage(imageFile),
                                             fit: BoxFit.contain,
                                           ) : const DecorationImage(
                                             image: AssetImage(ImagesConstants.imgProductPlaceholder),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
-                                      ))
+                                       /* child:  CustomImageView(
+                                          url: imageFile,
+                                          height: getSize(
+                                            190,
+                                          ),
+                                          width: getSize(
+                                            190,
+                                          ),
+                                          alignment: Alignment.center,
+                                          fit: BoxFit.cover,
+                                          placeHolder: ImagesConstants.placeholderUserUrl,
+                                        ), */
+                                      )
+
+                                  )
                                 ],
                               ),
                             )),
@@ -140,13 +157,17 @@ class ProductForm extends StatelessWidget {
                                   ),
                                 ),
                                 InputsV2Widget(
+                                /*  prefixIconHeight: 18,
+                                  prefixIconWidth: 18,
+                                  prefixIcon: ImagesConstants.imgEuro,
+                                  isPrefixIcon: true, */
                                   hinttext: getCurrentLanguageValue(PRICE)!,
                                   controller: priceController,
                                   validator: priceValidator,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ], // O,
-                                  keyboard: TextInputType.number,
+                                 // keyboard: TextInputType.numberWithOptions(decimal: true, signed: false),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                                  ],
                                   paddingRight: 0,
                                   paddingLeft: 0,
                                   borderSide: const BorderSide(color: greyState),
@@ -154,7 +175,8 @@ class ProductForm extends StatelessWidget {
                                 )
 
                               ],
-                            )),
+                            )
+                        ),
                       ],
                     ),
                     Padding(
@@ -174,5 +196,8 @@ class ProductForm extends StatelessWidget {
 
       ),
     );
+      }
+      else return ErrorWidget("exception");
+        });
   }
 }
