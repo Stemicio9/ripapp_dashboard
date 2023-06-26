@@ -62,60 +62,62 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Header(
-            deleteProfileOnTap: (){},
-            onTap: (){
-              context.go(AppPage.addDemise.path);
-            },
-            pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
-            buttonText: getCurrentLanguageValue(ADD_DEMISE)!,
-          ),
+      padding: getPadding(top: 60, left: 5, right: 5),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Header(
+              deleteProfileOnTap: (){},
+              onTap: (){
+                context.go(AppPage.addDemise.path);
+              },
+              pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
+              buttonText: getCurrentLanguageValue(ADD_DEMISE)!,
+            ),
 
-          DemiseTable(
-            delete: (dynamic p){
-              showDialog(
-                  context: context,
-                  builder: (ctx) => DeleteMessageDialog(
-                      onConfirm: (){
-                        _searchDemiseCubit.delete(p.id);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: green,
-                            content: const Text('Defunto eliminato con successo!'),
-                            duration: const Duration(milliseconds: 3000),
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3),
+            DemiseTable(
+              delete: (dynamic p){
+                showDialog(
+                    context: context,
+                    builder: (ctx) => DeleteMessageDialog(
+                        onConfirm: (){
+                          _searchDemiseCubit.delete(p.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: green,
+                              content: const Text('Defunto eliminato con successo!'),
+                              duration: const Duration(milliseconds: 3000),
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3),
+                              ),
                             ),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      },
-                      onCancel: (){
-                        Navigator.pop(context);
-                      },
-                      message: message
-                  )
-              );
-            },
-            edit: (dynamic p){
-              context.go(AppPage.editDemise.path);
-              _selectedDemiseCubit.selectUser(p);
-            },
-            showDetail: (dynamic p){
-              _selectedDemiseCubit.selectUser(p);
-              context.go(AppPage.demiseDetail.path);
-            },
-            detailMessage: detailMessage,
-            editMessage: editMessage,
-            deleteMessage: deleteMessage,
-          )
+                          );
+                          Navigator.pop(context);
+                        },
+                        onCancel: (){
+                          Navigator.pop(context);
+                        },
+                        message: message
+                    )
+                );
+              },
+              edit: (dynamic p){
+                context.go(AppPage.editDemise.path);
+                _selectedDemiseCubit.selectUser(p);
+              },
+              showDetail: (dynamic p){
+                _selectedDemiseCubit.selectUser(p);
+                context.go(AppPage.demiseDetail.path);
+              },
+              detailMessage: detailMessage,
+              editMessage: editMessage,
+              deleteMessage: deleteMessage,
+            )
 
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -51,7 +51,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
   SelectedAgencyCubit get _selectedAgencyCubit => context.read<SelectedAgencyCubit>();
-  late List<CityFromAPI> cityOptions;
+  late List<CityFromAPI> cityOptions = [];
 
   @override
   Widget build(BuildContext context) {

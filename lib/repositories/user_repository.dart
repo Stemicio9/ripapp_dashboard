@@ -102,10 +102,11 @@ class UserRepository {
     print(response.data);
     // todo this could be not necessary
     String goodJson = jsonEncode(response.data);
-    //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
-    var userList = jsonDecode(goodJson)["content"] as List;
-    List<UserEntity> users = (userList).map((user) => UserEntity.fromJson(user)).toList();
-
+    print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
+    print('STAMPOOOOOOO');
+    print((jsonDecode(goodJson) ));
+    List<UserEntity> users = ((jsonDecode(goodJson) as List)).map((user) => UserEntity.fromJson(user)).toList();
+    print("ecco i tuoi utenti" + users.toString() + users.length.toString());
     //List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
     //return userEntityList;
     return users;

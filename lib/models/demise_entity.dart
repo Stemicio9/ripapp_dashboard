@@ -84,12 +84,12 @@ class DemiseEntity {
   }
 
   factory DemiseEntity.fromJson(Map<String, dynamic> json) => DemiseEntity(
-    id: json["demiseid"] ?? "",
+    id: json["demiseid"] ?? 0,
     firstName: json["name"] ?? "",
     lastName: json["surname"] ?? "",
     city: json["city"] == null ? null : CityEntity.fromJson(json["city"]),
     phoneNumber: json["phonenumber"] ?? "",
-    age: json["age"] ?? "",
+    age: json["age"] ?? 0,
     deceasedDate: json["ts"] == null ? null : DateTime.parse(json["ts"]),
 
 

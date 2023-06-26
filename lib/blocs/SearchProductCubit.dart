@@ -6,11 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/repositories/product_repository.dart';
-import 'package:ripapp_dashboard/widgets/snackbars.dart';
+import 'package:ripapp_dashboard/utils/DeleteProductMessage.dart';
 @immutable
 class SearchProductState{}
 class SearchProductLoading extends SearchProductState {}
-class SearchProductError extends SearchProductState {}
+class SearchProductError extends SearchProductState {
+  String errorMessage;
+  SearchProductError(this.errorMessage);
+}
 class SearchProductLoaded extends SearchProductState {
 
   final List<ProductEntity> products;
@@ -39,18 +42,18 @@ class SearchProductCubit extends Cubit<SearchProductState>{
     }
   }
 
-  delete(idProduct, BuildContext context)async{
+   delete(idProduct)async{
     emit(SearchProductLoading());
     try{
-      var result = await ProductRepository().deleteProduct(idProduct);
-      SuccessSnackbar(context, text: 'Prodotto eliminato con successo!');
+      DeleteProductMessage deleteMessage = await ProductRepository().deleteProduct(idProduct);
+      print("b3, "+ deleteMessage.toString());
+      if (deleteMessage.message!.startsWith("il prodotto è già in uso da parte di"))
+        throw new Exception(deleteMessage.message);
       fetchProducts();
     }catch(e){
       print("ERRORE");
       print(e);
-      // todo capire l'errore ed in base all'errore mostrare la snackbar corretta
-      ErrorSnackbar(context, text: 'Non puoi eliminare il prodotto perchè è presente nel catalogo di alcune agenzie');
-      emit(SearchProductError());
+      emit(SearchProductError(e.toString()));
     }
   }
 
@@ -60,7 +63,7 @@ class SearchProductCubit extends Cubit<SearchProductState>{
       var result = await ProductRepository().saveProduct(productEntity);
       fetchProducts();
     }catch(e){
-      emit(SearchProductError());
+      emit(SearchProductError(e.toString()));
     }
   }
 

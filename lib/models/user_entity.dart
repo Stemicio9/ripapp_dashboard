@@ -47,7 +47,6 @@ class UserEntity implements ResultEntity {
       city: (json["city"]).map((e) => CityEntity.fromJson(e)).toList() ?? List.empty(),
       phoneNumber: json["phone"] ?? "",
       idtoken: json["idtoken"] ?? "",
-       // status: json["status"] != null && (json["status"] as String).isNotEmpty ? UserStatus.values.firstWhere((e) => e.toString() == json["status"]) : UserStatus.active,
       agency: json["agency"] != null ? AgencyEntity.fromJson(json["agency"]) : null,
       role: json["role"] ?? "",
       status: UserStatus.fromJson(json['status'])
@@ -102,5 +101,6 @@ class UserEntity implements ResultEntity {
   );
 
   factory UserEntity.emptyUser() => UserEntity();
-  // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
+
+// this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
 }

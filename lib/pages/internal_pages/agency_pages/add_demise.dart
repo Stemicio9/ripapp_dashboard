@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
@@ -369,7 +370,7 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   formSubmit() {
-    if (_formKey.currentState!.validate()) {
+   // if (_formKey.currentState!.validate()) {
       if (_list.isEmpty) {
         ErrorSnackbar(context, text: 'Inserire necrologio!');
       } else {
@@ -427,19 +428,19 @@ class AddDemiseState extends State<AddDemise> {
           }
         }
 
-        _searchDemiseCubit.saveProduct(demiseEntity);
+        _searchDemiseCubit.saveDemise(demiseEntity);
         SuccessSnackbar(
             context,
             text: 'Defunto aggiunto con successo!'
         );
-        Navigator.pop(context);
+        context.pop();
       }
-    } else {
-      ErrorSnackbar(
-          context,
-          text: 'Impossibile aggiungere defunto!'
-      );
-    }
+   // } else {
+   //   ErrorSnackbar(
+     //     context,
+   //       text: 'Impossibile aggiungere defunto!'
+    //  );
+   // }
 
   }
 

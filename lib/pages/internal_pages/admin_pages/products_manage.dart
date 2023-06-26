@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
+import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
@@ -14,6 +15,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/produc
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
+import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import '../../../widgets/snackbars.dart';
 
@@ -94,10 +96,60 @@ class ProductsManageState extends State<ProductsManage>{
                     context: context,
                     builder: (ctx) => DeleteMessageDialog(
                         onConfirm: (){
-                          _searchProductsCubit.delete(p.id, context);
-                        // SuccessSnackbar(context, text: 'Prodotto eliminato con successo!');
+                          _searchProductsCubit.delete(p.id);
+                          SuccessSnackbar(context, text: 'Prodotto eliminato con successo!');
 
                           Navigator.pop(context);
+                          BlocBuilder<SearchProductCubit, SearchProductState>(
+                             builder: (context, state) {
+                            if (state is SearchProductError) {
+                               return SnackBar(
+                                backgroundColor: rossoopaco,
+                                content:  Row(
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(right: 10),
+                                      child: Icon(Icons.warning_amber_rounded, color: white),
+                                    ),
+                                    Text('Prodotto non eliminato perchè ' + state.errorMessage),
+                                  ],
+                                ),
+                                duration: const Duration(milliseconds: 4000),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              );
+
+                              //ErrorSnackbar(context,
+                              //    text: 'Prodotto non eliminato perchè ' +
+                              //        state.errorMessage);
+                            }
+                            else {
+                              return SnackBar(
+                                backgroundColor: green,
+                                content: Row(
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(right: 10),
+                                      child: Icon(Icons.check_circle_outline_rounded, color: white),
+                                    ),
+                                    Text('Prodotto eliminato con successo!'),
+                                  ],
+                                ),
+                                duration: const Duration(milliseconds: 4000),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              );
+                            }
+                            return Container();
+                          });
+
+
+
+
                         },
                         onCancel: (){
                           Navigator.pop(context);
@@ -170,8 +222,6 @@ class ProductsManageState extends State<ProductsManage>{
       SuccessSnackbar(context, text: 'Prodotto aggiunto con successo!');
 
       Navigator.pop(context);
-
-
     }
   }
 }
