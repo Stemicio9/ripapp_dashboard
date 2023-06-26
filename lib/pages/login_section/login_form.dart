@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
+import 'package:ripapp_dashboard/constants/app_pages.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -101,7 +103,6 @@ class LoginFormState extends State<LoginForm>{
             isSuffixIcon: true,
             suffixIconHeight: 25,
             suffixIconWidth: 25,
-            paddingTop: 10,
           ),
           Padding(
             padding: getPadding(top: 40),
@@ -130,7 +131,7 @@ class LoginFormState extends State<LoginForm>{
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: (){
-                    Navigator.pushNamed(context, RouteConstants.forgotPassword);
+                   context.go(AppPage.forgotPassword.path);
                   },
                   child:  Texth4V2(
                     testo: getCurrentLanguageValue(FORGOT_PASSWORD)!,
@@ -153,7 +154,7 @@ class LoginFormState extends State<LoginForm>{
 
 
   formsubmit() async {
-   // if (_formKey.currentState!.validate()) {
+   if (_formKey.currentState!.validate()) {
     FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailTextController.text,
         password: _passwordTextController.text).then((value) async {
@@ -161,10 +162,7 @@ class LoginFormState extends State<LoginForm>{
       UserRepository().setFirebaseToken(token);
       var response = await UserRepository().loginPreLayer(token);
     });
-    //Navigator.pushNamed(context, RouteConstants.dashboard);
-
-
-   // }
+   }
   }
   loginAgency() async {
     //  if (_formKey.currentState!.validate()) {

@@ -7,6 +7,8 @@ import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/blocs/current_user_cubit.dart';
+import 'package:ripapp_dashboard/blocs/firebase_storage/firebase_storage_bloc.dart';
+import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
@@ -108,6 +110,8 @@ class MyApp extends StatelessWidget {
             BlocProvider<SelectedProductCubit>(create: (_) => SelectedProductCubit()),
             BlocProvider<CurrentPageCubit>(create: (_) => CurrentPageCubit()),
             BlocProvider<SelectedUserCubit>(create: (_) => SelectedUserCubit()),
+            BlocProvider<ProfileImageCubit>(create: (_) => ProfileImageCubit()),
+            BlocProvider<FirebaseStorageCubit>(create: (_) => FirebaseStorageCubit()),
           ],
           child: Builder(
             builder: (context) {

@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/constants/app_pages.dart';
 import 'package:ripapp_dashboard/constants/app_roles.dart';
+import 'package:ripapp_dashboard/pages/forgot_password/forgot_password.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/dashboard.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/dashboard_agency.dart';
@@ -28,8 +29,15 @@ class RouterManager {
         // Go_router default goes to "/" page
         GoRoute(
             path: "/",
-            builder: (context, state) => const Login()
+            builder: (context, state) => const Login(),
+          routes: [
+            GoRoute(
+              path: "forgotpassword", //for admins
+              builder: (context, state) =>  const ForgotPassword(),
+            ),
+          ]
         ),
+
         GoRoute(
             path: "/dashboard", //for admins
             builder: (context, state) =>  Dashboard(),

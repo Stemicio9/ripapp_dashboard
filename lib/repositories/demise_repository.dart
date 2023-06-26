@@ -25,7 +25,7 @@ class DemiseRepository{
     };
   }
 
-  final String demiseUrl = "$baseUrl/api/auth/demiseWithoutCookie";
+  final String demiseUrl = "$baseUrl/api/auth/demise";
   final String searchDemisesByCityUrl = "$baseUrl/api/auth/search/demises";
   final String searchDemisesIgnorante = "$baseUrl/api/auth/demisesIgnorante";
   final String deleteDemiseUrl = "$baseUrl/api/auth/demise";
@@ -44,22 +44,34 @@ class DemiseRepository{
     //myoptions.headers!["cookie"] = "idtoken=$token;";
     print("ciao");
     Map<String, Object>? headers = Map();
+    print("ciao2");
     myoptions.headers = headers;
+    print("ciao3");
     //myoptions.headers!["set-cookie"] = "idtoken=123;";
     myoptions.headers!["Content-Type"] = "application/json";
     myoptions.headers!["app_version"] = appVersion;
+    print("ciao4");
     var response = await _dio.post(demiseUrl, data: demiseEntity, options: myoptions);
+
     //var response = await _dio.post(demiseUrl, data: demiseEntity);
+
     return response.data;
   }
 
 
   Future<dynamic> deleteDemise(int idDemise) async{
-    print('simone');
     String urlDeleteDemise = '$deleteDemiseUrl/$idDemise';
-    var response = await _dio.delete(urlDeleteDemise);
+    Options myoptions = Options();
+    Map<String, Object>? headers = Map();
+    myoptions.headers = headers;
+    //myoptions.headers!["set-cookie"] = "idtoken=123;";
+    myoptions.headers!["Content-Type"] = "application/json";
+    myoptions.headers!["app_version"] = appVersion;
+    var response = await _dio.delete(urlDeleteDemise, options: myoptions);
     return response.data;
   }
+
+
 
   Future<List<DemiseEntity>> getDemisesByCities(DemisesSearchEntity demisesSearchEntity) async {
     Response res;

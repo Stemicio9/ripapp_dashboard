@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
@@ -29,12 +32,12 @@ class EditProfileForm extends StatefulWidget{
   bool showConfirmPassword;
   final Function() imageOnTap;
   final Function() changePassword;
-  final String imageFile;
+
 
 
    EditProfileForm({
     super.key,
-    required this.imageFile,
+
     required this.imageOnTap,
     required this.onTap,
     required this.cardTitle,
@@ -62,6 +65,7 @@ class EditProfileForm extends StatefulWidget{
 class EditProfileFormState extends State<EditProfileForm>{
 
 
+  var imageFile;
 
 
   @override
@@ -101,7 +105,23 @@ class EditProfileFormState extends State<EditProfileForm>{
                                     ),
                                   ),
                                   InkWell(
-                                      onTap: widget.imageOnTap,
+                                      onTap: () async {
+                                        FilePickerResult? result = await FilePicker.platform.pickFiles();
+                                        //TODO SALVARE IMMAGINE SU FIRESTORAGE E MOSTRARE L'IMMAGINE PICKATA NEL BOX
+                                        if (result != null) {
+                                          Uint8List fileBytes = result.files.first.bytes!;
+                                          String fileName = result.files.first.name;
+                                          print('STAMPO IL FILE PICKATO');
+                                          print(fileName);
+                                          final User user = FirebaseAuth.instance.currentUser!;
+                                          final uid = user.uid;
+                                          var path = 'profile_images/users_images/$uid';
+                                          await FirebaseStorage.instance.ref("$path/$fileName").putData(fileBytes);
+                                          setState(() {
+                                            imageFile = fileBytes;
+                                          });
+                                        }
+                                      },
                                       child: Container(
                                         height: 130,
                                         width: 130,
@@ -109,13 +129,12 @@ class EditProfileFormState extends State<EditProfileForm>{
                                           borderRadius: const BorderRadius.all(Radius.circular(3)),
                                           color: greyDrag,
                                           border: Border.all(color: background, width: 1),
-                                          image: widget.imageFile != "" ? DecorationImage(
-                                            image: NetworkImage(widget.imageFile),
-                                            fit: BoxFit.contain,
+                                          image: imageFile != null ? DecorationImage(
+                                            image: MemoryImage(imageFile),
+                                            fit: BoxFit.cover,
                                           ) : DecorationImage(
                                             image: AssetImage(ImagesConstants.imgDemisePlaceholder),
                                             fit: BoxFit.cover,
-
                                           ),
                                         ),
                                       ))

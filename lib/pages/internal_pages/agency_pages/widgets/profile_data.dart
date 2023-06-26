@@ -7,7 +7,7 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
 
 class ProfileData extends StatelessWidget {
-  final File? imageFile;
+  var imageFile;
   final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController lastNameController;
@@ -57,23 +57,24 @@ class ProfileData extends StatelessWidget {
                     height: 137,
                     width: 137,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(3)),
+                        borderRadius: const BorderRadius.all(Radius.circular(3)),
                         color: greyDrag,
                         border: Border.all(
                           color: background,
                           width: 1,
                         ),
-                        image: imageFile != null
-                            ? DecorationImage(
-                                fit: BoxFit.cover, image: FileImage(imageFile!))
-                            : DecorationImage(
-                                image: AssetImage(
-                                    ImagesConstants.imgDemisePlaceholder),
-                                fit: BoxFit.cover,
-                              )),
+                        image: imageFile != null ? DecorationImage(
+                          image: NetworkImage(imageFile),
+                          fit: BoxFit.cover,
+                        ) : DecorationImage(
+                          image: AssetImage(ImagesConstants.imgDemisePlaceholder),
+                          fit: BoxFit.cover,
+                        ),
+                    ),
                   ),
                 ],
-              )),
+              )
+          ),
           Expanded(
               flex: 3,
               child: Column(

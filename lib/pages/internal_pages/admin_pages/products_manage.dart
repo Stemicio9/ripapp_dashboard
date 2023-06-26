@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
+import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
@@ -14,8 +15,10 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/produc
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
+import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import '../../../widgets/snackbars.dart';
+
 
 class ProductsManage extends StatefulWidget {
 
@@ -99,8 +102,8 @@ class ProductsManageState extends State<ProductsManage>{
                     context: context,
                     builder: (ctx) => DeleteMessageDialog(
                         onConfirm: (){
-                          _searchProductsCubit.delete(p.id);
 
+                          _searchProductsCubit.delete(p.id);
                           Navigator.pop(context);
                           BlocBuilder<SearchProductCubit, SearchProductState>(
                              builder: (context, state) {
