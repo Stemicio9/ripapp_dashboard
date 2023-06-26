@@ -2,7 +2,9 @@ import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/constants/app_pages.dart';
 import 'package:ripapp_dashboard/constants/app_roles.dart';
+import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/dashboard.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/dashboard_agency.dart';
 import 'package:ripapp_dashboard/pages/login_section/login.dart';
 
@@ -34,6 +36,10 @@ class RouterManager {
         GoRoute(
             path: "/dashboardagency",
             builder: (context, state) => DashboardAgency(),
+        ),
+        GoRoute(
+            path: RouteConstants.addDemise,
+            builder: (context, state) => AddDemise(),
         ),
       ],
       redirect: (context , state) async {

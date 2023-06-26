@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -49,7 +50,7 @@ class DemiseManageState extends State<DemiseManage>{
           Header(
             deleteProfileOnTap: (){},
             onTap: (){
-              Navigator.pushNamed(context, RouteConstants.addDemise);
+              context.go(RouteConstants.addDemise);
             },
             pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
             buttonText: getCurrentLanguageValue(ADD_DEMISE)!,

@@ -101,6 +101,7 @@ class AgencyRepository{
     parameters.putIfAbsent("pageNumber", () => (pageIndex));
     parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
     Response response;
+    print("sto facendo la richiesta con indice: $pageIndex");
     response = await _dio.get(indexedAgenciesUrl, queryParameters: parameters);
     String goodJson = jsonEncode(response.data);
     //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());

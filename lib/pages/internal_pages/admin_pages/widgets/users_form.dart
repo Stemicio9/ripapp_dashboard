@@ -579,6 +579,9 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                         List<
                                                             AgencyEntity> agencies = state
                                                             .agencies;
+                                                        widget.agencyChange(state
+                                                            .selectedAgency!);
+
 
                                                         return DropdownButton<
                                                             AgencyEntity>(

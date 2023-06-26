@@ -15,26 +15,30 @@ class BottomNavigationBarExample extends StatefulWidget {
 class _BottomNavigationBarExampleState
     extends State<BottomNavigationBarExample> {
   final int _numPages = 10;
-  int _currentPageNumber = 0;
+
   CurrentPageCubit get _currentPageCubit  => context.read<CurrentPageCubit>();
 
 
+  NumberPaginatorController _controller = NumberPaginatorController();
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.zero,
       elevation: 4,
-      child: NumberPaginator(
-        // by default, the paginator shows numbers as center content
-        numberPages: _numPages,
-        onPageChange: (int index) {
-          setState(() {
-            _currentPageNumber = index;
-            //passare l'indice
-            widget.changePageHandle(_currentPageCubit.state.page, _currentPageNumber);
-          });
-        },
+      child: BlocBuilder<CurrentPageCubit,CurrentPageState> (
+        builder: (context, state) {
+         // _controller.navigateToPage(state.pageNumber);
+          return NumberPaginator(
+            // by default, the paginator shows numbers as center content
+          initialPage: state.pageNumber,
+            numberPages: _numPages,
+            onPageChange: (int index) {
+              widget.changePageHandle(_currentPageCubit.state.page, index); //todo: in realtà qui si può chiamare un metodo del cubit che
+              //  ne cambi solo il numero, dato che la pagina rimane la stessa
+            },
+          );
+        }
       ),
     );
   }
