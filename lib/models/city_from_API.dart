@@ -1,3 +1,5 @@
+import 'package:ripapp_dashboard/models/CityEntity.dart';
+
 class CityFromAPI {
   String? codice;
   String? nome;
@@ -69,6 +71,7 @@ class CityFromAPI {
       telefono: "",
       fax: "",
       coordinate: {});
+
 
 
   @override

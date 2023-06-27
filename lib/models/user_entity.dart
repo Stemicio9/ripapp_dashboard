@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
 String userEntityToJson(UserEntity data) => json.encode(data.toJson());
@@ -44,7 +45,7 @@ class UserEntity implements ResultEntity {
       firstName: json["name"] ?? "",
       lastName: json["surname"] ?? "",
       email: json["email"] ?? "",
-      city: (json["city"]).map((e) => CityEntity.fromJson(e)).toList() ?? List.empty(),
+      city: (json["city"]).map((e) => CityFromAPI.fromJson(e)).toList() ?? List.empty(),
       phoneNumber: json["phone"] ?? "",
       idtoken: json["idtoken"] ?? "",
       agency: json["agency"] != null ? AgencyEntity.fromJson(json["agency"]) : null,

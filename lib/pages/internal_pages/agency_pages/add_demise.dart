@@ -64,8 +64,8 @@ class AddDemiseState extends State<AddDemise> {
   Offset? offset;
   DateTime? wakeDate;
   DateTime? funeralDate;
-  List<CityFromAPI> cityOptions = <CityFromAPI>[];
-  List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+  List<CityFromAPI> cityList = [];
+  List<CityFromAPI> citiesOfInterestList = [];
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   static const List<String> kinship = <String>[
@@ -136,7 +136,7 @@ class AddDemiseState extends State<AddDemise> {
                   ageController: ageController,
                   dateController: deceasedDateController,
                   citiesController: citiesController,
-                  options: cityOptions,
+                  options: cityList,
                   nameValidator: notEmptyValidate,
                   lastNameValidator: notEmptyValidate,
                   phoneValidator:notEmptyValidate ,
@@ -144,7 +144,7 @@ class AddDemiseState extends State<AddDemise> {
                   dateValidator: notEmptyValidate,
                   citiesOfInterestValidator: notEmptyValidate,
                   cityValidator: notEmptyValidate,
-                  citiesOfInterestOptions: citiesOfInterestOptions,
+                  citiesOfInterestOptions: citiesOfInterestList,
                   iconOnTap: () async {
                     DateTime? pickedDate = await showDatePicker(
                         context: context,

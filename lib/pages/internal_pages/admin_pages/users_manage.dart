@@ -1,8 +1,8 @@
-import 'dart:js_interop';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/city_list_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
@@ -17,7 +17,6 @@ import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_table.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
-import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import '../../../blocs/users_list_cubit.dart';
 
@@ -38,7 +37,7 @@ class UsersManage extends StatelessWidget{
    /* return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => UsersListCubit(),
+          create: (_) => CityListCubit(),
         ),
         BlocProvider(
           create: (_) => SelectedUserCubit(),
@@ -65,10 +64,9 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
 
   SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
+  CityListCubit get _cityListCubit => context.read<CityListCubit>();
 
-  List<String> cityOptions = <String>[
-    'Milano'
-  ];
+  List<String> cityOptions = [];
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
@@ -193,6 +191,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                                 passwordController.text = "";
                                 emailController.text = "";
                                 phoneController.text = "";
+
                                 SuccessSnackbar(context, text: 'Utente modificato con successo!');
                                 Navigator.pop(context);
                               }
@@ -244,7 +243,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
       userEntity.email = emailController.text;
       userEntity.phoneNumber = phoneController.text;
       userEntity.password = passwordController.text;
-      //  userEntity.city = widget.filterController.text;
+      userEntity.city = cityOptions;
 
 
         if (userEntity.email != "" && userEntity.password != "") {
@@ -266,6 +265,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
             passwordController.text = "";
             emailController.text = "";
             phoneController.text = "";
+
 
             SuccessSnackbar(context, text: 'Utente aggiunto con successo!');
             Navigator.pop(context);

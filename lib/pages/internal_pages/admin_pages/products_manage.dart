@@ -1,6 +1,6 @@
 import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +17,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
 import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
+
 import '../../../widgets/snackbars.dart';
 
 class ProductsManage extends StatefulWidget {

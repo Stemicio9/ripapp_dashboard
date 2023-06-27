@@ -178,6 +178,7 @@ class UserRepository {
     Response res;
     res = await globalDio.get(cityListUrl);
     List<CityFromAPI> cityList = (res.data as List).map((e) => CityFromAPI.fromJson(e)).toList();
+
     print("ECCO LE CITTà - simone");
     return cityList;
   }
