@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
 
 import '../../../../constants/colors.dart';
 import '../../../../constants/images_constants.dart';
@@ -11,7 +12,9 @@ import '../../../../widgets/texts.dart';
 
 class DeceasedDetail extends StatelessWidget{
 
-  final File? imageFile;
+  var imageFile;
+  var memoryImage;
+  final bool isNetwork;
   final String lastName;
   final String firstName;
   final String id;
@@ -25,6 +28,8 @@ class DeceasedDetail extends StatelessWidget{
   final downloadObituary;
 
   DeceasedDetail({
+    this.memoryImage,
+    this.isNetwork = true,
     this.imageFile,
     required this.id,
     required this.age,
@@ -69,13 +74,11 @@ class DeceasedDetail extends StatelessWidget{
                             borderRadius: const BorderRadius.all(Radius.circular(5)),
                             color: greyDrag,
                             border: Border.all(color: background, width: 1),
-                            image: imageFile != null ?
-                            DecorationImage(
-                              image: FileImage(imageFile!),
-                              fit: BoxFit.contain,
-                            )
-                                :  DecorationImage(
-                              image: AssetImage(ImagesConstants.imgDemisePlaceholder),
+                            image: DecorationImage(
+                              image: NetworkMemoryImageUtility(
+                                  isNetwork: isNetwork,
+                                  networkUrl: imageFile,
+                                  memoryImage: memoryImage).provide(),
                               fit: BoxFit.cover,
                             )
                         ),

@@ -17,7 +17,8 @@ class SelectedDemiseState {
 class SelectedDemiseCubit extends Cubit<SelectedDemiseState> {
   SelectedDemiseCubit() : super(SelectedDemiseState(selectedDemise: DemiseEntity.emptyDemise()));
 
-  selectUser(DemiseEntity selectedDemise)async{
+  selectDemise(DemiseEntity selectedDemise)async{
+    print("cambio l'utente selezionato in " + selectedDemise.toString());
     emit(SelectedDemiseState(selectedDemise: selectedDemise));
     print(selectedDemise);
   }

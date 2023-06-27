@@ -154,7 +154,7 @@ class EditProfileFormState extends State<EditProfileForm>{
                                           print(fileName);
                                           final User user = FirebaseAuth.instance.currentUser!;
                                           final uid = user.uid;
-                                          var path = 'profile_images/users_images/$uid/';
+                                          var path = 'profile_images/users_images/UID:$uid/';
 
                                           var fileList = await FirebaseStorage.instance.ref(path).listAll();
                                           if (fileList.items.isNotEmpty) {
@@ -176,7 +176,6 @@ class EditProfileFormState extends State<EditProfileForm>{
                                           color: greyDrag,
                                           border: Border.all(color: background, width: 1),
                                           image: DecorationImage(
-                                            // todo here implement boolean logic and memory/network differences
                                             image: NetworkMemoryImageUtility(isNetwork: isNetwork, networkUrl: imageFile, memoryImage: memoryImage).provide(),
                                             fit: BoxFit.cover,
                                           )
