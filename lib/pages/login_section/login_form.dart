@@ -153,7 +153,7 @@ class LoginFormState extends State<LoginForm>{
 
 
   formsubmit() async {
-   // if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
     FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailTextController.text,
         password: _passwordTextController.text).then((value) async {
@@ -164,7 +164,7 @@ class LoginFormState extends State<LoginForm>{
     //Navigator.pushNamed(context, RouteConstants.dashboard);
 
 
-   // }
+    }
   }
   loginAgency() async {
     //  if (_formKey.currentState!.validate()) {

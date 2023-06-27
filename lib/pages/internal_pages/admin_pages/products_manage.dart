@@ -1,8 +1,6 @@
 import 'dart:typed_data';
-import 'dart:html';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,8 +15,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
-import 'package:ripapp_dashboard/widgets/scaffold.dart';
-import '../../../constants/colors.dart';
+
 import '../../../widgets/snackbars.dart';
 
 class ProductsManage extends StatefulWidget {

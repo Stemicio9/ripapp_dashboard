@@ -172,6 +172,7 @@ class UserRepository {
     Response res;
     res = await _dio.get(cityListUrl);
     List<CityFromAPI> cityList = (res.data as List).map((e) => CityFromAPI.fromJson(e)).toList();
+
     print("ECCO LE CITTà - simone");
     return cityList;
   }

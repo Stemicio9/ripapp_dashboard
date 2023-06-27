@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
 String userEntityToJson(UserEntity data) => json.encode(data.toJson());
@@ -44,10 +45,9 @@ class UserEntity implements ResultEntity {
       firstName: json["name"] ?? "",
       lastName: json["surname"] ?? "",
       email: json["email"] ?? "",
-      city: (json["city"]).map((e) => CityEntity.fromJson(e)).toList() ?? List.empty(),
+      city: (json["city"]).map((e) => CityFromAPI.fromJson(e)).toList() ?? List.empty(),
       phoneNumber: json["phone"] ?? "",
       idtoken: json["idtoken"] ?? "",
-       // status: json["status"] != null && (json["status"] as String).isNotEmpty ? UserStatus.values.firstWhere((e) => e.toString() == json["status"]) : UserStatus.active,
       agency: json["agency"] != null ? AgencyEntity.fromJson(json["agency"]) : null,
       role: json["role"] ?? "",
       status: UserStatus.fromJson(json['status'])
@@ -102,5 +102,6 @@ class UserEntity implements ResultEntity {
   );
 
   factory UserEntity.emptyUser() => UserEntity();
-  // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
+
+// this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
 }

@@ -24,8 +24,10 @@ class CityEntity {
   );
 
 
+
   @override
   String toString() {
     return name;
   }
+
 }
