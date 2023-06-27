@@ -9,7 +9,7 @@ class ImagesConstants{
 
   static const String imgProductPlaceholder = "assets/images/photo_placeholder.jpeg";
 
-  static String imgDemisePlaceholder = "assets/images/demise_placeholder.jpeg";
+  static String imgDemisePlaceholder = "https://firebasestorage.googleapis.com/v0/b/ripapp-auth.appspot.com/o/profile_images%2Fdemise_placeholder.jpeg?alt=media&token=399e7df4-b698-4693-8c0b-51a9e17ea5cd";
 
   static String imgPassSee = "assets/images/pass_icon_see.png";
 

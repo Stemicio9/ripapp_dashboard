@@ -65,7 +65,9 @@ class EditProfileForm extends StatefulWidget{
 
 class EditProfileFormState extends State<EditProfileForm>{
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
-  var imageFile;
+  var imageFile = ImagesConstants.imgDemisePlaceholder;
+  var memoryImage;
+  bool isNetwork = true;
 
 
 
@@ -76,7 +78,7 @@ class EditProfileFormState extends State<EditProfileForm>{
     }
 
     if (fileList.items.isEmpty) {
-      var fileList = await FirebaseStorage.instance.ref('profile_images/demise_placeholder.jpeg').listAll();
+      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
       var file = fileList.items[0];
       var result = await file.getDownloadURL();
       return result;
@@ -105,8 +107,7 @@ class EditProfileFormState extends State<EditProfileForm>{
 
 
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
-        builder: (context, state)
-    {
+        builder: (context, state) {
       print("il nostro link è " + imageFile.toString());
 
       return Padding(
@@ -160,13 +161,14 @@ class EditProfileFormState extends State<EditProfileForm>{
                                             var fileesistente = fileList.items[0];
                                             fileesistente.delete();
                                           }
+                                          isNetwork = false;
                                           await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
                                           setState(() {
-                                            imageFile = fileBytes;
+                                            memoryImage = fileBytes;
                                           });
                                         }
                                       },
-                                      child:  state.loaded ? Container(
+                                      child: state.loaded ? Container(
                                         height: 130,
                                         width: 130,
                                         decoration: BoxDecoration(
@@ -175,7 +177,7 @@ class EditProfileFormState extends State<EditProfileForm>{
                                           border: Border.all(color: background, width: 1),
                                           image: DecorationImage(
                                             // todo here implement boolean logic and memory/network differences
-                                            image: NetworkMemoryImageUtility(isNetwork: true, networkUrl: imageFile, memoryImage: null).provide(),
+                                            image: NetworkMemoryImageUtility(isNetwork: isNetwork, networkUrl: imageFile, memoryImage: memoryImage).provide(),
                                             fit: BoxFit.cover,
                                           )
                                         ),

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 class NetworkMemoryImageUtility {
 
   final bool isNetwork;
-  final String networkUrl;
+  final String? networkUrl;
   final Uint8List? memoryImage;
 
 
@@ -21,7 +21,7 @@ class NetworkMemoryImageUtility {
 
   ImageProvider provide() {
       if(isNetwork) {
-        return NetworkImage(networkUrl);
+        return NetworkImage(networkUrl!);
       } else {
         return MemoryImage(memoryImage!);
       }
