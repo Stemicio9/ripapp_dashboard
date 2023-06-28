@@ -128,7 +128,10 @@ class UserRepository {
     print("USER si: ");
     print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO");
     print(userEntity.toJson());
+    print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO 2");
     var response = await globalDio.post(signupUrl,data: userEntity.toJson(), options: Options(headers: buildHeaders()));
+    print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO 3");
+    print("risposta = " + response.toString());
     return response.data;
   }
 

@@ -81,6 +81,7 @@ class UsersListCubit extends Cubit<UsersListState> {
     emit(UsersListLoading());
     try {
       var result = await UserRepository().signup(userEntity);
+      print("risultato della salve: " +result.toString());
       fetchUsersListWithIndex(0);
     } catch (e) {
       emit(UsersListError());
