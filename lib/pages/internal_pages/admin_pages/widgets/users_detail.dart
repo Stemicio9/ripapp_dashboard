@@ -36,14 +36,7 @@ class UsersDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SelectedCityCubit, SelectedCityState>(
-        builder: (context, stateCity) {
-          if (stateCity is SelectedCityState) {
-            if (stateCity.selectedCity.nome != null ) {
-              city =  stateCity.selectedCity.nome?? "";}
-            print("CITY");
-            print(city);
-     return BlocBuilder<SelectedUserCubit, SelectedUserState>(
+    return BlocBuilder<SelectedUserCubit, SelectedUserState>(
         builder: (context, state) {
       if (state is SelectedUserState) {
         id = state.selectedUser.id ?? 0;
@@ -220,10 +213,7 @@ class UsersDetail extends StatelessWidget {
       else return ErrorWidget("exception");
 
         });
-  }
-   else
-    return ErrorWidget("ERRORE");
-  });
+
   }
 }
 

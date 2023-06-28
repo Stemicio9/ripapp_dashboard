@@ -17,6 +17,7 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
+import '../../../../blocs/selected_city_cubit.dart';
 import '../../../../widgets/autocomplete.dart';
 
 class UsersForm extends StatelessWidget {
@@ -158,6 +159,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   List<CityFromAPI> cityList = [];
   List<String> emptyList = ['Seleziona agenzia'];
   late UserEntity userEntity;
+  String? city;
 
   @override
   void initState() {
@@ -168,8 +170,13 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    return
-      BlocBuilder<SelectedUserCubit, SelectedUserState>(
+    return BlocBuilder<SelectedCityCubit, SelectedCityState>(
+        builder: (context, stateCity) {
+          print("SELEZIONO CITTA UTENTE");
+          if (stateCity is SelectedCityState) {
+            widget.filterController.text = stateCity.selectedCity.nome ?? "";
+            print("LA CITTA SELEZIONATA E $city");
+            return BlocBuilder<SelectedUserCubit, SelectedUserState>(
         builder: (context, state) {
           if (state is SelectedUserState) {
             widget.nameController.text = state.selectedUser.firstName ?? widget.nameController.text;
@@ -371,7 +378,9 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                                 paddingRight: 10,
                                                                 paddingLeft: 0,
                                                                 hintText: getCurrentLanguageValue(CITY)!,
-                                                                filterController: widget.filterController, paddingTop: 10, paddingBottom: 10,
+                                                                filterController: widget.filterController,
+                                                                paddingTop: 10,
+                                                                paddingBottom: 10,
                                                               )
                                                             ],
                                                           )),
@@ -631,7 +640,10 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
           else
             return ErrorWidget("exception2");
         });
-
+  }
+  else
+  return ErrorWidget("exception");
+} );
   }
 }
 
