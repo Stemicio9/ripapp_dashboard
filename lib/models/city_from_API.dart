@@ -78,4 +78,5 @@ class CityFromAPI {
   String toString() {
     return nome ?? "";
   }
+  factory CityFromAPI.emptyCity() => CityFromAPI();
 }

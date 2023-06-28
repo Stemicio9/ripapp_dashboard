@@ -455,7 +455,7 @@ class DeceasedData extends StatelessWidget {
                             paddingLeft: 0,
                             hintText: getCurrentLanguageValue(CITY)!,
                             filterController: widget.filterController,
-                            validator: widget.cityValidator,
+                            validator: widget.cityValidator, paddingTop: 10, paddingBottom: 10,
                           )
                         ],
                       );
@@ -509,7 +509,7 @@ class DeceasedData extends StatelessWidget {
                             paddingLeft: 0,
                             hintText: "Comuni di interesse",
                             filterController: widget.citiesController,
-                            validator: widget.citiesOfInterestValidator,
+                            validator: widget.citiesOfInterestValidator, paddingTop: 10, paddingBottom: 10,
                           )
                         ],
                       );

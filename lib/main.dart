@@ -14,6 +14,7 @@ import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/blocs/search_users_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_agency_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_city_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
@@ -113,6 +114,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<CityListCubit>(create: (_)=> CityListCubit()),
             BlocProvider<ProfileImageCubit>(create: (_) => ProfileImageCubit()),
             BlocProvider<FirebaseStorageCubit>(create: (_) => FirebaseStorageCubit()),
+            BlocProvider<SelectedCityCubit>(create: (_)=> SelectedCityCubit())
           ],
           child: Builder(
             builder: (context) {

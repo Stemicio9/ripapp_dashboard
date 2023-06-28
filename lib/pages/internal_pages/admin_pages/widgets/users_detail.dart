@@ -5,6 +5,7 @@ import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
+import '../../../../blocs/selected_city_cubit.dart';
 import '../../../../widgets/texts.dart';
 
 class UsersDetail extends StatelessWidget {
@@ -35,7 +36,14 @@ class UsersDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SelectedUserCubit, SelectedUserState>(
+    return BlocBuilder<SelectedCityCubit, SelectedCityState>(
+        builder: (context, stateCity) {
+          if (stateCity is SelectedCityState) {
+            if (stateCity.selectedCity.nome != null ) {
+              city =  stateCity.selectedCity.nome?? "";}
+            print("CITY");
+            print(city);
+     return BlocBuilder<SelectedUserCubit, SelectedUserState>(
         builder: (context, state) {
       if (state is SelectedUserState) {
         id = state.selectedUser.id ?? 0;
@@ -51,7 +59,6 @@ class UsersDetail extends StatelessWidget {
         'Amministratore';
         //TODO IMPLEMENTARE CITTA
       //  city = state.selectedUser.city ?? "";
-
 
         return Container(
       padding: getPadding(left: 20, right: 20),
@@ -165,6 +172,7 @@ class UsersDetail extends StatelessWidget {
                                   ),
                                 ),
                                 Texth3V2(testo: city, color: black),
+
                                 Padding(
                                   padding: getPadding(bottom: 5,top: 20),
                                   child: Text(
@@ -213,4 +221,11 @@ class UsersDetail extends StatelessWidget {
 
         });
   }
+   else
+    return ErrorWidget("ERRORE");
+  });
+  }
 }
+
+
+

@@ -9,6 +9,7 @@ import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
+import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
@@ -167,7 +168,8 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SelectedUserCubit, SelectedUserState>(
+    return
+      BlocBuilder<SelectedUserCubit, SelectedUserState>(
         builder: (context, state) {
           if (state is SelectedUserState) {
             widget.nameController.text = state.selectedUser.firstName ?? widget.nameController.text;
@@ -369,7 +371,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                                 paddingRight: 10,
                                                                 paddingLeft: 0,
                                                                 hintText: getCurrentLanguageValue(CITY)!,
-                                                                filterController: widget.filterController,
+                                                                filterController: widget.filterController, paddingTop: 10, paddingBottom: 10,
                                                               )
                                                             ],
                                                           )),
@@ -629,6 +631,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
           else
             return ErrorWidget("exception2");
         });
+
   }
 }
 

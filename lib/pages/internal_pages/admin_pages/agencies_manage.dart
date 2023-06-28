@@ -13,11 +13,10 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agenci
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
-import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import '../../../blocs/selected_agency_cubit.dart';
 import '../../../models/agency_entity.dart';
-import '../../../models/city_from_API.dart';
+
 
 class AgenciesManage extends StatelessWidget{
 
@@ -59,7 +58,6 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
   SelectedAgencyCubit get _selectedAgencyCubit => context.read<SelectedAgencyCubit>();
-  CityListCubit get _cityFromApi => context.read<CityListCubit>();
   List<CityFromAPI> cityList = [];
 
   @override
@@ -76,7 +74,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                 showDialog(context: context, builder: (ctx)=> Form(
                   key: _formKey,
                   child: AgencyForm(
-                    cityOptions: cityOptions,
+                    cityOptions: cityList,
                     cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
                     nameController: nameController,
                     emailController: emailController,
@@ -130,7 +128,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
 
                     },
                     isAddPage: false,
-                    cityOptions: cityOptions,
+                    cityOptions: cityList,
                     cardTitle: getCurrentLanguageValue(EDIT_AGENCY)!,
                     nameController: nameController,
                     emailController: emailController,
