@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
-import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/utils/ResultSet.dart';

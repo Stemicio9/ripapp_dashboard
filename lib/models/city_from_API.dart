@@ -76,7 +76,8 @@ class CityFromAPI {
 
   @override
   String toString() {
-    return nome ?? "";
+    return '{nome: $nome}';
   }
   factory CityFromAPI.emptyCity() => CityFromAPI();
+
 }

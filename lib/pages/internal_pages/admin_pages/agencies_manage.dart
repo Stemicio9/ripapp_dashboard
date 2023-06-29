@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/city_list_cubit.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_city_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
@@ -29,7 +30,8 @@ class AgenciesManage extends StatelessWidget{
       create: (_) => UsersListCubit(),
       ),
           BlocProvider(
-              create: (_)=> CityListCubit())
+              create: (_)=> CityListCubit()),
+          BlocProvider(create: (_)=> SelectedCityCubit())
         ],
       child: AgenciesManageWidget(),
     );
@@ -58,6 +60,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
   SelectedAgencyCubit get _selectedAgencyCubit => context.read<SelectedAgencyCubit>();
+  SelectedCityCubit get _selectedCityCubit => context.read<SelectedCityCubit>();
   List<CityFromAPI> cityList = [];
 
   @override

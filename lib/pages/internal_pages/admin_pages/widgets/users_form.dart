@@ -29,7 +29,7 @@ class UsersForm extends StatelessWidget {
   final TextEditingController passwordController;
   final TextEditingController filterController;
   final dynamic nameValidator;
-  final List<String> options;
+  final List<CityFromAPI> options;
   final dynamic emailValidator;
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
@@ -108,7 +108,7 @@ class UsersFormWidget extends StatefulWidget {
   final TextEditingController filterController;
   final TextEditingController passwordController;
   final dynamic nameValidator;
-  final List<String> options;
+  final List<CityFromAPI> options;
   final dynamic emailValidator;
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
@@ -172,10 +172,11 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<SelectedCityCubit, SelectedCityState>(
         builder: (context, stateCity) {
-          print("SELEZIONO CITTA UTENTE");
           if (stateCity is SelectedCityState) {
-            widget.filterController.text = stateCity.selectedCity.nome ?? "";
-            print("LA CITTA SELEZIONATA E $city");
+            print("QUI SELEZIONO LA CITTA DELL'UTENTE");
+            widget.filterController.text = stateCity.selectedCity.nome ?? widget.filterController.text;
+            print("QUESTA é LA CITTA SELEZIONATA DELL?UTENTE");
+            print(widget.filterController.text);
             return BlocBuilder<SelectedUserCubit, SelectedUserState>(
         builder: (context, state) {
           if (state is SelectedUserState) {

@@ -27,7 +27,7 @@ class UsersDetail extends StatelessWidget {
      this.id = 0,
      this.email = "",
      this.phoneNumber ="",
-     this.city ="",
+     this.city = "",
      this.lastName="",
      this.role = "",
      this.agencyName = "",
@@ -51,7 +51,8 @@ class UsersDetail extends StatelessWidget {
         state.selectedUser.status.toString() == 'UserStatus.agency' ? 'Agenzia' :
         'Amministratore';
         //TODO IMPLEMENTARE CITTA
-      //  city = state.selectedUser.city ?? "";
+          city =  state.selectedUser.city.toString();
+         print("LA CITTà DETTAGLI UTENTE è : $city");
 
         return Container(
       padding: getPadding(left: 20, right: 20),
