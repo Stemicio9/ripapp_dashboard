@@ -152,7 +152,7 @@ class ProductFormState extends State<ProductForm> {
                                                           });
                                                         }
                                                       },
-                                                      child: imageState.loaded ? Container(
+                                                      child: Container(
                                                         height: 130,
                                                         width: 130,
                                                         decoration: BoxDecoration(
@@ -168,7 +168,7 @@ class ProductFormState extends State<ProductForm> {
                                                           ),
                                                         ),
 
-                                                      ) : Container()
+                                                      )
 
                                                   )
                                                 ],

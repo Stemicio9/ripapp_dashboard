@@ -7,7 +7,6 @@ class ProductsRow extends StatelessWidget {
   final List<SingleProductEntity> products;
   final SearchProductsOfferedLoaded state;
 
-
    ProductsRow(
       {Key? key,
       required this.products,
@@ -24,6 +23,7 @@ class ProductsRow extends StatelessWidget {
             .map((e) => SingleProduct(
                   singleProductEntity: e,
                   state: state,
+                  firebaseId: e.firebaseId,
 
                 ))
             .toList()

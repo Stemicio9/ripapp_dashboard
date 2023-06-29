@@ -63,17 +63,7 @@ class ProductsTableState extends State<ProductsTable> {
   List<String> headerTitle = ['ID', 'Foto', 'Nome', 'Prezzo', ''];
   List<ProductEntity> products = [];
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
-  ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
-  var imageFile = ImagesConstants.imgDemisePlaceholder;
-  var memoryImage;
-  bool isNetwork = true;
 
-
-
-  void func(value){
-    _profileImageCubit.changeLoaded(true);
-    imageFile = value;
-  }
 
   @override
   void initState() {
