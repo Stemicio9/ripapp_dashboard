@@ -9,6 +9,7 @@ import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
+import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
@@ -16,6 +17,7 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
+import '../../../../blocs/selected_city_cubit.dart';
 import '../../../../widgets/autocomplete.dart';
 
 class UsersForm extends StatelessWidget {
@@ -27,7 +29,7 @@ class UsersForm extends StatelessWidget {
   final TextEditingController passwordController;
   final TextEditingController filterController;
   final dynamic nameValidator;
-  final List<String> options;
+  final List<CityFromAPI> options;
   final dynamic emailValidator;
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
@@ -97,7 +99,7 @@ class UsersForm extends StatelessWidget {
 }
 
 
-class UsersFormWidget extends StatefulWidget{
+class UsersFormWidget extends StatefulWidget {
   final String cardTitle;
   late TextEditingController nameController;
   final TextEditingController phoneController;
@@ -106,7 +108,7 @@ class UsersFormWidget extends StatefulWidget{
   final TextEditingController filterController;
   final TextEditingController passwordController;
   final dynamic nameValidator;
-  final List<String> options;
+  final List<CityFromAPI> options;
   final dynamic emailValidator;
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
@@ -150,11 +152,14 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
   SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
   late bool _passwordVisible;
+
   CityListCubit get _cityListCubit => context.read<CityListCubit>();
   late String selectedValue;
   late AgencyEntity selectedAgency;
   List<CityFromAPI> cityList = [];
   List<String> emptyList = ['Seleziona agenzia'];
+  late UserEntity userEntity;
+  String? city;
 
   @override
   void initState() {
@@ -165,7 +170,14 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SelectedUserCubit, SelectedUserState>(
+    return BlocBuilder<SelectedCityCubit, SelectedCityState>(
+        builder: (context, stateCity) {
+          if (stateCity is SelectedCityState) {
+            print("QUI SELEZIONO LA CITTA DELL'UTENTE");
+            widget.filterController.text = stateCity.selectedCity.name ?? widget.filterController.text;
+            print("QUESTA é LA CITTA SELEZIONATA DELL?UTENTE");
+            print(widget.filterController.text);
+            return BlocBuilder<SelectedUserCubit, SelectedUserState>(
         builder: (context, state) {
           if (state is SelectedUserState) {
             widget.nameController.text = state.selectedUser.firstName ?? widget.nameController.text;
@@ -343,78 +355,80 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                 cityList = cityState.listCity;
                                                 if (cityList.isNotEmpty) {
                                                   return Row(
-                                                      children: [
-                                                        Expanded(
-                                                            flex: 1,
-                                                            child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: getPadding(bottom: 5),
-                                                                  child: Text(
-                                                                    'CITTÀ',
-                                                                    style: SafeGoogleFont(
-                                                                      'Montserrat',
-                                                                      fontSize: 14,
-                                                                      fontWeight: FontWeight.w600,
-                                                                      color: background,
-                                                                    ),
+                                                    children: [
+                                                      Expanded(
+                                                          flex: 1,
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              Padding(
+                                                                padding: getPadding(bottom: 5),
+                                                                child: Text(
+                                                                  'CITTÀ',
+                                                                  style: SafeGoogleFont(
+                                                                    'Montserrat',
+                                                                    fontSize: 14,
+                                                                    fontWeight: FontWeight.w600,
+                                                                    color: background,
                                                                   ),
                                                                 ),
+                                                              ),
 
-                                                                AutocompleteWidget(
-                                                                  options: cityList,
-                                                                  paddingRight: 10,
-                                                                  paddingLeft: 0,
-                                                                  hintText: getCurrentLanguageValue(CITY)!,
-                                                                  filterController: widget.filterController,
-                                                                )
-                                                              ],
-                                                            )),
-                                                        Expanded(
-                                                            flex: 1,
-                                                            child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: getPadding(
-                                                                      bottom: 5, left: 3),
-                                                                  child: Text(
-                                                                    'TELEFONO',
-                                                                    style: SafeGoogleFont(
-                                                                      'Montserrat',
-                                                                      fontSize: 14,
-                                                                      fontWeight: FontWeight.w600,
-                                                                      color: background,
-                                                                    ),
+                                                              AutocompleteWidget(
+                                                                options: cityList,
+                                                                paddingRight: 10,
+                                                                paddingLeft: 0,
+                                                                hintText: getCurrentLanguageValue(CITY)!,
+                                                                filterController: widget.filterController,
+                                                                paddingTop: 10,
+                                                                paddingBottom: 10,
+                                                              )
+                                                            ],
+                                                          )),
+                                                      Expanded(
+                                                          flex: 1,
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              Padding(
+                                                                padding: getPadding(
+                                                                    bottom: 5, left: 3),
+                                                                child: Text(
+                                                                  'TELEFONO',
+                                                                  style: SafeGoogleFont(
+                                                                    'Montserrat',
+                                                                    fontSize: 14,
+                                                                    fontWeight: FontWeight.w600,
+                                                                    color: background,
                                                                   ),
                                                                 ),
-                                                                InputsV2Widget(
-                                                                  hinttext: getCurrentLanguageValue(
-                                                                      PHONE_NUMBER)!,
-                                                                  controller: widget.phoneController,
-                                                                  validator: widget.phoneValidator,
-                                                                  inputFormatters: <
-                                                                      TextInputFormatter>[
-                                                                    FilteringTextInputFormatter.digitsOnly,
-                                                                  ],
-                                                                  paddingRight: 0,
-                                                                  paddingLeft: 10,
-                                                                  borderSide: const BorderSide(
-                                                                      color: greyState),
-                                                                  activeBorderSide: const BorderSide(
-                                                                      color: background),
-                                                                )
-                                                              ],
-                                                            )),
-                                                      ]);
+                                                              ),
+                                                              InputsV2Widget(
+                                                                hinttext: getCurrentLanguageValue(
+                                                                    PHONE_NUMBER)!,
+                                                                controller: widget.phoneController,
+                                                                validator: widget.phoneValidator,
+                                                                inputFormatters: <
+                                                                    TextInputFormatter>[
+                                                                  FilteringTextInputFormatter.digitsOnly,
+                                                                ],
+                                                                paddingRight: 0,
+                                                                paddingLeft: 10,
+                                                                borderSide: const BorderSide(
+                                                                    color: greyState),
+                                                                activeBorderSide: const BorderSide(
+                                                                    color: background),
+                                                              )
+                                                            ],
+                                                          )),
+                                                    ],
+                                                  );
+
+
                                                 }
-
-                                              }
-                                              return ErrorWidget("errore di connessione");
+                                              }return ErrorWidget("errore di connessione");
 
                                             }),
-
                                       ),
                                       Padding(
                                         padding: getPadding(bottom: 40),
@@ -610,7 +624,10 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: ActionButtonV2(
-                                          action: widget.onTap,
+                                          action: (){
+                                            print("CHIAMO LA FORM SUBMIT");
+                                            widget.onTap(stateCity.selectedCity);
+                                            },
                                           text: getCurrentLanguageValue(SAVE)!,
                                         ),
                                       )
@@ -628,4 +645,9 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
             return ErrorWidget("exception2");
         });
   }
+  else
+  return ErrorWidget("exception");
+} );
+  }
 }
+

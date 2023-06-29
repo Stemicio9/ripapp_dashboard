@@ -14,7 +14,7 @@ class CityEntity {
   );
 
   Map<String, dynamic> toJson() => {
-    "cityid": cityid,
+    "cityid": null,
     "name": name,
   };
 
@@ -24,8 +24,10 @@ class CityEntity {
   );
 
 
+
   @override
   String toString() {
     return name;
   }
+
 }

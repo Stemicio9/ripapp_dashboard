@@ -82,9 +82,7 @@ class UserRepository {
     // todo this could be not necessary
     String goodJson = jsonEncode(response.data);
 
-    //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
-    //List<UserEntity> users = ((jsonDecode(goodJson) as Map)["content"] as List).map((user) => UserEntity.fromJson(user)).toList();
-    //print("ecco i tuoi utenti" + users.toString() + users.length.toString());
+
 
     List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
     return userEntityList;
@@ -128,8 +126,17 @@ class UserRepository {
     print("USER si: ");
     print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO");
     print(userEntity.toJson());
-    var response = await globalDio.post(signupUrl,data: userEntity.toJson(), options: Options(headers: buildHeaders()));
-    return response.data;
+    print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO 2");
+    try {
+      var response = await globalDio.post(signupUrl, data: userEntity.toJson(),
+          options: Options(headers: buildHeaders()));
+      print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO 3");
+      print("risposta = " + response.toString());
+      return response.data;
+    }catch(e){
+      print("ERRORE");
+      print(e);
+    }
   }
 
   Future loginPreLayer(String token) async {
@@ -169,8 +176,6 @@ class UserRepository {
     //myoptions.headers!["set-cookie"] = "idtoken=123;";
     myoptions.headers!["Content-Type"] = "application/json";
     Response res = await globalDio.get(allUsersUrl, data: searchEntity.toJson(), queryParameters: parameters, options: myoptions);
-    print("dati = " + res.data.toString());
-    print(res.data);
     List<UserEntity> users = (res.data as List).map((user) => UserEntity.fromJson(user)).toList();
     return users;
   }
@@ -178,6 +183,7 @@ class UserRepository {
     Response res;
     res = await globalDio.get(cityListUrl);
     List<CityFromAPI> cityList = (res.data as List).map((e) => CityFromAPI.fromJson(e)).toList();
+
     print("ECCO LE CITTà - simone");
     return cityList;
   }
