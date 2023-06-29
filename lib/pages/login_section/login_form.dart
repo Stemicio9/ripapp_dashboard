@@ -14,6 +14,7 @@ import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
+import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/utilities/image_utility.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -156,8 +157,16 @@ class LoginFormState extends State<LoginForm> {
       print("TI SALUTO ");
       String token = await value.user!.getIdToken();
       UserRepository().setFirebaseToken(token);
-      var response = await UserRepository().loginPreLayer(token);
-    });
+      try {
+        var response = await UserRepository().loginPreLayer(token);
+      }catch(e){
+        ErrorSnackbar(context, text: 'Credenziali errate!');
+      }
+    }, onError: (e) {
+      ErrorSnackbar(context, text: 'Credenziali errate!');
+    }
+
+    );
     //Navigator.pushNamed(context, RouteConstants.dashboard);
     //if (CustomFirebaseAuthenticationListener().userEntity!.status == UserStatus.admin){
       _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber);
