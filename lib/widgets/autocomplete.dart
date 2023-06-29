@@ -82,8 +82,8 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
         builder: (context, stateCity) {
       if (stateCity is SelectedCityState) {
         print("Qui ci arrivooo");
-        if (stateCity.selectedCity.nome != null ) {
-          city =  stateCity.selectedCity.nome?? "";
+        if (stateCity.selectedCity.name != null ) {
+          city =  stateCity.selectedCity.name?? "";
           print("CITY CONTIENE");
           print(city);
         }
@@ -101,11 +101,12 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
                   return const Iterable<CityFromAPI>.empty();
                 }
                 return widget.options.where((CityFromAPI option) {
-                  return option.nome!
+                  return option.name!
                       .toLowerCase()
                       .contains(textEditingValue.text.toLowerCase());
                 });
               },
+              displayStringForOption: (CityFromAPI option) => option.name!,
               fieldViewBuilder: (BuildContext context,
                   TextEditingController textEditingController,
                   FocusNode focusNode,
@@ -166,7 +167,7 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
                               onTap: () => onSelected(option),
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
-                                child: Text(option.nome!),
+                                child: Text(option.name!),
                               ),
                             );
                           },

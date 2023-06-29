@@ -174,7 +174,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
         builder: (context, stateCity) {
           if (stateCity is SelectedCityState) {
             print("QUI SELEZIONO LA CITTA DELL'UTENTE");
-            widget.filterController.text = stateCity.selectedCity.nome ?? widget.filterController.text;
+            widget.filterController.text = stateCity.selectedCity.name ?? widget.filterController.text;
             print("QUESTA é LA CITTA SELEZIONATA DELL?UTENTE");
             print(widget.filterController.text);
             return BlocBuilder<SelectedUserCubit, SelectedUserState>(
@@ -624,7 +624,10 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: ActionButtonV2(
-                                          action: widget.onTap,
+                                          action: (){
+                                            print("CHIAMO LA FORM SUBMIT");
+                                            widget.onTap(stateCity.selectedCity);
+                                            },
                                           text: getCurrentLanguageValue(SAVE)!,
                                         ),
                                       )

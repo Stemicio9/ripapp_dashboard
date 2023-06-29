@@ -122,7 +122,7 @@ class AgencyFormWidgetState extends State<AgencyFormWidget> {
         builder: (context, stateCity) {
           if (stateCity is SelectedCityState) {
             print("QUI SI SELEZIONA LA CITTA");
-            widget.cityController.text = stateCity.selectedCity.nome ?? "";
+            widget.cityController.text = stateCity.selectedCity.name ?? "";
             print("LA CITTA DELL'AGENZIA é $city");
             return
               BlocBuilder<SelectedAgencyCubit, SelectedAgencyState>(

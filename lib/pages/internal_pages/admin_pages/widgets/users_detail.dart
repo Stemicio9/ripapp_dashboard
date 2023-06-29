@@ -50,8 +50,11 @@ class UsersDetail extends StatelessWidget {
         role = state.selectedUser.status.toString() == 'UserStatus.active' ? 'Utente' :
         state.selectedUser.status.toString() == 'UserStatus.agency' ? 'Agenzia' :
         'Amministratore';
-        //TODO IMPLEMENTARE CITTA
-          city =  state.selectedUser.city.toString();
+          try {
+            city = state.selectedUser.city?[0].name ?? "";
+          }catch(e){
+            city = "";
+          }
          print("LA CITTà DETTAGLI UTENTE è : $city");
 
         return Container(

@@ -147,7 +147,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                             phoneValidator: notEmptyValidate,
                             statusChange: setStatusFromDropdown,
                             agencyChange: setAgencyFromDropdown,
-                            onTap: (){formSubmit();},
+                            onTap: formSubmit,
                             roles: UserRoles.values,
                           ),
                         ));
@@ -240,15 +240,18 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
 
 
 
-  formSubmit(){
+  formSubmit(CityFromAPI? nome){
+    print("SONO NEL VERO METODO FORM SUBMIT");
     if(_formKey.currentState!.validate()) {
+      print("RIEMPO I CAMPI");
       userEntity.firstName = nameController.text;
       userEntity.lastName = lastNameController.text;
       userEntity.email = emailController.text;
       userEntity.phoneNumber = phoneController.text;
       userEntity.password = passwordController.text;
-      userEntity.city = cityOptions;
+      userEntity.city = [nome!];
 
+      print("VALIDATO");
 
         if (userEntity.email != "" && userEntity.password != "") {
           FirebaseAuth.instance.createUserWithEmailAndPassword(

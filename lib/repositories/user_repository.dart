@@ -127,10 +127,16 @@ class UserRepository {
     print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO");
     print(userEntity.toJson());
     print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO 2");
-    var response = await globalDio.post(signupUrl,data: userEntity.toJson(), options: Options(headers: buildHeaders()));
-    print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO 3");
-    print("risposta = " + response.toString());
-    return response.data;
+    try {
+      var response = await globalDio.post(signupUrl, data: userEntity.toJson(),
+          options: Options(headers: buildHeaders()));
+      print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO 3");
+      print("risposta = " + response.toString());
+      return response.data;
+    }catch(e){
+      print("ERRORE");
+      print(e);
+    }
   }
 
   Future loginPreLayer(String token) async {
@@ -170,8 +176,6 @@ class UserRepository {
     //myoptions.headers!["set-cookie"] = "idtoken=123;";
     myoptions.headers!["Content-Type"] = "application/json";
     Response res = await globalDio.get(allUsersUrl, data: searchEntity.toJson(), queryParameters: parameters, options: myoptions);
-    print("dati = " + res.data.toString());
-    print(res.data);
     List<UserEntity> users = (res.data as List).map((user) => UserEntity.fromJson(user)).toList();
     return users;
   }
