@@ -315,6 +315,8 @@ class DeceasedData extends StatelessWidget {
                             hintText: getCurrentLanguageValue(CITY)!,
                             filterController: filterController,
                             validator: cityValidator,
+                            paddingTop: 10,
+                            paddingBottom: 10,
                           )
                         ],
                       )),

@@ -84,7 +84,7 @@ class AddDemiseState extends State<AddDemise> {
   var imageFile = ImagesConstants.imgDemisePlaceholder;
   var memoryImage;
   bool isNetwork = true;
-  late String fileName;
+  String? fileName;
   late Uint8List fileBytes;
 
 
