@@ -12,22 +12,6 @@ import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 
 
-/*
-class MyProducts extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SearchProductCubit(),
-      child: MyProductsWrapped(),
-    );
-  }
-}*/
-
-
-
-
-
-
 
 class MyProducts extends StatefulWidget {
   @override

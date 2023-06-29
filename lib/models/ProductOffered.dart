@@ -12,7 +12,7 @@ class ProductOffered{
   );
 
   Map<String, dynamic> toJson() => {
-    "product": productEntity?.toJson() ?? null,
+    "product": productEntity.toJson() ?? null,
     "offered": offered,
   };
 

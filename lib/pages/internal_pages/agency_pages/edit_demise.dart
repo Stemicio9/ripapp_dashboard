@@ -6,8 +6,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker_web/image_picker_web.dart';
+import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
+import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
@@ -23,7 +24,6 @@ import '../../../constants/colors.dart';
 import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
 import '../../../constants/validators.dart';
-import '../../../models/demise_entity.dart';
 import '../../../utils/size_utils.dart';
 import 'package:intl/intl.dart';
 
@@ -31,31 +31,16 @@ import '../../../widgets/action_button.dart';
 import '../../../widgets/snackbars.dart';
 
 
-class EditDemise extends StatelessWidget{
 
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => SelectedDemiseCubit(),
-        ),
-
-      ],
-      child: EditDemiseWidget(),
-    );
-  }
-}
-
-class EditDemiseWidget extends StatefulWidget {
+class EditDemise extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return EditDemiseWidgetState();
+    return EditDemiseState();
   }
 }
 
-class EditDemiseWidgetState extends State<EditDemiseWidget> {
+class EditDemiseState extends State<EditDemise> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
@@ -85,48 +70,81 @@ class EditDemiseWidgetState extends State<EditDemiseWidget> {
   DateTime? funeralDate;
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
 
   static const List<String> kinship = <String>[
     'Madre',
     'Padre',
   ];
 
-  String imageFile = "";
+
   final List<Widget> relativeRows = [];
+  var imageFile = ImagesConstants.imgDemisePlaceholder;
+  var memoryImage;
+  bool isNetwork = true;
+  late String fileName;
+  late Uint8List fileBytes;
+
+
+  Future<dynamic> downloadUrlImage(String uid,String demiseId) async {
+    var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/UID:$uid/demiseId:$demiseId/').listAll();
+    for (var element in fileList.items) {
+      print(element.name);
+    }
+    if (fileList.items.isEmpty) {
+      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
+      var file = fileList.items[0];
+      var result = await file.getDownloadURL();
+      return result;
+    }
+    var file = fileList.items[0];
+    var result = await file.getDownloadURL();
+    return result;
+  }
+
+  void func(value){
+    _profileImageCubit.changeLoaded(true);
+    imageFile = value;
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
-        builder: (context, state)
-        {
-          if (state is SelectedDemiseState) {
-            nameController.text = state.selectedDemise.firstName?? nameController.text;
-            lastNameController.text = state.selectedDemise.lastName?? lastNameController.text;
-            phoneController.text = state.selectedDemise.phoneNumber ?? phoneController.text ;
-            if(state.selectedDemise.age != null){
-              ageController.text = state.selectedDemise.age.toString();
-            }
-            deceasedDateController.text = state.selectedDemise.deceasedDate.toString();
+    final User user = FirebaseAuth.instance.currentUser!;
+    final uid = user.uid;
+    return BlocBuilder<ProfileImageCubit, ProfileImageState>(
+        builder: (context, imageState) {
+      return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
+          builder: (context, state) {
+              print("perche non si valoriza? "+ state.selectedDemise.toString());
+              downloadUrlImage(uid,state.selectedDemise.firebaseid!).then((value) => func(value));
+
+              nameController.text = state.selectedDemise.firstName ?? nameController.text;
+              lastNameController.text = state.selectedDemise.lastName ?? lastNameController.text;
+              phoneController.text = state.selectedDemise.phoneNumber ?? phoneController.text;
+              if (state.selectedDemise.age != null) {
+                ageController.text = state.selectedDemise.age.toString();
+              }
+              deceasedDateController.text = state.selectedDemise.deceasedDate.toString();
 
 
-
-          //  DateTime datetime = state.selectedDemise.wakeDateTime!;
-         //   wakeDateController.text =  DateTime(datetime.year, datetime.month, datetime.day).toString();
-         //   wakeTimeController.text = state.selectedDemise.wakeDateTime!.hour.toString() + state.selectedDemise.wakeDateTime!.minute.toString();
-            wakeAddressController.text = state.selectedDemise.wakeAddress ?? wakeAddressController.text;
-            wakeNoteController.text = state.selectedDemise.wakeNotes ?? wakeNoteController.text;
-
-
-           // funeralDateController.text = state.selectedDemise.funeralDateTime!.toString() ?? "";
-            //funeralTimeController.text = state.selectedDemise.funeralDateTime.toString() ?? "";
-            funeralNoteController.text = state.selectedDemise.funeralNotes ?? funeralNoteController.text;
-            funeralAddressController.text = state.selectedDemise.funeralAddress ??  funeralAddressController.text;
+              //  DateTime datetime = state.selectedDemise.wakeDateTime!;
+              //   wakeDateController.text =  DateTime(datetime.year, datetime.month, datetime.day).toString();
+              //   wakeTimeController.text = state.selectedDemise.wakeDateTime!.hour.toString() + state.selectedDemise.wakeDateTime!.minute.toString();
+              wakeAddressController.text = state.selectedDemise.wakeAddress ?? wakeAddressController.text;
+              wakeNoteController.text = state.selectedDemise.wakeNotes ?? wakeNoteController.text;
 
 
-            //relativeController.text = state.selectedDemise.relative.toString() ?? "";
+              // funeralDateController.text = state.selectedDemise.funeralDateTime!.toString() ?? "";
+              //funeralTimeController.text = state.selectedDemise.funeralDateTime.toString() ?? "";
+              funeralNoteController.text = state.selectedDemise.funeralNotes ?? funeralNoteController.text;
+              funeralAddressController.text = state.selectedDemise.funeralAddress ?? funeralAddressController.text;
 
-            return ScaffoldWidget(
+
+              //relativeController.text = state.selectedDemise.relative.toString() ?? "";
+
+              return ScaffoldWidget(
                 body: SingleChildScrollView(
                   child: Padding(
                     padding: getPadding(top: 40, bottom: 40, left: 5, right: 5),
@@ -145,26 +163,22 @@ class EditDemiseWidgetState extends State<EditDemiseWidget> {
                           ),
 
                           //deceased data
-                          DeceasedData(
+                          imageState.loaded ? DeceasedData(
+                            isNetwork: isNetwork,
                             imageFile: imageFile,
+                            memoryImage: memoryImage,
                             imageOnTap: () async {
                               FilePickerResult? result = await FilePicker.platform.pickFiles();
-                              //TODO SALVARE IMMAGINE SU FIRESTORAGE E MOSTRARE L'IMMAGINE PICKATA NEL BOX
                               if (result != null) {
-                                Uint8List fileBytes = result.files.first.bytes!;
-                                String fileName = result.files.first.name;
+                                fileBytes = result.files.first.bytes!;
+                                fileName = result.files.first.name;
                                 print('STAMPO IL FILE PICKATO');
                                 print(fileName);
+                                isNetwork = false;
 
                                 setState(() {
-                                  imageFile = fileBytes.toString();
-                                  print('STAMPO IMMAGINE NEL BOX');
-                                  print(imageFile);
+                                  memoryImage = fileBytes;
                                 });
-                                final User user = auth.currentUser!;
-                                final uid = user.uid;
-                                var path = 'profile_images/users_images/$uid/$fileName';
-                                await FirebaseStorage.instance.ref(path).putData(fileBytes);
                               }
                             },
 
@@ -236,7 +250,10 @@ class EditDemiseWidgetState extends State<EditDemiseWidget> {
                               strokeWidth: 1,
                               child: Container(
                                 height: 200,
-                                width: MediaQuery.of(context).size.width,
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width,
                                 decoration: BoxDecoration(
                                   color:
                                   _dragging
@@ -279,7 +296,7 @@ class EditDemiseWidgetState extends State<EditDemiseWidget> {
                                 ),
                               ),
                             ),
-                          ),
+                          ) : Container(),
 
                           //wake data
                           Padding(
@@ -413,19 +430,15 @@ class EditDemiseWidgetState extends State<EditDemiseWidget> {
                   ),
                 ),
               );
-          }
-          else return ErrorWidget("exception3");
-        });
+          });
+    });
   }
 
 
 
-  formSubmit() {
+  formSubmit() async {
     if(_formKey.currentState!.validate()){
-
       DemiseEntity demiseEntity = DemiseEntity();
-
-
       if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
         if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {
           return ErrorSnackbar(
@@ -434,6 +447,19 @@ class EditDemiseWidgetState extends State<EditDemiseWidget> {
           );
         }
       }
+
+
+      final User user = FirebaseAuth.instance.currentUser!;
+      final uid = user.uid;
+      var path = 'profile_images/deceased_images/UID:$uid/demiseId:${demiseEntity.firebaseid}/';
+
+      var fileList = await FirebaseStorage.instance.ref(path).listAll();
+      if (fileList.items.isNotEmpty) {
+        var fileesistente = fileList.items[0];
+        fileesistente.delete();
+      }
+      await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+
 
       SuccessSnackbar(
           context,

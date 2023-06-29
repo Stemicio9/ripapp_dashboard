@@ -4,45 +4,26 @@ import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/app_pages.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
-import 'package:ripapp_dashboard/constants/route_constants.dart';
-import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
-import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/demise_table.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
-import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 import '../../../blocs/search_demises_cubit.dart';
 import '../../../constants/colors.dart';
-import '../admin_pages/users_manage.dart';
 
 
-class DemiseMenage extends StatelessWidget{
 
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => SelectedDemiseCubit(),
-        ),
-
-      ],
-      child: DemiseManageWidget(),
-    );
-  }
-}
-
-class DemiseManageWidget extends StatefulWidget {
+class DemiseMenage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return DemiseManageWidgetState();
+    return DemiseManageState();
   }
+
 }
 
 
-class DemiseManageWidgetState extends State<DemiseManageWidget>{
+class DemiseManageState extends State<DemiseMenage>{
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
@@ -63,61 +44,64 @@ class DemiseManageWidgetState extends State<DemiseManageWidget>{
   Widget build(BuildContext context) {
     return Padding(
       padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Header(
-            deleteProfileOnTap: (){},
-            onTap: (){
-              context.push(AppPage.addDemise.path);
-            },
-            pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
-            buttonText: getCurrentLanguageValue(ADD_DEMISE)!,
-          ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Header(
+              deleteProfileOnTap: (){},
+              onTap: (){
+                context.push(AppPage.addDemise.path);
+              },
+              pageTitle: getCurrentLanguageValue(DEATHS_INSERT)!,
+              buttonText: getCurrentLanguageValue(ADD_DEMISE)!,
+            ),
 
-            DemiseTable(
-              delete: (dynamic p){
-                showDialog(
-                    context: context,
-                    builder: (ctx) => DeleteMessageDialog(
-                        onConfirm: (){
-                          _searchDemiseCubit.delete(p.id);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: green,
-                              content: const Text('Defunto eliminato con successo!'),
-                              duration: const Duration(milliseconds: 3000),
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(3),
+              DemiseTable(
+                delete: (dynamic p){
+                  showDialog(
+                      context: context,
+                      builder: (ctx) => DeleteMessageDialog(
+                          onConfirm: (){
+                            _searchDemiseCubit.delete(p.id);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: green,
+                                content: const Text('Defunto eliminato con successo!'),
+                                duration: const Duration(milliseconds: 3000),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
                               ),
-                            ),
-                          );
-                          Navigator.pop(context);
-                        },
-                        onCancel: (){
-                          Navigator.pop(context);
-                        },
-                        message: message
-                    )
-                );
-              },
-              edit: (dynamic p){
+                            );
+                            Navigator.pop(context);
+                          },
+                          onCancel: (){
+                            Navigator.pop(context);
+                          },
+                          message: message
+                      )
+                  );
+                },
+                edit: (dynamic p){
+                  print("demise attuale " +  p.toString());
                 context.push(AppPage.editDemise.path);
-                _selectedDemiseCubit.selectUser(p);
-              },
+                  _selectedDemiseCubit.selectDemise(p);
+                },
 
-              showDetail: (dynamic p){
-                _selectedDemiseCubit.selectUser(p);
-                context.push(AppPage.demiseDetail.path);
-              },
+                showDetail: (dynamic p){
+                  _selectedDemiseCubit.selectDemise(p);
+                  context.push(AppPage.demiseDetail.path);
+                },
 
-              detailMessage: detailMessage,
-              editMessage: editMessage,
-              deleteMessage: deleteMessage,
-            )
+                detailMessage: detailMessage,
+                editMessage: editMessage,
+                deleteMessage: deleteMessage,
+              )
 
-        ],
+          ],
+        ),
       ),
     );
   }

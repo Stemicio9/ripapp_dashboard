@@ -14,16 +14,16 @@ import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/blocs/search_users_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_agency_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_city_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
-import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
-import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ripapp_dashboard/routing/routes.dart';
 import 'package:ripapp_dashboard/utils/AppUtils.dart';
+import 'blocs/city_list_cubit.dart';
 import 'firebase_options.dart';
 
 
@@ -110,8 +110,11 @@ class MyApp extends StatelessWidget {
             BlocProvider<SelectedProductCubit>(create: (_) => SelectedProductCubit()),
             BlocProvider<CurrentPageCubit>(create: (_) => CurrentPageCubit()),
             BlocProvider<SelectedUserCubit>(create: (_) => SelectedUserCubit()),
+            BlocProvider<CurrentPageCubit>(create: (_) => CurrentPageCubit()),
+            BlocProvider<CityListCubit>(create: (_)=> CityListCubit()),
             BlocProvider<ProfileImageCubit>(create: (_) => ProfileImageCubit()),
             BlocProvider<FirebaseStorageCubit>(create: (_) => FirebaseStorageCubit()),
+            BlocProvider<SelectedCityCubit>(create: (_)=> SelectedCityCubit())
           ],
           child: Builder(
             builder: (context) {

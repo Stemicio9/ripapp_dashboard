@@ -32,14 +32,12 @@ class EditProfileForm extends StatefulWidget{
   final dynamic emailValidator;
   final Function() onTap;
   bool showConfirmPassword;
-  final Function() imageOnTap;
   final Function() changePassword;
 
 
 
    EditProfileForm({
     super.key,
-    required this.imageOnTap,
     required this.onTap,
     required this.cardTitle,
     this.nameValidator,
@@ -72,7 +70,7 @@ class EditProfileFormState extends State<EditProfileForm>{
 
 
   Future<dynamic> downloadUrlImage(String uid) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/users_images/$uid/').listAll();
+    var fileList = await FirebaseStorage.instance.ref('profile_images/users_images/UID:$uid/').listAll();
     for (var element in fileList.items) {
       print(element.name);
     }
@@ -154,7 +152,7 @@ class EditProfileFormState extends State<EditProfileForm>{
                                           print(fileName);
                                           final User user = FirebaseAuth.instance.currentUser!;
                                           final uid = user.uid;
-                                          var path = 'profile_images/users_images/$uid/';
+                                          var path = 'profile_images/users_images/UID:$uid/';
 
                                           var fileList = await FirebaseStorage.instance.ref(path).listAll();
                                           if (fileList.items.isNotEmpty) {
@@ -176,7 +174,6 @@ class EditProfileFormState extends State<EditProfileForm>{
                                           color: greyDrag,
                                           border: Border.all(color: background, width: 1),
                                           image: DecorationImage(
-                                            // todo here implement boolean logic and memory/network differences
                                             image: NetworkMemoryImageUtility(isNetwork: isNetwork, networkUrl: imageFile, memoryImage: memoryImage).provide(),
                                             fit: BoxFit.cover,
                                           )

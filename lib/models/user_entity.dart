@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
 String userEntityToJson(UserEntity data) => json.encode(data.toJson());
@@ -11,7 +12,7 @@ class UserEntity implements ResultEntity {
   String? firstName;
   String? lastName;
   String? email;
-  List<dynamic>? city;
+  List<CityFromAPI>? city;
   String? phoneNumber;
   String? idtoken;
   UserStatus? status;
@@ -39,25 +40,39 @@ class UserEntity implements ResultEntity {
         ' city: $city, phone:$phoneNumber, idtoken:$idtoken, status:$status, role:$role, agency:$agency}';
   }
 
-  factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
-      id: json["accountid"] ?? 0,
-      firstName: json["name"] ?? "",
-      lastName: json["surname"] ?? "",
-      email: json["email"] ?? "",
-      city: (json["city"]).map((e) => CityEntity.fromJson(e)).toList() ?? List.empty(),
-      phoneNumber: json["phone"] ?? "",
-      idtoken: json["idtoken"] ?? "",
-      agency: json["agency"] != null ? AgencyEntity.fromJson(json["agency"]) : null,
-      role: json["role"] ?? "",
-      status: UserStatus.fromJson(json['status'])
-  );
+  factory UserEntity.fromJson(Map<String, dynamic> json) {
+    print("SONO NEL FROM JSON DI USERENTITY");
+    print(json);
+    var cityList = json["city"];
+    var resultCityList = List<CityFromAPI>.empty(growable: true);
+    if(cityList != null && cityList.length > 0){
+      Map<String, dynamic> cityMap = cityList[0];
+      CityFromAPI city = CityFromAPI(name: cityMap["name"]);
+      resultCityList.add(city);
+    }
+    return UserEntity(
+        id: json["accountid"] ?? 0,
+        firstName: json["name"] ?? "",
+        lastName: json["surname"] ?? "",
+        email: json["email"] ?? "",
+       // city: (json["city"] as List).isNotEmpty ? (json["city"]).map((e) => CityFromAPI.fromJson(e)).toList() : List.empty(),
+        city: resultCityList,
+        phoneNumber: json["phone"] ?? "",
+        idtoken: json["idtoken"] ?? "",
+        agency: json["agency"] != null
+            ? AgencyEntity.fromJson(json["agency"])
+            : null,
+        role: json["role"] ?? "",
+        status: UserStatus.fromJson(json['status'])
+    );
+  }
 
   UserEntity copyWith(
       {int? id,
       String? firstName,
       String? lastName,
       String? email,
-      List<dynamic>? city,
+      List<CityFromAPI>? city,
       String? phoneNumber,
       String? idtoken,
       String? role,
@@ -80,7 +95,7 @@ class UserEntity implements ResultEntity {
         "name": firstName,
         "surname": lastName,
         "email": email,
-        "city": city?.map((e) => e.toJson()).toList() ?? [],
+        "city": city?.map((e) => e.toJson()).toList(),
         "phone": phoneNumber,
         "idtoken": idtoken,
         "status":  status?.toJson(),

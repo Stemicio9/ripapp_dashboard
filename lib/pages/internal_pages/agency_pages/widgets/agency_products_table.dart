@@ -7,6 +7,7 @@ import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
+import 'package:ripapp_dashboard/widgets/data_cell_image.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 
 class AgencyProductsTable extends StatefulWidget {
@@ -141,24 +142,8 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
               fontWeight: FontWeight.w700
           ),
         )),
-        DataCell(Container(
-          height: 70,
-          width: 70,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(3)),
-            color: greyDrag,
-            border: Border.all(color: background, width: 0.5),
-            image: imageFile != null ?
-            DecorationImage(
-              image: FileImage(imageFile!),
-              fit: BoxFit.contain,
-            ) : const DecorationImage(
-              image: AssetImage(ImagesConstants.imgProductPlaceholder),
-              fit: BoxFit.cover,
-
-            ),
-          ),
-        )),
+        DataCell(DataCellImage(firebaseId: p.firebaseId),
+        ),
         DataCell(Text(
           p.name,
           style: SafeGoogleFont('Montserrat',

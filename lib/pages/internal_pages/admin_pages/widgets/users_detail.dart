@@ -5,6 +5,7 @@ import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
+import '../../../../blocs/selected_city_cubit.dart';
 import '../../../../widgets/texts.dart';
 
 class UsersDetail extends StatelessWidget {
@@ -26,7 +27,7 @@ class UsersDetail extends StatelessWidget {
      this.id = 0,
      this.email = "",
      this.phoneNumber ="",
-     this.city ="",
+     this.city = "",
      this.lastName="",
      this.role = "",
      this.agencyName = "",
@@ -49,9 +50,12 @@ class UsersDetail extends StatelessWidget {
         role = state.selectedUser.status.toString() == 'UserStatus.active' ? 'Utente' :
         state.selectedUser.status.toString() == 'UserStatus.agency' ? 'Agenzia' :
         'Amministratore';
-        //TODO IMPLEMENTARE CITTA
-      //  city = state.selectedUser.city ?? "";
-
+          try {
+            city = state.selectedUser.city?[0].name ?? "";
+          }catch(e){
+            city = "";
+          }
+         print("LA CITTà DETTAGLI UTENTE è : $city");
 
         return Container(
       padding: getPadding(left: 20, right: 20),
@@ -165,6 +169,7 @@ class UsersDetail extends StatelessWidget {
                                   ),
                                 ),
                                 Texth3V2(testo: city, color: black),
+
                                 Padding(
                                   padding: getPadding(bottom: 5,top: 20),
                                   child: Text(
@@ -212,5 +217,9 @@ class UsersDetail extends StatelessWidget {
       else return ErrorWidget("exception");
 
         });
+
   }
 }
+
+
+

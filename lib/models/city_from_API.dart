@@ -1,6 +1,8 @@
+import 'package:ripapp_dashboard/models/CityEntity.dart';
+
 class CityFromAPI {
   String? codice;
-  String? nome;
+  String? name;
   String? nomeStraniero;
   String? codiceCatastale;
   String? cap;
@@ -15,7 +17,7 @@ class CityFromAPI {
   CityFromAPI(
       {
         this.codice,
-      this.nome,
+      this.name,
       this.nomeStraniero,
       this.codiceCatastale,
       this.cap,
@@ -27,23 +29,28 @@ class CityFromAPI {
       this.fax,
       this.coordinate});
 
-  factory CityFromAPI.fromJson(Map<String, dynamic> json) => CityFromAPI(
-      codice: json["codice"],
-      nome: json["nome"],
-      nomeStraniero: json["nomeStraniero"],
-      codiceCatastale: json["codiceCatastale"],
-      cap: json["cap"],
-      prefisso: json["prefisso"],
-      provincia: json["provincia"],
-      email: json["email"],
-      pec: json["pec"],
-      telefono: json["telefono"],
-      fax: json["fax"],
-      coordinate: json["coordinate"]);
+  factory CityFromAPI.fromJson(Map<String, dynamic> json)
+  {
+    print("SONO NEL FROMJSON DI CITYFROMAPI");
+    print(json);
+    return CityFromAPI(
+        codice: json["codice"] ?? "",
+        name: json["nome"] ?? json["name"] ?? "",
+        nomeStraniero: json["nomeStraniero"] ?? "",
+        codiceCatastale: json["codiceCatastale"] ?? "",
+        cap: json["cap"] ?? "",
+        prefisso: json["prefisso"] ?? "",
+        provincia: json["provincia"] ?? "",
+        email: json["email"] ?? "",
+        pec: json["pec"] ?? "",
+        telefono: json["telefono"] ?? "",
+        fax: json["fax"] ?? "",
+        coordinate: json["coordinate"] ?? "");
+  }
 
   Map<String, dynamic> toJson() => {
         "codice": codice,
-        "nome": nome,
+        "name": name,
         "nomeStraniero": nomeStraniero,
         "codiceCatastale": codiceCatastale,
         "cap": cap,
@@ -58,7 +65,7 @@ class CityFromAPI {
 
   factory CityFromAPI.defaultCity() => CityFromAPI(
       codice: "",
-      nome: "",
+      name: "",
       nomeStraniero: "",
       codiceCatastale: "",
       cap: "",
@@ -71,8 +78,11 @@ class CityFromAPI {
       coordinate: {});
 
 
+
   @override
   String toString() {
-    return nome ?? "";
+    return '{nome: $name}';
   }
+  factory CityFromAPI.emptyCity() => CityFromAPI();
+
 }

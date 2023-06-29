@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/widgets/autocomplete.dart';
+import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
 
 import '../../../../constants/colors.dart';
 import '../../../../constants/language.dart';
@@ -37,12 +38,16 @@ class DeceasedData extends StatelessWidget {
   final onDragEntered;
   final onDragExited;
   final Widget child;
-  final String imageFile;
+  var imageFile;
+  var memoryImage;
+  final bool isNetwork;
   final List<CityFromAPI> options;
   final List<CityFromAPI> citiesOfInterestOptions;
 
-  const DeceasedData(
+   DeceasedData(
       {super.key,
+        this.memoryImage,
+        this.isNetwork = true,
         required this.imageOnTap,
         this.nameValidator,
         this.phoneValidator,
@@ -66,7 +71,7 @@ class DeceasedData extends StatelessWidget {
         required this.ageController,
         required this.options,
         required this.citiesOfInterestOptions,
-        required this.imageFile,
+        this.imageFile,
         required this.dateController});
 
   @override
@@ -118,30 +123,16 @@ class DeceasedData extends StatelessWidget {
                                 borderRadius: const BorderRadius.all(Radius.circular(3)),
                                 color: greyDrag,
                                 border: Border.all(color: background, width: 1),
-                                image: imageFile != "" ?
-                                DecorationImage(
-                                  image: NetworkImage(imageFile),
-                                  fit: BoxFit.contain,
+                                image: DecorationImage(
+                                  image: NetworkMemoryImageUtility(
+                                      isNetwork: isNetwork,
+                                      networkUrl: imageFile,
+                                      memoryImage: memoryImage).provide(),
+                                  fit: BoxFit.cover,
                                 )
-                                    : DecorationImage(
-                                  image: AssetImage(ImagesConstants.imgProductPlaceholder),
-                              fit: BoxFit.cover,
-                                )
-                              ),
-                          /*    child: imageFile == null ? Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                  child: Texth4V2(
-                                    testo:getCurrentLanguageValue(INSERT_PHOTO) ?? "",
-                                    color: greyDisabled,
-                                    weight: FontWeight.bold,
-                                    textalign: TextAlign.center,
-
-                                  ),
-                                ),
-                              ) : const SizedBox(), */
                             ),
                           ),
+                          )
                         ],
                       ),
                     ),

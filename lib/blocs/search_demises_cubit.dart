@@ -52,8 +52,8 @@ class DemiseCubit extends Cubit<DemiseState> {
   saveDemise(DemiseEntity demiseEntity) async{
     emit(SaveDemiseLoading());
     try{
-      await DemiseRepository().saveDemise(demiseEntity);
-      //emit(SaveDemiseLoaded(result));
+      var result= await DemiseRepository().saveDemise(demiseEntity);
+      emit(SaveDemiseLoaded(result));
       print("HO SALVATO LA DEMISE, FACCIO LA FETCH");
       fetchDemises();
     }catch(e){

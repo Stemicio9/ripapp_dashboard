@@ -30,6 +30,7 @@ class DemiseEntity {
 
   //relative data
   RelativeEntity? relative;
+  String? firebaseid;
 
 
   DemiseEntity({
@@ -54,7 +55,8 @@ class DemiseEntity {
     this.funeralNotes,
 
 
-    this.relative
+    this.relative,
+    this.firebaseid
   });
 
   //toString
@@ -79,6 +81,7 @@ class DemiseEntity {
 
           'wakenotes: $wakeNotes, '
           'wakets: $wakeDateTime, '
+          'firebaseid: $firebaseid, '
           'wakeAddress: $wakeAddress}\n';
 
   }
@@ -101,6 +104,7 @@ class DemiseEntity {
     funeralAddress: json["funeraladdress"] ?? "",
     funeralDateTime: json["funeralts"] == null ? null : DateTime.parse(json["funeralts"]),
     funeralNotes: json["funeralnotes"] ?? "",
+    firebaseid: json["firebaseid"] ?? "",
     /*cities: json["cities"] todo aggiungere questi due campi!!
         .map((data) => CityEntity.fromJson(data))
         .toList(),
@@ -154,6 +158,7 @@ class DemiseEntity {
     "surname":lastName,
     "city":city?.toJson() ?? null,
     "phonenumber":phoneNumber,
+    "firebaseid":firebaseid,
     "age":age,
     "ts":deceasedDate,
     "cities": cities?.map((e) => e.toJson()).toList() ?? [],
