@@ -7,6 +7,7 @@ import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
+import 'package:ripapp_dashboard/widgets/data_cell_image.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
@@ -67,22 +68,7 @@ class ProductsTableState extends State<ProductsTable> {
   var memoryImage;
   bool isNetwork = true;
 
-  Future<dynamic> downloadUrlImage( String productId) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/products_images/productid:$productId/').listAll();
-    for (var element in fileList.items) {
-      print(element.name);
-    }
 
-    if (fileList.items.isEmpty) {
-      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
-      var file = fileList.items[0];
-      var result = await file.getDownloadURL();
-      return result;
-    }
-    var file = fileList.items[0];
-    var result = await file.getDownloadURL();
-    return result;
-  }
 
   void func(value){
     _profileImageCubit.changeLoaded(true);
@@ -171,6 +157,8 @@ class ProductsTableState extends State<ProductsTable> {
   }
 
   DataRow composeSingleRow(dynamic p) {
+    print("LA SINGOLA ROW");
+    print(p);
     return DataRow(
       cells: <DataCell>[
         DataCell(Text(
@@ -179,27 +167,8 @@ class ProductsTableState extends State<ProductsTable> {
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
 
-        DataCell(  BlocBuilder<ProfileImageCubit, ProfileImageState>(
-            builder: (context, imageState) {
-              print("il nostro link è " + imageFile.toString());
-                    downloadUrlImage(p.firebaseId).then((value) => func(value));
-                    return imageState.loaded ?  Container(
-                    height: 70,
-                    width: 70,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(3)),
-                      color: greyDrag,
-                      border: Border.all(color: background, width: 0.5),
-                      image: DecorationImage(
-                        image: NetworkMemoryImageUtility(
-                            isNetwork: isNetwork,
-                            networkUrl: imageFile,
-                            memoryImage: memoryImage).provide(),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ) : Container();
-                  })
+        DataCell(
+            DataCellImage(firebaseId: p.firebaseId)
         ),
 
         DataCell(Text(
