@@ -26,6 +26,18 @@ class SearchProductLoaded extends SearchProductState {
   }
 
 }
+class SaveProductLoaded extends SearchProductState {
+
+  final ProductEntity productSaved;
+  SaveProductLoaded(this.productSaved);
+
+  SaveProductLoaded copyWith({ProductEntity? productSaved,}) {
+    return SaveProductLoaded(
+      productSaved ?? this.productSaved,
+    );
+  }
+
+}
 
 
 class SearchProductCubit extends Cubit<SearchProductState>{
@@ -54,13 +66,20 @@ class SearchProductCubit extends Cubit<SearchProductState>{
       emit(SearchProductError(e.toString()));
     }
   }
-
-  saveProduct(ProductEntity productEntity) async{
+   saveProduct(ProductEntity productEntity) async{
     emit(SearchProductLoading());
     try{
-      var result = await ProductRepository().saveProduct(productEntity);
+      print("ci arrivo 0"); //ProductEntity saved =
+      var response = await ProductRepository().saveProduct(productEntity);
+      ProductEntity p = ProductEntity.fromJson(response);
+      print(p);
+      print("ci arrivo?1");
       fetchProducts();
+      print("ci arrivo?2");
+      emit(SaveProductLoaded(p));
     }catch(e){
+      print("merda");
+      print("errorino di cacca " + e.toString());
       emit(SearchProductError(e.toString()));
     }
   }

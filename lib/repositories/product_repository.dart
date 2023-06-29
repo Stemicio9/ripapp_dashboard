@@ -33,6 +33,7 @@ class ProductRepository{
     Map<String, String> values = {};
     values.putIfAbsent("idtoken", () => UserRepository().firebaseToken ?? "");
     var response = await globalDio.post(productUrl, data: productEntity.toJson(), options: Options(headers: values));
+    print("risposta cattiva: " + response.toString());
     return response.data;
   }
 

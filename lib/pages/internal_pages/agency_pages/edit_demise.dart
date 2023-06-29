@@ -91,19 +91,14 @@ class EditDemiseState extends State<EditDemise> {
     for (var element in fileList.items) {
       print(element.name);
     }
-
     if (fileList.items.isEmpty) {
       var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
       var file = fileList.items[0];
       var result = await file.getDownloadURL();
       return result;
     }
-
-
     var file = fileList.items[0];
     var result = await file.getDownloadURL();
-
-
     return result;
   }
 

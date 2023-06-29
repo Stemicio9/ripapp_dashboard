@@ -376,7 +376,9 @@ class AddDemiseState extends State<AddDemise> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            ActionButtonV2(action: formSubmit, text: getCurrentLanguageValue(SAVE) ?? ""),
+                            ActionButtonV2(
+                                action: formSubmit,
+                                text: getCurrentLanguageValue(SAVE) ?? ""),
                           ],
                         ),
                       ),

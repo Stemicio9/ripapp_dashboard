@@ -32,14 +32,12 @@ class EditProfileForm extends StatefulWidget{
   final dynamic emailValidator;
   final Function() onTap;
   bool showConfirmPassword;
-  final Function() imageOnTap;
   final Function() changePassword;
 
 
 
    EditProfileForm({
     super.key,
-    required this.imageOnTap,
     required this.onTap,
     required this.cardTitle,
     this.nameValidator,
@@ -72,7 +70,7 @@ class EditProfileFormState extends State<EditProfileForm>{
 
 
   Future<dynamic> downloadUrlImage(String uid) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/users_images/$uid/').listAll();
+    var fileList = await FirebaseStorage.instance.ref('profile_images/users_images/UID:$uid/').listAll();
     for (var element in fileList.items) {
       print(element.name);
     }

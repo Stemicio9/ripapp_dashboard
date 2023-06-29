@@ -1,41 +1,85 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
+import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
 import '../../../../constants/images_constants.dart';
 import '../../../../widgets/texts.dart';
 
-class ProductDetail extends StatelessWidget {
+class ProductDetail extends StatefulWidget{
+
   final String cardTitle;
   late int id;
   late String name;
   late double price;
-  final String productPhoto;
-  final File? imageFile;
 
-   ProductDetail({
+
+  ProductDetail({
     super.key,
     required this.cardTitle,
-     this.name = "",
-     this.id = 0,
-     this.price = 0,
-    required this.productPhoto,
-    this.imageFile
+    this.name = "",
+    this.id = 0,
+    this.price = 0,
   });
 
   @override
+  State<StatefulWidget> createState() {
+    return ProductDetailState();
+  }
+
+}
+
+
+
+class ProductDetailState extends State<ProductDetail> {
+  ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
+  var imageFile = ImagesConstants.imgDemisePlaceholder;
+  var memoryImage;
+  bool isNetwork = true;
+
+  Future<dynamic> downloadUrlImage(String? firebaseId) async {
+     var  fileList = await FirebaseStorage.instance.ref('profile_images/products_images/productid:$firebaseId/').listAll();
+      for (var element in fileList.items) {
+        print(element.name);
+      }
+
+    if (fileList.items.isEmpty) {
+      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
+      var file = fileList.items[0];
+      var result = await file.getDownloadURL();
+      return result;
+    }
+    var file = fileList.items[0];
+    var result = await file.getDownloadURL();
+    return result;
+  }
+
+  void func(value){
+    _profileImageCubit.changeLoaded(true);
+    imageFile = value;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return BlocBuilder<ProfileImageCubit, ProfileImageState>(
+        builder: (context, imageState) {
+      print("il nostro link è " + imageFile.toString());
     return BlocBuilder<SelectedProductCubit, SelectedProductState>(
         builder: (context, state) {
+
       if (state is SelectedProductState) {
-        id = state.selectedProduct.id ?? 0;
-        name = state.selectedProduct.name ?? "";
-        price = state.selectedProduct.price ?? 0;
+        downloadUrlImage(state.selectedProduct.firebaseId!).then((value) => func(value));
+        widget.id = state.selectedProduct.id ?? 0;
+        widget.name = state.selectedProduct.name ?? "";
+        widget.price = state.selectedProduct.price ?? 0;
         return Container(
       padding: getPadding(left: 20, right: 20),
       child: Column(
@@ -47,7 +91,7 @@ class ProductDetail extends StatelessWidget {
                 paddingLeft: 10,
                 paddingRight: 10,
                 cancelIcon: true,
-                cardTitle: cardTitle,
+                cardTitle: widget.cardTitle,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -59,13 +103,13 @@ class ProductDetail extends StatelessWidget {
                           borderRadius: const BorderRadius.all(Radius.circular(5)),
                           color: greyDrag,
                           border: Border.all(color: background, width: 1),
-                          image: imageFile != null ?
-                          DecorationImage(
-                            image: FileImage(imageFile!),
-                            fit: BoxFit.contain,
-                          ) :  DecorationImage(
-                            image: AssetImage(ImagesConstants.imgProductPlaceholder),
+                          image: DecorationImage(
+                            image:NetworkMemoryImageUtility(
+                                isNetwork: isNetwork,
+                                networkUrl: imageFile,
+                                memoryImage: memoryImage).provide(),
                             fit: BoxFit.cover,
+
                           )
                       ),
                     ),
@@ -90,7 +134,7 @@ class ProductDetail extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Texth3V2(testo: id.toString(), color: black),
+                          Texth3V2(testo: widget.id.toString(), color: black),
 
                           Padding(
                             padding: getPadding(bottom: 5,top: 20),
@@ -104,7 +148,7 @@ class ProductDetail extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Texth3V2(testo: name, color: black),
+                          Texth3V2(testo: widget.name, color: black),
 
                           Padding(
                             padding: getPadding(bottom: 5,top:20),
@@ -119,7 +163,7 @@ class ProductDetail extends StatelessWidget {
                             ),
                           ),
                           Texth3V2(
-                              testo: '€ $price',
+                              testo: '€ ${widget.price}',
                               color: black
                           ),
 
@@ -137,6 +181,6 @@ class ProductDetail extends StatelessWidget {
     );
       }
       else return ErrorWidget("exception");
-        });
+        });});
   }
 }

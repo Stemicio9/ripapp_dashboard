@@ -1,8 +1,8 @@
-import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
-import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
+import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
@@ -10,6 +10,7 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
+import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
 
 import '../../../../constants/images_constants.dart';
 
@@ -41,18 +42,6 @@ class ProductsTable extends StatefulWidget {
 }
 
 class ProductsTableState extends State<ProductsTable> {
-  List<String> headerTitle = ['ID', 'Foto', 'Nome', 'Prezzo', ''];
-  List<ProductEntity> products = [];
-  File? imageFile;
-  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
-
-  @override
-  void initState() {
-    //_currentPageCubit.loadPage(ScaffoldWidgetState.products_page, 0);
-    _currentPageCubit.loadPage(ScaffoldWidgetState.products_page, _currentPageCubit.state.pageNumber);
-    super.initState();
-  }
-
   final edit;
   final delete;
   final showDetail;
@@ -69,8 +58,47 @@ class ProductsTableState extends State<ProductsTable> {
     required this.deleteMessage
   });
 
+
+  List<String> headerTitle = ['ID', 'Foto', 'Nome', 'Prezzo', ''];
+  List<ProductEntity> products = [];
+  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
+  ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
+  var imageFile = ImagesConstants.imgDemisePlaceholder;
+  var memoryImage;
+  bool isNetwork = true;
+
+  Future<dynamic> downloadUrlImage( String productId) async {
+    var fileList = await FirebaseStorage.instance.ref('profile_images/products_images/productid:$productId/').listAll();
+    for (var element in fileList.items) {
+      print(element.name);
+    }
+
+    if (fileList.items.isEmpty) {
+      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
+      var file = fileList.items[0];
+      var result = await file.getDownloadURL();
+      return result;
+    }
+    var file = fileList.items[0];
+    var result = await file.getDownloadURL();
+    return result;
+  }
+
+  void func(value){
+    _profileImageCubit.changeLoaded(true);
+    imageFile = value;
+  }
+
+  @override
+  void initState() {
+    _currentPageCubit.loadPage(ScaffoldWidgetState.products_page, _currentPageCubit.state.pageNumber);
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<CurrentPageCubit, CurrentPageState>(
         builder: (context, state) {
           if (state.loading) {
@@ -150,24 +178,30 @@ class ProductsTableState extends State<ProductsTable> {
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
-        DataCell(Container(
-          height: 70,
-          width: 70,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(3)),
-            color: greyDrag,
-            border: Border.all(color: background, width: 0.5),
-            image: imageFile != null ?
-            DecorationImage(
-              image: FileImage(imageFile!),
-              fit: BoxFit.contain,
-            ) : const DecorationImage(
-              image: AssetImage(ImagesConstants.imgProductPlaceholder),
-              fit: BoxFit.cover,
 
-            ),
-          ),
-        )),
+        DataCell(  BlocBuilder<ProfileImageCubit, ProfileImageState>(
+            builder: (context, imageState) {
+              print("il nostro link è " + imageFile.toString());
+                    downloadUrlImage(p.firebaseId).then((value) => func(value));
+                    return imageState.loaded ?  Container(
+                    height: 70,
+                    width: 70,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(3)),
+                      color: greyDrag,
+                      border: Border.all(color: background, width: 0.5),
+                      image: DecorationImage(
+                        image: NetworkMemoryImageUtility(
+                            isNetwork: isNetwork,
+                            networkUrl: imageFile,
+                            memoryImage: memoryImage).provide(),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ) : Container();
+                  })
+        ),
+
         DataCell(Text(
           p.name,
           style: SafeGoogleFont('Montserrat',

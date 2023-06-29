@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
-import 'package:ripapp_dashboard/blocs/firebase_storage/firebase_storage_bloc.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
@@ -18,23 +17,17 @@ import '../../../constants/validators.dart';
 import '../../../utils/size_utils.dart';
 import '../header.dart';
 
-class AgencyProfile extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return  BlocProvider<FirebaseStorageCubit>(create: (_) => FirebaseStorageCubit(), child: AgencyProfileWidget(),);
-  }
-
-}
 
 
-class AgencyProfileWidget extends StatefulWidget {
+
+class AgencyProfile extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return AgencyProfileState();
   }
 }
 
-class AgencyProfileState extends State<AgencyProfileWidget> {
+class AgencyProfileState extends State<AgencyProfile> {
   final String message = 'Sei sicuro di voler eliminare definitivamente questo profilo?';
 
   final TextEditingController nameController = TextEditingController();
@@ -48,7 +41,7 @@ class AgencyProfileState extends State<AgencyProfileWidget> {
   var imageFile;
 
   Future<dynamic> downloadUrlImage(String uid) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/users_images/$uid/').listAll();
+    var fileList = await FirebaseStorage.instance.ref('profile_images/users_images/UID:$uid/').listAll();
     for (var element in fileList.items) {
       print(element.name);
     }
@@ -126,8 +119,7 @@ class AgencyProfileState extends State<AgencyProfileWidget> {
                         Form(
                           key: _formKey,
                           child: EditProfileForm(
-                              cardTitle: getCurrentLanguageValue(
-                                  EDIT_PROFILE) ?? "",
+                              cardTitle: getCurrentLanguageValue(EDIT_PROFILE) ?? "",
                               nameController: nameController,
                               lastNameController: lastNameController,
                               emailController: emailController,
@@ -140,9 +132,6 @@ class AgencyProfileState extends State<AgencyProfileWidget> {
                                 SuccessSnackbar(context,
                                     text: 'Ti abbiamo inviato una mail per il reset della password!');
                                 Navigator.pop(context);
-                              },
-                              imageOnTap: () async {
-
                               },
                               onTap: () {
                                 if (_formKey.currentState!.validate()) {

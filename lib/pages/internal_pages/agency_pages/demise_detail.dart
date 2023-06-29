@@ -52,7 +52,7 @@ class DemiseDetailState extends State<DemiseDetail> {
   var imageFile = ImagesConstants.imgDemisePlaceholder;
   List<Widget> relativeRows = [];
   Future<dynamic> downloadUrlImage(String uid) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/$uid/').listAll();
+    var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/UID:$uid/').listAll();
     for (var element in fileList.items) {
       print(element.name);
     }
