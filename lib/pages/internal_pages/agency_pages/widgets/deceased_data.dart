@@ -124,7 +124,7 @@ class DeceasedData extends StatelessWidget {
                                   fit: BoxFit.contain,
                                 )
                                     : DecorationImage(
-                                  image: AssetImage(ImagesConstants.imgDemisePlaceholder),
+                                  image: AssetImage(ImagesConstants.imgProductPlaceholder),
                               fit: BoxFit.cover,
                                 )
                               ),

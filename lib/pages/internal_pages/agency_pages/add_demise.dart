@@ -85,6 +85,22 @@ class AddDemiseState extends State<AddDemise> {
 
   @override
   Widget build(BuildContext context) {
+    nameController.text = "nome";
+    lastNameController.text = "cognome";
+    cityController.text = "citta";
+    phoneController.text = "telefono";
+    ageController.text = "12";
+    //deceasedDateController.text = "";
+    addressController.text = "in dirizzo";
+    //wakeDateController.text = "";
+    //wakeTimeController.text = "";
+    wakeNoteController.text = "note";
+    funeralAddressController.text = "in dirizzo";
+    //funeralDateController.text = "";
+    //funeralTimeController.text = "";
+    funeralNoteController.text = "note";
+    citiesController.text = "citta";
+
     return ScaffoldWidget(
       body: SingleChildScrollView(
         child: Padding(
@@ -419,6 +435,7 @@ class AddDemiseState extends State<AddDemise> {
                 funeralMinutes);
           }
         }
+        /* todo decommentare: è stato commentato solo per velocizzare i testing
         if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
           if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {
             return ErrorSnackbar(
@@ -426,7 +443,7 @@ class AddDemiseState extends State<AddDemise> {
                 text: 'Date selezionate incoerenti!'
             );
           }
-        }
+        }*/
 
         _searchDemiseCubit.saveDemise(demiseEntity);
         SuccessSnackbar(

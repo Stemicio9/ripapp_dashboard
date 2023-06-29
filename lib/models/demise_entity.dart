@@ -61,7 +61,7 @@ class DemiseEntity {
   @override
   String toString() {
     return
-      'UserEntity{'
+      'DemiseEntity{'
           'demiseid: $id, '
           'name: $firstName, '
           'surname: $lastName, '

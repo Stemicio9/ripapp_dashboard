@@ -52,7 +52,9 @@ class DemiseRepository{
     myoptions.headers!["app_version"] = appVersion;
     print("ciao4");
 
+    print("ecco il tuo demise entity, carissimo $demiseEntity");
     var response = await globalDio.post(demiseUrl, data: demiseEntity, options: myoptions);
+    print("ciao5 esatto");
 
     //var response = await _dio.post(demiseUrl, data: demiseEntity);
 
