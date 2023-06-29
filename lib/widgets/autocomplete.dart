@@ -58,10 +58,10 @@ class AutocompleteWidget extends StatefulWidget {
     required this.options,
     this.validator,
     required this.hintText,
-    required this.paddingLeft,
-    required this.paddingRight,
-    required this.paddingTop,
-    required this.paddingBottom,
+    this.paddingLeft = 40,
+    this.paddingRight = 40,
+    this.paddingTop = 10,
+    this.paddingBottom = 10,
     required this.filterController,
   });
 
