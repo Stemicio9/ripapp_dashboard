@@ -1,4 +1,4 @@
-
+import 'dart:html' as html;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,6 @@ class DemiseDetailState extends State<DemiseDetail> {
   final String cityOfInterest = "Milano";
   final String city = "Milano";
   final String phoneNumber = "3401234567";
-  final String obituaryName = "Necrologio_Mario_Rossi.pdf";
   final String funeralDate = "24-03-2023";
   final String funeralNote = "Note del funerale";
   final String funeralAddress = "Via Roma, 56";
@@ -40,28 +39,52 @@ class DemiseDetailState extends State<DemiseDetail> {
   final String wakeHour = "09:00";
   final String wakeNote = "Note della veglia";
   final String wakeAddress = "Via Milano, 35";
-  final String wakeDate= "23-03-2023";
+  final String wakeDate = "23-03-2023";
   final TextEditingController relativeController = TextEditingController();
+
   late List<RelativeEntity> relativeList = [
-     RelativeEntity(relativeName: 'Madre di', relativePhone: '3401234567'),
-     RelativeEntity(relativeName: 'Padre di', relativePhone: '3409876543'),
+    RelativeEntity(relativeName: 'Madre di', relativePhone: '3401234567'),
+    RelativeEntity(relativeName: 'Padre di', relativePhone: '3409876543'),
   ];
+
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
   var imageFile = ImagesConstants.imgDemisePlaceholder;
+  var obituaryName = "";
+  var obituaryUrl = "";
+
   List<Widget> relativeRows = [];
-  Future<dynamic> downloadUrlImage(String uid,String demiseId) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/UID:$uid/demiseId:$demiseId/').listAll();
+
+  void downloadFile(String url) {
+    html.AnchorElement anchorElement =  html.AnchorElement(href: url);
+    anchorElement.download = url;
+    anchorElement.click();
+  }
+
+
+  Future<dynamic> downloadObituary(String uid, String demiseId) async {
+    var fileList = await FirebaseStorage.instance
+        .ref('obituaries/UID:$uid/demiseId:$demiseId/')
+        .listAll();
+    var file = fileList.items[0];
+    var result = await file.getDownloadURL();
+    return result;
+  }
+
+  Future<dynamic> downloadUrlImage(String uid, String demiseId) async {
+    var fileList = await FirebaseStorage.instance
+        .ref('profile_images/deceased_images/UID:$uid/demiseId:$demiseId/')
+        .listAll();
     for (var element in fileList.items) {
       print(element.name);
     }
 
     if (fileList.items.isEmpty) {
-      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
+      var fileList =
+          await FirebaseStorage.instance.ref('profile_images/').listAll();
       var file = fileList.items[0];
       var result = await file.getDownloadURL();
       return result;
     }
-
 
     var file = fileList.items[0];
     var result = await file.getDownloadURL();
@@ -69,9 +92,14 @@ class DemiseDetailState extends State<DemiseDetail> {
     return result;
   }
 
-  void func(value){
+  void func(value) {
     _profileImageCubit.changeLoaded(true);
     imageFile = value;
+  }
+
+  void obituary(value) {
+    _profileImageCubit.changeLoaded(true);
+    obituaryUrl = value;
   }
 
   @override
@@ -81,17 +109,18 @@ class DemiseDetailState extends State<DemiseDetail> {
     createRelative();
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
-          print("il nostro link è " + imageFile.toString());
-          return  BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
-        builder: (context, state) {
-          downloadUrlImage(uid,state.selectedDemise.firebaseid!).then((value) => func(value));
+      return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
+          builder: (context, state) {
+        downloadUrlImage(uid, state.selectedDemise.firebaseid!)
+            .then((value) => func(value));
+        downloadObituary(uid, state.selectedDemise.firebaseid!).then((value) {
+          obituary(value);
+          obituaryName = extractFileNameFromFirebaseUrl(value);
+        });
 
-          firstName = state.selectedDemise.firstName ?? "";
-      lastName = state.selectedDemise.lastName ?? "";
-      return
-
-
-        ScaffoldWidget(
+        firstName = state.selectedDemise.firstName ?? "";
+        lastName = state.selectedDemise.lastName ?? "";
+        return ScaffoldWidget(
           body: SingleChildScrollView(
             child: Padding(
               padding: getPadding(top: 40, bottom: 40, left: 5, right: 5),
@@ -108,19 +137,21 @@ class DemiseDetailState extends State<DemiseDetail> {
                   ),
 
                   //deceased data
-                 imageState.loaded ?  DeceasedDetail(
-                     imageFile: imageFile,
-                    downloadObituary: () {},
-                    obituaryName: obituaryName,
-                    id: id,
-                    age: age,
-                    lastName: lastName,
-                    firstName: firstName,
-                    phoneNumber: phoneNumber,
-                    city: city,
-                    cityOfInterest: cityOfInterest,
-                    deceasedDate: deceasedDate,
-                  ) : Container(),
+                  imageState.loaded
+                      ? DeceasedDetail(
+                          imageFile: imageFile,
+                          downloadObituary: (){downloadFile(obituaryUrl);},
+                          obituaryName: obituaryName,
+                          id: id,
+                          age: age,
+                          lastName: lastName,
+                          firstName: firstName,
+                          phoneNumber: phoneNumber,
+                          city: city,
+                          cityOfInterest: cityOfInterest,
+                          deceasedDate: deceasedDate,
+                        )
+                      : Container(),
 
                   //wake data
                   Padding(
@@ -129,9 +160,7 @@ class DemiseDetailState extends State<DemiseDetail> {
                         wakeDate: wakeDate,
                         wakeNote: wakeNote,
                         wakeHour: wakeHour,
-                        wakeAddress: wakeAddress
-
-                    ),
+                        wakeAddress: wakeAddress),
                   ),
 
                   //funeral data
@@ -141,9 +170,7 @@ class DemiseDetailState extends State<DemiseDetail> {
                           funeralDate: funeralDate,
                           funeralNote: funeralNote,
                           funeralHour: funeralHour,
-                          funeralAddress: funeralAddress
-                      )
-                  ),
+                          funeralAddress: funeralAddress)),
 
                   //add relative
                   Padding(
@@ -158,21 +185,26 @@ class DemiseDetailState extends State<DemiseDetail> {
             ),
           ),
         );
-    }); });
-
-
-
+      });
+    });
   }
 
-  createRelative(){
+  createRelative() {
     relativeRows = [];
-      for(var element in relativeList){
-        relativeRows.add(
-            RelativeDetailRow(
-                relativeName: element.relativeName,
-                relativePhone: element.relativePhone,
-            ));
-      }
+    for (var element in relativeList) {
+      relativeRows.add(RelativeDetailRow(
+        relativeName: element.relativeName,
+        relativePhone: element.relativePhone,
+      ));
+    }
   }
 
+  extractFileNameFromFirebaseUrl(value) {
+    var x = Uri.parse(value).pathSegments;
+    if (x.length > 1) {
+      var l = x[x.length - 1].split('/');
+      return l[l.length - 1];
+    }
+    return '';
+  }
 }
