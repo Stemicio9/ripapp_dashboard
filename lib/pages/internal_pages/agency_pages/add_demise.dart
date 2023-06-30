@@ -84,7 +84,7 @@ class AddDemiseState extends State<AddDemise> {
   var imageFile = ImagesConstants.imgDemisePlaceholder;
   var memoryImage;
   bool isNetwork = true;
-  late String fileName;
+  late String fileName = "";
   late Uint8List fileBytes;
 
 
@@ -468,7 +468,9 @@ class AddDemiseState extends State<AddDemise> {
         var fileesistente = fileList.items[0];
         fileesistente.delete();
       }
-      await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+      if(fileName != ""){
+        await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+      }
 
       SuccessSnackbar(context, text: 'Defunto aggiunto con successo!');
       context.pop();

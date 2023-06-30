@@ -139,8 +139,7 @@ class AgencyProfileState extends State<AgencyProfile> {
                               lastNameValidator: notEmptyValidate,
                               nameValidator: notEmptyValidate,
                               changePassword: () {
-                                SuccessSnackbar(context,
-                                    text: 'Ti abbiamo inviato una mail per il reset della password!');
+                                SuccessSnackbar(context, text: 'Ti abbiamo inviato una mail per il reset della password!');
                                 Navigator.pop(context);
                               },
                               onTap: () {

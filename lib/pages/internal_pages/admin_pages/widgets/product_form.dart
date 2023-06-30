@@ -49,7 +49,7 @@ class ProductFormState extends State<ProductForm> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late String fileName;
+  late String fileName = "";
   late Uint8List fileBytes;
 
 
@@ -94,8 +94,7 @@ class ProductFormState extends State<ProductForm> {
 
                 }
 
-                  // TODO RIPRISTINARE FORM EDIT
-               //  nameController.text = state.selectedProduct.name ?? "";
+                   nameController.text = state.selectedProduct.name ?? "";
                   if(state.selectedProduct.price != null){
                     priceController.text = state.selectedProduct.price.toString();
                   }
@@ -267,26 +266,36 @@ class ProductFormState extends State<ProductForm> {
       var uuid = const Uuid();
       var productId = uuid.v4();
       productEntity.firebaseId = productId;
-       _searchProductsCubit.saveProduct(productEntity);
-   /*    if (_searchProductsCubit.state is SaveProductLoaded){
+
+
+      if(widget.isEdit){
+        SuccessSnackbar(context, text: 'Prodotto modificato con successo!');
+
+      }else{
+        _searchProductsCubit.saveProduct(productEntity);
+        /*    if (_searchProductsCubit.state is SaveProductLoaded){
          var state = _searchProductsCubit.state as SaveProductLoaded;
          state.productSaved.id;
          print("id del prodotto salvato = " + state.productSaved.id.toString());
        } */
 
-      var path = 'profile_images/products_images/productid:$productId/';
+        var path = 'profile_images/products_images/productid:$productId/';
 
-      var fileList = await FirebaseStorage.instance.ref(path).listAll();
-      if (fileList.items.isNotEmpty) {
-        var fileesistente = fileList.items[0];
-        fileesistente.delete();
+        var fileList = await FirebaseStorage.instance.ref(path).listAll();
+        if (fileList.items.isNotEmpty) {
+          var fileesistente = fileList.items[0];
+          fileesistente.delete();
+        }
+        if(fileName != "") {
+          await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+        }
+        SuccessSnackbar(context, text: 'Prodotto aggiunto con successo!');
+
       }
-      await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
 
       nameController.text = "";
       priceController.text = "";
 
-      SuccessSnackbar(context, text: 'Prodotto aggiunto con successo!');
       Navigator.pop(context);
     }
   }
