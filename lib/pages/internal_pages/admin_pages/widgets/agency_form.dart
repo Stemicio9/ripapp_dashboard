@@ -15,59 +15,8 @@ import '../../../../blocs/selected_city_cubit.dart';
 import '../../../../widgets/autocomplete.dart';
 
 
-class AgencyForm extends StatelessWidget {
 
-
-final String cardTitle;
-final TextEditingController nameController;
-final TextEditingController phoneController;
-final TextEditingController emailController;
-final TextEditingController cityController;
-final dynamic nameValidator;
-final dynamic cityValidator;
-final dynamic emailValidator;
-final dynamic phoneValidator;
-final Function() onSubmit;
-final List<CityFromAPI> cityOptions;
-final bool isAddPage;
-
-
-const AgencyForm({
-super.key,
-required this.cityOptions,
-required this.cardTitle,
-this.nameValidator,
-this.emailValidator,
-this.phoneValidator,
-this.cityValidator,
-required this.nameController,
-required this.emailController,
-required this.phoneController,
-required this.cityController,
-required this.onSubmit,
-this.isAddPage = true,
-});
-@override
-Widget build(BuildContext context) {
-  return MultiBlocProvider(
-    providers: [
-
-      BlocProvider(create: (_) => CityListCubit()),
-    ],
-    child: AgencyFormWidget(
-    cardTitle      : cardTitle,
-    nameController : nameController,
-    phoneController: phoneController,
-    emailController: emailController,
-    cityController : cityController,
-    cityOptions    : cityOptions,
-    isAddPage      : isAddPage,
-    onSubmit: onSubmit,
-  ),
-  );
-}
-}
-class AgencyFormWidget extends StatefulWidget {
+class AgencyForm extends StatefulWidget {
   final String cardTitle;
   final TextEditingController nameController;
   final TextEditingController phoneController;
@@ -82,7 +31,7 @@ class AgencyFormWidget extends StatefulWidget {
   final bool isAddPage;
 
 
-  AgencyFormWidget({
+  AgencyForm({
  super.key,
   required this.cardTitle,
   required this.nameController,
@@ -100,11 +49,11 @@ class AgencyFormWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return AgencyFormWidgetState();
+    return AgencyFormState();
   }
 }
 
-class AgencyFormWidgetState extends State<AgencyFormWidget> {
+class AgencyFormState extends State<AgencyForm> {
   CityListCubit get _cityListCubit => context.read<CityListCubit>();
   List<CityFromAPI> cityList = [];
   String? city;
@@ -128,10 +77,9 @@ class AgencyFormWidgetState extends State<AgencyFormWidget> {
               BlocBuilder<SelectedAgencyCubit, SelectedAgencyState>(
                   builder: (context, state) {
                     if (state is SelectedAgencyState) {
-                      widget.nameController.text =
-                          state.selectedAgency.agencyName ?? "";
-                      widget.phoneController.text =
-                          state.selectedAgency.phoneNumber ?? "";
+                      widget.nameController.text = state.selectedAgency.agencyName ??  widget.nameController.text;
+                      widget.phoneController.text = state.selectedAgency.phoneNumber ??  widget.phoneController.text;
+                      widget.cityController.text = state.selectedAgency.city ??  widget.cityController.text;
                       return Container(
                         padding: getPadding(left: 20, right: 20),
                         child: Column(
@@ -154,8 +102,7 @@ class AgencyFormWidgetState extends State<AgencyFormWidget> {
                                               Expanded(
                                                   flex: 1,
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment
-                                                        .start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Padding(
                                                         padding: getPadding(
@@ -165,19 +112,15 @@ class AgencyFormWidgetState extends State<AgencyFormWidget> {
                                                           style: SafeGoogleFont(
                                                             'Montserrat',
                                                             fontSize: 14,
-                                                            fontWeight: FontWeight
-                                                                .w600,
+                                                            fontWeight: FontWeight.w600,
                                                             color: background,
                                                           ),
                                                         ),
                                                       ),
                                                       InputsV2Widget(
-                                                        hinttext: getCurrentLanguageValue(
-                                                            NAME)!,
-                                                        controller: widget
-                                                            .nameController,
-                                                        validator: widget
-                                                            .nameValidator,
+                                                        hinttext: getCurrentLanguageValue(NAME)!,
+                                                        controller: widget.nameController,
+                                                        validator: widget.nameValidator,
                                                         paddingLeft: 0,
                                                         paddingRight: 10,
                                                         borderSide: const BorderSide(
@@ -228,12 +171,10 @@ class AgencyFormWidgetState extends State<AgencyFormWidget> {
                                                                 paddingRight: 0,
                                                                 paddingLeft: 10,
                                                                 hintText: "Città",
-                                                                filterController: widget
-                                                                    .cityController,
-                                                                validator: widget
-                                                                    .cityValidator,
-                                                                paddingTop: 10,
-                                                                paddingBottom: 10,
+                                                                filterController: widget.cityController,
+                                                                validator: widget.cityValidator,
+                                                                paddingTop: 0,
+                                                                paddingBottom: 0,
                                                               )
                                                             ],
                                                           );
@@ -316,10 +257,8 @@ class AgencyFormWidgetState extends State<AgencyFormWidget> {
                                                       InputsV2Widget(
                                                         hinttext: getCurrentLanguageValue(
                                                             EMAIL)!,
-                                                        controller: widget
-                                                            .emailController,
-                                                        validator: widget
-                                                            .emailValidator,
+                                                        controller: widget.emailController,
+                                                        validator: widget.emailValidator,
                                                         paddingRight: 0,
                                                         paddingLeft: 10,
                                                         borderSide: const BorderSide(

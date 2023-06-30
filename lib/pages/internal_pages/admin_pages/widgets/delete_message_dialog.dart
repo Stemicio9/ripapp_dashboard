@@ -46,12 +46,11 @@ class DeleteMessageDialog extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-
                             Padding(
                               padding: getPadding(right: 3),
-                              child: Expanded(
+                              child: /*Expanded(
                                 flex: 1,
-                                child:  ActionButtonV2(
+                                child: */ ActionButtonV2(
                                   action: onCancel,
                                   text: getCurrentLanguageValue(CANCEL)!,
                                   color: white,
@@ -61,20 +60,20 @@ class DeleteMessageDialog extends StatelessWidget {
                                   maxWidth: 180,
 
                                 ),
-                              ),
+                              //),
                             ),
 
                             Padding(
                               padding: getPadding(left: 3),
-                              child: Expanded(
+                              child: /*Expanded(
                                 flex: 1,
-                                child:  ActionButtonV2(
+                                child:*/  ActionButtonV2(
                                     action: onConfirm,
                                     text: getCurrentLanguageValue(CONFIRM)!,
                                     color: background,
                                     maxWidth: 180,
                                 ),
-                                ),
+                                //),
                             ),
                           ],
                         ),

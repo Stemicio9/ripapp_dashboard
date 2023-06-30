@@ -165,7 +165,6 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                             onConfirm: () {
                               _userListCubit.delete(p.id);
                               SuccessSnackbar(context, text: 'Utente eliminato con successo!');
-
                               Navigator.pop(context);
                             },
                             onCancel: () {

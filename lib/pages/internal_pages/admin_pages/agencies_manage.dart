@@ -88,6 +88,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                     cityValidator: notEmptyValidate,
                     phoneValidator: notEmptyValidate,
                     onSubmit: (){formSubmit();},
+                    isAddPage: true,
                   ),
                 ));
               },
@@ -120,7 +121,6 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                       if (_editKey.currentState!.validate()) {
 
                         nameController.text = "";
-                        emailController.text = "";
                         phoneController.text = "";
                         cityController.text = "";
 
@@ -185,7 +185,6 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
       emailController.text = "";
       phoneController.text = "";
       cityController.text = "";
-      SuccessSnackbar(context, text: 'Agenzia aggiunta con successo!');
 
       Navigator.pop(context);
     }

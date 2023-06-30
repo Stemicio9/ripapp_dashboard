@@ -1,6 +1,5 @@
 
 import 'package:desktop_drop/desktop_drop.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +27,7 @@ import '../../../../widgets/texts.dart';
   final TextEditingController dateController;
   final TextEditingController citiesController;
   final TextEditingController filterController;
+  bool isEdit = false;
 
   final dynamic nameValidator;
   final dynamic phoneValidator;
@@ -49,54 +49,36 @@ import '../../../../widgets/texts.dart';
   final List<CityFromAPI> options;
   final List<CityFromAPI> citiesOfInterestOptions;
 
-
-  DeceasedData({
-  super.key, required this.nameController,
-  required this.phoneController,
-  required this.cityController,
-  required this.lastNameController,
-  required this.ageController,
-  required this.dateController,
-  required this.citiesController,
-  required this.filterController,
-  this.nameValidator,
-  this.phoneValidator,
-  this.lastNameValidator,
-  this.ageValidator,
-  this.dateValidator,
-  this.citiesOfInterestValidator,
-  this.cityValidator,
-  this.iconOnTap,
-  this.imageOnTap,
-  this.onDragDone,
-  this.onDragUpdated,
-  this.onDragEntered,
-  this.onDragExited,
-  required this.child,
-  required this.isNetwork,
-    required this.imageFile,
-    required this.memoryImage,
-  required this.options,
-  required this.citiesOfInterestOptions
-  });
-
-  @override
-  State<StatefulWidget> createState() {
-  return DeceasedDataState();}
-  }
-
-
-  class DeceasedDataState extends State<DeceasedData> {
-  List<CityFromAPI> cityList= [];
-  CityListCubit get _cityListCubit => context.read<CityListCubit>();
-
-
-  @override
-  void initState() {
-  _cityListCubit.fetchCityList();
-  super.initState();
-  }
-
+   DeceasedData(
+      {super.key,
+        required this.isEdit,
+        this.memoryImage,
+        this.isNetwork = true,
+        required this.imageOnTap,
+        this.nameValidator,
+        this.phoneValidator,
+        this.cityValidator,
+        this.citiesOfInterestValidator,
+        this.lastNameValidator,
+        this.ageValidator,
+        this.dateValidator,
+        required this.child,
+        required this.onDragDone,
+        required this.onDragEntered,
+        required this.onDragExited,
+        required this.onDragUpdated,
+        required this.iconOnTap,
+        required this.citiesController,
+        required this.nameController,
+        required this.phoneController,
+        required this.cityController,
+        required this.filterController,
+        required this.lastNameController,
+        required this.ageController,
+        required this.options,
+        required this.citiesOfInterestOptions,
+        this.imageFile,
+        required this.dateController});
 
   @override
   Widget  build(BuildContext context) {
@@ -353,11 +335,11 @@ import '../../../../widgets/texts.dart';
                             options: cityList,
                             paddingRight: 0,
                             paddingLeft: 0,
+                            paddingTop: 0,
+                            paddingBottom: 0,
                             hintText: getCurrentLanguageValue(CITY)!,
                             filterController: widget.filterController,
                             validator: widget.cityValidator,
-                            paddingTop: 10,
-                            paddingBottom: 10,
                           )
                         ],
                       );
@@ -409,6 +391,8 @@ import '../../../../widgets/texts.dart';
                             options: cityList,
                             paddingRight: 20,
                             paddingLeft: 0,
+                            paddingBottom: 0,
+                            paddingTop: 0,
                             hintText: "Comuni di interesse",
                             filterController: widget.citiesController,
                             validator: widget.citiesOfInterestValidator,
@@ -422,7 +406,7 @@ import '../../../../widgets/texts.dart';
                   ),
                   Expanded(
                       flex: 2,
-                      child:  Column(
+                      child: isEdit ? Container() : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
@@ -447,7 +431,8 @@ import '../../../../widgets/texts.dart';
                             ),
 
                         ],
-                      ),
+                      )
+                    ,
                     ),
                 ],
               ),

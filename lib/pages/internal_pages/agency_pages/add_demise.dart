@@ -84,7 +84,7 @@ class AddDemiseState extends State<AddDemise> {
   var imageFile = ImagesConstants.imgDemisePlaceholder;
   var memoryImage;
   bool isNetwork = true;
-  String? fileName;
+  late String fileName = "";
   late Uint8List fileBytes;
 
 
@@ -129,6 +129,7 @@ class AddDemiseState extends State<AddDemise> {
 
                       //deceased data
                       state.loaded ?  DeceasedData(
+                        isEdit: false,
                         isNetwork: isNetwork,
                         imageFile: imageFile,
                         memoryImage: memoryImage,
@@ -448,6 +449,9 @@ class AddDemiseState extends State<AddDemise> {
           );
         }
       }
+
+
+
       final User user = FirebaseAuth.instance.currentUser!;
       final uid = user.uid;
       var uuid = const Uuid();
@@ -455,20 +459,26 @@ class AddDemiseState extends State<AddDemise> {
       demiseEntity.firebaseid = demiseId;
 
       _searchDemiseCubit.saveDemise(demiseEntity);
-      print('STAMPO IL DEFUNTO APPENA CREATO');
-      print(demiseEntity);
+
+      var obituaryPath = 'obituaries/UID:$uid/demiseId:$demiseId/';
+      var obituaryList = await FirebaseStorage.instance.ref(obituaryPath).listAll();
+      if (obituaryList.items.isNotEmpty) {
+        var fileesistente = obituaryList.items[0];
+        fileesistente.delete();
+      }
+      await FirebaseStorage.instance.ref("$obituaryPath${_list.first.name}").putData(fileBytes);
+
 
 
       var path = 'profile_images/deceased_images/UID:$uid/demiseId:$demiseId/';
-      print('STAMPO IL PERCORSO DEL FILE SALVATO');
-      print(path);
-
       var fileList = await FirebaseStorage.instance.ref(path).listAll();
       if (fileList.items.isNotEmpty) {
         var fileesistente = fileList.items[0];
         fileesistente.delete();
       }
-      await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+      if(fileName != ""){
+        await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+      }
 
       SuccessSnackbar(context, text: 'Defunto aggiunto con successo!');
       context.pop();
