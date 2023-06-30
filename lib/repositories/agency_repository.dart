@@ -22,6 +22,7 @@ class AgencyRepository{
   final String allAgenciesUrl = "$baseUrl/api/auth/agencies";
   final String allAgenciesProductsUrl = "$baseUrl/api/auth/products";
   final String allProductsOfferedByAgency = "$baseUrl/api/auth/productsOffered";
+  final String allProductsOfferedByAgencyPaginated = "$baseUrl/api/auth/productsOfferedPaginated";
   final String indexedAgenciesUrl =  "$baseUrl/api/auth/agenciesWithIndex";
   final String deleteAgency ="$baseUrl/api/auth/agency";
   factory AgencyRepository() {
@@ -70,6 +71,26 @@ class AgencyRepository{
     print(productsOffered);
     List<ProductOffered> products = (res.data as List).map((product) => ProductOffered.fromJson(product)).toList();
     return products;
+  }
+
+  Future<List<ProductOffered>> getAllAgencyProductsWithIndex(int pageIndex) async {
+    Map<String, dynamic>? parameters = {};
+    int pageNumber = 1;
+    int pageElements = 1;
+    AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
+    UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
+    var userId = (user != null) ? user.id : "48";
+    parameters.putIfAbsent("pageNumber", () => (pageIndex));
+    parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
+    parameters.putIfAbsent("userid", () => userId!);
+    Response response;
+    Response res = await globalDio.get(allProductsOfferedByAgencyPaginated, queryParameters: parameters);
+    print("eallora?");
+    String goodJson = jsonEncode(res.data);
+    List<ProductOffered> productsOffered =  ((jsonDecode(goodJson) as Map)["content"] as List).map((e) => ProductOffered.fromJson(e)).toList();
+    //List<AgencyEntity> agencies = ((jsonDecode(goodJson) as Map)["content"] as List).map((agency) => AgencyEntity.fromJson(agency)).toList();
+    print("a zi gustati sta paginetta " + productsOffered.toString());
+    return productsOffered;
   }
 
   void setAgencyProducts(List<ProductOffered> productsOffered) async {

@@ -1,6 +1,7 @@
 import 'package:ripapp_dashboard/models/product_entity.dart';
+import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
-class ProductOffered{
+class ProductOffered implements ResultEntity {
   ProductEntity productEntity;
   bool offered;
 

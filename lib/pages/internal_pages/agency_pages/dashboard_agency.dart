@@ -37,6 +37,7 @@ class DashboardAgencyState extends State<DashboardAgency> {
         text: getCurrentLanguageValue(MY_PRODUCTS)!,
         icon: Icons.table_rows,
         onPressed: () => setState(() {
+          _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_products_page);
           title = getCurrentLanguageValue(MY_PRODUCTS)!;
           currentPage = 1;
         }),
@@ -46,6 +47,7 @@ class DashboardAgencyState extends State<DashboardAgency> {
         text: getCurrentLanguageValue(DEATHS_INSERT)!,
         icon: Icons.church_rounded,
         onPressed: () => setState(() {
+          _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_demises_page);
           title = getCurrentLanguageValue(DEATHS_INSERT)!;
           currentPage = 2;
         }),
@@ -55,6 +57,7 @@ class DashboardAgencyState extends State<DashboardAgency> {
         text: getCurrentLanguageValue(MY_PROFILE)!,
         icon: Icons.person_rounded,
         onPressed: () => setState(() {
+          _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_edit_profile_page);
           title = getCurrentLanguageValue(DEATHS_INSERT)!;
           currentPage = 3;
         }),

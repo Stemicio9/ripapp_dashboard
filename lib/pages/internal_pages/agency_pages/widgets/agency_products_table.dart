@@ -1,13 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/data_cell_image.dart';
+import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 
 class AgencyProductsTable extends StatefulWidget {
@@ -20,6 +23,7 @@ class AgencyProductsTable extends StatefulWidget {
 }
 
 class AgencyProductsTableState extends State<AgencyProductsTable> {
+  CurrentPageCubit  get _currentPageCubit => context.read<CurrentPageCubit>();
   List<String> headerTitle = ['ID', 'Foto', 'Nome', 'Prezzo',];
 
   SearchProductsOfferedCubit get _searchProductCubit => context.read<SearchProductsOfferedCubit>();
@@ -28,22 +32,22 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
 
   @override
   void initState() {
-    _searchProductCubit.fetchProducts();
+    _currentPageCubit.loadPage(ScaffoldWidgetState.agency_products_page, _currentPageCubit.state.pageNumber);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return
-      BlocBuilder<SearchProductsOfferedCubit, SearchProductsOfferedState>(
+      BlocBuilder<CurrentPageCubit, CurrentPageState>(
           builder: (context, state)
     {
-      if(state is SearchProductsOfferedLoading){
+      if(state.loading){
         return const Center(
             child: CircularProgressIndicator()
         );
       }
-      if(state is SearchProductsOfferedEmpty){
+      else if (state.resultSet.length == 0){
         return Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 40),
@@ -55,11 +59,11 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
           ),
         );
       }
-      if (state is SearchProductsOfferedLoaded) {
+      else {
         products.clear();
-        state.productsOffered.forEach((
+        state.resultSet.forEach((
             productOffered) {
-          if (productOffered.offered)
+          if ((productOffered as ProductOffered).offered)
             products.add(productOffered.productEntity);
         });
 
@@ -98,8 +102,6 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
           ),
         );
       }
-      else
-        return ErrorWidget("errore");
     });
   } //fine metodo build
 

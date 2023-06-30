@@ -31,7 +31,18 @@ class ScaffoldWidgetState extends State<ScaffoldWidget> {
   static const String agencies_page = "agencies_list";
   static const String products_page = "products_list";
   static const String login_page = "login_page";
+
   static const String agency_products_page = "agency_products_list";
+  static const String agency_demises_page = "agency_demises_list";
+  static const String agency_edit_profile_page = "agency_edit_profile";
+
+  bool isPageablePage(String pageName){
+    return _currentPageCubit.state.page == ScaffoldWidgetState.users_page ||
+        _currentPageCubit.state.page == ScaffoldWidgetState.agencies_page ||
+        _currentPageCubit.state.page == ScaffoldWidgetState.products_page ||
+        _currentPageCubit.state.page == ScaffoldWidgetState.agency_products_page ||
+        _currentPageCubit.state.page == ScaffoldWidgetState.agency_demises_page;
+  }
 
 
   @override
@@ -45,9 +56,7 @@ class ScaffoldWidgetState extends State<ScaffoldWidget> {
           widget.body
         ],
       )),
-      bottomNavigationBar: (_currentPageCubit.state.page == ScaffoldWidgetState.users_page ||
-          _currentPageCubit.state.page == ScaffoldWidgetState.agencies_page ||
-          _currentPageCubit.state.page == ScaffoldWidgetState.products_page ) ? bottomPagesBar() : null,
+      bottomNavigationBar: (isPageablePage(_currentPageCubit.state.page)) ? bottomPagesBar() : null,
     );
   }
 
@@ -90,7 +99,7 @@ class ScaffoldWidgetState extends State<ScaffoldWidget> {
     print("bru, la pagina è " + _currentPageCubit.state.page.toString());
     return BlocBuilder<CurrentPageCubit, CurrentPageState>(
         builder: (context, state){
-      return (state.page == ScaffoldWidgetState.users_page || state.page == ScaffoldWidgetState.agencies_page || state.page == ScaffoldWidgetState.products_page) ? BottomNavigationBarExample(changePageHandle: changePageHandleUser) : ErrorWidget("exception4");
+      return (isPageablePage(state.page)) ? BottomNavigationBarExample(changePageHandle: changePageHandleUser) : ErrorWidget("exception4");
     });
   }
 
