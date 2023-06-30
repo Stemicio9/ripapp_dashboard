@@ -19,67 +19,77 @@ import '../../../../widgets/texts.dart';
 
 
   class DeceasedData extends StatefulWidget {
-  final TextEditingController nameController;
-  final TextEditingController phoneController;
-  final TextEditingController cityController;
-  final TextEditingController lastNameController;
-  final TextEditingController ageController;
-  final TextEditingController dateController;
-  final TextEditingController citiesController;
-  final TextEditingController filterController;
-  bool isEdit = false;
+    final TextEditingController nameController;
+    final TextEditingController phoneController;
+    final TextEditingController cityController;
+    final TextEditingController lastNameController;
+    final TextEditingController ageController;
+    final TextEditingController dateController;
+    final TextEditingController citiesController;
+    final TextEditingController filterController;
+    bool isEdit = false;
 
-  final dynamic nameValidator;
-  final dynamic phoneValidator;
-  final dynamic lastNameValidator;
-  final dynamic ageValidator;
-  final dynamic dateValidator;
-  final dynamic citiesOfInterestValidator;
-  final dynamic cityValidator;
-  final iconOnTap;
-  final imageOnTap;
-  final onDragDone;
-  final onDragUpdated;
-  final onDragEntered;
-  final onDragExited;
-  final Widget child;
-  var imageFile;
-  var memoryImage;
-  final bool isNetwork;
-  final List<CityFromAPI> options;
-  final List<CityFromAPI> citiesOfInterestOptions;
+    final dynamic nameValidator;
+    final dynamic phoneValidator;
+    final dynamic lastNameValidator;
+    final dynamic ageValidator;
+    final dynamic dateValidator;
+    final dynamic citiesOfInterestValidator;
+    final dynamic cityValidator;
+    final iconOnTap;
+    final imageOnTap;
+    final onDragDone;
+    final onDragUpdated;
+    final onDragEntered;
+    final onDragExited;
+    final Widget child;
+    var imageFile;
+    var memoryImage;
+    final bool isNetwork;
+    final List<CityFromAPI> options;
+    final List<CityFromAPI> citiesOfInterestOptions;
 
-   DeceasedData(
-      {super.key,
-        required this.isEdit,
-        this.memoryImage,
-        this.isNetwork = true,
-        required this.imageOnTap,
-        this.nameValidator,
-        this.phoneValidator,
-        this.cityValidator,
-        this.citiesOfInterestValidator,
-        this.lastNameValidator,
-        this.ageValidator,
-        this.dateValidator,
-        required this.child,
-        required this.onDragDone,
-        required this.onDragEntered,
-        required this.onDragExited,
-        required this.onDragUpdated,
-        required this.iconOnTap,
-        required this.citiesController,
-        required this.nameController,
-        required this.phoneController,
-        required this.cityController,
-        required this.filterController,
-        required this.lastNameController,
-        required this.ageController,
-        required this.options,
-        required this.citiesOfInterestOptions,
-        this.imageFile,
-        required this.dateController});
+    DeceasedData({super.key,
+      required this.isEdit,
+      this.memoryImage,
+      this.isNetwork = true,
+      required this.imageOnTap,
+      this.nameValidator,
+      this.phoneValidator,
+      this.cityValidator,
+      this.citiesOfInterestValidator,
+      this.lastNameValidator,
+      this.ageValidator,
+      this.dateValidator,
+      required this.child,
+      required this.onDragDone,
+      required this.onDragEntered,
+      required this.onDragExited,
+      required this.onDragUpdated,
+      required this.iconOnTap,
+      required this.citiesController,
+      required this.nameController,
+      required this.phoneController,
+      required this.cityController,
+      required this.filterController,
+      required this.lastNameController,
+      required this.ageController,
+      required this.options,
+      required this.citiesOfInterestOptions,
+      this.imageFile,
+      required this.dateController});
 
+  @override
+  State<StatefulWidget> createState() {
+    return DeceasedDataState();
+  }
+
+
+  }
+
+   class DeceasedDataState extends State<DeceasedData>{
+
+    List<CityFromAPI> cityList = [];
   @override
   Widget  build(BuildContext context) {
     return  BlocBuilder<SelectedCityCubit, SelectedCityState>(
@@ -406,7 +416,7 @@ import '../../../../widgets/texts.dart';
                   ),
                   Expanded(
                       flex: 2,
-                      child: isEdit ? Container() : Column(
+                      child: widget.isEdit ? Container() : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
