@@ -106,9 +106,9 @@ class ProductsManageState extends State<ProductsManage>{
                             else {
                               return SnackBar(
                                 backgroundColor: green,
-                                content: Row(
+                                content: const Row(
                                   children: [
-                                    const Padding(
+                                    Padding(
                                       padding: EdgeInsets.only(right: 10),
                                       child: Icon(Icons.check_circle_outline_rounded, color: white),
                                     ),
