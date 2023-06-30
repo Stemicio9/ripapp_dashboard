@@ -240,7 +240,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Padding(
-                                                      padding: getPadding(bottom: 5,left: 3),
+                                                      padding: getPadding(bottom: 5,left: 4),
                                                       child: Text(
                                                         'COGNOME',
                                                         style: SafeGoogleFont(
@@ -305,7 +305,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Padding(
-                                                        padding: getPadding(bottom: 5,left: 3),
+                                                        padding: getPadding(bottom: 5,left: 4),
                                                         child: Text(
                                                           'PASSWORD',
                                                           style: SafeGoogleFont(
@@ -378,10 +378,10 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                                 options: cityList,
                                                                 paddingRight: 10,
                                                                 paddingLeft: 0,
+                                                                paddingTop: 0,
+                                                                paddingBottom: 0,
                                                                 hintText: getCurrentLanguageValue(CITY)!,
                                                                 filterController: widget.filterController,
-                                                                paddingTop: 10,
-                                                                paddingBottom: 10,
                                                               )
                                                             ],
                                                           )),
@@ -392,7 +392,7 @@ class UsersFormWidgetState extends State<UsersFormWidget> {
                                                             children: [
                                                               Padding(
                                                                 padding: getPadding(
-                                                                    bottom: 5, left: 3),
+                                                                    bottom: 5, left: 4),
                                                                 child: Text(
                                                                   'TELEFONO',
                                                                   style: SafeGoogleFont(

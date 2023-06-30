@@ -228,12 +228,10 @@ class AgencyFormWidgetState extends State<AgencyFormWidget> {
                                                                 paddingRight: 0,
                                                                 paddingLeft: 10,
                                                                 hintText: "Città",
-                                                                filterController: widget
-                                                                    .cityController,
-                                                                validator: widget
-                                                                    .cityValidator,
-                                                                paddingTop: 10,
-                                                                paddingBottom: 10,
+                                                                filterController: widget.cityController,
+                                                                validator: widget.cityValidator,
+                                                                paddingTop: 0,
+                                                                paddingBottom: 0,
                                                               )
                                                             ],
                                                           );
