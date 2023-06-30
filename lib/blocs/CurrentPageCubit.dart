@@ -41,6 +41,9 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
     else if (pageName == ScaffoldWidgetState.products_page){
       result = await ProductRepository().getAllProductsWithIndex(index);
     }
+    else if (pageName == ScaffoldWidgetState.agency_products_page){
+      result = await AgencyRepository().getAllAgencyProductsWithIndex(index);
+    }
     return result;
   }
 
@@ -48,6 +51,7 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
     print("piccola chiamata 1");
     emit(CurrentPageState(page, [], true, index));
     List<ResultEntity>? resultSet = await findResult(page, index);
+    print("ecco il resultset: " + resultSet.toString());
     emit(CurrentPageState(page, resultSet!, false, index));
   }
 
