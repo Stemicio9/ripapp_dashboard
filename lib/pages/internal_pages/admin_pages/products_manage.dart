@@ -67,8 +67,6 @@ class ProductsManageState extends State<ProductsManage>{
                               }
                           );
 
-                          final User user = FirebaseAuth.instance.currentUser!;
-                          final uid = user.uid;
                           var path = 'profile_images/products_images/productid:${p.firebaseId}/';
 
                           var fileList = await FirebaseStorage.instance.ref(path).listAll();
