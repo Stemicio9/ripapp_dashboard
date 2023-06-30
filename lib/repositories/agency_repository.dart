@@ -32,6 +32,7 @@ class AgencyRepository{
     //print(agencyEntity.toJson());
     var response = await globalDio.post(agencyUrl, data: agencyEntity.toJson());
     SaveAgencyMessage saveAgencyMessage = SaveAgencyMessage.fromJson(response.data);
+    
     if (saveAgencyMessage.message!.startsWith("Duplicate entry"))
       throw new Exception(saveAgencyMessage.message);
     return saveAgencyMessage;

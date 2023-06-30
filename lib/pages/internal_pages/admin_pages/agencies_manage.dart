@@ -185,7 +185,6 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
       emailController.text = "";
       phoneController.text = "";
       cityController.text = "";
-      SuccessSnackbar(context, text: 'Agenzia aggiunta con successo!');
 
       Navigator.pop(context);
     }
