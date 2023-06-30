@@ -20,86 +20,10 @@ import 'package:ripapp_dashboard/widgets/input.dart';
 import '../../../../blocs/selected_city_cubit.dart';
 import '../../../../widgets/autocomplete.dart';
 
-class UsersForm extends StatelessWidget {
-  final String cardTitle;
-  final TextEditingController nameController;
-  final TextEditingController phoneController;
-  final TextEditingController emailController;
-  final TextEditingController lastNameController;
-  final TextEditingController passwordController;
-  final TextEditingController filterController;
-  final dynamic nameValidator;
-  final List<CityFromAPI> options;
-  final dynamic emailValidator;
-  final dynamic phoneValidator;
-  final dynamic lastNameValidator;
-  final dynamic passwordValidator;
-  final onTap;
-  final Function(String selectedValue) statusChange;
-  final Function(AgencyEntity selectedAgency) agencyChange;
-  final List<UserRoles> roles;
-  final bool isAddPage;
 
 
-  const UsersForm({
-    super.key,
-    required this.onTap,
-    required this.cardTitle,
-    this.nameValidator,
-    this.emailValidator,
-    this.phoneValidator,
-    this.lastNameValidator,
-    this.passwordValidator,
-    required this.nameController,
-    required this.emailController,
-    required this.filterController,
-    required this.phoneController,
-    required this.passwordController,
-    required this.lastNameController,
-    required this.statusChange,
-    required this.agencyChange,
-    required this.roles,
-    required this.options,
-    this.isAddPage = true,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => SearchAgencyCubit(),
-        ),
-        BlocProvider(
-          create: (_) => SelectedUserCubit(),
-        ),
-        BlocProvider(create: (_) => CityListCubit()),
-      ],
-      child: UsersFormWidget(
-        onTap: onTap,
-        cardTitle: cardTitle,
-        options: options,
-        filterController: filterController,
-        nameController: nameController,
-        phoneController: phoneController,
-        emailController: emailController,
-        passwordController: passwordController,
-        lastNameController: lastNameController,
-        statusChange: statusChange,
-        agencyChange: agencyChange,
-        roles: roles,
-        nameValidator: nameValidator,
-        lastNameValidator: lastNameValidator,
-        emailValidator: emailValidator,
-        passwordValidator: passwordValidator,
-        phoneValidator: phoneValidator,
-      ),
-    );
-  }
-}
-
-
-class UsersFormWidget extends StatefulWidget {
+class UsersForm extends StatefulWidget {
   final String cardTitle;
   late TextEditingController nameController;
   final TextEditingController phoneController;
@@ -120,7 +44,7 @@ class UsersFormWidget extends StatefulWidget {
   final bool isAddPage;
 
 
-  UsersFormWidget({
+  UsersForm({
     super.key,
     required this.onTap,
     required this.cardTitle,
@@ -144,11 +68,11 @@ class UsersFormWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return UsersFormWidgetState();
+    return UsersFormState();
   }
 }
 
-class UsersFormWidgetState extends State<UsersFormWidget> {
+class UsersFormState extends State<UsersForm> {
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
   SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
   late bool _passwordVisible;
