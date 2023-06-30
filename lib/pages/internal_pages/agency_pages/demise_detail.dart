@@ -24,6 +24,10 @@ class DemiseDetail extends StatefulWidget {
 }
 
 class DemiseDetailState extends State<DemiseDetail> {
+  ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
+  var imageFile = ImagesConstants.imgDemisePlaceholder;
+  var obituaryName = "";
+  var obituaryUrl = "";
   String firstName = "Mario";
   String lastName = "Rossi";
   final String age = "89";
@@ -47,10 +51,7 @@ class DemiseDetailState extends State<DemiseDetail> {
     RelativeEntity(relativeName: 'Padre di', relativePhone: '3409876543'),
   ];
 
-  ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
-  var imageFile = ImagesConstants.imgDemisePlaceholder;
-  var obituaryName = "";
-  var obituaryUrl = "";
+
 
   List<Widget> relativeRows = [];
 
@@ -80,7 +81,7 @@ class DemiseDetailState extends State<DemiseDetail> {
 
     if (fileList.items.isEmpty) {
       var fileList =
-          await FirebaseStorage.instance.ref('profile_images/').listAll();
+      await FirebaseStorage.instance.ref('profile_images/').listAll();
       var file = fileList.items[0];
       var result = await file.getDownloadURL();
       return result;

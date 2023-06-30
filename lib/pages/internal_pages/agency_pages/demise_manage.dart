@@ -71,6 +71,13 @@ class DemiseManageState extends State<DemiseMenage>{
                             final User user = FirebaseAuth.instance.currentUser!;
                             final uid = user.uid;
                             var path = 'profile_images/deceased_images/UID:$uid/demiseId:${p.firebaseid}/';
+                            var obituaryPath = 'obituaries/UID:$uid/demiseId:${p.firebaseid}/';
+
+                            var obituaryList = await FirebaseStorage.instance.ref(obituaryPath).listAll();
+                            if (obituaryList.items.isNotEmpty) {
+                              var fileesistente = obituaryList.items[0];
+                              fileesistente.delete();
+                            }
 
                             var fileList = await FirebaseStorage.instance.ref(path).listAll();
                             if (fileList.items.isNotEmpty) {
