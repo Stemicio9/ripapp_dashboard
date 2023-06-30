@@ -80,6 +80,8 @@ class DemiseTableState extends State<DemiseTable>{
             }
             if (state is SearchDemiseLoaded){
               demises = state.demises;
+              print("LOADED DEMISE");
+              print(demises);
 
               if(demises.isEmpty){
                 return Center(

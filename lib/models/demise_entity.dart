@@ -160,7 +160,7 @@ class DemiseEntity {
     "phonenumber":phoneNumber,
     "firebaseid":firebaseid,
     "age":age,
-    "ts":deceasedDate,
+    "ts":deceasedDate == null ? null : deceasedDate!.toIso8601String(),
     "cities": cities?.map((e) => e.toJson()).toList() ?? [],
 
 

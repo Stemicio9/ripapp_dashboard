@@ -31,8 +31,7 @@ class CityFromAPI {
 
   factory CityFromAPI.fromJson(Map<String, dynamic> json)
   {
-    print("SONO NEL FROMJSON DI CITYFROMAPI");
-    print(json);
+
     return CityFromAPI(
         codice: json["codice"] ?? "",
         name: json["nome"] ?? json["name"] ?? "",
