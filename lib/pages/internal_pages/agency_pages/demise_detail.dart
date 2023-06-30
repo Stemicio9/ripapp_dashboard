@@ -33,12 +33,10 @@ class DemiseDetailState extends State<DemiseDetail> {
   final String city = "Milano";
   final String phoneNumber = "3401234567";
   final String obituaryName = "Necrologio_Mario_Rossi.pdf";
-
   final String funeralDate = "24-03-2023";
   final String funeralNote = "Note del funerale";
   final String funeralAddress = "Via Roma, 56";
   final String funeralHour = "16:00";
-
   final String wakeHour = "09:00";
   final String wakeNote = "Note della veglia";
   final String wakeAddress = "Via Milano, 35";
@@ -51,8 +49,8 @@ class DemiseDetailState extends State<DemiseDetail> {
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
   var imageFile = ImagesConstants.imgDemisePlaceholder;
   List<Widget> relativeRows = [];
-  Future<dynamic> downloadUrlImage(String uid) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/UID:$uid/').listAll();
+  Future<dynamic> downloadUrlImage(String uid,String demiseId) async {
+    var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/UID:$uid/demiseId:$demiseId/').listAll();
     for (var element in fileList.items) {
       print(element.name);
     }
@@ -80,14 +78,15 @@ class DemiseDetailState extends State<DemiseDetail> {
   Widget build(BuildContext context) {
     final User user = FirebaseAuth.instance.currentUser!;
     final uid = user.uid;
-    downloadUrlImage(uid).then((value) => func(value));
     createRelative();
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
           print("il nostro link è " + imageFile.toString());
           return  BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
         builder: (context, state) {
-      firstName = state.selectedDemise.firstName ?? "";
+          downloadUrlImage(uid,state.selectedDemise.firebaseid!).then((value) => func(value));
+
+          firstName = state.selectedDemise.firstName ?? "";
       lastName = state.selectedDemise.lastName ?? "";
       return
 

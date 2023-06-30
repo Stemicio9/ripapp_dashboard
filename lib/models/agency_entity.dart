@@ -20,7 +20,7 @@ class AgencyEntity implements ResultEntity {
   //toString
   @override
   String toString() {
-    return 'AgencyEntity{agencyid: $id, agencyName: $agencyName, email: $email, address: $city, telephoneNumber:$phoneNumber }';
+    return 'AgencyEntity{agencyid: $id, name: $agencyName, email: $email, address: $city, telephoneNumber:$phoneNumber }';
   }
 
   factory AgencyEntity.fromJson(Map<String, dynamic> json) => AgencyEntity(

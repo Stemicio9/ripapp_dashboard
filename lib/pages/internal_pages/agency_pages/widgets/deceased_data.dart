@@ -23,6 +23,7 @@ class DeceasedData extends StatelessWidget {
   final TextEditingController dateController;
   final TextEditingController citiesController;
   final TextEditingController filterController;
+  bool isEdit = false;
 
   final dynamic nameValidator;
   final dynamic phoneValidator;
@@ -46,6 +47,7 @@ class DeceasedData extends StatelessWidget {
 
    DeceasedData(
       {super.key,
+        required this.isEdit,
         this.memoryImage,
         this.isNetwork = true,
         required this.imageOnTap,
@@ -312,6 +314,8 @@ class DeceasedData extends StatelessWidget {
                             options: options,
                             paddingRight: 0,
                             paddingLeft: 0,
+                            paddingTop: 0,
+                            paddingBottom: 0,
                             hintText: getCurrentLanguageValue(CITY)!,
                             filterController: filterController,
                             validator: cityValidator,
@@ -351,6 +355,8 @@ class DeceasedData extends StatelessWidget {
                             options: citiesOfInterestOptions,
                             paddingRight: 20,
                             paddingLeft: 0,
+                            paddingBottom: 0,
+                            paddingTop: 0,
                             hintText: "Comuni di interesse",
                             filterController: citiesController,
                             validator: citiesOfInterestValidator,
@@ -359,7 +365,7 @@ class DeceasedData extends StatelessWidget {
                       )),
                   Expanded(
                       flex: 2,
-                      child:  Column(
+                      child: isEdit ? Container() : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
@@ -384,7 +390,8 @@ class DeceasedData extends StatelessWidget {
                             ),
 
                         ],
-                      ),
+                      )
+                    ,
                     ),
                 ],
               ),

@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -62,8 +64,20 @@ class DemiseManageState extends State<DemiseMenage>{
                   showDialog(
                       context: context,
                       builder: (ctx) => DeleteMessageDialog(
-                          onConfirm: (){
+                          onConfirm: () async {
                             _searchDemiseCubit.delete(p.id);
+
+
+                            final User user = FirebaseAuth.instance.currentUser!;
+                            final uid = user.uid;
+                            var path = 'profile_images/deceased_images/UID:$uid/demiseId:${p.firebaseid}/';
+
+                            var fileList = await FirebaseStorage.instance.ref(path).listAll();
+                            if (fileList.items.isNotEmpty) {
+                              var fileesistente = fileList.items[0];
+                              fileesistente.delete();
+                            }
+
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 backgroundColor: green,

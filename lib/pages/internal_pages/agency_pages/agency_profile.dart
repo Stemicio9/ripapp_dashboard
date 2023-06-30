@@ -57,7 +57,6 @@ class AgencyProfileState extends State<AgencyProfile> {
     var file = fileList.items[0];
     var result = await file.getDownloadURL();
 
-
     return result;
   }
 
@@ -96,9 +95,20 @@ class AgencyProfileState extends State<AgencyProfile> {
                     context: context,
                     builder: (ctx) =>
                         DeleteMessageDialog(
-                            onConfirm: () {
+                            onConfirm: () async {
                               print(userEntity.id);
                               _userListCubit.delete(userEntity.id);
+
+                              final User user = FirebaseAuth.instance.currentUser!;
+                              final uid = user.uid;
+                              var path = 'profile_images/users_images/UID:$uid/';
+
+                              var fileList = await FirebaseStorage.instance.ref(path).listAll();
+                              if (fileList.items.isNotEmpty) {
+                                var fileesistente = fileList.items[0];
+                                fileesistente.delete();
+                              }
+
                               FirebaseAuth.instance.signOut();
                             },
                             onCancel: () {
@@ -129,8 +139,7 @@ class AgencyProfileState extends State<AgencyProfile> {
                               lastNameValidator: notEmptyValidate,
                               nameValidator: notEmptyValidate,
                               changePassword: () {
-                                SuccessSnackbar(context,
-                                    text: 'Ti abbiamo inviato una mail per il reset della password!');
+                                SuccessSnackbar(context, text: 'Ti abbiamo inviato una mail per il reset della password!');
                                 Navigator.pop(context);
                               },
                               onTap: () {

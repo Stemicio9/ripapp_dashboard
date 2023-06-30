@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
@@ -56,8 +58,7 @@ class ProductsManageState extends State<ProductsManage>{
                 showDialog(
                     context: context,
                     builder: (ctx) => DeleteMessageDialog(
-                        onConfirm: (){
-                          //_searchProductsCubit.delete(p.id);
+                        onConfirm: () async {
                           ProductRepository().deleteProduct(p.id).then((deleteProductMessage) {
                             SuccessSnackbar(context, text: "Prodotto eliminato con successo");
                           }, onError: (e) {
@@ -65,6 +66,14 @@ class ProductsManageState extends State<ProductsManage>{
                               ErrorSnackbar(context, text: 'Prodotto usato da agenzie');
                               }
                           );
+
+                          var path = 'profile_images/products_images/productid:${p.firebaseId}/';
+
+                          var fileList = await FirebaseStorage.instance.ref(path).listAll();
+                          if (fileList.items.isNotEmpty) {
+                            var fileesistente = fileList.items[0];
+                            fileesistente.delete();
+                          }
 
                           Navigator.pop(context);
                           BlocBuilder<SearchProductCubit, SearchProductState>(
@@ -95,9 +104,9 @@ class ProductsManageState extends State<ProductsManage>{
                             else {
                               return SnackBar(
                                 backgroundColor: green,
-                                content: Row(
+                                content: const Row(
                                   children: [
-                                    const Padding(
+                                    Padding(
                                       padding: EdgeInsets.only(right: 10),
                                       child: Icon(Icons.check_circle_outline_rounded, color: white),
                                     ),
