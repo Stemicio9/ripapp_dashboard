@@ -64,7 +64,6 @@ class AgencyFormState extends State<AgencyForm> {
     _cityListCubit.fetchCityList();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return  BlocBuilder<SelectedCityCubit, SelectedCityState>(
@@ -73,13 +72,12 @@ class AgencyFormState extends State<AgencyForm> {
             print("QUI SI SELEZIONA LA CITTA");
             widget.cityController.text = stateCity.selectedCity.name ?? "";
             print("LA CITTA DELL'AGENZIA é $city");
-            return
-              BlocBuilder<SelectedAgencyCubit, SelectedAgencyState>(
+            return BlocBuilder<SelectedAgencyCubit, SelectedAgencyState>(
                   builder: (context, state) {
                     if (state is SelectedAgencyState) {
                       widget.nameController.text = state.selectedAgency.agencyName ??  widget.nameController.text;
                       widget.phoneController.text = state.selectedAgency.phoneNumber ??  widget.phoneController.text;
-                      widget.cityController.text = state.selectedAgency.city ??  widget.cityController.text;
+
                       return Container(
                         padding: getPadding(left: 20, right: 20),
                         child: Column(
@@ -129,39 +127,32 @@ class AgencyFormState extends State<AgencyForm> {
                                                             color: background),
                                                       )
                                                     ],
-                                                  )),
+                                                  )
+                                              ),
                                               Expanded(
                                                 flex: 1,
-                                                child: BlocBuilder<
-                                                    CityListCubit,
-                                                    CityListState>(
-                                                    builder: (context,
-                                                        cityState) {
+                                                child: BlocBuilder<CityListCubit, CityListState>(
+                                                    builder: (context, cityState) {
                                                       if (cityState is CityListLoading) {
-                                                        return const Center(
-                                                            child: CircularProgressIndicator()
-                                                        );
+                                                        return const Center(child: CircularProgressIndicator());
                                                       } else
                                                       if (cityState is CityListLoaded) {
-                                                        cityList =
-                                                            cityState.listCity;
-                                                        if (cityList
-                                                            .isNotEmpty) {
+                                                        cityList = cityState.listCity;
+                                                        if (cityList.isNotEmpty) {
+                                                          widget.cityController.text = state.selectedAgency.city ?? widget.cityController.text;
+                                                          print("STAMPO LA CITTA");
+                                                          print( widget.cityController.text);
                                                           return Column(
-                                                            crossAxisAlignment: CrossAxisAlignment
-                                                                .start,
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
                                                               Padding(
-                                                                padding: getPadding(
-                                                                    bottom: 5,
-                                                                    left: 3),
+                                                                padding: getPadding(bottom: 5, left: 3),
                                                                 child: Text(
                                                                   'CITTÀ',
                                                                   style: SafeGoogleFont(
                                                                     'Montserrat',
                                                                     fontSize: 14,
-                                                                    fontWeight: FontWeight
-                                                                        .w600,
+                                                                    fontWeight: FontWeight.w600,
                                                                     color: background,
                                                                   ),
                                                                 ),
@@ -180,8 +171,7 @@ class AgencyFormState extends State<AgencyForm> {
                                                           );
                                                         }
                                                       }
-                                                      return ErrorWidget(
-                                                          "errore di connessione");
+                                                      return ErrorWidget("errore di connessione");
                                                     }),),
                                             ],
 
@@ -195,8 +185,7 @@ class AgencyFormState extends State<AgencyForm> {
                                               Expanded(
                                                   flex: 1,
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment
-                                                        .start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Padding(
                                                         padding: getPadding(
@@ -213,36 +202,26 @@ class AgencyFormState extends State<AgencyForm> {
                                                         ),
                                                       ),
                                                       InputsV2Widget(
-                                                        hinttext: getCurrentLanguageValue(
-                                                            PHONE_NUMBER)!,
-                                                        controller: widget
-                                                            .phoneController,
-                                                        validator: widget
-                                                            .phoneValidator,
+                                                        hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
+                                                        controller: widget.phoneController,
+                                                        validator: widget.phoneValidator,
                                                         paddingLeft: 0,
                                                         paddingRight: 10,
-                                                        inputFormatters: <
-                                                            TextInputFormatter>[
-                                                          FilteringTextInputFormatter
-                                                              .digitsOnly,
+                                                        inputFormatters: <TextInputFormatter>[
+                                                          FilteringTextInputFormatter.digitsOnly,
                                                         ],
-                                                        borderSide: const BorderSide(
-                                                            color: greyState),
-                                                        activeBorderSide: const BorderSide(
-                                                            color: background),
+                                                        borderSide: const BorderSide(color: greyState),
+                                                        activeBorderSide: const BorderSide(color: background),
                                                       )
                                                     ],
                                                   )),
                                               Expanded(
                                                   flex: 1,
-                                                  child: widget.isAddPage
-                                                      ? Column(
-                                                    crossAxisAlignment: CrossAxisAlignment
-                                                        .start,
+                                                  child: widget.isAddPage ? Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Padding(
-                                                        padding: getPadding(
-                                                            bottom: 5, left: 3),
+                                                        padding: getPadding(bottom: 5, left: 3),
                                                         child: Text(
                                                           'EMAIL',
                                                           style: SafeGoogleFont(
@@ -255,14 +234,12 @@ class AgencyFormState extends State<AgencyForm> {
                                                         ),
                                                       ),
                                                       InputsV2Widget(
-                                                        hinttext: getCurrentLanguageValue(
-                                                            EMAIL)!,
+                                                        hinttext: getCurrentLanguageValue(EMAIL)!,
                                                         controller: widget.emailController,
                                                         validator: widget.emailValidator,
                                                         paddingRight: 0,
                                                         paddingLeft: 10,
-                                                        borderSide: const BorderSide(
-                                                            color: greyState),
+                                                        borderSide: const BorderSide(color: greyState),
                                                         activeBorderSide: const BorderSide(
                                                             color: background),
                                                       )
