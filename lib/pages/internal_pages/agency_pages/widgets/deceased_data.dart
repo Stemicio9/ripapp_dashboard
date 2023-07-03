@@ -1,5 +1,3 @@
-
-import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +5,6 @@ import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/widgets/autocomplete.dart';
 import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
-
 import '../../../../blocs/city_list_cubit.dart';
 import '../../../../blocs/selected_city_cubit.dart';
 import '../../../../constants/colors.dart';
@@ -38,18 +35,16 @@ class DeceasedData extends StatefulWidget {
   final dynamic cityValidator;
   final iconOnTap;
   final imageOnTap;
-  final onDragDone;
-  final onDragUpdated;
-  final onDragEntered;
-  final onDragExited;
-  final Widget child;
   var imageFile;
   var memoryImage;
   final bool isNetwork;
+  final Widget child;
   final List<CityFromAPI> options;
   final List<CityFromAPI> citiesOfInterestOptions;
 
+
   DeceasedData({super.key,
+    required this.child,
     required this.isEdit,
     this.memoryImage,
     this.isNetwork = true,
@@ -61,11 +56,6 @@ class DeceasedData extends StatefulWidget {
     this.lastNameValidator,
     this.ageValidator,
     this.dateValidator,
-    required this.child,
-    required this.onDragDone,
-    required this.onDragEntered,
-    required this.onDragExited,
-    required this.onDragUpdated,
     required this.iconOnTap,
     required this.citiesController,
     required this.nameController,
@@ -77,7 +67,8 @@ class DeceasedData extends StatefulWidget {
     required this.options,
     required this.citiesOfInterestOptions,
     this.imageFile,
-    required this.dateController});
+    required this.dateController,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -384,8 +375,7 @@ class DeceasedDataState extends State<DeceasedData>{
                                   builder: (context, cityState) {
                                     if (cityState is CityListLoading) {
                                       print("DECESSED DATA CITY LOADING");
-                                      return const Center(
-                                          child: CircularProgressIndicator());
+                                      return const Center(child: CircularProgressIndicator());
                                     } else if (cityState is CityListLoaded) {
                                       cityList = cityState.listCity;
                                       print("decesssed city: $cityList");
@@ -440,11 +430,8 @@ class DeceasedDataState extends State<DeceasedData>{
                                     ),
                                   ),
 
-                                  DropTarget(
-                                    onDragDone: widget.onDragDone,
-                                    onDragUpdated: widget.onDragUpdated,
-                                    onDragEntered: widget.onDragEntered,
-                                    onDragExited: widget.onDragExited,
+                                  Container(
+                                    alignment: Alignment.center,
                                     child: widget.child,
                                   ),
 
