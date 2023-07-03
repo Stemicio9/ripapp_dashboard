@@ -112,24 +112,21 @@ class _DropZoneWidgetState extends State<DropZoneWidget> {
   }
 
   Widget buildFileDetail(File_Data_Model? file) {
-    return Container(
-      margin: const EdgeInsets.only(left: 24),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Text(
-              file!.name,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w800, fontSize: 18, color: white),
-            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: Text(
+            file!.name,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                fontWeight: FontWeight.w800, fontSize: 18, color: white),
           ),
-          Text('Dimensione: ${file.size}',
-              style: const TextStyle(fontSize: 16, color: white)),
-        ],
-      ),
+        ),
+        Text('Dimensione: ${file.size}',
+            style: const TextStyle(fontSize: 16, color: white)),
+      ],
     );
   }
 
