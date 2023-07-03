@@ -20,6 +20,7 @@ const Color redAccent = Color(0xFFFF0000);
 Color blackTransparent = Color(0xFF000000).withOpacity(0.65);
 Color blackDialog = Color(0xFF000000).withOpacity(0.95);
 Color blackDivider = Color(0xFF3D3D3D).withOpacity(0.3);
+Color backgroundWithOpacity = Color(0xFF412268).withOpacity(0.8);
 
 
 
