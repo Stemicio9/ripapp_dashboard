@@ -120,12 +120,13 @@ class _DropZoneWidgetState extends State<DropZoneWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
-              'Nome file: ${file?.name}',
+              file!.name,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                   fontWeight: FontWeight.w800, fontSize: 18, color: white),
             ),
           ),
-          Text('Size: ${file?.size}',
+          Text('Dimensione: ${file.size}',
               style: const TextStyle(fontSize: 16, color: white)),
         ],
       ),
