@@ -52,7 +52,6 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
   }
 
   void loadPage(String page, int index) async {
-    print("piccola chiamata 1");
     emit(CurrentPageState(page, [], true, index));
     List<ResultEntity>? resultSet = await findResult(page, index);
     print("ecco il resultset: " + resultSet.toString());

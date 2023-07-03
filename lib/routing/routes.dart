@@ -40,11 +40,12 @@ class RouterManager {
         ),
 
         GoRoute(
-            path: "/dashboard", //for admins
+            //path: "/dashboard", //for admins
+            path: AppPage.adminScaffold.path, //for admins
             builder: (context, state) =>  Dashboard(),
         ),
         GoRoute(
-            path: "/dashboardagency",
+            path: AppPage.agencyScaffold.path,
             builder: (context, state) => DashboardAgency(),
           routes: [
             GoRoute(

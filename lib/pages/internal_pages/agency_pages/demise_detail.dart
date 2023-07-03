@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
+import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_detail.dart';
@@ -24,6 +26,7 @@ class DemiseDetail extends StatefulWidget {
 }
 
 class DemiseDetailState extends State<DemiseDetail> {
+  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
   var imageFile = ImagesConstants.imgDemisePlaceholder;
   var obituaryName = "";
@@ -105,6 +108,7 @@ class DemiseDetailState extends State<DemiseDetail> {
 
   @override
   Widget build(BuildContext context) {
+    _currentPageCubit.changeCurrentPage(RouteConstants.demiseDetail);
     final User user = FirebaseAuth.instance.currentUser!;
     final uid = user.uid;
     createRelative();
