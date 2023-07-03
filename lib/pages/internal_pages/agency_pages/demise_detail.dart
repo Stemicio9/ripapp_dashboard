@@ -48,15 +48,12 @@ class DemiseDetailState extends State<DemiseDetail> {
   final String wakeAddress = "Via Milano, 35";
   final String wakeDate = "23-03-2023";
   final TextEditingController relativeController = TextEditingController();
+  List<Widget> relativeRows = [];
 
   late List<RelativeEntity> relativeList = [
     RelativeEntity(relativeName: 'Madre di', relativePhone: '3401234567'),
     RelativeEntity(relativeName: 'Padre di', relativePhone: '3409876543'),
   ];
-
-
-
-  List<Widget> relativeRows = [];
 
   void downloadFile(String url) {
     html.AnchorElement anchorElement =  html.AnchorElement(href: url);
@@ -66,9 +63,7 @@ class DemiseDetailState extends State<DemiseDetail> {
 
 
   Future<dynamic> downloadObituary(String uid, String demiseId) async {
-    var fileList = await FirebaseStorage.instance
-        .ref('obituaries/UID:$uid/demiseId:$demiseId/')
-        .listAll();
+    var fileList = await FirebaseStorage.instance.ref('obituaries/UID:$uid/demiseId:$demiseId/').listAll();
     var file = fileList.items[0];
     var result = await file.getDownloadURL();
     return result;
@@ -83,8 +78,7 @@ class DemiseDetailState extends State<DemiseDetail> {
     }
 
     if (fileList.items.isEmpty) {
-      var fileList =
-      await FirebaseStorage.instance.ref('profile_images/').listAll();
+      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
       var file = fileList.items[0];
       var result = await file.getDownloadURL();
       return result;
@@ -111,13 +105,14 @@ class DemiseDetailState extends State<DemiseDetail> {
     _currentPageCubit.changeCurrentPage(RouteConstants.demiseDetail);
     final User user = FirebaseAuth.instance.currentUser!;
     final uid = user.uid;
+
     createRelative();
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
       return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
           builder: (context, state) {
-        downloadUrlImage(uid, state.selectedDemise.firebaseid!)
-            .then((value) => func(value));
+        downloadUrlImage(uid, state.selectedDemise.firebaseid!).then((value) => func(value));
+
         downloadObituary(uid, state.selectedDemise.firebaseid!).then((value) {
           obituary(value);
           obituaryName = extractFileNameFromFirebaseUrl(value);
@@ -175,7 +170,9 @@ class DemiseDetailState extends State<DemiseDetail> {
                           funeralDate: funeralDate,
                           funeralNote: funeralNote,
                           funeralHour: funeralHour,
-                          funeralAddress: funeralAddress)),
+                          funeralAddress: funeralAddress
+                      )
+                  ),
 
                   //add relative
                   Padding(

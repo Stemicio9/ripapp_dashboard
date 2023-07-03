@@ -1,5 +1,3 @@
-
-import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -13,20 +11,17 @@ import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/dropzone/file_data_model.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
-import 'package:cross_file/cross_file.dart';
-import 'package:ripapp_dashboard/widgets/texts.dart';
-import '../../../constants/colors.dart';
 import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
 import '../../../constants/validators.dart';
 import '../../../utils/size_utils.dart';
 import 'package:intl/intl.dart';
-
 import '../../../widgets/action_button.dart';
 import '../../../widgets/snackbars.dart';
 
@@ -62,10 +57,7 @@ class EditDemiseState extends State<EditDemise> {
   final TextEditingController funeralNoteController = TextEditingController();
 
   final TextEditingController relativeController = TextEditingController();
-  final List<XFile> _list = [];
-  bool _dragging = false;
   final _formKey = GlobalKey<FormState>();
-  Offset? offset;
   DateTime? wakeDate;
   DateTime? funeralDate;
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
@@ -217,87 +209,12 @@ class EditDemiseState extends State<EditDemise> {
                                 print("Date is not selected");
                               }
                             },
-                            onDragDone: (detail) async {
-                              setState(() {
-                                _list.addAll(detail.files);
-                              });
+                            child: Container(),
 
-                              debugPrint('onDragDone:');
-                              for (final file in detail.files) {
-                                debugPrint('  ${file.path} ${file.name}'
-                                    '  ${await file.lastModified()}'
-                                    '  ${await file.length()}'
-                                    '  ${file.mimeType}');
-                              }
-                            },
-                            onDragUpdated: (details) {
-                              setState(() {
-                                offset = details.localPosition;
-                              });
-                            },
-                            onDragEntered: (detail) {
-                              setState(() {
-                                _dragging = true;
-                                offset = detail.localPosition;
-                              });
-                            },
-                            onDragExited: (detail) {
-                              setState(() {
-                                _dragging = false;
-                                offset = null;
-                              });
-                            },
-                            child: DottedBorder(
-                              strokeWidth: 1,
-                              child: Container(
-                                height: 200,
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width,
-                                decoration: BoxDecoration(
-                                  color:
-                                  _dragging
-                                      ? Colors.blue.withOpacity(0.4)
-                                      : greyDrag,
-                                ),
-                                child: Stack(
-                                  children: [
-                                    if (_list.isEmpty)
-                                      Center(
-                                        child: Texth2V2(
-                                          testo: "Trascina qui un file",
-                                          color: greyDisabled,
-                                          weight: FontWeight.bold,
-                                        ),
-
-                                      )
-                                    else
-                                      Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: Texth4V2(
-                                          testo: _list.map((e) => e.name).join(
-                                              "\n"),
-                                          color: black,
-                                          weight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    if (offset != null)
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Text(
-                                          '$offset',
-                                          style: Theme
-                                              .of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        ),
-                                      )
-                                  ],
-                                ),
-                              ),
-                            ),
                           ) : Container(),
+
+
+
 
                           //wake data
                           Padding(

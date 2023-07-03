@@ -241,8 +241,7 @@ class DeceasedDetail extends StatelessWidget{
                               cursor: SystemMouseCursors.click,
                               child:GestureDetector(
                                 onTap: downloadObituary,
-                                child: const Icon(
-                                    Icons.download_rounded, color: background
+                                child: const Icon(Icons.download_rounded, color: background
                                 ),
                               )
                           )
