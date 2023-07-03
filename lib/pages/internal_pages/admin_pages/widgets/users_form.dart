@@ -107,6 +107,8 @@ class UsersFormState extends State<UsersForm> {
             widget.nameController.text = state.selectedUser.firstName ?? widget.nameController.text;
             widget.lastNameController.text = state.selectedUser.lastName ?? widget.lastNameController.text;
             widget.phoneController.text = state.selectedUser.phoneNumber ?? widget.phoneController.text;
+            if (state.selectedUser.status == null)
+              widget.statusChange(UserRoles.Utente.name);
             return Padding(
                 padding: getPadding(left: 20, right: 20),
                 child: Column(
