@@ -26,6 +26,7 @@ class DemiseCubit extends Cubit<DemiseState> {
       DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset))
           .then((demises) => emit(SearchDemiseLoaded(demises, false))).catchError((e) => emit(SearchDemiseLoaded(List.empty(growable: false), false)));
       */
+      //var demises = await DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset));
       var demises = await DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset));
       print(demises);
       emit(SearchDemiseLoaded(demises, false));

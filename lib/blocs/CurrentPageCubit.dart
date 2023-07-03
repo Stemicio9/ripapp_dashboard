@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
+import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/ResultSet.dart';
@@ -43,6 +44,9 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
     }
     else if (pageName == ScaffoldWidgetState.agency_products_page){
       result = await AgencyRepository().getAllAgencyProductsWithIndex(index);
+    }
+    else if (pageName == ScaffoldWidgetState.agency_demises_page){
+      result = await DemiseRepository().getDemisesPaginated(index);
     }
     return result;
   }

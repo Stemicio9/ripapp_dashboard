@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/browser.dart';
@@ -9,6 +10,7 @@ import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
+import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
 
 class DemiseRepository{
   static final DemiseRepository _demiseRepository = DemiseRepository._internal();
@@ -88,6 +90,35 @@ class DemiseRepository{
     List<DemiseEntity> demises = (res.data as List).map((e) => DemiseEntity.fromJson(e)).toList();
 
     print(" demises"+ demises.toString());
+    return demises;
+  }
+
+  Future<List<DemiseEntity>> getDemisesPaginated(int pageIndex) async {
+    Response res;
+
+    Map<String, dynamic>? parameters = {};
+    int pageNumber = 1;
+    int pageElements = 3;
+    AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
+
+    try {
+      //res = await _dio.post(searchDemisesByCityUrl, data: demisesSearchEntity.toJson(), options: Options(headers: buildHeaders()));
+      UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
+      var userId = (user != null) ? user.id : 48;
+      Map<String, dynamic>? parameters = {};
+      parameters.putIfAbsent("userid", () => userId);
+      parameters.putIfAbsent("pageNumber", () => (pageIndex));
+      parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
+      res = await globalDio.get(searchDemisesByCityUrl, queryParameters: parameters);
+    }
+    on DioError catch (e) {
+      return List.empty(growable: true);
+    }
+    if (res.statusCode != 201 && res.statusCode != 200) {
+      return List.empty(growable: true);
+    }
+    String goodJson = jsonEncode(res.data);
+    List<DemiseEntity> demises =  ((jsonDecode(goodJson) as Map)["content"] as List).map((e) => DemiseEntity.fromJson(e)).toList();
     return demises;
   }
 

@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/relative_entity.dart';
+import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
-class DemiseEntity {
+class DemiseEntity implements ResultEntity {
 
   //deceased data
   int? id;

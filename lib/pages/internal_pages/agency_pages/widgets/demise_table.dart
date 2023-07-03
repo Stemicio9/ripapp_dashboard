@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
@@ -7,6 +8,7 @@ import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
+import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
 
@@ -33,11 +35,13 @@ class DemiseTable extends StatefulWidget {
 
 
 class DemiseTableState extends State<DemiseTable>{
-  DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
+  //DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
+  CurrentPageCubit  get _currentPageCubit => context.read<CurrentPageCubit>();
 
   @override
   void initState() {
-    _searchDemiseCubit.fetchDemises(cities: [], sorting: SearchSorting.name, offset: 0);
+    //_searchDemiseCubit.fetchDemises(cities: [], sorting: SearchSorting.name, offset: 0);
+    _currentPageCubit.loadPage(ScaffoldWidgetState.agency_demises_page, _currentPageCubit.state.pageNumber);
     super.initState();
   }
 
@@ -69,17 +73,17 @@ class DemiseTableState extends State<DemiseTable>{
   @override
   Widget build(BuildContext context) {
     return
-      BlocBuilder<DemiseCubit, DemiseState>(
+      BlocBuilder<CurrentPageCubit, CurrentPageState>(
           builder: (context, state) {
             print("COSTRUISCO LO STATO");
             print(state.runtimeType.toString());
-            if (state is SearchDemiseLoading) {
+            if (state.loading) {
               return const Center(
                   child: CircularProgressIndicator()
               );
             }
-            if (state is SearchDemiseLoaded){
-              demises = state.demises;
+            else {
+              demises = state.resultSet as List<DemiseEntity>;
               print("LOADED DEMISE");
               print(demises);
 
@@ -116,13 +120,10 @@ class DemiseTableState extends State<DemiseTable>{
                   columns: createHeaderTable(),
                   rows: createRows(),
                 ),
-              );}}
-            else return ErrorWidget("ERRORE DI CARICAMENTO");
-          });
-
-
-
-
+              );
+              }
+            }
+  });
   }
 
 
