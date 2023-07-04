@@ -46,9 +46,6 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
     }
     else if (pageName == ScaffoldWidgetState.agency_products_page){
       result = await AgencyRepository().getAllAgencyProductsWithIndex(index);
-      List<ProductEntity> products = result as List<ProductEntity>;
-      print("eccoti solo i prodotti offerti: " + products.toString());
-      result = products;
     }
     else if (pageName == ScaffoldWidgetState.agency_demises_page){
       result = await DemiseRepository().getDemisesPaginated(index);

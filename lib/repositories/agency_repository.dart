@@ -76,7 +76,7 @@ class AgencyRepository{
   Future<List<ProductEntity>> getAllAgencyProductsWithIndex(int pageIndex) async {
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
-    int pageElements = 1;
+    int pageElements = 10;
     AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
     var userId = (user != null) ? user.id : "48";
