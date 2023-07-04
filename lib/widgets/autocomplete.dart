@@ -87,8 +87,7 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
           print("CITY CONTIENE");
           print(city);
         }
-        print(" AUTOCOMPLETE CITY");
-        print(city);
+        print("CITTA NON SELEZIONATA");
         return Padding(
           padding: EdgeInsets.only(
               left: widget.paddingLeft,
@@ -96,18 +95,18 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
               top: widget.paddingTop,
               bottom: widget.paddingBottom),
           child: Autocomplete<CityFromAPI>(
+              initialValue: TextEditingValue(text: widget.filterController.text),
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (textEditingValue.text == '') {
                   return const Iterable<CityFromAPI>.empty();
                 }
                 return widget.options.where((CityFromAPI option) {
-                  return option.name!
-                      .toLowerCase()
-                      .contains(textEditingValue.text.toLowerCase());
+                  return option.name!.toLowerCase().contains(textEditingValue.text.toLowerCase());
                 });
               },
               displayStringForOption: (CityFromAPI option) => option.name!,
-              fieldViewBuilder: (BuildContext context,
+              fieldViewBuilder: (
+                  BuildContext context,
                   TextEditingController textEditingController,
                   FocusNode focusNode,
                   VoidCallback onFieldSubmitted) {
