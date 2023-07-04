@@ -494,6 +494,12 @@ class UsersFormState extends State<UsersForm> {
                                                                 }
                                                                 else {
                                                                   List<AgencyEntity> agencies = agencyState.agencies;
+                                                                  if (state.selectedUser.agency == null && state.selectedUser.status == UserStatus.agency) {
+                                                                    widget
+                                                                        .agencyChange(
+                                                                        agencyState
+                                                                            .selectedAgency!);
+                                                                  }
                                                                   return DropdownButton<AgencyEntity>(
                                                                     hint: const Padding(
                                                                       padding: EdgeInsets.only(left: 20),
