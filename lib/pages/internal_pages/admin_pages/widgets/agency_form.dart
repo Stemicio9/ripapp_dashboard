@@ -69,15 +69,18 @@ class AgencyFormState extends State<AgencyForm> {
     return  BlocBuilder<SelectedCityCubit, SelectedCityState>(
         builder: (context, stateCity) {
           if (stateCity is SelectedCityState) {
-            print("QUI SI SELEZIONA LA CITTA");
-            widget.cityController.text = stateCity.selectedCity.name ?? "";
-            print("LA CITTA DELL'AGENZIA é $city");
             return BlocBuilder<SelectedAgencyCubit, SelectedAgencyState>(
                   builder: (context, state) {
                     if (state is SelectedAgencyState) {
-                      widget.nameController.text = state.selectedAgency.agencyName ??  widget.nameController.text;
-                      widget.phoneController.text = state.selectedAgency.phoneNumber ??  widget.phoneController.text;
-
+                      if(widget.isAddPage){
+                        widget.nameController.text = "";
+                        widget.phoneController.text = "";
+                        widget.cityController.text = "";
+                      }else{
+                        widget.cityController.text = stateCity.selectedCity.name ?? widget.cityController.text;
+                        widget.nameController.text = state.selectedAgency.agencyName ??  widget.nameController.text;
+                        widget.phoneController.text = state.selectedAgency.phoneNumber ??  widget.phoneController.text;
+                      }
                       return Container(
                         padding: getPadding(left: 20, right: 20),
                         child: Column(

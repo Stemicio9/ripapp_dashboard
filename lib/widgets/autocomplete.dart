@@ -98,7 +98,7 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
               top: widget.paddingTop,
               bottom: widget.paddingBottom),
           child: Autocomplete<CityFromAPI>(
-              initialValue: TextEditingValue(text: widget.filterController.text),
+            //  initialValue: TextEditingValue(text: widget.filterController.text),
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (textEditingValue.text == '') {
                   return const Iterable<CityFromAPI>.empty();

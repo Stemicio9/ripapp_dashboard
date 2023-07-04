@@ -89,15 +89,15 @@ class ProductFormState extends State<ProductForm> {
 
                 if(widget.isEdit){
                   downloadUrlImage(state.selectedProduct.firebaseId!).then((value) => func(value));
+                  nameController.text = state.selectedProduct.name ?? nameController.text;
+                  priceController.text = state.selectedProduct.price.toString();
                 }else{
                   downloadUrlImage(null).then((value) => func(value));
-
+                  nameController.text = "";
+                  priceController.text = "";
                 }
 
-                   nameController.text = state.selectedProduct.name ?? "";
-                  if(state.selectedProduct.price != null){
-                    priceController.text = state.selectedProduct.price.toString();
-                  }
+
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Form(

@@ -65,7 +65,6 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
 
   SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
-  CityListCubit get _cityListCubit => context.read<CityListCubit>();
   List<CityFromAPI> cityList = [];
 
   List<CityFromAPI> cityOptions = [];
