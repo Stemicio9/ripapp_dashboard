@@ -37,6 +37,7 @@ class UsersForm extends StatefulWidget {
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
   final dynamic passwordValidator;
+  final dynamic cityValidator;
   final onTap;
   final Function(String selectedValue) statusChange;
   final Function(AgencyEntity selectedAgency) agencyChange;
@@ -53,6 +54,7 @@ class UsersForm extends StatefulWidget {
     this.phoneValidator,
     this.lastNameValidator,
     this.passwordValidator,
+    this.cityValidator,
     required this.nameController,
     required this.emailController,
     required this.filterController,
@@ -102,185 +104,100 @@ class UsersFormState extends State<UsersForm> {
             print("QUESTA é LA CITTA SELEZIONATA DELL?UTENTE");
             print(widget.filterController.text);
             return BlocBuilder<SelectedUserCubit, SelectedUserState>(
-        builder: (context, state) {
-          if (state is SelectedUserState) {
-            widget.nameController.text = state.selectedUser.firstName ?? widget.nameController.text;
-            widget.lastNameController.text = state.selectedUser.lastName ?? widget.lastNameController.text;
-            widget.phoneController.text = state.selectedUser.phoneNumber ?? widget.phoneController.text;
-            if (state.selectedUser.status == null)
-              widget.statusChange(UserRoles.Utente.name);
-            return Padding(
-                padding: getPadding(left: 20, right: 20),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
+                builder: (context, state) {
+                  if (state is SelectedUserState) {
+                    widget.nameController.text = state.selectedUser.firstName ?? widget.nameController.text;
+                    widget.lastNameController.text = state.selectedUser.lastName ?? widget.lastNameController.text;
+                    widget.phoneController.text = state.selectedUser.phoneNumber ?? widget.phoneController.text;
+                    if (state.selectedUser.status == null)
+                      widget.statusChange(UserRoles.Utente.name);
+                    return Padding(
                         padding: getPadding(left: 20, right: 20),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 700,
-                              child: DialogCard(
-                                  cancelIcon: true,
-                                  paddingLeft: 10,
-                                  paddingRight: 10,
-                                  cardTitle: widget.cardTitle,
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: getPadding(bottom: 30),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                                flex: 1,
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: getPadding(bottom: 5),
-                                                      child: Text(
-                                                        'NOME',
-                                                        style: SafeGoogleFont(
-                                                          'Montserrat',
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.w600,
-                                                          color: background,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    InputsV2Widget(
-                                                      hinttext: getCurrentLanguageValue(NAME)!,
-                                                      controller: widget.nameController,
-                                                      validator: widget.nameValidator,
-                                                      paddingLeft: 0,
-                                                      paddingRight: 10,
-                                                      borderSide: const BorderSide(color: greyState),
-                                                      activeBorderSide: const BorderSide(color: background),
-                                                    )
-                                                  ],
-                                                )),
-                                            Expanded(
-                                                flex: 1,
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: getPadding(bottom: 5,left: 4),
-                                                      child: Text(
-                                                        'COGNOME',
-                                                        style: SafeGoogleFont(
-                                                          'Montserrat',
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.w600,
-                                                          color: background,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    InputsV2Widget(
-                                                      hinttext: getCurrentLanguageValue(LAST_NAME)!,
-                                                      controller: widget.lastNameController,
-                                                      validator: widget.lastNameValidator,
-                                                      paddingRight: 0,
-                                                      paddingLeft: 10,
-                                                      borderSide: const BorderSide(color: greyState),
-                                                      activeBorderSide: const BorderSide(color: background),
-                                                    )
-                                                  ],
-                                                )),
-                                          ],
-                                        ),
-                                      ),
-                                      Visibility(
-                                        visible: widget.isAddPage,
-                                        child: Padding(
-                                          padding: getPadding(bottom: 30),
-                                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: getPadding(left: 20, right: 20),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 700,
+                                      child: DialogCard(
+                                          cancelIcon: true,
+                                          paddingLeft: 10,
+                                          paddingRight: 10,
+                                          cardTitle: widget.cardTitle,
+                                          child: Column(
                                             children: [
-                                              Expanded(
-                                                  flex: 1,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Padding(
-                                                        padding: getPadding(bottom: 5),
-                                                        child: Text(
-                                                          'EMAIL',
-                                                          style: SafeGoogleFont(
-                                                            'Montserrat',
-                                                            fontSize: 14,
-                                                            fontWeight: FontWeight.w600,
-                                                            color: background,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      InputsV2Widget(
-                                                        hinttext: getCurrentLanguageValue(EMAIL)!,
-                                                        controller: widget.emailController,
-                                                        validator: widget.emailValidator,
-                                                        paddingLeft: 0,
-                                                        paddingRight: 10,
-                                                        borderSide: const BorderSide(color: greyState),
-                                                        activeBorderSide: const BorderSide(color: background),
-                                                      )
-                                                    ],
-                                                  )),
-                                              Expanded(
-                                                  flex: 1,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Padding(
-                                                        padding: getPadding(bottom: 5,left: 4),
-                                                        child: Text(
-                                                          'PASSWORD',
-                                                          style: SafeGoogleFont(
-                                                            'Montserrat',
-                                                            fontSize: 14,
-                                                            fontWeight: FontWeight.w600,
-                                                            color: background,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      InputsV2Widget(
-                                                        iconOnTap: (){
-                                                          setState(() {
-                                                            _passwordVisible = !_passwordVisible;
-                                                          });
-                                                        },
-                                                        isPassword: !_passwordVisible,
-                                                        hinttext: getCurrentLanguageValue(PASSWORD)!,
-                                                        controller: widget.passwordController,
-                                                        validator: widget.passwordValidator,
-                                                        paddingRight: 0,
-                                                        suffixIcon: _passwordVisible ? ImagesConstants.imgPassSee : ImagesConstants.imgPassUnsee,
-                                                        isSuffixIcon: true,
-                                                        suffixIconHeight: 25,
-                                                        suffixIconWidth: 25,
-                                                        paddingLeft: 10,
-                                                        borderSide: const BorderSide(color: greyState),
-                                                        activeBorderSide: const BorderSide(color: background),
-                                                      )
-                                                    ],
-                                                  )
-
-
+                                              Padding(
+                                                padding: getPadding(bottom: 30),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                        flex: 1,
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Padding(
+                                                              padding: getPadding(bottom: 5),
+                                                              child: Text(
+                                                                'NOME',
+                                                                style: SafeGoogleFont(
+                                                                  'Montserrat',
+                                                                  fontSize: 14,
+                                                                  fontWeight: FontWeight.w600,
+                                                                  color: background,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            InputsV2Widget(
+                                                              hinttext: getCurrentLanguageValue(NAME)!,
+                                                              controller: widget.nameController,
+                                                              validator: widget.nameValidator,
+                                                              paddingLeft: 0,
+                                                              paddingRight: 10,
+                                                              borderSide: const BorderSide(color: greyState),
+                                                              activeBorderSide: const BorderSide(color: background),
+                                                            )
+                                                          ],
+                                                        )),
+                                                    Expanded(
+                                                        flex: 1,
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Padding(
+                                                              padding: getPadding(bottom: 5,left: 4),
+                                                              child: Text(
+                                                                'COGNOME',
+                                                                style: SafeGoogleFont(
+                                                                  'Montserrat',
+                                                                  fontSize: 14,
+                                                                  fontWeight: FontWeight.w600,
+                                                                  color: background,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            InputsV2Widget(
+                                                              hinttext: getCurrentLanguageValue(LAST_NAME)!,
+                                                              controller: widget.lastNameController,
+                                                              validator: widget.lastNameValidator,
+                                                              paddingRight: 0,
+                                                              paddingLeft: 10,
+                                                              borderSide: const BorderSide(color: greyState),
+                                                              activeBorderSide: const BorderSide(color: background),
+                                                            )
+                                                          ],
+                                                        )),
+                                                  ],
+                                                ),
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: getPadding(bottom: 30),
-                                        child: BlocBuilder<CityListCubit, CityListState>(
-                                            builder: (context, cityState) {
-                                              if (cityState is CityListLoading) {
-                                                return const Center(
-                                                    child: CircularProgressIndicator());
-                                              } else if (cityState is CityListLoaded) {
-                                                cityList = cityState.listCity;
-                                                if (cityList.isNotEmpty) {
-                                                  return Row(
+                                              Visibility(
+                                                visible: widget.isAddPage,
+                                                child: Padding(
+                                                  padding: getPadding(bottom: 30),
+                                                  child: Row(
                                                     children: [
                                                       Expanded(
                                                           flex: 1,
@@ -290,7 +207,7 @@ class UsersFormState extends State<UsersForm> {
                                                               Padding(
                                                                 padding: getPadding(bottom: 5),
                                                                 child: Text(
-                                                                  'CITTÀ',
+                                                                  'EMAIL',
                                                                   style: SafeGoogleFont(
                                                                     'Montserrat',
                                                                     fontSize: 14,
@@ -299,18 +216,108 @@ class UsersFormState extends State<UsersForm> {
                                                                   ),
                                                                 ),
                                                               ),
-
-                                                              AutocompleteWidget(
-                                                                options: cityList,
-                                                                paddingRight: 10,
+                                                              InputsV2Widget(
+                                                                hinttext: getCurrentLanguageValue(EMAIL)!,
+                                                                controller: widget.emailController,
+                                                                validator: widget.emailValidator,
                                                                 paddingLeft: 0,
-                                                                paddingTop: 0,
-                                                                paddingBottom: 0,
-                                                                hintText: getCurrentLanguageValue(CITY)!,
-                                                                filterController: widget.filterController,
+                                                                paddingRight: 10,
+                                                                borderSide: const BorderSide(color: greyState),
+                                                                activeBorderSide: const BorderSide(color: background),
                                                               )
                                                             ],
                                                           )),
+                                                      Expanded(
+                                                          flex: 1,
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              Padding(
+                                                                padding: getPadding(bottom: 5,left: 4),
+                                                                child: Text(
+                                                                  'PASSWORD',
+                                                                  style: SafeGoogleFont(
+                                                                    'Montserrat',
+                                                                    fontSize: 14,
+                                                                    fontWeight: FontWeight.w600,
+                                                                    color: background,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              InputsV2Widget(
+                                                                iconOnTap: (){
+                                                                  setState(() {
+                                                                    _passwordVisible = !_passwordVisible;
+                                                                  });
+                                                                },
+                                                                isPassword: !_passwordVisible,
+                                                                hinttext: getCurrentLanguageValue(PASSWORD)!,
+                                                                controller: widget.passwordController,
+                                                                validator: widget.passwordValidator,
+                                                                paddingRight: 0,
+                                                                suffixIcon: _passwordVisible ? ImagesConstants.imgPassSee : ImagesConstants.imgPassUnsee,
+                                                                isSuffixIcon: true,
+                                                                suffixIconHeight: 25,
+                                                                suffixIconWidth: 25,
+                                                                paddingLeft: 10,
+                                                                borderSide: const BorderSide(color: greyState),
+                                                                activeBorderSide: const BorderSide(color: background),
+                                                              )
+                                                            ],
+                                                          )
+
+
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                  padding: getPadding(bottom: 30),
+                                                  child: Row(
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: BlocBuilder<CityListCubit, CityListState>(
+                                                            builder: (context, cityState) {
+                                                              if (cityState is CityListLoading) {
+                                                                return const Center(
+                                                                    child: CircularProgressIndicator());
+                                                              } else if (cityState is CityListLoaded) {
+                                                                cityList = cityState.listCity;
+                                                                if (cityList.isNotEmpty) {
+                                                                  return Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding: getPadding(bottom: 5),
+                                                                        child: Text(
+                                                                          'CITTÀ',
+                                                                          style: SafeGoogleFont(
+                                                                            'Montserrat',
+                                                                            fontSize: 14,
+                                                                            fontWeight: FontWeight.w600,
+                                                                            color: background,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+
+                                                                      AutocompleteWidget(
+                                                                        options: cityList,
+                                                                        validator: widget.cityValidator,
+                                                                        paddingRight: 10,
+                                                                        paddingLeft: 0,
+                                                                        paddingTop: 0,
+                                                                        paddingBottom: 0,
+                                                                        hintText: getCurrentLanguageValue(CITY)!,
+                                                                        filterController: widget.filterController,
+                                                                      )
+                                                                    ],
+                                                                  );
+                                                                }
+                                                              }return ErrorWidget("errore di connessione");
+
+                                                            }),),
                                                       Expanded(
                                                           flex: 1,
                                                           child: Column(
@@ -346,240 +353,238 @@ class UsersFormState extends State<UsersForm> {
                                                                     color: background),
                                                               )
                                                             ],
+
                                                           )),
                                                     ],
-                                                  );
+                                                  )
 
 
-                                                }
-                                              }return ErrorWidget("errore di connessione");
 
-                                            }),
-                                      ),
-                                      Padding(
-                                        padding: getPadding(bottom: 40),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                                flex: 1,
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                              ),
+                                              Padding(
+                                                padding: getPadding(bottom: 40),
+                                                child: Row(
                                                   children: [
-                                                    Padding(
-                                                      padding: getPadding(bottom: 5),
-                                                      child: Text(
-                                                        'RUOLO',
-                                                        style: SafeGoogleFont(
-                                                          'Montserrat',
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.w600,
-                                                          color: background,
-                                                        ),
-                                                      ),
-                                                    ),
-
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          right: 10),
-                                                      child: Container(
-                                                        height: 48,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(3),
-                                                            border: Border.all(color: greyState)
-                                                        ),
-                                                        child: DropdownButton<UserRoles>(
-                                                          hint: const Text(
-                                                            "Seleziona ruolo",
-                                                            style: TextStyle(
-                                                              color: black,
-                                                              fontSize: 14,
-                                                              fontWeight: FontWeight.normal,
-                                                            ),
-                                                          ),
-
-                                                          isExpanded: true,
-                                                          underline: const SizedBox(),
-                                                          value: fromUserStatus(state.selectedUser.status ?? UserStatus.active),
-                                                          onChanged: (UserRoles? value) {
-                                                            _selectedUserCubit.selectUser(state.selectedUser.copyWith(status: fromUserRole(value ?? UserRoles.Utente)));
-                                                            widget.statusChange(value?.name ?? "");
-                                                          },
-                                                          items: widget.roles.map((
-                                                              UserRoles role) {
-                                                            return DropdownMenuItem<
-                                                                UserRoles>(
-                                                              value: role,
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.only(left: 20),
-                                                                child: Text(
-                                                                  role.name,
-                                                                  style: const TextStyle(
-                                                                    color: black,
-                                                                    fontSize: 14,
-                                                                  ),
+                                                    Expanded(
+                                                        flex: 1,
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Padding(
+                                                              padding: getPadding(bottom: 5),
+                                                              child: Text(
+                                                                'RUOLO',
+                                                                style: SafeGoogleFont(
+                                                                  'Montserrat',
+                                                                  fontSize: 14,
+                                                                  fontWeight: FontWeight.w600,
+                                                                  color: background,
                                                                 ),
                                                               ),
-                                                            );
-                                                          }).toList(),
-                                                        ),
-                                                      ),
-                                                    ),
+                                                            ),
 
-
-                                                  ],
-                                                )),
-                                            Expanded(
-                                                flex: 1,
-                                                child: state.selectedUser.status?.name.toLowerCase() == 'agency' ?
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: getPadding(bottom: 5, left: 4),
-                                                      child: Text(
-                                                        'AGENZIA',
-                                                        style: SafeGoogleFont(
-                                                          'Montserrat',
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.w600,
-                                                          color: background,
-                                                        ),
-                                                      ),
-                                                    ),
-
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(left: 10),
-                                                      child: Container(
-                                                        height: 48,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(3),
-                                                            border: Border.all(color: greyState)
-                                                        ),
-                                                        child: BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
-                                                            builder: (context, agencyState) {
-                                                              if (agencyState is SearchAgencyLoading) {
-                                                                return const Center(child: CircularProgressIndicator());
-                                                              } else
-                                                              if (agencyState is SearchAgencyLoaded) {
-                                                                if (agencyState.agencies.isEmpty) {
-                                                                  return DropdownButton<
-                                                                      String>(
-                                                                    hint: const Padding(
-                                                                      padding: EdgeInsets.only(left: 20),
-                                                                      child: Text(
-                                                                        "Seleziona agenzia",
-                                                                        style: TextStyle(
-                                                                          color: black,
-                                                                          fontSize: 14,
-                                                                          fontWeight: FontWeight
-                                                                              .normal,
-                                                                        ),
-                                                                      ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(
+                                                                  right: 10),
+                                                              child: Container(
+                                                                height: 48,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.circular(3),
+                                                                    border: Border.all(color: greyState)
+                                                                ),
+                                                                child: DropdownButton<UserRoles>(
+                                                                  hint: const Text(
+                                                                    "Seleziona ruolo",
+                                                                    style: TextStyle(
+                                                                      color: black,
+                                                                      fontSize: 14,
+                                                                      fontWeight: FontWeight.normal,
                                                                     ),
+                                                                  ),
 
-                                                                    isExpanded: true,
-                                                                    underline: const SizedBox(),
-                                                                    onChanged: (String? value) {
-
-                                                                    },
-                                                                    items: emptyList.map<
-                                                                        DropdownMenuItem<String>>((String value) {
-                                                                      return DropdownMenuItem<String>(
-                                                                        value: value,
+                                                                  isExpanded: true,
+                                                                  underline: const SizedBox(),
+                                                                  value: fromUserStatus(state.selectedUser.status ?? UserStatus.active),
+                                                                  onChanged: (UserRoles? value) {
+                                                                    _selectedUserCubit.selectUser(state.selectedUser.copyWith(status: fromUserRole(value ?? UserRoles.Utente)));
+                                                                    widget.statusChange(value?.name ?? "");
+                                                                  },
+                                                                  items: widget.roles.map((
+                                                                      UserRoles role) {
+                                                                    return DropdownMenuItem<
+                                                                        UserRoles>(
+                                                                      value: role,
+                                                                      child: Padding(
+                                                                        padding: const EdgeInsets.only(left: 20),
                                                                         child: Text(
-                                                                            value),
-                                                                      );
-                                                                    }).toList(),
-                                                                  );
-                                                                }
-                                                                else {
-                                                                  List<AgencyEntity> agencies = agencyState.agencies;
-                                                                  if (state.selectedUser.agency == null && state.selectedUser.status == UserStatus.agency) {
-                                                                    widget
-                                                                        .agencyChange(
-                                                                        agencyState
-                                                                            .selectedAgency!);
-                                                                  }
-                                                                  return DropdownButton<AgencyEntity>(
-                                                                    hint: const Padding(
-                                                                      padding: EdgeInsets.only(left: 20),
-                                                                      child: Text(
-                                                                        "Seleziona agenzia",
-                                                                        style: TextStyle(
-                                                                          color: black,
-                                                                          fontSize: 14,
-                                                                          fontWeight: FontWeight.normal,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-
-                                                                    isExpanded: true,
-                                                                    underline: const SizedBox(),
-                                                                    value: state.selectedUser.agency ?? agencyState.selectedAgency,
-                                                                    onChanged: (AgencyEntity? value) {
-                                                                      _searchAgencyCubit.changeSelectedAgency(value);
-                                                                      if (value != null) {
-                                                                        widget.agencyChange(value);
-                                                                      }
-                                                                    },
-                                                                    items: agencies.map((AgencyEntity agency) {
-                                                                      return DropdownMenuItem<AgencyEntity>(
-                                                                        value: agency,
-                                                                        child: Padding(
-                                                                          padding: const EdgeInsets.only(left: 20),
-                                                                          child: Text(
-                                                                            agency.agencyName ?? "",
-                                                                            style: const TextStyle(
-                                                                              color: black,
-                                                                              fontSize: 14,
-                                                                            ),
+                                                                          role.name,
+                                                                          style: const TextStyle(
+                                                                            color: black,
+                                                                            fontSize: 14,
                                                                           ),
                                                                         ),
-                                                                      );
-                                                                    }).toList(),
-                                                                  );
-                                                                }
-                                                              }
-                                                              else
-                                                                return ErrorWidget("errore di connessione");
-                                                              //TODO aggiungere errore
-                                                            }
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ) : Container()),
-                                          ],
-                                        ),
-                                      ),
+                                                                      ),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
+                                                            ),
 
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: ActionButtonV2(
-                                          action: (){
-                                            print("CHIAMO LA FORM SUBMIT");
-                                            widget.onTap(stateCity.selectedCity);
-                                            },
-                                          text: getCurrentLanguageValue(SAVE)!,
-                                        ),
-                                      )
-                                    ],
-                                  )),
-                            )
-                          ],
-                        ),
-                      )
-                    ]
-                )
-            );
+
+                                                          ],
+                                                        )),
+                                                    Expanded(
+                                                        flex: 1,
+                                                        child: state.selectedUser.status?.name.toLowerCase() == 'agency' ?
+                                                        Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Padding(
+                                                              padding: getPadding(bottom: 5, left: 4),
+                                                              child: Text(
+                                                                'AGENZIA',
+                                                                style: SafeGoogleFont(
+                                                                  'Montserrat',
+                                                                  fontSize: 14,
+                                                                  fontWeight: FontWeight.w600,
+                                                                  color: background,
+                                                                ),
+                                                              ),
+                                                            ),
+
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(left: 10),
+                                                              child: Container(
+                                                                height: 48,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.circular(3),
+                                                                    border: Border.all(color: greyState)
+                                                                ),
+                                                                child: BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
+                                                                    builder: (context, agencyState) {
+                                                                      if (agencyState is SearchAgencyLoading) {
+                                                                        return const Center(child: CircularProgressIndicator());
+                                                                      } else
+                                                                      if (agencyState is SearchAgencyLoaded) {
+                                                                        if (agencyState.agencies.isEmpty) {
+                                                                          return DropdownButton<
+                                                                              String>(
+                                                                            hint: const Padding(
+                                                                              padding: EdgeInsets.only(left: 20),
+                                                                              child: Text(
+                                                                                "Seleziona agenzia",
+                                                                                style: TextStyle(
+                                                                                  color: black,
+                                                                                  fontSize: 14,
+                                                                                  fontWeight: FontWeight
+                                                                                      .normal,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+
+                                                                            isExpanded: true,
+                                                                            underline: const SizedBox(),
+                                                                            onChanged: (String? value) {
+
+                                                                            },
+                                                                            items: emptyList.map<
+                                                                                DropdownMenuItem<String>>((String value) {
+                                                                              return DropdownMenuItem<String>(
+                                                                                value: value,
+                                                                                child: Text(
+                                                                                    value),
+                                                                              );
+                                                                            }).toList(),
+                                                                          );
+                                                                        }
+                                                                        else {
+                                                                          List<AgencyEntity> agencies = agencyState.agencies;
+                                                                          if (state.selectedUser.agency == null && state.selectedUser.status == UserStatus.agency) {
+                                                                            widget
+                                                                                .agencyChange(
+                                                                                agencyState
+                                                                                    .selectedAgency!);
+                                                                          }
+                                                                          return DropdownButton<AgencyEntity>(
+                                                                            hint: const Padding(
+                                                                              padding: EdgeInsets.only(left: 20),
+                                                                              child: Text(
+                                                                                "Seleziona agenzia",
+                                                                                style: TextStyle(
+                                                                                  color: black,
+                                                                                  fontSize: 14,
+                                                                                  fontWeight: FontWeight.normal,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+
+                                                                            isExpanded: true,
+                                                                            underline: const SizedBox(),
+                                                                            value: state.selectedUser.agency ?? agencyState.selectedAgency,
+                                                                            onChanged: (AgencyEntity? value) {
+                                                                              _searchAgencyCubit.changeSelectedAgency(value);
+                                                                              if (value != null) {
+                                                                                widget.agencyChange(value);
+                                                                              }
+                                                                            },
+                                                                            items: agencies.map((AgencyEntity agency) {
+                                                                              return DropdownMenuItem<AgencyEntity>(
+                                                                                value: agency,
+                                                                                child: Padding(
+                                                                                  padding: const EdgeInsets.only(left: 20),
+                                                                                  child: Text(
+                                                                                    agency.agencyName ?? "",
+                                                                                    style: const TextStyle(
+                                                                                      color: black,
+                                                                                      fontSize: 14,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              );
+                                                                            }).toList(),
+                                                                          );
+                                                                        }
+                                                                      }
+                                                                      else
+                                                                        return ErrorWidget("errore di connessione");
+                                                                      //TODO aggiungere errore
+                                                                    }
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ) : Container()),
+                                                  ],
+                                                ),
+                                              ),
+
+                                              Align(
+                                                alignment: Alignment.centerRight,
+                                                child: ActionButtonV2(
+                                                  action: (){
+                                                    print("CHIAMO LA FORM SUBMIT");
+                                                    widget.onTap(stateCity.selectedCity);
+                                                  },
+                                                  text: getCurrentLanguageValue(SAVE)!,
+                                                ),
+                                              )
+                                            ],
+                                          )),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ]
+                        )
+                    );
+                  }
+                  else
+                    return ErrorWidget("exception2");
+                });
           }
           else
-            return ErrorWidget("exception2");
-        });
-  }
-  else
-  return ErrorWidget("exception");
-} );
+            return ErrorWidget("exception");
+        } );
   }
 }
 

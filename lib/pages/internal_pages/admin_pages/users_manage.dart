@@ -144,6 +144,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                             lastNameValidator: notEmptyValidate,
                             passwordValidator: validatePassword,
                             emailValidator: validateEmail,
+                            cityValidator: notEmptyValidate,
                             phoneValidator: notEmptyValidate,
                             statusChange: setStatusFromDropdown,
                             agencyChange: setAgencyFromDropdown,
@@ -211,6 +212,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                             nameValidator: notEmptyValidate,
                             lastNameValidator: notEmptyValidate,
                             phoneValidator: notEmptyValidate,
+                            cityValidator: notEmptyValidate,
                             roles: UserRoles.values,
                           ),
                         ));

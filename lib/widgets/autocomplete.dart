@@ -52,11 +52,14 @@ class AutocompleteWidget extends StatefulWidget {
   final double paddingBottom; //10
   final FocusNode focusNode = FocusNode();
   final TextEditingController filterController;
+  final TextStyle errorStyle;
+
 
   AutocompleteWidget({
     super.key,
     required this.options,
     this.validator,
+    this.errorStyle = const TextStyle(color: Colors.redAccent),
     required this.hintText,
     this.paddingLeft = 40,
     this.paddingRight = 40,
@@ -132,6 +135,7 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
                     ),
                     hintText: widget.hintText,
                     hoverColor: white,
+                    errorStyle: widget.errorStyle,
                     hintStyle: const TextStyle(color: darkGrey, fontSize: 14),
                     filled: true,
                     contentPadding: const EdgeInsets.only(left: 20),
