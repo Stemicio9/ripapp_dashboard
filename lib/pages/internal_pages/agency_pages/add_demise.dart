@@ -6,9 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
+import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
@@ -62,6 +64,7 @@ class AddDemiseState extends State<AddDemise> {
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
   File_Data_Model? obituaryFile;
+  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
 
   static const List<String> kinship = <String>[
     'Madre',
@@ -99,6 +102,7 @@ class AddDemiseState extends State<AddDemise> {
 
   @override
   Widget build(BuildContext context) {
+    _currentPageCubit.changeCurrentPage(RouteConstants.addDemise);
     final User user = FirebaseAuth.instance.currentUser!;
     final uid = user.uid;
     downloadUrlImage(uid).then((value) => func(value));
