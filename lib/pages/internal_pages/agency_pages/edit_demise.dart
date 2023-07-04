@@ -4,9 +4,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
+import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
@@ -55,6 +57,7 @@ class EditDemiseState extends State<EditDemise> {
   final TextEditingController funeralDateController = TextEditingController();
   final TextEditingController funeralTimeController = TextEditingController();
   final TextEditingController funeralNoteController = TextEditingController();
+  CurrentPageCubit  get _currentPageCubit => context.read<CurrentPageCubit>();
 
   final TextEditingController relativeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -103,6 +106,7 @@ class EditDemiseState extends State<EditDemise> {
 
   @override
   Widget build(BuildContext context) {
+    _currentPageCubit.changeCurrentPage(RouteConstants.editDemise);
     final User user = FirebaseAuth.instance.currentUser!;
     final uid = user.uid;
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
