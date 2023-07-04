@@ -61,11 +61,12 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
       }
       else {
         products.clear();
-        state.resultSet.forEach((
+        products = (state.resultSet as List<ProductEntity>);
+        /*state.resultSet.forEach((
             productOffered) {
           if ((productOffered as ProductOffered).offered)
             products.add(productOffered.productEntity);
-        });
+        });*/
 
         print("products: $products");
         if (products.isEmpty) {

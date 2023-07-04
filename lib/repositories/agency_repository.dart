@@ -73,7 +73,7 @@ class AgencyRepository{
     return products;
   }
 
-  Future<List<ProductOffered>> getAllAgencyProductsWithIndex(int pageIndex) async {
+  Future<List<ProductEntity>> getAllAgencyProductsWithIndex(int pageIndex) async {
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
     int pageElements = 1;
@@ -87,7 +87,7 @@ class AgencyRepository{
     Response res = await globalDio.get(allProductsOfferedByAgencyPaginated, queryParameters: parameters);
     print("eallora?");
     String goodJson = jsonEncode(res.data);
-    List<ProductOffered> productsOffered =  ((jsonDecode(goodJson) as Map)["content"] as List).map((e) => ProductOffered.fromJson(e)).toList();
+    List<ProductEntity> productsOffered =  ((jsonDecode(goodJson) as Map)["content"] as List).map((e) => ProductEntity.fromJson(e)).toList();
     //List<AgencyEntity> agencies = ((jsonDecode(goodJson) as Map)["content"] as List).map((agency) => AgencyEntity.fromJson(agency)).toList();
     print("a zi gustati sta paginetta " + productsOffered.toString());
     return productsOffered;
