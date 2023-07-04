@@ -41,7 +41,7 @@ class UsersForm extends StatefulWidget {
   final onTap;
   final Function(String selectedValue) statusChange;
   final Function(AgencyEntity selectedAgency) agencyChange;
-  final List<UserRoles> roles;
+  late  List<UserRoles> roles;
   final bool isAddPage;
 
 
@@ -106,11 +106,18 @@ class UsersFormState extends State<UsersForm> {
             return BlocBuilder<SelectedUserCubit, SelectedUserState>(
                 builder: (context, state) {
                   if (state is SelectedUserState) {
+                    if(widget.isAddPage){
+                      widget.nameController.text = "";
+                      widget.phoneController.text = "";
+                      widget.lastNameController.text = "";
+                    }else{
                     widget.nameController.text = state.selectedUser.firstName ?? widget.nameController.text;
                     widget.lastNameController.text = state.selectedUser.lastName ?? widget.lastNameController.text;
                     widget.phoneController.text = state.selectedUser.phoneNumber ?? widget.phoneController.text;
-                    if (state.selectedUser.status == null)
+                    }
+                    if (state.selectedUser.status == null) {
                       widget.statusChange(UserRoles.Utente.name);
+                    }
                     return Padding(
                         padding: getPadding(left: 20, right: 20),
                         child: Column(
@@ -405,12 +412,12 @@ class UsersFormState extends State<UsersForm> {
                                                                   isExpanded: true,
                                                                   underline: const SizedBox(),
                                                                   value: fromUserStatus(state.selectedUser.status ?? UserStatus.active),
+                                                                 // value: widget.isAddPage ? fromUserStatus(state.selectedUser.status = UserStatus.active) : fromUserStatus(state.selectedUser.status ?? UserStatus.active),
                                                                   onChanged: (UserRoles? value) {
                                                                     _selectedUserCubit.selectUser(state.selectedUser.copyWith(status: fromUserRole(value ?? UserRoles.Utente)));
                                                                     widget.statusChange(value?.name ?? "");
                                                                   },
-                                                                  items: widget.roles.map((
-                                                                      UserRoles role) {
+                                                                  items: widget.roles.map((UserRoles role) {
                                                                     return DropdownMenuItem<
                                                                         UserRoles>(
                                                                       value: role,
@@ -500,10 +507,7 @@ class UsersFormState extends State<UsersForm> {
                                                                         else {
                                                                           List<AgencyEntity> agencies = agencyState.agencies;
                                                                           if (state.selectedUser.agency == null && state.selectedUser.status == UserStatus.agency) {
-                                                                            widget
-                                                                                .agencyChange(
-                                                                                agencyState
-                                                                                    .selectedAgency!);
+                                                                            widget.agencyChange(agencyState.selectedAgency!);
                                                                           }
                                                                           return DropdownButton<AgencyEntity>(
                                                                             hint: const Padding(
