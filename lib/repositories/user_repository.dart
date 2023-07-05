@@ -25,7 +25,7 @@ class UserRepository {
   final String deleteUrl = "$baseUrl/api/auth/account";
   final String deleteUserUrl = "$baseUrl/api/auth/account";
   final String listAccountUrl = "$baseUrl/api/auth/account/list";
-  final String updateUserUrl = "$baseUrl/api/auth/account";
+  final String updateUserUrl = "$baseUrl/api/auth/account/update";
   final String cityListUrl = "$baseUrl/api/auth/publicCityList";
 
 
@@ -217,9 +217,8 @@ class UserRepository {
     return cityList;
   }
 
-  Future<dynamic> updateUser(int userId, UserEntity userEntity) async{
-    String urlChiamato = '$updateUserUrl/$userId';
-    var response = await globalDio.put(urlChiamato, data: userEntity.toJson());
+  editUser(UserEntity userEntity) async {
+    var response = await globalDio.post(updateUserUrl, data: userEntity.toJson());
     return UserEntity.fromJson(response.data);
   }
 

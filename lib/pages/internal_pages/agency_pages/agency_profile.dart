@@ -11,6 +11,7 @@ import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/edit_profile_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/profile_data.dart';
+import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import '../../../constants/language.dart';
 import '../../../constants/validators.dart';
@@ -142,12 +143,28 @@ class AgencyProfileState extends State<AgencyProfile> {
                                 SuccessSnackbar(context, text: 'Ti abbiamo inviato una mail per il reset della password!');
                                 Navigator.pop(context);
                               },
-                              onTap: () {
+                              onTap: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  SuccessSnackbar(context, text: 'Profilo modificato con successo!');
+
+                                  UserEntity ue = UserEntity(
+                                    id: userEntity.id,
+                                    firstName: nameController.text,
+                                    lastName: lastNameController.text,
+                                    email: emailController.text,
+                                    phoneNumber: phoneController.text
+                                  );
+
+                                  UserRepository().editUser(ue).then((res) {
+                                    SuccessSnackbar(context, text: "Profilo modificato con successo");
+                                  }, onError: (e) {
+                                    ErrorSnackbar(context, text: "Errore generico durante la modifica dell\'utente");
+                                  });
+
+                                  //TODO AGGIORNARE CORRETTAMENTE L'UTENTE DOPO L'EDIT
+                                  String token = UserRepository().getFirebaseToken();
+                                  await UserRepository().loginPreLayer(token);
                                   Navigator.pop(context);
                                   setState(() {
-
                                   });
                                 }
                               }),
