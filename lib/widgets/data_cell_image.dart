@@ -21,8 +21,6 @@ class _DataCellImageState extends State<DataCellImage> {
   @override
   initState() {
     super.initState();
-    print("IL FIREBASE ID DELLO STATO");
-    print(widget.firebaseId);
     downloadUrlImage(widget.firebaseId).then((value) => changeFunction(value));
   }
 

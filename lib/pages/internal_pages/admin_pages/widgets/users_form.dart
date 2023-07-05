@@ -99,9 +99,7 @@ class UsersFormState extends State<UsersForm> {
     return BlocBuilder<SelectedCityCubit, SelectedCityState>(
         builder: (context, stateCity) {
           if (stateCity is SelectedCityState) {
-            print("QUI SELEZIONO LA CITTA DELL'UTENTE");
             widget.filterController.text = stateCity.selectedCity.name ?? widget.filterController.text;
-            print("QUESTA é LA CITTA SELEZIONATA DELL?UTENTE");
             print(widget.filterController.text);
             return BlocBuilder<SelectedUserCubit, SelectedUserState>(
                 builder: (context, state) {
@@ -146,6 +144,8 @@ class UsersFormState extends State<UsersForm> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
+
+                                                            //NAME WITH LABEL
                                                             Padding(
                                                               padding: getPadding(bottom: 5),
                                                               child: Text(
@@ -174,6 +174,8 @@ class UsersFormState extends State<UsersForm> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
+
+                                                            //SURNAME WITH LABEL
                                                             Padding(
                                                               padding: getPadding(bottom: 5,left: 4),
                                                               child: Text(
@@ -211,6 +213,8 @@ class UsersFormState extends State<UsersForm> {
                                                           child: Column(
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
+
+                                                              //EMAIL WITH LABEL
                                                               Padding(
                                                                 padding: getPadding(bottom: 5),
                                                                 child: Text(
@@ -239,6 +243,8 @@ class UsersFormState extends State<UsersForm> {
                                                           child: Column(
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
+
+                                                              //PASSWORD WITH LABEL
                                                               Padding(
                                                                 padding: getPadding(bottom: 5,left: 4),
                                                                 child: Text(
@@ -272,8 +278,6 @@ class UsersFormState extends State<UsersForm> {
                                                               )
                                                             ],
                                                           )
-
-
                                                       ),
                                                     ],
                                                   ),
@@ -288,14 +292,15 @@ class UsersFormState extends State<UsersForm> {
                                                         child: BlocBuilder<CityListCubit, CityListState>(
                                                             builder: (context, cityState) {
                                                               if (cityState is CityListLoading) {
-                                                                return const Center(
-                                                                    child: CircularProgressIndicator());
+                                                                return const Center(child: CircularProgressIndicator());
                                                               } else if (cityState is CityListLoaded) {
                                                                 cityList = cityState.listCity;
                                                                 if (cityList.isNotEmpty) {
                                                                   return Column(
                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                     children: [
+
+                                                                      // CITY WITH LABEL
                                                                       Padding(
                                                                         padding: getPadding(bottom: 5),
                                                                         child: Text(
@@ -308,7 +313,6 @@ class UsersFormState extends State<UsersForm> {
                                                                           ),
                                                                         ),
                                                                       ),
-
                                                                       AutocompleteWidget(
                                                                         options: cityList,
                                                                         validator: widget.cityValidator,
@@ -330,6 +334,8 @@ class UsersFormState extends State<UsersForm> {
                                                           child: Column(
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
+
+                                                              // PHONE NUMBER WITH LABEL
                                                               Padding(
                                                                 padding: getPadding(
                                                                     bottom: 5, left: 4),
@@ -364,9 +370,6 @@ class UsersFormState extends State<UsersForm> {
                                                           )),
                                                     ],
                                                   )
-
-
-
                                               ),
                                               Padding(
                                                 padding: getPadding(bottom: 40),
@@ -377,6 +380,8 @@ class UsersFormState extends State<UsersForm> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
+
+                                                            //DROPDOWN ROLE WITH LABEL
                                                             Padding(
                                                               padding: getPadding(bottom: 5),
                                                               child: Text(
@@ -389,7 +394,6 @@ class UsersFormState extends State<UsersForm> {
                                                                 ),
                                                               ),
                                                             ),
-
                                                             Padding(
                                                               padding: const EdgeInsets.only(
                                                                   right: 10),
@@ -436,8 +440,6 @@ class UsersFormState extends State<UsersForm> {
                                                                 ),
                                                               ),
                                                             ),
-
-
                                                           ],
                                                         )),
                                                     Expanded(
@@ -446,6 +448,8 @@ class UsersFormState extends State<UsersForm> {
                                                         Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
+
+                                                            //AGENCY WITH LABEL
                                                             Padding(
                                                               padding: getPadding(bottom: 5, left: 4),
                                                               child: Text(
@@ -458,7 +462,6 @@ class UsersFormState extends State<UsersForm> {
                                                                 ),
                                                               ),
                                                             ),
-
                                                             Padding(
                                                               padding: const EdgeInsets.only(left: 10),
                                                               child: Container(
@@ -566,7 +569,6 @@ class UsersFormState extends State<UsersForm> {
                                                 alignment: Alignment.centerRight,
                                                 child: ActionButtonV2(
                                                   action: (){
-                                                    print("CHIAMO LA FORM SUBMIT");
                                                     widget.onTap(stateCity.selectedCity);
                                                   },
                                                   text: getCurrentLanguageValue(SAVE)!,

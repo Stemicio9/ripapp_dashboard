@@ -54,6 +54,7 @@ const String INSERT_PHOTO = "Tocca per caricare una foto";
 const String MY_PROFILE = "Il mio profilo";
 const String DELETE_ACCOUNT = "Elimina account";
 const String SELECT_PRODUCTS = "Seleziona prodotti";
+const String PHOTO = "Foto";
 
 
 final Map<String, String> LANG_IT = {
@@ -105,6 +106,7 @@ final Map<String, String> LANG_IT = {
   EDIT_PROFILE: "Modifica profilo",
   DELETE_ACCOUNT: "Elimina account",
   SELECT_PRODUCTS: "Seleziona prodotti",
+  PHOTO: "Foto",
 
   //navbar title
   USERS_MANAGE: "Gestisci utenti",

@@ -11,6 +11,12 @@ class SaveAgencyMessage {
     message: json["message"] ?? "",
   );
 
+  factory SaveAgencyMessage.defaultSaveAgencyMessage() => SaveAgencyMessage(
+    agencySaved: null,
+    message: ""
+  );
+
+
   Map<String, dynamic> toJson() => {
     "agencySaved": agencySaved?.toJson() ?? null,
     "message": message,

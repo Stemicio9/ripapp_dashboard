@@ -12,12 +12,7 @@ class ProfileImageCubit extends Cubit<ProfileImageState> {
 
 @immutable
 class ProfileImageState {
-   bool loaded;
+  bool loaded;
 
   ProfileImageState(this.loaded);
 }
-
-
-
-
-

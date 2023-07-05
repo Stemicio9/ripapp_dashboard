@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
+import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/custom_image_view.dart';
 
 class InputsV2Widget extends StatelessWidget {
   final double round = 30.0;
   final String hintText;
+  final String labelText;
   TextEditingController controller;
   final dynamic validator;
   var onChanged;
@@ -48,12 +50,15 @@ class InputsV2Widget extends StatelessWidget {
   final double paddingTop; //10
   final double paddingBottom; //10
   final inputFormatters;
+  final double labelPaddingTop;
+  final bool isVisible;
 
   InputsV2Widget(
       {required hinttext,
         required this.controller,
         this.isPassword = false,
         this.borderRadius = 3,
+        this.labelPaddingTop = 0,
         this.errorStyle = const TextStyle(color: Colors.redAccent),
         this.elevation = 0,
         this.textAlign = TextAlign.start,
@@ -91,102 +96,123 @@ class InputsV2Widget extends StatelessWidget {
         this.maxLenght = 999999999,
         this.borderSide = BorderSide.none,
         this.mouseCursor = SystemMouseCursors.text,
-        this.activeBorderSide = BorderSide.none
+        this.activeBorderSide = BorderSide.none,
+        this.isVisible = false,
+        this.labelText = "",
       })
       : hintText = hinttext;
 
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
-    return Padding(
-        padding: EdgeInsets.only(
-            left: paddingLeft,
-            right: paddingRight,
-            top: paddingTop,
-            bottom: paddingBottom),
-        child: TextFormField(
-          mouseCursor: mouseCursor,
-          readOnly: readOnly,
-          onTap: onTap,
-          focusNode: focusNode,
-          textAlign: textAlign!,
-          validator: validator,
-          style: TextStyle(
-            fontSize: fontSize,
-          ),
-          obscureText: isPassword,
-          textInputAction: textInputAction,
-          onChanged: onChanged,
-          controller: controller,
-          maxLength: maxLenght,
-          inputFormatters: inputFormatters,
-          keyboardType: multiline ? TextInputType.multiline : keyboard,
-          maxLines: multiline ? maxLine : 1,
-          onEditingComplete: () => node.nextFocus(),
-          enabled: enabled,
-          decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderSide: borderSide,
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: activeBorderSide,
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: rossoopaco),
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: rossoopaco),
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-            hintText: hintText,
-            hoverColor: white,
-            errorStyle: errorStyle,
-            counterText: "",
-            hintStyle: TextStyle(color: darkGrey, fontSize: fontHintSize),
-            filled: true,
-            prefixIcon: isPrefixIcon ? Align(
-              widthFactor: 1.0,
-              heightFactor: 1.0,
-              child: CustomImageView(
-                imagePath: prefixIcon,
-                svgPath: svgPath,
-                height: getSize(
-                  prefixIconHeight,
-                ),
-                width: getSize(
-                  prefixIconWidth,
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Visibility(
+          visible: isVisible,
+          child: Padding(
+            padding: getPadding(bottom: 5,top: labelPaddingTop),
+            child: Text(
+              labelText,
+              style: SafeGoogleFont(
+                'Montserrat',
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: background,
               ),
-            )
-                : null,
-            suffixIcon: isSuffixIcon
-                ? Align(
-              widthFactor: 1.0,
-              heightFactor: 1.0,
-              child: CustomImageView(
-                imagePath: suffixIcon,
-                height: getSize(
-                  suffixIconHeight,
-                ),
-                width: getSize(
-                  suffixIconWidth,
-                ),
-                svgPath: svgPath,
-                onTap: iconOnTap,
-              ),
-            )
-                : null,
-            contentPadding: EdgeInsets.only(
-                left: contentPaddingLeft,
-                right: contentPaddingRight,
-                top: multiline ? 40 : contentPaddingTop),
-            fillColor: white,
-            floatingLabelBehavior: FloatingLabelBehavior.never,
+            ),
           ),
-        ));
+        ),
+        Padding(padding: EdgeInsets.only(
+                left: paddingLeft,
+                right: paddingRight,
+                top: paddingTop,
+                bottom: paddingBottom),
+            child: TextFormField(
+              mouseCursor: mouseCursor,
+              readOnly: readOnly,
+              onTap: onTap,
+              focusNode: focusNode,
+              textAlign: textAlign!,
+              validator: validator,
+              style: TextStyle(
+                fontSize: fontSize,
+              ),
+              obscureText: isPassword,
+              textInputAction: textInputAction,
+              onChanged: onChanged,
+              controller: controller,
+              maxLength: maxLenght,
+              inputFormatters: inputFormatters,
+              keyboardType: multiline ? TextInputType.multiline : keyboard,
+              maxLines: multiline ? maxLine : 1,
+              onEditingComplete: () => node.nextFocus(),
+              enabled: enabled,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderSide: borderSide,
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: activeBorderSide,
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: rossoopaco),
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: rossoopaco),
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+                hintText: hintText,
+                hoverColor: white,
+                errorStyle: errorStyle,
+                counterText: "",
+                hintStyle: TextStyle(color: darkGrey, fontSize: fontHintSize),
+                filled: true,
+                prefixIcon: isPrefixIcon ? Align(
+                  widthFactor: 1.0,
+                  heightFactor: 1.0,
+                  child: CustomImageView(
+                    imagePath: prefixIcon,
+                    svgPath: svgPath,
+                    height: getSize(
+                      prefixIconHeight,
+                    ),
+                    width: getSize(
+                      prefixIconWidth,
+                    ),
+                  ),
+                )
+                    : null,
+                suffixIcon: isSuffixIcon
+                    ? Align(
+                  widthFactor: 1.0,
+                  heightFactor: 1.0,
+                  child: CustomImageView(
+                    imagePath: suffixIcon,
+                    height: getSize(
+                      suffixIconHeight,
+                    ),
+                    width: getSize(
+                      suffixIconWidth,
+                    ),
+                    svgPath: svgPath,
+                    onTap: iconOnTap,
+                  ),
+                )
+                    : null,
+                contentPadding: EdgeInsets.only(
+                    left: contentPaddingLeft,
+                    right: contentPaddingRight,
+                    top: multiline ? 40 : contentPaddingTop),
+                fillColor: white,
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+              ),
+            )),
+      ],
+    );
   }
 }
 

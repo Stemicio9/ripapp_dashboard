@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -34,11 +35,19 @@ class LoginFormState extends State<LoginForm> {
   final double logoWidth = 250;
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
+
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
   late bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
+    if(kDebugMode){
+      _emailTextController.text = "admin@admin.it";
+      _passwordTextController.text = "123456";
+    }
+
+
+
     //_emailTextController.text = "utente@agenzia.it";
     //_passwordTextController.text = "12345678";
     //final authService = watch(Provider.of<CustomFirebaseAuthenticationListener>(context).value);

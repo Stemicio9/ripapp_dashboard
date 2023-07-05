@@ -10,7 +10,7 @@ import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
 
-class UsersTable extends StatefulWidget{
+class UsersTable extends StatefulWidget {
   List<String> headerTitle = [
     'ID',
     'Nome',
@@ -24,12 +24,12 @@ class UsersTable extends StatefulWidget{
   final edit;
   final delete;
   final showDetail;
+
   // final onSort;
   // final sortColumnIndex;
   final String detailMessage;
   final String editMessage;
   final String deleteMessage;
-
 
   UsersTable({
     required this.delete,
@@ -48,18 +48,19 @@ class UsersTable extends StatefulWidget{
   }
 }
 
-
-
-class UsersTableState extends State<UsersTable>{
+class UsersTableState extends State<UsersTable> {
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
+
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
 
   List<UserEntity> usersList = [];
+
   @override
   void initState() {
     //_userListCubit.fetchUsersListWithIndex(0);
     //_currentPageCubit.loadPage(ScaffoldWidgetState.users_page, 0);
-    _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber);
+    _currentPageCubit.loadPage(
+        ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber);
     super.initState();
   }
 
@@ -67,66 +68,57 @@ class UsersTableState extends State<UsersTable>{
   Widget build(BuildContext context) {
     return BlocBuilder<CurrentPageCubit, CurrentPageState>(
         builder: (context, state) {
-
-          if (state.loading) {
-            return const Center(
-                child: CircularProgressIndicator()
-            );
-          } else {
-            usersList = state.resultSet as List<UserEntity>;
-            if (usersList.isEmpty) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 40),
-                  child: Texth2V2(
-                      testo: 'Nessun utente inserito',
-                      weight: FontWeight.bold,
-                      color: background
-                  ),
-                ),
-              );
-            }
-            else {
-              return Container(
-                padding: getPadding(top: 20),
-                width: MediaQuery.of(context).size.width,
-                child: DataTable(
-                  columnSpacing: 30,
-                  dataRowColor: MaterialStateColor.resolveWith((states) => white),
-                  headingRowColor: MaterialStateColor.resolveWith((
-                      states) => background),
-                  border: const TableBorder(
-                    top: BorderSide(width: 0.5, color: greyState),
-                    bottom: BorderSide(width: 0.5, color: greyState),
-                    left: BorderSide(width: 0.5, color: greyState),
-                    right: BorderSide(width: 0.5, color: greyState),
-                    horizontalInside: BorderSide(width: 0.5, color: greyState),
-                  ),
-                  columns: createHeaderTable(),
-                  rows: createRows(usersList),
-                  //   sortColumnIndex: sortColumnIndex,
-                ),
-              );
-            }
-          }
-        });
+      if (state.loading) {
+        return const Center(child: CircularProgressIndicator());
+      } else {
+        usersList = state.resultSet as List<UserEntity>;
+        if (usersList.isEmpty) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: Texth2V2(
+                  testo: 'Nessun utente inserito',
+                  weight: FontWeight.bold,
+                  color: background),
+            ),
+          );
+        } else {
+          return Container(
+            padding: getPadding(top: 20),
+            width: MediaQuery.of(context).size.width,
+            child: DataTable(
+              columnSpacing: 30,
+              dataRowColor: MaterialStateColor.resolveWith((states) => white),
+              headingRowColor:
+                  MaterialStateColor.resolveWith((states) => background),
+              border: const TableBorder(
+                top: BorderSide(width: 0.5, color: greyState),
+                bottom: BorderSide(width: 0.5, color: greyState),
+                left: BorderSide(width: 0.5, color: greyState),
+                right: BorderSide(width: 0.5, color: greyState),
+                horizontalInside: BorderSide(width: 0.5, color: greyState),
+              ),
+              columns: createHeaderTable(),
+              rows: createRows(usersList),
+              //   sortColumnIndex: sortColumnIndex,
+            ),
+          );
+        }
+      }
+    });
   }
-
-
-
 
   List<DataColumn> createHeaderTable() {
     List<DataColumn> res = [];
-    for (var i = 0; i <widget.headerTitle.length; i++) {
+    for (var i = 0; i < widget.headerTitle.length; i++) {
       res.add(DataColumn(
-      //  onSort: onSort,
+        //  onSort: onSort,
         label: Expanded(
             child: Texth4V2(
-              testo: widget.headerTitle[i],
-              color: white,
-              weight: FontWeight.bold,
-            )
-        ),
+          testo: widget.headerTitle[i],
+          color: white,
+          weight: FontWeight.bold,
+        )),
       ));
     }
     return res;
@@ -144,7 +136,8 @@ class UsersTableState extends State<UsersTable>{
   DataRow composeSingleRow(dynamic p) {
     return DataRow(
       cells: <DataCell>[
-        DataCell(Text(p.id.toString(),
+        DataCell(Text(
+          p.id.toString(),
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
@@ -169,31 +162,34 @@ class UsersTableState extends State<UsersTable>{
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
         DataCell(Text(
-          p.status.toString() == 'UserStatus.active' ? 'Utente' :
-          p.status.toString() == 'UserStatus.agency' ? 'Agenzia' :
-          'Amministratore',
+          p.status.toString() == 'UserStatus.active'
+              ? 'Utente'
+              : p.status.toString() == 'UserStatus.agency'
+                  ? 'Agenzia'
+                  : 'Amministratore',
           style: SafeGoogleFont('Montserrat',
               color: black, fontSize: 12, fontWeight: FontWeight.w700),
         )),
-
         DataCell(Row(
           children: [
             Visibility(
-              visible:  p.status.toString() == 'UserStatus.agency',
+              visible: p.status.toString() == 'UserStatus.agency',
               child: Text(
-                p.status.toString() == 'UserStatus.agency' ? p.agency.agencyName : '',
+                p.status.toString() == 'UserStatus.agency'
+                    ? p.agency.agencyName
+                    : '',
                 style: SafeGoogleFont('Montserrat',
                     color: black, fontSize: 12, fontWeight: FontWeight.w700),
               ),
             ),
-
             Visibility(
-              visible: p.status.toString() != 'UserStatus.agency',
-                child: Icon(Icons.cancel_rounded, color: rossoopaco,)
-            )
+                visible: p.status.toString() != 'UserStatus.agency',
+                child: Icon(
+                  Icons.cancel_rounded,
+                  color: rossoopaco,
+                ))
           ],
         )),
-
         DataCell(Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -201,7 +197,9 @@ class UsersTableState extends State<UsersTable>{
               message: widget.detailMessage,
               direction: AxisDirection.down,
               child: GestureDetector(
-                  onTap:  (){widget.showDetail(p);},
+                  onTap: () {
+                    widget.showDetail(p);
+                  },
                   child: const MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Icon(
@@ -216,7 +214,9 @@ class UsersTableState extends State<UsersTable>{
                 message: widget.editMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(
-                    onTap: (){widget.edit(p);},
+                    onTap: () {
+                      widget.edit(p);
+                    },
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Icon(
@@ -228,13 +228,13 @@ class UsersTableState extends State<UsersTable>{
             ),
             Padding(
               padding: getPadding(left: 4),
-              child:TooltipWidget(
+              child: TooltipWidget(
                 message: widget.deleteMessage,
                 direction: AxisDirection.down,
                 child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       widget.delete(p);
-                      },
+                    },
                     child: const MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Icon(
@@ -249,6 +249,4 @@ class UsersTableState extends State<UsersTable>{
       ],
     );
   }
-
-
 }

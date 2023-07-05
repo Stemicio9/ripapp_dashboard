@@ -7,23 +7,28 @@ import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 
 @immutable
-class SearchAgencyState{}
+class SearchAgencyState {}
+
 class SearchAgencyLoading extends SearchAgencyState {}
+
 class SearchAgencyError extends SearchAgencyState {}
+
 class SearchAgencyLoaded extends SearchAgencyState {
   final List<AgencyEntity> agencies;
   final AgencyEntity? selectedAgency;
+
   //final bool loadingMore;
   //SearchAgencyLoaded(this.agencies, this.loadingMore);
   SearchAgencyLoaded(this.agencies, this.selectedAgency);
 
   //copywith si prende una lista di agenzie e una agenzia; se non vengono fornite viene tornata una copia del
   //SearchAgencyLoaded corrente con la sua lista e la sua agenzia
-  SearchAgencyLoaded copyWith({List<AgencyEntity>? agencies, AgencyEntity? selectedAgency,}) {
+  SearchAgencyLoaded copyWith({
+    List<AgencyEntity>? agencies,
+    AgencyEntity? selectedAgency,
+  }) {
     return SearchAgencyLoaded(
-       agencies ?? this.agencies,
-       selectedAgency ?? this.selectedAgency
-    );
+        agencies ?? this.agencies, selectedAgency ?? this.selectedAgency);
   }
 }
 
@@ -35,31 +40,31 @@ class SearchAgencyCubit extends Cubit<SearchAgencyState> {
     try {
       print("FACCIO LA FETCH DELLE AGENZIE");
       // todo manage if agencies is null or empty in response
-        var agencies = await AgencyRepository().getAgencies();
-        if(agencies.isEmpty){
-          emit(SearchAgencyLoaded(agencies, null));
-        }else{
-          emit(SearchAgencyLoaded(agencies, agencies.first));
-        }
-
-    }catch(e){
-        // ignore
+      var agencies = await AgencyRepository().getAgencies();
+      if (agencies.isEmpty) {
+        emit(SearchAgencyLoaded(agencies, null));
+      } else {
+        emit(SearchAgencyLoaded(agencies, agencies.first));
+      }
+    } catch (e) {
+      // ignore
       print("ERRORE SULLA GET");
       print(e);
       emit(SearchAgencyError());
-      }
     }
+  }
 
-    saveAgency(AgencyEntity agencyEntity)async{
+  saveAgency(AgencyEntity agencyEntity) async {
     emit(SearchAgencyLoading());
-    try{
+    try {
       var result = await AgencyRepository().saveAgency(agencyEntity);
       fetchAgencies();
-    }catch(e){
+    } catch (e) {
       emit(SearchAgencyError());
     }
-    }
-  remove(idAgency)async {
+  }
+
+  remove(idAgency) async {
     emit(SearchAgencyLoading());
     try {
       var result = await AgencyRepository().removeAgency(idAgency);
@@ -71,8 +76,8 @@ class SearchAgencyCubit extends Cubit<SearchAgencyState> {
     }
   }
 
-  changeSelectedAgency(AgencyEntity? selectedAgency){
-    if(state is SearchAgencyLoaded && selectedAgency != null){
+  changeSelectedAgency(AgencyEntity? selectedAgency) {
+    if (state is SearchAgencyLoaded && selectedAgency != null) {
       var a = state as SearchAgencyLoaded;
       emit(a.copyWith(selectedAgency: selectedAgency));
     }
@@ -84,18 +89,16 @@ class SearchAgencyCubit extends Cubit<SearchAgencyState> {
       print("FACCIO LA FETCH DELLE AGENZIE");
       // todo manage if agencies is null or empty in response
       var agencies = await AgencyRepository().getAgenciesWithIndex(index);
-      if(agencies.isEmpty){
+      if (agencies.isEmpty) {
         emit(SearchAgencyLoaded(agencies, null));
-      }else{
+      } else {
         emit(SearchAgencyLoaded(agencies, agencies.first));
       }
-
-    }catch(e){
+    } catch (e) {
       // ignore
       print("ERRORE SULLA GET");
       print(e);
       emit(SearchAgencyError());
     }
   }
-
 }

@@ -58,28 +58,29 @@ class SearchProductCubit extends Cubit<SearchProductState>{
     emit(SearchProductLoading());
     try{
       DeleteProductMessage deleteMessage = await ProductRepository().deleteProduct(idProduct);
-      print("b3, "+ deleteMessage.toString());
       fetchProducts();
     }catch(e){
-      print("ERRORE");
-      print(e);
       emit(SearchProductError(e.toString()));
     }
   }
    saveProduct(ProductEntity productEntity) async{
     emit(SearchProductLoading());
     try{
-      print("ci arrivo 0"); //ProductEntity saved =
       var response = await ProductRepository().saveProduct(productEntity);
       ProductEntity p = ProductEntity.fromJson(response);
-      print(p);
-      print("ci arrivo?1");
       fetchProducts();
-      print("ci arrivo?2");
-      emit(SaveProductLoaded(p));
     }catch(e){
-      print("merda");
-      print("errorino di cacca " + e.toString());
+      emit(SearchProductError(e.toString()));
+    }
+  }
+
+  editProduct(ProductEntity productEntity) async {
+    emit(SearchProductLoading());
+    try{
+      var response = await ProductRepository().editProduct(productEntity);
+      ProductEntity p = ProductEntity.fromJson(response);
+      fetchProducts();
+    }catch(e){
       emit(SearchProductError(e.toString()));
     }
   }

@@ -54,7 +54,6 @@ class AutocompleteWidget extends StatefulWidget {
   final TextEditingController filterController;
   final TextStyle errorStyle;
 
-
   AutocompleteWidget({
     super.key,
     required this.options,
@@ -75,22 +74,18 @@ class AutocompleteWidget extends StatefulWidget {
 }
 
 class AutocompleteWidgetState extends State<AutocompleteWidget> {
-   String? city;
-  SelectedCityCubit get _cityFromAPI => context.read<SelectedCityCubit>();
+  String? city;
 
+  SelectedCityCubit get _cityFromAPI => context.read<SelectedCityCubit>();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelectedCityCubit, SelectedCityState>(
         builder: (context, stateCity) {
       if (stateCity is SelectedCityState) {
-        print("Qui ci arrivooo");
-        if (stateCity.selectedCity.name != null ) {
-          city =  stateCity.selectedCity.name?? "";
-          print("CITY CONTIENE");
-          print(city);
+        if (stateCity.selectedCity.name != null) {
+          city = stateCity.selectedCity.name ?? "";
         }
-        print("CITTA NON SELEZIONATA");
         return Padding(
           padding: EdgeInsets.only(
               left: widget.paddingLeft,
@@ -98,7 +93,6 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
               top: widget.paddingTop,
               bottom: widget.paddingBottom),
           child: Autocomplete<CityFromAPI>(
-            //  initialValue: TextEditingValue(text: widget.filterController.text),
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (textEditingValue.text == '') {
                   return const Iterable<CityFromAPI>.empty();
@@ -108,8 +102,7 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
                 });
               },
               displayStringForOption: (CityFromAPI option) => option.name!,
-              fieldViewBuilder: (
-                  BuildContext context,
+              fieldViewBuilder: (BuildContext context,
                   TextEditingController textEditingController,
                   FocusNode focusNode,
                   VoidCallback onFieldSubmitted) {
@@ -146,7 +139,6 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
                   onFieldSubmitted: (String? value) {
                     _cityFromAPI.selectCity(value as CityFromAPI);
                     onFieldSubmitted();
-                    print('You just typed a new entry  $city');
                   },
                 );
               },

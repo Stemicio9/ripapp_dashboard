@@ -13,12 +13,14 @@ import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
 import 'package:ripapp_dashboard/utils/SaveAgencyMessage.dart';
+import 'package:ripapp_dashboard/utils/UpdateAgencyMessage.dart';
 
 
 class AgencyRepository{
   static final AgencyRepository _agencyRepository = AgencyRepository._internal();
   AgencyRepository._internal();
   final String agencyUrl = "$baseUrl/api/auth/agency";
+  final String updateAgencyUrl = "$baseUrl/api/auth/agency/update";
   final String allAgenciesUrl = "$baseUrl/api/auth/agencies";
   final String allAgenciesProductsUrl = "$baseUrl/api/auth/products";
   final String allProductsOfferedByAgency = "$baseUrl/api/auth/productsOffered";
@@ -30,16 +32,20 @@ class AgencyRepository{
   }
 
   Future<dynamic> saveAgency(AgencyEntity agencyEntity) async {
-    //print(agencyEntity.toJson());
     var response = await globalDio.post(agencyUrl, data: agencyEntity.toJson());
     SaveAgencyMessage saveAgencyMessage = SaveAgencyMessage.fromJson(response.data);
-    print("ecco il messaggio " +saveAgencyMessage.message.toString());
-    
-    if (saveAgencyMessage.message!.startsWith("Duplicate entry"))
-      throw new Exception(saveAgencyMessage.message);
+
+    if (saveAgencyMessage.message!.startsWith("Duplicate entry")) {
+      throw Exception(saveAgencyMessage.message);
+    }
     return saveAgencyMessage;
   }
 
+  Future<dynamic> editAgency(AgencyEntity agencyEntity) async {
+    var response = await globalDio.post(updateAgencyUrl, data: agencyEntity.toJson());
+    UpdateAgencyMessage updateAgencyMessage = UpdateAgencyMessage.fromJson(response.data);
+    return updateAgencyMessage;
+  }
 
 
   Future<List<AgencyEntity>> getAgencies() async {

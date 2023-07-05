@@ -18,6 +18,7 @@ class ProductRepository{
   ProductRepository._internal();
   //final String productUrl = "$baseUrl/api/auth/product/fine";
   final String productUrl = "$baseUrl/api/auth/productFromAdmin";
+  final String updateProductUrl = "$baseUrl/api/auth/productFromAdmin/update";
   final String allProductsUrl = "$baseUrl/api/auth/all-products";
   final String deleteProductUrl = "$baseUrl/api/auth/delete";
   final String indexedProductsUrl =  "$baseUrl/api/auth/productsWithIndex";
@@ -28,12 +29,9 @@ class ProductRepository{
   }
 
   Future<dynamic> saveProduct(ProductEntity productEntity) async {
-    print("3");
-    print(productEntity);
     Map<String, String> values = {};
     values.putIfAbsent("idtoken", () => UserRepository().firebaseToken ?? "");
     var response = await globalDio.post(productUrl, data: productEntity.toJson(), options: Options(headers: values));
-    print("risposta cattiva: " + response.toString());
     return response.data;
   }
 
@@ -71,6 +69,13 @@ class ProductRepository{
     //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
     List<ProductEntity> products = ((jsonDecode(goodJson) as Map)["content"] as List).map((product) => ProductEntity.fromJson(product)).toList();
     return products;
+  }
+
+  editProduct(ProductEntity productEntity) async{
+      Map<String, String> values = {};
+      values.putIfAbsent("idtoken", () => UserRepository().firebaseToken ?? "");
+      var response = await globalDio.post(updateProductUrl, data: productEntity.toJson(), options: Options(headers: values));
+      return response.data;
   }
 
 }

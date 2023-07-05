@@ -18,28 +18,23 @@ import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import '../../../blocs/selected_agency_cubit.dart';
 import '../../../models/agency_entity.dart';
 
-
-class AgenciesManage extends StatelessWidget{
-
-
+class AgenciesManage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers:[
-      BlocProvider(
-      create: (_) => UsersListCubit(),
-      ),
-          BlocProvider(
-              create: (_)=> CityListCubit()),
-          BlocProvider(create: (_)=> SelectedCityCubit())
-        ],
+      providers: [
+        BlocProvider(
+          create: (_) => UsersListCubit(),
+        ),
+        BlocProvider(create: (_) => CityListCubit()),
+        BlocProvider(create: (_) => SelectedCityCubit())
+      ],
       child: AgenciesManageWidget(),
     );
   }
 }
 
 class AgenciesManageWidget extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() {
     return AgenciesManageWidgetState();
@@ -50,8 +45,10 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
-  final String message = 'Le informazioni riguardanti questa agenzia verranno definitivamente eliminate. Verranno eliminati anche tutti gli utenti associati a questa agenzia. Sei sicuro di volerle eliminare?';
+  final String message =
+      'Le informazioni riguardanti questa agenzia verranno definitivamente eliminate. Verranno eliminati anche tutti gli utenti associati a questa agenzia. Sei sicuro di volerle eliminare?';
   final String city = 'Roma';
+
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
@@ -59,8 +56,9 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   final TextEditingController phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
-  SelectedAgencyCubit get _selectedAgencyCubit => context.read<SelectedAgencyCubit>();
-  SelectedCityCubit get _selectedCityCubit => context.read<SelectedCityCubit>();
+
+  SelectedAgencyCubit get _selectedAgencyCubit =>
+      context.read<SelectedAgencyCubit>();
   List<CityFromAPI> cityList = [];
 
   @override
@@ -72,25 +70,29 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Header(
-              deleteProfileOnTap: (){},
+              deleteProfileOnTap: () {},
               onTap: () async {
-                showDialog(context: context, builder: (ctx)=> Form(
-                  key: _formKey,
-                  child: AgencyForm(
-                    cityOptions: cityList,
-                    cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
-                    nameController: nameController,
-                    emailController: emailController,
-                    phoneController: phoneController,
-                    cityController: cityController,
-                    nameValidator: notEmptyValidate,
-                    emailValidator: validateEmail,
-                    cityValidator: notEmptyValidate,
-                    phoneValidator: notEmptyValidate,
-                    onSubmit: (){formSubmit();},
-                    isAddPage: true,
-                  ),
-                ));
+                showDialog(
+                    context: context,
+                    builder: (ctx) => Form(
+                          key: _formKey,
+                          child: AgencyForm(
+                            cityOptions: cityList,
+                            cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
+                            nameController: nameController,
+                            emailController: emailController,
+                            phoneController: phoneController,
+                            cityController: cityController,
+                            nameValidator: notEmptyValidate,
+                            emailValidator: validateEmail,
+                            cityValidator: notEmptyValidate,
+                            phoneValidator: notEmptyValidate,
+                            onSubmit: () {
+                              formSubmit();
+                            },
+                            isAddPage: true,
+                          ),
+                        ));
               },
               pageTitle: getCurrentLanguageValue(AGENCIES_MANAGE)!,
               buttonText: getCurrentLanguageValue(ADD_AGENCY)!,
@@ -102,55 +104,55 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                     builder: (ctx) => DeleteMessageDialog(
                         onConfirm: () {
                           _searchAgencyCubit.remove(p.id);
-                          SuccessSnackbar(context, text: 'Agenzia eliminata con successo!');
+                          SuccessSnackbar(context,
+                              text: 'Agenzia eliminata con successo!');
 
                           Navigator.pop(context);
                         },
                         onCancel: () {
                           Navigator.pop(context);
                         },
-                        message: message
-                    ));
+                        message: message));
               },
               edit: (dynamic p) {
                 _selectedAgencyCubit.selectUser(p);
-                showDialog(context: context, builder: (ctx)=> Form(
-                  key: _editKey,
-                  child: AgencyForm(
-                    onSubmit: (){
-                      if (_editKey.currentState!.validate()) {
+                showDialog(
+                    context: context,
+                    builder: (ctx) => Form(
+                          key: _editKey,
+                          child: AgencyForm(
+                            onSubmit: () {
+                              if (_editKey.currentState!.validate()) {
+                                AgencyEntity agencyEntity = AgencyEntity(
+                                    agencyName: nameController.text,
+                                    city: cityController.text,
+                                    phoneNumber: phoneController.text);
 
-                        nameController.text = "";
-                        phoneController.text = "";
-                        cityController.text = "";
+                                saveOrEditAgency(agencyEntity, true);
 
-                        SuccessSnackbar(context, text: 'Agenzia modificata con successo!');
-
-                        Navigator.pop(context);
-                      }
-
-                    },
-                    isAddPage: false,
-                    cityOptions: cityList,
-                    cardTitle: getCurrentLanguageValue(EDIT_AGENCY)!,
-                    nameController: nameController,
-                    emailController: emailController,
-                    phoneController: phoneController,
-                    cityController: cityController,
-                    nameValidator: notEmptyValidate,
-                    cityValidator: notEmptyValidate,
-                    phoneValidator: notEmptyValidate,
-
-                  ),
-                ));
+                                Navigator.pop(context);
+                              }
+                            },
+                            isAddPage: false,
+                            cityOptions: cityList,
+                            cardTitle: getCurrentLanguageValue(EDIT_AGENCY)!,
+                            nameController: nameController,
+                            emailController: emailController,
+                            phoneController: phoneController,
+                            cityController: cityController,
+                            nameValidator: notEmptyValidate,
+                            cityValidator: notEmptyValidate,
+                            phoneValidator: notEmptyValidate,
+                          ),
+                        ));
               },
               showDetail: (dynamic p) {
                 _selectedAgencyCubit.selectUser(p);
                 showDialog(
                     context: context,
                     builder: (ctx) => AgencyDetail(
-                        cardTitle: getCurrentLanguageValue(AGENCY_DETAIL)!,
-                    ));
+                          cardTitle: getCurrentLanguageValue(AGENCY_DETAIL)!,
+                        ));
               },
               detailMessage: detailMessage,
               editMessage: editMessage,
@@ -161,6 +163,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
       ),
     );
   }
+
   formSubmit() {
     if (_formKey.currentState!.validate()) {
       AgencyEntity agencyEntity = AgencyEntity(
@@ -168,31 +171,40 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
         city: cityController.text,
         email: emailController.text,
         phoneNumber: phoneController.text,
-
       );
 
-      AgencyRepository().saveAgency(agencyEntity).then((savedAgency) {
-        SuccessSnackbar(context, text: "Agenzia salvata con successo");
-      }, onError: (e) {
-        if (e.toString().contains("Duplicate entry"))
-          ErrorSnackbar(context, text: 'Questa email è già in uso da un\'altra agenzia');
-      }
-      );
-
-      print("salvataggio agenzia...");
-
-      nameController.text = "";
-      emailController.text = "";
-      phoneController.text = "";
-      cityController.text = "";
+      saveOrEditAgency(agencyEntity, false);
 
       Navigator.pop(context);
     }
   }
-}
 
-Future saveAgency(AgencyEntity agencyEntity) async {
-  var response = await AgencyRepository().saveAgency(agencyEntity);
-  print(response);
-}
+  saveOrEditAgency(AgencyEntity agencyEntity, bool isEdit) {
+    if (isEdit) {
+      AgencyRepository().editAgency(agencyEntity).then((savedAgency) {
+        clearControllers();
+        SuccessSnackbar(context, text: "Agenzia modificata con successo");
+      }, onError: (e) {
+        ErrorSnackbar(context,
+            text: "Errore generico durante la modifica dell\'agenzia");
+      });
+    } else {
+      AgencyRepository().saveAgency(agencyEntity).then((savedAgency) {
+        clearControllers();
+        SuccessSnackbar(context, text: "Agenzia salvata con successo");
+      }, onError: (e) {
+        if (e.toString().contains("Duplicate entry")) {
+          ErrorSnackbar(context,
+              text: 'Questa email è già in uso da un\'altra agenzia');
+        }
+      });
+    }
+  }
 
+  clearControllers() {
+    nameController.text = "";
+    emailController.text = "";
+    phoneController.text = "";
+    cityController.text = "";
+  }
+}
