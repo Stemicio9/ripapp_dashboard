@@ -12,4 +12,4 @@ const double appVersion = 0.1;
 // const String baseUrl = "http://172.17.0.3:80";
 
 //ip backend locale
-const String baseUrl = "http://localhost:8080";
+const String baseUrl = "http://localhost:48795";

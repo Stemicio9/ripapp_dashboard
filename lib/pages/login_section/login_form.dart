@@ -160,6 +160,8 @@ class LoginFormState extends State<LoginForm> {
       UserRepository().setFirebaseToken(token);
       try {
         var response = await UserRepository().loginPreLayer(token);
+        UserRepository().setAuthenticationValues(CustomFirebaseAuthenticationListener().userEntity);
+      //  CustomFirebaseAuthenticationListener().notify();
       }catch(e){
         ErrorSnackbar(context, text: 'Credenziali errate!');
       }

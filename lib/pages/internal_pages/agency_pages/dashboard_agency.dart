@@ -3,6 +3,7 @@ import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
@@ -69,7 +70,10 @@ class DashboardAgencyState extends State<DashboardAgency> {
         onPressed: () {
           //  logoutFromAll();
           _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.login_page);
-          FirebaseAuth.instance.signOut().then((value) => FirebaseAuth.instance.signOut());
+          // FIXME LA RIGA DI CODICE SOTTO QUESTA NON VA BENE
+          //FirebaseAuth.instance.signOut().then((value) => _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.login_page));
+          print("PREMUTO IL PULSANTE LOGOUT");
+          CustomFirebaseAuthenticationListener().logout();
           //Navigator.pushReplacementNamed(context, RouteConstants.login);
         },
         isSelected: currentPage == 4,

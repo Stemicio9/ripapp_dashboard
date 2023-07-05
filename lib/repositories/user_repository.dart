@@ -9,6 +9,7 @@ import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
  Dio globalDio = Dio()..httpClientAdapter = BrowserHttpClientAdapter(withCredentials: true);
@@ -34,10 +35,40 @@ class UserRepository {
 
   UserRepository._internal();
 
-  String? firebaseToken;
+ // String? firebaseToken;
 
   setFirebaseToken(String token) {
-    firebaseToken = token;
+ //   firebaseToken = token;
+    SharedPreferences.getInstance().then((value) => value.setString("ftok", token));
+  }
+
+  setAuthenticationValues(UserEntity? userEntity){
+    if(userEntity == null) return;
+    String element = jsonEncode(userEntity.toJson());
+    SharedPreferences.getInstance().then((value) => value.setString("userentity", element));
+  }
+
+  getAuthenticationValues() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? value = prefs.getString("userentity");
+    if(value == null) return null;
+    print("STRINGA PRESA = ");
+    print(value);
+    Map<String,dynamic> jsonElement = jsonDecode(value);
+    UserEntity userEntity = UserEntity.fromJson(jsonElement);
+    return userEntity;
+  }
+
+  getFirebaseToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString("ftok");
+    return token;
+  }
+
+  Future removeFirebaseToken() async {
+     SharedPreferences pref = await SharedPreferences.getInstance();
+     pref.clear();
+     return "OK";
   }
 
   Map<String, dynamic> buildHeaders() {
@@ -156,8 +187,6 @@ class UserRepository {
     print("STATUS");
     print(accountResponse.status);
     CustomFirebaseAuthenticationListener().userEntity = accountResponse;
-
-
   }
 
   Future<List<UserEntity>> getAllUsers() async {

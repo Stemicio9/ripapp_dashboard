@@ -3,10 +3,14 @@ import 'dart:async';
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ripapp_dashboard/constants/app_roles.dart';
+import 'package:ripapp_dashboard/firebase_options.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
+import 'package:ripapp_dashboard/utils/AppUtils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomFirebaseAuthenticationListener with ChangeNotifier {
 
@@ -43,9 +47,6 @@ class CustomFirebaseAuthenticationListener with ChangeNotifier {
 
 
   setCurrentAuthState(User? user) async {
-    print("questo viene chiamato al logout?");
-    print("USER ATTUALE");
-    print(user);
     if (user == null) {
       _user = null;
       _loginState = false;
@@ -61,6 +62,18 @@ class CustomFirebaseAuthenticationListener with ChangeNotifier {
     notifyListeners();
   }
 
+  reauthenticate() async {
+    AppUtils.firebaseApplication = await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    if(_userEntity == null && FirebaseAuth.instance.currentUser != null){
+       var user = await UserRepository().getAuthenticationValues();
+       if(user != null){
+         _userEntity = user;
+       }
+    }
+  }
+
 
   Future<String> getCurrentRole() async {
     return dummyFuture();
@@ -73,14 +86,36 @@ class CustomFirebaseAuthenticationListener with ChangeNotifier {
   }
 
   void logout(){
-    globalDio = Dio()..httpClientAdapter = BrowserHttpClientAdapter(withCredentials: true);
-    FirebaseAuth.instance.signOut();
+    print("ESEGUO IL LOGOUT");
+    try {
+      UserRepository().removeFirebaseToken().then((value) {
+        print("HO RIMOSSO IL TOKEN");
+        clearValues();
+        globalDio = Dio()
+          ..httpClientAdapter = BrowserHttpClientAdapter(withCredentials: true);
+        FirebaseAuth.instance.signOut();
+      });
+    }catch(e){
+      print("NON RIESCO A FARE LOGOUT");
+      print(e);
+    }
+  }
+
+  void clearValues(){
+    _user = null;
+    _loginState = false;
+    _tokenId = null;
+    _userEntity = null;
   }
 
   Future<void> onAppStart() async {
     // TODO ripristinare queste due righe per l'authentication
     FirebaseAuth.instance.authStateChanges().listen(setCurrentAuthState);
     setCurrentAuthState(user);
+  }
+
+  void notify(){
+    notifyListeners();
   }
 
 

@@ -76,13 +76,11 @@ class RouterManager {
         ),
       ],
       redirect: (context , state) async {
+        await CustomFirebaseAuthenticationListener().reauthenticate();
         var auth = CustomFirebaseAuthenticationListener();
 
-        print("SONO NEL REDIRECT, STATO ATTUALE");
-        print(auth.userEntity);
         bool authPath = state.location.contains("dashboard");
 
-        print(state.location);
         if (auth.userEntity == null && !authPath) {
           return state.location;
         }

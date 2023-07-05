@@ -30,7 +30,8 @@ class ProductRepository{
 
   Future<dynamic> saveProduct(ProductEntity productEntity) async {
     Map<String, String> values = {};
-    values.putIfAbsent("idtoken", () => UserRepository().firebaseToken ?? "");
+    String? token = await UserRepository().getFirebaseToken();
+    values.putIfAbsent("idtoken", () => token ?? "");
     var response = await globalDio.post(productUrl, data: productEntity.toJson(), options: Options(headers: values));
     return response.data;
   }
@@ -73,7 +74,8 @@ class ProductRepository{
 
   editProduct(ProductEntity productEntity) async{
       Map<String, String> values = {};
-      values.putIfAbsent("idtoken", () => UserRepository().firebaseToken ?? "");
+      String token = UserRepository().getFirebaseToken();
+      values.putIfAbsent("idtoken", () => token ?? "");
       var response = await globalDio.post(updateProductUrl, data: productEntity.toJson(), options: Options(headers: values));
       return response.data;
   }
