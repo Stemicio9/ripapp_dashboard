@@ -451,6 +451,7 @@ class AddDemiseState extends State<AddDemise> {
       print("ILPARENTE");
       print(value);
       var index = relativeRows.indexOf(relativeRow);
+      print("ha indice " + index.toString());
       selectedValues[index] = value;
       changeDropdown(relativeRow, value);
     });

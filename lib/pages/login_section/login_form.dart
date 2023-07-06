@@ -41,6 +41,8 @@ class LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    _emailTextController.text = "utente@agenzia.it";
+    _passwordTextController.text = "12345678";
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Form(
