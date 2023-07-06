@@ -53,6 +53,7 @@ class UsersForm extends StatelessWidget {
         create: (_) => SelectedAgencyCubit(),
         child: UsersFormWidget(
             onTap: onTap,
+            isAddPage: isAddPage,
             cardTitle: cardTitle,
             nameController: nameController,
             emailController: emailController,
@@ -140,12 +141,9 @@ class UsersFormState extends State<UsersFormWidget> {
               widget.phoneController.text = "";
               widget.lastNameController.text = "";
             } else {
-              widget.nameController.text =
-                  state.selectedUser.firstName ?? widget.nameController.text;
-              widget.lastNameController.text =
-                  state.selectedUser.lastName ?? widget.lastNameController.text;
-              widget.phoneController.text =
-                  state.selectedUser.phoneNumber ?? widget.phoneController.text;
+              widget.nameController.text = state.selectedUser.firstName ?? widget.nameController.text;
+              widget.lastNameController.text = state.selectedUser.lastName ?? widget.lastNameController.text;
+              widget.phoneController.text = state.selectedUser.phoneNumber ?? widget.phoneController.text;
             }
             if (state.selectedUser.status == null) {
               widget.statusChange(UserRoles.Utente.name);

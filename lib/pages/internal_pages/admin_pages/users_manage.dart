@@ -173,7 +173,6 @@ class UsersManageState extends State<UsersManage> {
                                   ErrorSnackbar(context, text: "Errore generico durante la modifica dell\'utente");
                                 });
 
-
                                 nameController.text = "";
                                 lastNameController.text = "";
                                 passwordController.text = "";
