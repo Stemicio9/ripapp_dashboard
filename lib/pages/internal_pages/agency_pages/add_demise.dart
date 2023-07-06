@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
+import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
@@ -59,12 +60,14 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController relativeController = TextEditingController();
   final TextEditingController filterController = TextEditingController();
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
+  SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
   DateTime? wakeDate;
   DateTime? funeralDate;
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
   File_Data_Model? obituaryFile;
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
+  int relativeIndex = 0;
 
   static const List<String> kinship = <String>[
     'Madre',
@@ -85,6 +88,7 @@ class AddDemiseState extends State<AddDemise> {
   bool isNetwork = true;
   late String fileName = "";
   late Uint8List fileBytes = Uint8List.fromList([0,1]);
+  DemiseEntity demiseEntity = DemiseEntity();
 
 
   Future<dynamic> downloadUrlImage(String uid) async {
@@ -326,13 +330,22 @@ class AddDemiseState extends State<AddDemise> {
           );});
   }
 
+  setKinshipFromDropdownOf(int index, Kinship kinship) {
+    demiseEntity.relatives![index].kinshipType = kinship;
+  }
+
+  setTelephoneNumberOf(int index, String phoneNumber) {
+    print("ecco quanti elementi ha relatives " + demiseEntity.relatives.toString());
+    demiseEntity.relatives![index].telephoneNumber = phoneNumber;
+  }
+
   formSubmit() async{
     // if (_formKey.currentState!.validate()) {
     if (obituaryFile == null) {
       ErrorSnackbar(context, text: 'Inserire necrologio!');
     } else {
 
-      DemiseEntity demiseEntity = DemiseEntity();
+
       demiseEntity.firstName = (nameController.text);
       demiseEntity.lastName = (lastNameController.text);
       demiseEntity.city = CityEntity(name: cityController.text);
@@ -427,14 +440,21 @@ class AddDemiseState extends State<AddDemise> {
 
   }
 
+
+
   void createNewRelativeRow() {
-    selectedValues.add(kinship.first);
+    print("stampettina");
     var x = RelativeRow(
       onChanged: changeDropdown,
       relativeValidator: notEmptyValidate,
       relativeController: relativeController,
-      deleteRelative: deleteRelative, changeKinship: (Kinship selectedKinship) {  }, statusChange: (String selectedValue) {  }, isDetail: false, selectedKinship: Kinship.brother, listKinship: const ['nonno'],
-
+      deleteRelative: deleteRelative,
+      changeKinship: setKinshipFromDropdownOf,
+      changeTelephoneNumber: setTelephoneNumberOf,
+      isDetail: false,
+      selectedKinship: Kinship.brother,
+      listKinship: const ['nonno'],
+      index: relativeIndex,
     );
 
     // RelativeRow(onChanged: (String? value) {
@@ -442,18 +462,23 @@ class AddDemiseState extends State<AddDemise> {
     //     dropdownValue = value!;
     //   });
     // }, kinship: kinship, relativeController: relativeController, deleteRelative: (){}, value: dropdownValue);
-
+    relativeIndex += 1;
     relativeRows.add(x);
+    (_searchKinshipCubit.state as SearchKinshipState).selectedKinships!.add(Kinship.aunt);
+    (_searchKinshipCubit.state as SearchKinshipState).phoneNumbersInserted!.add("nuovo");
+    print("ecco i telefoni dallo stato "+ _searchKinshipCubit.state.phoneNumbersInserted.toString());
+    print("ecco le kinship dallo stato "+ _searchKinshipCubit.state.selectedKinships.toString());
+    //(_searchKinshipCubit.state as SearchKinshipLoaded).phoneNumbersInserted!.add();
   }
 
   changeDropdown(RelativeRow relativeRow, value){
     setState(() {
-      print("ILPARENTE");
-      print(value);
-      var index = relativeRows.indexOf(relativeRow);
-      print("ha indice " + index.toString());
-      selectedValues[index] = value;
-      changeDropdown(relativeRow, value);
+    print("ILPARENTE");
+    print(value);
+    var index = relativeRows.indexOf(relativeRow);
+    print("ha indice " + index.toString());
+    selectedValues[index] = value;
+    changeDropdown(relativeRow, value);
     });
   }
 

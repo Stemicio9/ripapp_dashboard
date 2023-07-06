@@ -58,6 +58,8 @@ class EditDemiseState extends State<EditDemise> {
   final TextEditingController funeralTimeController = TextEditingController();
   final TextEditingController funeralNoteController = TextEditingController();
   CurrentPageCubit  get _currentPageCubit => context.read<CurrentPageCubit>();
+  SelectedDemiseCubit  get _selectedDemiseCubit => context.read<SelectedDemiseCubit>();
+  int relativeIndex = 0;
 
   final TextEditingController relativeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -80,6 +82,13 @@ class EditDemiseState extends State<EditDemise> {
   late String fileName;
   late Uint8List fileBytes;
 
+  setKinshipFromDropdownOf(int index, Kinship kinship) {
+    (_selectedDemiseCubit.state.selectedDemise).relatives![index].kinshipType = kinship;
+  }
+
+  setTelephoneNumber(int index, String phoneNumber) {
+    (_selectedDemiseCubit.state.selectedDemise).relatives![index].telephoneNumber = phoneNumber;
+  }
 
   Future<dynamic> downloadUrlImage(String uid,String demiseId) async {
     var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/UID:$uid/demiseId:$demiseId/').listAll();
@@ -101,6 +110,9 @@ class EditDemiseState extends State<EditDemise> {
     _profileImageCubit.changeLoaded(true);
     imageFile = value;
   }
+
+
+
 
 
 
@@ -404,9 +416,11 @@ class EditDemiseState extends State<EditDemise> {
         relativeController: relativeController,
         deleteRelative: deleteRelative,
         relativeValidator: notEmptyValidate,
-
-      statusChange: (String selectedValue) {  },
-      isDetail: false, changeKinship: (Kinship selectedKinship) {  }, selectedKinship: kinship as Kinship, listKinship: ['nonno'],
+      index: relativeIndex,
+      changeTelephoneNumber: setTelephoneNumber,
+      isDetail: false, changeKinship: setKinshipFromDropdownOf,
+      selectedKinship: kinship as Kinship,
+      listKinship: ['nonno'],
        /*statusChange: (String selectedValue) {  }, kinChange: (Kinship selectedKinship)*/
 
     );

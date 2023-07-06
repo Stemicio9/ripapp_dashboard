@@ -61,7 +61,6 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
   }
 
   void changeCurrentPage(String page) {
-    print("piccola chiamata 2");
     emit(state.copyWith(page: page));
   }
 }

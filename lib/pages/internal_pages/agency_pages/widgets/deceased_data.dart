@@ -323,7 +323,7 @@ class DeceasedDataState extends State<DeceasedData>{
                                       return const Center(child: CircularProgressIndicator());
                                     } else if (cityState is CityListLoaded) {
                                       cityList = cityState.listCity;
-                                      print("decesssed city: $cityList");
+                                      //print("decesssed city: $cityList");
                                       if (cityList.isNotEmpty) {
                                         return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -378,7 +378,7 @@ class DeceasedDataState extends State<DeceasedData>{
                                       return const Center(child: CircularProgressIndicator());
                                     } else if (cityState is CityListLoaded) {
                                       cityList = cityState.listCity;
-                                      print("decesssed city: $cityList");
+                                      //print("decesssed city: $cityList");
                                       if (cityList.isNotEmpty) {
                                         return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,

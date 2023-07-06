@@ -474,8 +474,8 @@ class UsersFormState extends State<UsersForm> {
                                                                     builder: (context, agencyState) {
                                                                       if (agencyState is SearchAgencyLoading) {
                                                                         return const Center(child: CircularProgressIndicator());
-                                                                      } else
-                                                                      if (agencyState is SearchAgencyLoaded) {
+                                                                      }
+                                                                      else if (agencyState is SearchAgencyLoaded) {
                                                                         if (agencyState.agencies.isEmpty) {
                                                                           return DropdownButton<
                                                                               String>(

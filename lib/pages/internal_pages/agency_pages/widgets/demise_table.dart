@@ -84,8 +84,6 @@ class DemiseTableState extends State<DemiseTable>{
             }
             else {
               demises = state.resultSet as List<DemiseEntity>;
-              print("LOADED DEMISE");
-              print(demises);
 
               if(demises.isEmpty){
                 return Center(
