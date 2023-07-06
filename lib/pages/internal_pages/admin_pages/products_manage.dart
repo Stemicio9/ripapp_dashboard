@@ -6,11 +6,11 @@ import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_detail.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage/product_detail.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage/product_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/products_table.dart';
+import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage/products_table.dart';
 import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import '../../../widgets/snackbars.dart';
@@ -59,7 +59,17 @@ class ProductsManageState extends State<ProductsManage>{
                     context: context,
                     builder: (ctx) => DeleteMessageDialog(
                         onConfirm: () async {
-                          ProductRepository().deleteProduct(p.id).then((deleteProductMessage) {
+                          ProductRepository().deleteProduct(p.id).then((deleteProductMessage) async {
+
+
+                            var path = 'profile_images/products_images/productid:${p.firebaseId}/';
+
+                            var fileList = await FirebaseStorage.instance.ref(path).listAll();
+                            if (fileList.items.isNotEmpty) {
+                              var fileesistente = fileList.items[0];
+                              fileesistente.delete();
+                            }
+
                             SuccessSnackbar(context, text: "Prodotto eliminato con successo");
                           }, onError: (e) {
                             if (e.toString().contains("il prodotto è già in uso da parte di"))
@@ -67,15 +77,9 @@ class ProductsManageState extends State<ProductsManage>{
                               }
                           );
 
-                          var path = 'profile_images/products_images/productid:${p.firebaseId}/';
-
-                          var fileList = await FirebaseStorage.instance.ref(path).listAll();
-                          if (fileList.items.isNotEmpty) {
-                            var fileesistente = fileList.items[0];
-                            fileesistente.delete();
-                          }
 
                           Navigator.pop(context);
+
                           BlocBuilder<SearchProductCubit, SearchProductState>(
                              builder: (context, state) {
                             if (state is SearchProductError) {

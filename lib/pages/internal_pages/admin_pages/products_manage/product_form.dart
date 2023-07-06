@@ -12,8 +12,8 @@ import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form_image.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/product_form_inputs.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage/product_form_image.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage/product_form_inputs.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
@@ -37,13 +37,14 @@ class ProductForm extends StatefulWidget {
 
 class ProductFormState extends State<ProductForm> {
   SearchProductCubit get _searchProductsCubit => context.read<SearchProductCubit>();
+  SelectedProductCubit get _selectedProductsCubit => context.read<SelectedProductCubit>();
   var memoryImage;
   bool isNetwork = true;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   late String fileName = "";
-  late Uint8List fileBytes;
+  Uint8List? fileBytes;
 
   manageImageChange(String productId) async {
     var path = 'profile_images/products_images/productid:$productId/';
@@ -53,8 +54,11 @@ class ProductFormState extends State<ProductForm> {
       var fileesistente = fileList.items[0];
       fileesistente.delete();
     }
-    if (fileName != "") {
-      await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+    print("stampo filename");
+    print(fileName);
+
+    if (fileName.isNotEmpty && fileBytes != null) {
+        await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes!);
     }
   }
 
@@ -66,12 +70,10 @@ class ProductFormState extends State<ProductForm> {
         photoName: imageFile,
       );
 
+      productEntity.id = id;
       var uuid = const Uuid();
       var productId = uuid.v4();
       productEntity.firebaseId = productId;
-      productEntity.id = id;
-
-
       if (widget.isEdit) {
         _searchProductsCubit.editProduct(productEntity);
         SuccessSnackbar(context, text: 'Prodotto modificato con successo!');
@@ -80,7 +82,7 @@ class ProductFormState extends State<ProductForm> {
         SuccessSnackbar(context, text: 'Prodotto aggiunto con successo!');
       }
 
-      manageImageChange(productId);
+      await manageImageChange(productId);
       nameController.text = "";
       priceController.text = "";
 
@@ -91,11 +93,13 @@ class ProductFormState extends State<ProductForm> {
   formImageOnTap() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
-      fileBytes = result.files.first.bytes!;
-      fileName = result.files.first.name;
-      isNetwork = false;
+      _selectedProductsCubit.state.imageUrl = result.files.first.name;
       setState(() {
+        fileBytes = result.files.first.bytes!;
+        fileName = result.files.first.name;
+        isNetwork = false;
         memoryImage = fileBytes;
+
       });
     }
   }
@@ -130,17 +134,13 @@ class ProductFormState extends State<ProductForm> {
                                           )),
                               Expanded(
                                   flex: 2,
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ProductFormInputs(
+                                  child: ProductFormInputs(
                                             nameController: nameController,
                                             priceController: priceController,
                                             action: () {
                                               formSubmit(imageUrl, id);
                                             })
-                                      ]))
+                                      )
                             ])))
               ],
             )));
@@ -152,9 +152,12 @@ class ProductFormState extends State<ProductForm> {
         builder: (context, state) {
       nameController.text = "";
       priceController.text = "";
+      print("SONO APPENA ENTRATO NEL BLOC");
+      print(state.imageUrl);
       if (widget.isEdit) {
         nameController.text = state.selectedProduct.name ?? nameController.text;
         priceController.text = state.selectedProduct.price.toString();
+        fileName = state.imageUrl;
       }
       return widget.isEdit
           ? composeProductForm(state.imageUrl, state.selectedProduct.id)

@@ -10,7 +10,7 @@ import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/demise_table.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
+import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 

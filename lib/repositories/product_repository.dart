@@ -74,7 +74,7 @@ class ProductRepository{
 
   editProduct(ProductEntity productEntity) async{
       Map<String, String> values = {};
-      String token = UserRepository().getFirebaseToken();
+      String token = await UserRepository().getFirebaseToken();
       values.putIfAbsent("idtoken", () => token ?? "");
       var response = await globalDio.post(updateProductUrl, data: productEntity.toJson(), options: Options(headers: values));
       return response.data;

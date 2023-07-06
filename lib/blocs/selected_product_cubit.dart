@@ -7,10 +7,10 @@ import 'package:ripapp_dashboard/models/product_entity.dart';
 @immutable
 class SelectedProductState {
   final ProductEntity selectedProduct;
-  final String imageUrl;
+  String imageUrl;
 
 
-  const SelectedProductState({required this.selectedProduct, required this.imageUrl});
+  SelectedProductState({required this.selectedProduct, required this.imageUrl});
 }
 
 class SelectedProductCubit extends Cubit<SelectedProductState> {
