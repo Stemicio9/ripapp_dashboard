@@ -78,9 +78,11 @@ class SearchProductCubit extends Cubit<SearchProductState>{
     emit(SearchProductLoading());
     try{
       var response = await ProductRepository().editProduct(productEntity);
+      print("HO EDITATO IL PRODOTTO");
       ProductEntity p = ProductEntity.fromJson(response);
       fetchProducts();
     }catch(e){
+      print(e);
       emit(SearchProductError(e.toString()));
     }
   }

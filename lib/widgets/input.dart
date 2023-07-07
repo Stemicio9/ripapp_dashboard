@@ -51,6 +51,7 @@ class InputsV2Widget extends StatelessWidget {
   final double paddingBottom; //10
   final inputFormatters;
   final double labelPaddingTop;
+  final double labelPaddingLeft;
   final bool isVisible;
 
   InputsV2Widget(
@@ -59,6 +60,7 @@ class InputsV2Widget extends StatelessWidget {
         this.isPassword = false,
         this.borderRadius = 3,
         this.labelPaddingTop = 0,
+        this.labelPaddingLeft = 0,
         this.errorStyle = const TextStyle(color: Colors.redAccent),
         this.elevation = 0,
         this.textAlign = TextAlign.start,
@@ -111,7 +113,7 @@ class InputsV2Widget extends StatelessWidget {
         Visibility(
           visible: isVisible,
           child: Padding(
-            padding: getPadding(bottom: 5,top: labelPaddingTop),
+            padding: getPadding(bottom: 5,top: labelPaddingTop,left: labelPaddingLeft),
             child: Text(
               labelText,
               style: SafeGoogleFont(

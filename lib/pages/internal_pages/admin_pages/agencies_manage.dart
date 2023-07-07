@@ -7,11 +7,11 @@ import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agency_detail.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agency_form.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/agencies_manage/agency_detail.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/agencies_manage/agency_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/agencies_table.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/agencies_manage/agencies_table.dart';
+import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
@@ -124,6 +124,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
                             onSubmit: () {
                               if (_editKey.currentState!.validate()) {
                                 AgencyEntity agencyEntity = AgencyEntity(
+                                    id: p.id,
                                     agencyName: nameController.text,
                                     city: cityController.text,
                                     phoneNumber: phoneController.text);
@@ -182,6 +183,8 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   saveOrEditAgency(AgencyEntity agencyEntity, bool isEdit) {
     if (isEdit) {
       AgencyRepository().editAgency(agencyEntity).then((savedAgency) {
+        print("agenzia modificata");
+        print(agencyEntity);
         clearControllers();
         SuccessSnackbar(context, text: "Agenzia modificata con successo");
       }, onError: (e) {

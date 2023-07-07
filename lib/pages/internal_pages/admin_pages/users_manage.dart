@@ -11,11 +11,12 @@ import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_detail.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_form.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage/users_detail.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage/users_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/delete_message_dialog.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/widgets/users_table.dart';
+import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage/users_table.dart';
+import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import '../../../blocs/users_list_cubit.dart';
@@ -23,52 +24,23 @@ import '../../../models/city_from_API.dart';
 
 enum UserRoles { Amministratore, Agenzia, Utente }
 
-class UsersManage extends StatelessWidget {
-  final String detailMessage = 'Dettagli';
-  final String editMessage = 'Modifica';
-  final String deleteMessage = 'Elimina';
-  final String message =
-      'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
-
-  @override
-  Widget build(BuildContext context) {
-    /* return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => CityListCubit(),
-        ),
-        BlocProvider(
-          create: (_) => SelectedUserCubit(),
-        )
-      ],
-      child: UsersManageWidget(
-      ),
-    );;*/
-    return UsersManageWidget();
-  }
-}
-
-class UsersManageWidget extends StatefulWidget {
+class UsersManage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return UsersManageWidgetState();
+    return UsersManageState();
   }
 }
 
-class UsersManageWidgetState extends State<UsersManageWidget> {
+class UsersManageState extends State<UsersManage> {
   SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
-
   SelectedCityCubit get _selectedCityCubit => context.read<SelectedCityCubit>();
-
   UsersListCubit get _userListCubit => context.read<UsersListCubit>();
   List<CityFromAPI> cityList = [];
-
   List<CityFromAPI> cityOptions = [];
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
-  final String message =
-      'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
+  final String message = 'Le informazioni riguardanti questo utente verranno definitivamente eliminate. Sei sicuro di volerle eliminare?';
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
@@ -78,18 +50,17 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController filterController = TextEditingController();
 
-  UserEntity userEntity = new UserEntity(
+  UserEntity userEntity = UserEntity(
       id: 1,
-      firstName: 'Davide',
-      lastName: 'Rossi',
-      email: 'daviderossi@gmail.com',
+      firstName: '',
+      lastName: '',
+      email: '',
       city: [CityFromAPI.defaultCity()],
-      phoneNumber: '+39 0987654321',
-      role: 'Amministratore');
+      phoneNumber: '',
+      role: '');
 
   setStatusFromDropdown(String userRole) {
-    UserRoles role = UserRoles.values
-        .firstWhere((e) => e.toString() == 'UserRoles.' + userRole);
+    UserRoles role = UserRoles.values.firstWhere((e) => e.toString() == 'UserRoles.' + userRole);
     userEntity.role = role.toString();
     switch (role) {
       case UserRoles.Amministratore:
@@ -144,12 +115,6 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                             options: cityOptions,
                             lastNameController: lastNameController,
                             passwordController: passwordController,
-                            nameValidator: notEmptyValidate,
-                            lastNameValidator: notEmptyValidate,
-                            passwordValidator: validatePassword,
-                            emailValidator: validateEmail,
-                            cityValidator: notEmptyValidate,
-                            phoneValidator: notEmptyValidate,
                             statusChange: setStatusFromDropdown,
                             agencyChange: setAgencyFromDropdown,
                             onTap: formSubmit,
@@ -188,17 +153,33 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                           child: UsersForm(
                             statusChange: setStatusFromDropdown,
                             agencyChange: setAgencyFromDropdown,
-                            onTap: () {
+                            onTap: (CityFromAPI? nome) {
                               if (_editKey.currentState!.validate()) {
+
+                                userEntity.firstName = nameController.text;
+                                userEntity.lastName = lastNameController.text;
+                                userEntity.email = emailController.text;
+                                userEntity.phoneNumber = phoneController.text;
+                                userEntity.password = passwordController.text;
+                                userEntity.city = [nome!];
+
+                                print("stampo utente modificato");
+                                print(userEntity);
+
+
+                                UserRepository().editUser(userEntity).then((res) {
+                                  SuccessSnackbar(context, text: "Profilo modificato con successo");
+                                }, onError: (e) {
+                                  ErrorSnackbar(context, text: "Errore generico durante la modifica dell\'utente");
+                                });
+
                                 nameController.text = "";
                                 lastNameController.text = "";
                                 passwordController.text = "";
                                 emailController.text = "";
                                 phoneController.text = "";
                                 cityOptions;
-
-                                SuccessSnackbar(context,
-                                    text: 'Utente modificato con successo!');
+                                SuccessSnackbar(context, text: 'Utente modificato con successo!');
                                 Navigator.pop(context);
                               }
                             },
@@ -208,13 +189,9 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
                             emailController: emailController,
                             phoneController: phoneController,
                             filterController: filterController,
-                            options: cityOptions,
                             lastNameController: lastNameController,
                             passwordController: passwordController,
-                            nameValidator: notEmptyValidate,
-                            lastNameValidator: notEmptyValidate,
-                            phoneValidator: notEmptyValidate,
-                            cityValidator: notEmptyValidate,
+                            options: cityOptions,
                             roles: UserRoles.values,
                           ),
                         ));
@@ -244,7 +221,6 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
   formSubmit(CityFromAPI? nome) {
     print("SONO NEL VERO METODO FORM SUBMIT");
     if (_formKey.currentState!.validate()) {
-      print("RIEMPO I CAMPI");
       userEntity.firstName = nameController.text;
       userEntity.lastName = lastNameController.text;
       userEntity.email = emailController.text;
@@ -252,11 +228,8 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
       userEntity.password = passwordController.text;
       userEntity.city = [nome!];
 
-      print("VALIDATO");
-
       if (userEntity.email != "" && userEntity.password != "") {
-        FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
+        FirebaseAuth.instance.createUserWithEmailAndPassword(
                 email: userEntity.email ?? "",
                 password: userEntity.password ?? "")
             .then((value) async {
@@ -279,8 +252,7 @@ class UsersManageWidgetState extends State<UsersManageWidget> {
           Navigator.pop(context);
         }, onError: (e) {
           print(e);
-          ErrorSnackbar(context,
-              text: 'L\'email inserita è già usata da un altro utente!');
+          ErrorSnackbar(context, text: 'L\'email inserita è già usata da un altro utente!');
         });
       }
     }
