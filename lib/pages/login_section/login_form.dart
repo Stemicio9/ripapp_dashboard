@@ -35,14 +35,11 @@ class LoginFormState extends State<LoginForm> {
   final double logoWidth = 250;
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
-
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
   late bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
-    _emailTextController.text = "utente@agenzia.it";
-    _passwordTextController.text = "12345678";
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Form(

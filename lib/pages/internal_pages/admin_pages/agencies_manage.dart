@@ -18,36 +18,18 @@ import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import '../../../blocs/selected_agency_cubit.dart';
 import '../../../models/agency_entity.dart';
 
-class AgenciesManage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => UsersListCubit(),
-        ),
-        BlocProvider(create: (_) => CityListCubit()),
-        BlocProvider(create: (_) => SelectedCityCubit())
-      ],
-      child: AgenciesManageWidget(),
-    );
-  }
-}
-
-class AgenciesManageWidget extends StatefulWidget {
+class AgenciesManage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return AgenciesManageWidgetState();
+    return AgenciesManageState();
   }
 }
 
-class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
+class AgenciesManageState extends State<AgenciesManage> {
   final String detailMessage = 'Dettagli';
   final String editMessage = 'Modifica';
   final String deleteMessage = 'Elimina';
-  final String message =
-      'Le informazioni riguardanti questa agenzia verranno definitivamente eliminate. Verranno eliminati anche tutti gli utenti associati a questa agenzia. Sei sicuro di volerle eliminare?';
-  final String city = 'Roma';
+  final String message = 'Le informazioni riguardanti questa agenzia verranno definitivamente eliminate. Verranno eliminati anche tutti gli utenti associati a questa agenzia. Sei sicuro di volerle eliminare?';
 
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
   final TextEditingController nameController = TextEditingController();
@@ -57,8 +39,7 @@ class AgenciesManageWidgetState extends State<AgenciesManageWidget> {
   final _formKey = GlobalKey<FormState>();
   final _editKey = GlobalKey<FormState>();
 
-  SelectedAgencyCubit get _selectedAgencyCubit =>
-      context.read<SelectedAgencyCubit>();
+  SelectedAgencyCubit get _selectedAgencyCubit => context.read<SelectedAgencyCubit>();
   List<CityFromAPI> cityList = [];
 
   @override

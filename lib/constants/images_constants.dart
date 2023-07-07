@@ -17,5 +17,7 @@ class ImagesConstants{
 
   static String imgEuro= "assets/images/euro.png";
 
+  static String imgLogoWhite= "assets/images/logo-white.png";
+
 
 }

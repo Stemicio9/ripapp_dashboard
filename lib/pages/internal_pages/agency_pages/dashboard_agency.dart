@@ -8,8 +8,10 @@ import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
+import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/demise_manage.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/my_products.dart';
+import 'package:ripapp_dashboard/utils/image_utils.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 
 import 'agency_profile.dart';
@@ -25,11 +27,17 @@ class DashboardAgency extends StatefulWidget {
 class DashboardAgencyState extends State<DashboardAgency> {
   String title = "";
   int currentPage = 1;
-  String agencyName = 'Nome agenzia';
   String image = "assets/images/profiledefault.jpeg";
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
-  // final UserCubit? userCubit;
-  //  DashboardState({this.userCubit});
+  late UserEntity userEntity;
+
+
+  @override
+  void initState() {
+    userEntity = CustomFirebaseAuthenticationListener().userEntity!;
+    getUserImage();
+    super.initState();
+  }
 
 
   List<CollapsibleItem> get _items {
@@ -97,12 +105,23 @@ class DashboardAgencyState extends State<DashboardAgency> {
         //isCollapsed: MediaQuery.of(context).size.width <= 800,
         isCollapsed: true,
         items: _items,
-        avatarImg: AssetImage(image),
-        title: agencyName,
+        avatarImg: NetworkImage(image),
+        title: '${userEntity.firstName!.toUpperCase()} ${userEntity.lastName!.toUpperCase()}',
         body: _body(size, context),
         toggleTitle: '',
       ),
     );
+  }
+
+
+  getUserImage(){
+    final User user = FirebaseAuth.instance.currentUser!;
+    final uid = user.uid;
+    ImageUtils().downloadUrlImageUser(uid).then((value) {
+      setState(() {
+        image = value;
+      });
+    });
   }
 
   Widget _body(Size size, BuildContext context) {

@@ -28,12 +28,6 @@ class DashboardState extends State<Dashboard> {
   int currentPage = 1;
 
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
-
-
- // final UserCubit? userCubit;
-//  DashboardState({this.userCubit});
-
-
   List<CollapsibleItem> get _items {
     return [
       CollapsibleItem(
@@ -106,6 +100,7 @@ class DashboardState extends State<Dashboard> {
         title: getCurrentLanguageValue(ADMIN)!,
         body: _body(size, context),
         toggleTitle: '',
+        isAgency: false,
       ),
     );
   }

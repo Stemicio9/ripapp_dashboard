@@ -55,6 +55,7 @@ const String MY_PROFILE = "Il mio profilo";
 const String DELETE_ACCOUNT = "Elimina account";
 const String SELECT_PRODUCTS = "Seleziona prodotti";
 const String PHOTO = "Foto";
+const String EMPTY_FIELDS = "Svuota campi";
 
 
 final Map<String, String> LANG_IT = {
@@ -107,6 +108,8 @@ final Map<String, String> LANG_IT = {
   DELETE_ACCOUNT: "Elimina account",
   SELECT_PRODUCTS: "Seleziona prodotti",
   PHOTO: "Foto",
+  EMPTY_FIELDS: "Svuota campi",
+
 
   //navbar title
   USERS_MANAGE: "Gestisci utenti",
