@@ -9,52 +9,75 @@ import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/repositories/kinship_repository.dart';
 
 @immutable
-class SearchKinshipState{}
-class SearchKinshipLoading extends SearchKinshipState {}
-class SearchKinshipError extends SearchKinshipState {}
-
-
-class SearchKinshipLoaded extends SearchKinshipState {
-  final List<Kinship> kinships;
-  final Kinship? selectedKinship;
+class SearchKinshipState{
+  bool? loaded = false;
+  List<Kinship>? retrievedKinships;
+  List<Kinship>? selectedKinships;
+  List<String>? phoneNumbersInserted;
   //final bool loadingMore;
   //SearchAgencyLoaded(this.agencies, this.loadingMore);
-  SearchKinshipLoaded(this.kinships, this.selectedKinship);
+  SearchKinshipState(this.loaded, this.retrievedKinships, this.selectedKinships, this.phoneNumbersInserted);
 
 
-  SearchKinshipLoaded copyWith({List<Kinship>? kinships, Kinship? selectedKinship,}) {
-    return SearchKinshipLoaded(
-        kinships ?? this.kinships,
-        selectedKinship ?? this.selectedKinship
+  SearchKinshipState copyWith({bool? isLoaded, List<Kinship>? retrieved, List<Kinship>? selected, List<String>? phoneNumbers}) {
+    return SearchKinshipState(
+        isLoaded ?? this.loaded,
+        retrieved ?? this.retrievedKinships,
+        selected ?? this.selectedKinships,
+        phoneNumbers ?? this.phoneNumbersInserted
     );
   }
 }
 
+class SearchKinshipError extends SearchKinshipState{
+  SearchKinshipError(super.loaded, super.retrievedKinships, super.selectedKinships, super.phoneNumbersInserted);
+}
+
+
 class SearchKinshipCubit extends Cubit<SearchKinshipState> {
-  SearchKinshipCubit() : super(SearchKinshipLoading());
+  SearchKinshipCubit() : super(SearchKinshipState(false, [], [], []));
 
   fetchKinships() async {
-    emit(SearchKinshipLoading());
+    emit(state.copyWith(isLoaded: false));
     try {
       print("FACCIO LA FETCH DELLE kinship");
       // todo manage if agencies is null or empty in response
       var result = await KinshipRepository().getAllKinship();
       if(result.isNotEmpty) {
-        emit(SearchKinshipLoaded(result, result.first));
+        emit(state.copyWith(isLoaded: true, retrieved: result));
       }else{
-        emit(SearchKinshipLoaded(result, null));
+        emit(state.copyWith(isLoaded: true, retrieved: []));
       }
     }catch(e){
       print(e);
-      // ignore
-      emit(SearchKinshipError());
+      // todo gestire l'errore
     }
   }
 
-  changeSelectedKinship(Kinship? selectedValues,){
-    if(state is SearchKinshipLoaded && selectedValues != null){
-      var a = state as SearchKinshipLoaded;
-      emit(a.copyWith(selectedKinship: selectedValues));
+  changeSelectedKinships(List<Kinship>? selectedValues,){
+    if(state is SearchKinshipState && selectedValues != null){
+      var a = state as SearchKinshipState;
+      emit(a.copyWith(selected: selectedValues));
+    }
+  }
+
+  void changeSelectedKinshipOf(int index, Kinship kinshipFromString) {
+    if(state is SearchKinshipState){
+      var a = state as SearchKinshipState;
+      if (a.selectedKinships!.isNotEmpty){
+        a.selectedKinships![index] = kinshipFromString;
+        emit(a.copyWith());
+      }
+    }
+  }
+
+  void changeTelephoneNumberOf(int index, String? phoneNumber) {
+    if(state is SearchKinshipState){
+      var a = state as SearchKinshipState;
+      if (a.phoneNumbersInserted!.isNotEmpty){
+        a.phoneNumbersInserted![index] = phoneNumber!;
+        emit(a.copyWith());
+      }
     }
   }
 

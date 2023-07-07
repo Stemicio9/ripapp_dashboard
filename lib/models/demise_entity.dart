@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/DemiseRelative.dart';
 import 'package:ripapp_dashboard/models/relative_entity.dart';
 import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
@@ -29,8 +30,10 @@ class DemiseEntity implements ResultEntity {
   String? funeralNotes;
 
 
+
   //relative data
-  RelativeEntity? relative;
+  List<DemiseRelative>? relatives;
+
   String? firebaseid;
 
 
@@ -43,20 +46,14 @@ class DemiseEntity implements ResultEntity {
     this.age,
     this.cities,
     this.deceasedDate,
-
-
     //this.deceasedDate,
     this.wakeAddress,
     this.wakeDateTime,
     this.wakeNotes,
-
-
     this.funeralAddress,
     this.funeralDateTime,
     this.funeralNotes,
-
-
-    this.relative,
+    this.relatives,
     this.firebaseid
   });
 
@@ -72,19 +69,13 @@ class DemiseEntity implements ResultEntity {
           'age: $age, '
           'phonenumber: $phoneNumber, '
           'ts: $deceasedDate, '
-
-
           'funeralAddress: $funeralAddress, '
           'funeralts: $funeralDateTime '
           'funeralnotes: $funeralNotes '
-
-
-
           'wakenotes: $wakeNotes, '
           'wakets: $wakeDateTime, '
           'firebaseid: $firebaseid, '
           'wakeAddress: $wakeAddress}\n';
-
   }
 
   factory DemiseEntity.fromJson(Map<String, dynamic> json) => DemiseEntity(
@@ -106,6 +97,7 @@ class DemiseEntity implements ResultEntity {
     funeralDateTime: json["funeralts"] == null ? null : DateTime.parse(json["funeralts"]),
     funeralNotes: json["funeralnotes"] ?? "",
     firebaseid: json["firebaseid"] ?? "",
+    relatives: json["relatives"] != null ? (json["relatives"] as List).map((e) => DemiseRelative.fromJson(e)).toList() : [],
     /*cities: json["cities"] todo aggiungere questi due campi!!
         .map((data) => CityEntity.fromJson(data))
         .toList(),
@@ -163,18 +155,13 @@ class DemiseEntity implements ResultEntity {
     "age":age,
     "ts":deceasedDate == null ? null : deceasedDate!.toIso8601String(),
     "cities": cities?.map((e) => e.toJson()).toList() ?? [],
-
-
     "wakeaddress":wakeAddress,
     "wakets": wakeDateTime == null ? null : wakeDateTime!.toIso8601String(),
     "wakenotes":wakeNotes,
-
-
     "funeraladdress":funeralAddress,
     "funeralts":funeralDateTime == null ? null : funeralDateTime!.toIso8601String(),
     "funeralnotes":funeralNotes,
-
-    "relatives":relative?.toJson() ?? null,
+    "relatives":relatives?.map((relative) => relative.toJson()).toList()  ?? [],
   };
 
   factory DemiseEntity.emptyDemise() => DemiseEntity();

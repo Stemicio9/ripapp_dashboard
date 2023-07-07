@@ -95,7 +95,6 @@ class AgencyRepository{
     String goodJson = jsonEncode(res.data);
     List<ProductEntity> productsOffered =  ((jsonDecode(goodJson) as Map)["content"] as List).map((e) => ProductEntity.fromJson(e)).toList();
     //List<AgencyEntity> agencies = ((jsonDecode(goodJson) as Map)["content"] as List).map((agency) => AgencyEntity.fromJson(agency)).toList();
-    print("a zi gustati sta paginetta " + productsOffered.toString());
     return productsOffered;
   }
 

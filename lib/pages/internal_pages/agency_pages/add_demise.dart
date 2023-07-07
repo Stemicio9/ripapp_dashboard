@@ -8,13 +8,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
+import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/DemiseRelative.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/RelativeRow.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relatives.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/dropzone/dropzone_widget.dart';
@@ -59,12 +63,14 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController relativeController = TextEditingController();
   final TextEditingController filterController = TextEditingController();
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
+  SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
   DateTime? wakeDate;
   DateTime? funeralDate;
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
   File_Data_Model? obituaryFile;
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
+  int relativeIndex = 0;
 
   static const List<String> kinship = <String>[
     'Madre',
@@ -85,6 +91,7 @@ class AddDemiseState extends State<AddDemise> {
   bool isNetwork = true;
   late String fileName = "";
   late Uint8List fileBytes = Uint8List.fromList([0,1]);
+  DemiseEntity demiseEntity = DemiseEntity(relatives: []);
 
 
   Future<dynamic> downloadUrlImage(String uid) async {
@@ -99,6 +106,9 @@ class AddDemiseState extends State<AddDemise> {
     _profileImageCubit.changeLoaded(true);
     imageFile = value;
   }
+
+
+  List<RelativeRowNew> relativesNew = [];
 
   @override
   Widget build(BuildContext context) {
@@ -296,14 +306,46 @@ class AddDemiseState extends State<AddDemise> {
                       //add relative
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
-                        child: AddRelative(
+                        child:
+
+
+                        RelativesWidget(
+                          isDetail: false,
+                          relatives: relativesNew,
+                          addDemisePress: () {
+                            RelativeRowNew relativeRow = RelativeRowNew(currentIndex: relativesNew.length);
+                            setState(() {
+                              relativesNew.add(relativeRow);
+                            });
+                          },
+                          onKinshipChange: (int index, Kinship kinship) {
+                             setState(() {
+                               relativesNew[index].kinship = kinship;
+                             });
+                          },
+                          inputValueChange: (int index, String value) {
+                            print("CAMBIO VALORE DI INDICE $index");
+                            setState(() {
+                              relativesNew[index].value = value;
+                            });
+                          },
+                          deleteRow: (int index) {
+                          // TODO
+                          // TODO What problem can generate this method?
+                            relativesNew.removeAt(index);
+                            refactorRelativeIndexes();
+                          },)
+
+
+
+                        /*AddRelative(
                           relativeRows: relativeRows,
                           addRelative: () async {
                             setState(() {
                               createNewRelativeRow();
                             });
                           },
-                        ),
+                        ), */
                       ),
 
                       //form submit
@@ -326,13 +368,29 @@ class AddDemiseState extends State<AddDemise> {
           );});
   }
 
+  refactorRelativeIndexes(){
+     for(int i = 0; i< relativesNew.length; i++){
+       relativesNew[i].currentIndex = i;
+     }
+  }
+
+  setKinshipFromDropdownOf(int index, Kinship kinship) {
+    print("ecco quanti elementi ha relatives perle kin " + demiseEntity.relatives.toString());
+    demiseEntity.relatives![index].kinshipType = kinship;
+  }
+
+  setTelephoneNumberOf(int index, String phoneNumber) {
+    print("ecco quanti elementi ha relatives " + demiseEntity.relatives.toString());
+    demiseEntity.relatives![index].telephoneNumber = phoneNumber;
+  }
+
   formSubmit() async{
     // if (_formKey.currentState!.validate()) {
     if (obituaryFile == null) {
       ErrorSnackbar(context, text: 'Inserire necrologio!');
     } else {
 
-      DemiseEntity demiseEntity = DemiseEntity();
+
       demiseEntity.firstName = (nameController.text);
       demiseEntity.lastName = (lastNameController.text);
       demiseEntity.city = CityEntity(name: cityController.text);
@@ -427,14 +485,21 @@ class AddDemiseState extends State<AddDemise> {
 
   }
 
+
+
   void createNewRelativeRow() {
-    selectedValues.add(kinship.first);
+    print("stampettina");
     var x = RelativeRow(
       onChanged: changeDropdown,
       relativeValidator: notEmptyValidate,
       relativeController: relativeController,
-      deleteRelative: deleteRelative, changeKinship: (Kinship selectedKinship) {  }, statusChange: (String selectedValue) {  }, isDetail: false, selectedKinship: Kinship.brother, listKinship: const ['nonno'],
-
+      deleteRelative: deleteRelative,
+      changeKinship: setKinshipFromDropdownOf,
+      changeTelephoneNumber: setTelephoneNumberOf,
+      isDetail: false,
+      selectedKinship: Kinship.brother,
+      listKinship: const ['nonno'],
+      index: relativeIndex,
     );
 
     // RelativeRow(onChanged: (String? value) {
@@ -442,18 +507,24 @@ class AddDemiseState extends State<AddDemise> {
     //     dropdownValue = value!;
     //   });
     // }, kinship: kinship, relativeController: relativeController, deleteRelative: (){}, value: dropdownValue);
-
+    relativeIndex += 1;
     relativeRows.add(x);
+    demiseEntity.relatives!.add(DemiseRelative());
+    (_searchKinshipCubit.state as SearchKinshipState).selectedKinships!.add(Kinship.aunt);
+    (_searchKinshipCubit.state as SearchKinshipState).phoneNumbersInserted!.add("");
+    print("ecco i telefoni dallo stato "+ _searchKinshipCubit.state.phoneNumbersInserted.toString());
+    print("ecco le kinship dallo stato "+ _searchKinshipCubit.state.selectedKinships.toString());
+    //(_searchKinshipCubit.state as SearchKinshipLoaded).phoneNumbersInserted!.add();
   }
 
   changeDropdown(RelativeRow relativeRow, value){
     setState(() {
-      print("ILPARENTE");
-      print(value);
-      var index = relativeRows.indexOf(relativeRow);
-      print("ha indice " + index.toString());
-      selectedValues[index] = value;
-      changeDropdown(relativeRow, value);
+    print("ILPARENTE");
+    print(value);
+    var index = relativeRows.indexOf(relativeRow);
+    print("ha indice " + index.toString());
+    selectedValues[index] = value;
+    changeDropdown(relativeRow, value);
     });
   }
 
