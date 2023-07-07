@@ -77,6 +77,7 @@ class RelativeRowState extends State<RelativeRow> {
           print("FA IL LOADING");
           return const Center(child: CircularProgressIndicator());
         } else if (state is SearchKinshipState && state.loaded!) {
+          widget.relativeController.text = state.phoneNumbersInserted![widget.index];
           List<Kinship>? kinships = state.retrievedKinships;
           return Row(
             mainAxisAlignment: MainAxisAlignment.start,

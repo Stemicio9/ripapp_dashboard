@@ -14,8 +14,11 @@ import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/DemiseRelative.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/RelativeRow.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relatives.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/dropzone/dropzone_widget.dart';
@@ -88,7 +91,7 @@ class AddDemiseState extends State<AddDemise> {
   bool isNetwork = true;
   late String fileName = "";
   late Uint8List fileBytes = Uint8List.fromList([0,1]);
-  DemiseEntity demiseEntity = DemiseEntity();
+  DemiseEntity demiseEntity = DemiseEntity(relatives: []);
 
 
   Future<dynamic> downloadUrlImage(String uid) async {
@@ -103,6 +106,9 @@ class AddDemiseState extends State<AddDemise> {
     _profileImageCubit.changeLoaded(true);
     imageFile = value;
   }
+
+
+  List<RelativeRowNew> relativesNew = [];
 
   @override
   Widget build(BuildContext context) {
@@ -300,14 +306,46 @@ class AddDemiseState extends State<AddDemise> {
                       //add relative
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
-                        child: AddRelative(
+                        child:
+
+
+                        RelativesWidget(
+                          isDetail: false,
+                          relatives: relativesNew,
+                          addDemisePress: () {
+                            RelativeRowNew relativeRow = RelativeRowNew(currentIndex: relativesNew.length);
+                            setState(() {
+                              relativesNew.add(relativeRow);
+                            });
+                          },
+                          onKinshipChange: (int index, Kinship kinship) {
+                             setState(() {
+                               relativesNew[index].kinship = kinship;
+                             });
+                          },
+                          inputValueChange: (int index, String value) {
+                            print("CAMBIO VALORE DI INDICE $index");
+                            setState(() {
+                              relativesNew[index].value = value;
+                            });
+                          },
+                          deleteRow: (int index) {
+                          // TODO
+                          // TODO What problem can generate this method?
+                            relativesNew.removeAt(index);
+                            refactorRelativeIndexes();
+                          },)
+
+
+
+                        /*AddRelative(
                           relativeRows: relativeRows,
                           addRelative: () async {
                             setState(() {
                               createNewRelativeRow();
                             });
                           },
-                        ),
+                        ), */
                       ),
 
                       //form submit
@@ -330,7 +368,14 @@ class AddDemiseState extends State<AddDemise> {
           );});
   }
 
+  refactorRelativeIndexes(){
+     for(int i = 0; i< relativesNew.length; i++){
+       relativesNew[i].currentIndex = i;
+     }
+  }
+
   setKinshipFromDropdownOf(int index, Kinship kinship) {
+    print("ecco quanti elementi ha relatives perle kin " + demiseEntity.relatives.toString());
     demiseEntity.relatives![index].kinshipType = kinship;
   }
 
@@ -464,8 +509,9 @@ class AddDemiseState extends State<AddDemise> {
     // }, kinship: kinship, relativeController: relativeController, deleteRelative: (){}, value: dropdownValue);
     relativeIndex += 1;
     relativeRows.add(x);
+    demiseEntity.relatives!.add(DemiseRelative());
     (_searchKinshipCubit.state as SearchKinshipState).selectedKinships!.add(Kinship.aunt);
-    (_searchKinshipCubit.state as SearchKinshipState).phoneNumbersInserted!.add("nuovo");
+    (_searchKinshipCubit.state as SearchKinshipState).phoneNumbersInserted!.add("");
     print("ecco i telefoni dallo stato "+ _searchKinshipCubit.state.phoneNumbersInserted.toString());
     print("ecco le kinship dallo stato "+ _searchKinshipCubit.state.selectedKinships.toString());
     //(_searchKinshipCubit.state as SearchKinshipLoaded).phoneNumbersInserted!.add();

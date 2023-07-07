@@ -68,5 +68,5 @@ class DemiseRelative {
     "PHONE": telephoneNumber,
   };
 
-  factory DemiseRelative.emptyProduct() => DemiseRelative();
+  factory DemiseRelative.emptyDemise() => DemiseRelative();
 }
