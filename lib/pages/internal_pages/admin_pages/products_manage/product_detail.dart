@@ -17,17 +17,12 @@ import '../../../../widgets/texts.dart';
 class ProductDetail extends StatefulWidget{
 
   final String cardTitle;
-  late int id;
-  late String name;
-  late double price;
+
 
 
   ProductDetail({
     super.key,
-    required this.cardTitle,
-    this.name = "",
-    this.id = 0,
-    this.price = 0,
+    required this.cardTitle
   });
 
   @override
@@ -76,10 +71,8 @@ class ProductDetailState extends State<ProductDetail> {
         builder: (context, state) {
 
       if (state is SelectedProductState) {
-        downloadUrlImage(state.selectedProduct.firebaseId!).then((value) => func(value));
-        widget.id = state.selectedProduct.id ?? 0;
-        widget.name = state.selectedProduct.name ?? "";
-        widget.price = state.selectedProduct.price ?? 0;
+      //  downloadUrlImage(state.selectedProduct.firebaseId!).then((value) => func(value));
+
         return Container(
       padding: getPadding(left: 20, right: 20),
       child: Column(
@@ -106,7 +99,7 @@ class ProductDetailState extends State<ProductDetail> {
                           image: DecorationImage(
                             image:NetworkMemoryImageUtility(
                                 isNetwork: isNetwork,
-                                networkUrl: imageFile,
+                                networkUrl: state.imageUrl,
                                 memoryImage: memoryImage).provide(),
                             fit: BoxFit.cover,
 
@@ -134,7 +127,7 @@ class ProductDetailState extends State<ProductDetail> {
                               ),
                             ),
                           ),
-                          Texth3V2(testo: widget.id.toString(), color: black),
+                          Texth3V2(testo: state.selectedProduct.id.toString(), color: black),
 
                           Padding(
                             padding: getPadding(bottom: 5,top: 20),
@@ -148,7 +141,7 @@ class ProductDetailState extends State<ProductDetail> {
                               ),
                             ),
                           ),
-                          Texth3V2(testo: widget.name, color: black),
+                          Texth3V2(testo: state.selectedProduct.name ?? "", color: black),
 
                           Padding(
                             padding: getPadding(bottom: 5,top:20),
@@ -163,7 +156,7 @@ class ProductDetailState extends State<ProductDetail> {
                             ),
                           ),
                           Texth3V2(
-                              testo: '€ ${widget.price}',
+                              testo: '€ ${state.selectedProduct.price}',
                               color: black
                           ),
 
