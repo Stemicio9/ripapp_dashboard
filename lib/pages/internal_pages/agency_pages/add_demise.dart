@@ -332,8 +332,10 @@ class AddDemiseState extends State<AddDemise> {
                           deleteRow: (int index) {
                           // TODO
                           // TODO What problem can generate this method?
-                            relativesNew.removeAt(index);
-                            refactorRelativeIndexes();
+                            setState(() {
+                              relativesNew.removeAt(index);
+                              refactorRelativeIndexes();
+                            });
                           },)
 
 
@@ -451,7 +453,10 @@ class AddDemiseState extends State<AddDemise> {
       var demiseId = uuid.v4();
       demiseEntity.firebaseid = demiseId;
 
+      demiseEntity.relatives = relativesNew.map((relativeRow) => DemiseRelative(telephoneNumber: relativeRow.value, kinshipType: relativeRow.kinship)).toList();
+
       _searchDemiseCubit.saveDemise(demiseEntity);
+
 
       var obituaryPath = 'obituaries/UID:$uid/demiseId:$demiseId/';
       var obituaryList = await FirebaseStorage.instance.ref(obituaryPath).listAll();
@@ -475,6 +480,7 @@ class AddDemiseState extends State<AddDemise> {
 
       SuccessSnackbar(context, text: 'Defunto aggiunto con successo!');
       context.pop();
+
     }
     // } else {
     //   ErrorSnackbar(
