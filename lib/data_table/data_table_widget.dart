@@ -13,19 +13,20 @@ class DataTableWidget extends StatelessWidget {
   final List<TableRowElement> rows;
   final List<ActionDefinition> superiorActions;
   final List<ActionDefinition> rowActions;
+  final double dataRowHeight;
 
 
 
   const DataTableWidget({Key? key, required this.headers,
     required this.rows, required this.superiorActions,
-    required this.rowActions}) : super(key: key);
+    required this.rowActions, this.dataRowHeight = 48}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ActionWidgetList(actions: superiorActions),
-        InternalTableWidget(headers: headers, rows: rows, rowActions: rowActions)
+        InternalTableWidget(headers: headers, rows: rows, rowActions: rowActions,dataRowHeight: dataRowHeight,)
       ],
     );
   }

@@ -12,6 +12,7 @@ import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/demise_manage.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/my_products.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/new_pages/demise_manage_page.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/new_pages/products_selected_page.dart';
 import 'package:ripapp_dashboard/utils/image_utils.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 
@@ -137,7 +138,10 @@ class DashboardAgencyState extends State<DashboardAgency> {
   Widget bodyChild() {
     switch (currentPage) {
       case 1:
-        return MyProducts();
+        // FIXME using new table widget, it is a try
+        // FIXME eventually return to MyProducts
+        // return MyProducts();
+        return const ProductsSelectedPage();
       case 2:
         // FIXME using new table widget, it is a try
         // FIXME eventually return to DemiseManage

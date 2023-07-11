@@ -1,6 +1,8 @@
+
+import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
 import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
-class ProductEntity implements ResultEntity {
+class ProductEntity implements ResultEntity, TableRowElement {
   int? id;
   String? name;
   String? photoName;
@@ -54,5 +56,25 @@ class ProductEntity implements ResultEntity {
   };
 
   factory ProductEntity.emptyProduct() => ProductEntity();
+
+  @override
+  List<String> getHeaders() {
+    return [
+      "ID",
+      "Foto",
+      "Nome",
+      "Prezzo",
+    ];
+  }
+
+  @override
+  List<RowElement> rowElements() {
+    return [
+      RowElement(isText: true, isImage: false, element: id.toString()),
+      RowElement(isText: false, isImage: true, element: firebaseId ?? ""),
+      RowElement(isText: true, isImage: false, element: name ?? ""),
+      RowElement(isText: true, isImage: false, element: price.toString()),
+    ];
+  }
 
 }

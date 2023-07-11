@@ -1,9 +1,7 @@
-import 'dart:convert';
 
 import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/DemiseRelative.dart';
-import 'package:ripapp_dashboard/models/relative_entity.dart';
 import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
 class DemiseEntity implements ResultEntity, TableRowElement {

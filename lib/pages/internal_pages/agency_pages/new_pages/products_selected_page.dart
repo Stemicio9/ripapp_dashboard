@@ -1,32 +1,40 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
-import 'package:ripapp_dashboard/constants/app_pages.dart';
+import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
-import 'package:ripapp_dashboard/data_table/data_table_widget/action_widget_list.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/empty_table_content.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/products_popup.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
+import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/circular_progress_indicator.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 
-class DemiseManagePage extends StatefulWidget {
-  const DemiseManagePage({Key? key}) : super(key: key);
+class ProductsSelectedPage extends StatefulWidget {
+  const ProductsSelectedPage({Key? key}) : super(key: key);
   @override
-  State<DemiseManagePage> createState() => _DemiseManagePageState();
+  State<ProductsSelectedPage> createState() => _ProductsSelectedPageState();
 }
 
-class _DemiseManagePageState extends State<DemiseManagePage> {
+class _ProductsSelectedPageState extends State<ProductsSelectedPage> {
 
-  CurrentPageCubit get _searchDemiseCubit => context.read<CurrentPageCubit>();
+  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
+  SearchProductsOfferedCubit get _searchProductCubit => context.read<SearchProductsOfferedCubit>();
+
+  void changeAgencyProducts(List<ProductOffered> productsOffered){
+    AgencyRepository().setAgencyProducts(productsOffered);
+     context.pop();
+    _searchProductCubit.changeSelectedProducts();
+  }
 
   @override
   void initState() {
-    _searchDemiseCubit.loadPage(ScaffoldWidgetState.agency_demises_page, 0);
+    _currentPageCubit.loadPage(ScaffoldWidgetState.agency_products_page, 0);
     super.initState();
   }
 
@@ -40,10 +48,10 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
       List<TableRowElement> tableRowElements = state.resultSet as List<TableRowElement>;
       if(tableRowElements.isEmpty){
         return EmptyTableContent(
-            emptyMessage: 'Nessun decesso inserito',
-            showBackButton: false,
-            actions: composeSuperiorActions(),
-            pageTitle: 'Decessi inseriti',
+          emptyMessage: 'Nessun prodotto selezionato',
+          showBackButton: false,
+          actions: composeSuperiorActions(),
+          pageTitle: 'I miei prodotti',
         );
       }
       return Padding(
@@ -53,9 +61,10 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
             children: [
               const PageHeader(
                 showBackButton: false,
-                pageTitle: "Decessi inseriti",
+                pageTitle: 'I miei prodotti',
               ),
               DataTableWidget(
+                  dataRowHeight: 85,
                   headers: tableRowElements[0].getHeaders(),
                   rows: tableRowElements,
                   superiorActions: composeSuperiorActions(),
@@ -71,11 +80,15 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
   List<ActionDefinition> composeSuperiorActions(){
     var actions = <ActionDefinition>[];
     actions.add(ActionDefinition(
-        text: "Aggiungi decesso",
-        isButton: true,
-        action: () {
-          context.push(AppPage.addDemise.path);
-        }
+      text: "Seleziona prodotti",
+      isButton: true,
+      action: () {
+        showDialog(context: context,
+            builder: (ctx)=> ProductsPopup(
+                onTap: changeAgencyProducts
+            )
+        );
+      },
     ));
     return actions;
   }

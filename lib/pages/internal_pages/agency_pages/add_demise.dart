@@ -138,8 +138,6 @@ class AddDemiseState extends State<AddDemise> {
                       ),
 
 
-
-
                       //deceased data
                       state.loaded ?  DeceasedData(
                         emptyFields: () {

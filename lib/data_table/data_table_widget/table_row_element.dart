@@ -13,4 +13,6 @@ class RowElement {
   final String element;
 
   RowElement({required this.isText, required this.isImage, required this.element});
+
+
 }

@@ -6,6 +6,7 @@ import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
+import 'package:ripapp_dashboard/widgets/data_cell_image.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 
 class InternalTableWidget extends StatelessWidget {
@@ -13,9 +14,10 @@ class InternalTableWidget extends StatelessWidget {
   final List<String> headers;
   final List<TableRowElement> rows;
   final List<ActionDefinition> rowActions;
+  final double dataRowHeight;
 
   const InternalTableWidget({Key? key,
-    required this.headers, required this.rows, required this.rowActions}) : super(key: key);
+    required this.headers, required this.rows, required this.rowActions, this.dataRowHeight = 48}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class InternalTableWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: DataTable(
           columnSpacing: 30,
+          dataRowHeight: dataRowHeight,
           dataRowColor: MaterialStateColor.resolveWith((states) => white),
           headingRowColor: MaterialStateColor.resolveWith((states) => background),
           border: const TableBorder(
@@ -72,7 +75,11 @@ class DataCellWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if(element.isImage){
-      return Container();
+      return DataCellImage(
+        fromFirebase: true,
+        firebaseId: element.element,
+
+      );
     } else if(element.isText){
       return Text(
         element.element,

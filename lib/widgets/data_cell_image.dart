@@ -7,8 +7,10 @@ import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.
 class DataCellImage extends StatefulWidget {
 
   final String firebaseId;
+  final String url;
+  final bool fromFirebase;
 
-  const DataCellImage({Key? key, required this.firebaseId}) : super(key: key);
+  const DataCellImage({Key? key, this.firebaseId = "", this.url = "", this.fromFirebase = true}) : super(key: key);
 
   @override
   State<DataCellImage> createState() => _DataCellImageState();
@@ -21,7 +23,11 @@ class _DataCellImageState extends State<DataCellImage> {
   @override
   initState() {
     super.initState();
-    downloadUrlImage(widget.firebaseId).then((value) => changeFunction(value));
+    if(widget.fromFirebase){
+      downloadUrlImage(widget.firebaseId).then((value) => changeFunction(value));
+    } else {
+      url = widget.url;
+    }
   }
 
   Future<dynamic> downloadUrlImage( String productId) async {
