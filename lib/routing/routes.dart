@@ -10,6 +10,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/dashboard_age
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/demise_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/edit_demise.dart';
 import 'package:ripapp_dashboard/pages/login_section/login.dart';
+import 'package:ripapp_dashboard/pages/payment/checkout_page.dart';
 
 class RouterManager {
 
@@ -74,6 +75,12 @@ class RouterManager {
             path: RouteConstants.editDemise,
             builder: (context, state) => EditDemise(),
         ),
+        GoRoute(
+            path: AppPage.checkout.path,
+          builder: (context,state) {
+              return CheckoutWidget();
+          }
+        )
       ],
       redirect: (context , state) async {
         await CustomFirebaseAuthenticationListener().reauthenticate();
