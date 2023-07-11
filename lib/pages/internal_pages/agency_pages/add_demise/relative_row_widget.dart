@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/kinships.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/RelativeRow.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relative_row.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';

@@ -17,7 +17,7 @@ import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/DemiseRelative.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/RelativeRow.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relatives.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
@@ -27,6 +27,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funer
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:uuid/uuid.dart';
@@ -122,20 +123,18 @@ class AddDemiseState extends State<AddDemise> {
           return ScaffoldWidget(
             body: SingleChildScrollView(
               child: Padding(
-                padding: getPadding(top: 40, bottom: 40, left: 5, right: 5),
+                padding: getPadding(top: 30, bottom: 30, left: 5, right: 5),
                 child: Form(
                   key: _formKey ,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Header(
-                        deleteProfileOnTap: (){},
-                        leftPadding: const EdgeInsets.only(left: 5),
-                        showBackButton: true,
-                        onTap: null,
-                        showPageTitle: false,
-                        isVisible: false,
+
+                      const PageHeader(
+                          pageTitle: "Aggiungi decesso",
+                          showBackButton: true,
                       ),
+
 
                       //deceased data
                       state.loaded ?  DeceasedData(

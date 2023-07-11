@@ -18,6 +18,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funer
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
@@ -111,11 +112,6 @@ class EditDemiseState extends State<EditDemise> {
     imageFile = value;
   }
 
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     _currentPageCubit.changeCurrentPage(RouteConstants.editDemise);
@@ -155,19 +151,16 @@ class EditDemiseState extends State<EditDemise> {
               return ScaffoldWidget(
                 body: SingleChildScrollView(
                   child: Padding(
-                    padding: getPadding(top: 40, bottom: 40, left: 5, right: 5),
+                    padding: getPadding(top: 30, bottom: 30, left: 5, right: 5),
                     child: Form(
-                      key: _formKey,
+                      key: _formKey ,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Header(
-                            deleteProfileOnTap: () {},
-                            leftPadding: const EdgeInsets.only(left: 5),
+
+                          const PageHeader(
+                            pageTitle: "Modifica decesso",
                             showBackButton: true,
-                            onTap: null,
-                            showPageTitle: false,
-                            isVisible: false,
                           ),
 
                           //deceased data

@@ -99,8 +99,7 @@ class DashboardState extends State<Dashboard> {
         avatarImg: const AssetImage("assets/images/profiledefault.jpeg"),
         title: getCurrentLanguageValue(ADMIN)!,
         body: _body(size, context),
-        toggleTitle: '',
-        isAgency: false,
+        toggleTitle: ''
       ),
     );
   }

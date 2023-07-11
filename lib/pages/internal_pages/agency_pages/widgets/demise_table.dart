@@ -99,15 +99,11 @@ class DemiseTableState extends State<DemiseTable>{
               }else{
               return Container(
                 padding: getPadding(top: 20),
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
+                width: MediaQuery.of(context).size.width,
                 child: DataTable(
                   columnSpacing: 30,
                   dataRowColor: MaterialStateColor.resolveWith((states) => white),
-                  headingRowColor: MaterialStateColor.resolveWith((
-                      states) => background),
+                  headingRowColor: MaterialStateColor.resolveWith((states) => background),
                   border: const TableBorder(
                     top: BorderSide(width: 0.5, color: greyState),
                     bottom: BorderSide(width: 0.5, color: greyState),

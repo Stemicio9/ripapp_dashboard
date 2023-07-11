@@ -11,6 +11,7 @@ import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/demise_manage.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/my_products.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/new_pages/demise_manage_page.dart';
 import 'package:ripapp_dashboard/utils/image_utils.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 
@@ -138,7 +139,10 @@ class DashboardAgencyState extends State<DashboardAgency> {
       case 1:
         return MyProducts();
       case 2:
-        return DemiseMenage();
+        // FIXME using new table widget, it is a try
+        // FIXME eventually return to DemiseManage
+        // return DemiseMenage();
+        return const DemiseManagePage();
       case 3:
         return AgencyProfile();
       default:

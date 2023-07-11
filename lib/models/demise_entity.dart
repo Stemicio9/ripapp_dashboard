@@ -1,11 +1,12 @@
 import 'dart:convert';
 
+import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/DemiseRelative.dart';
 import 'package:ripapp_dashboard/models/relative_entity.dart';
 import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
-class DemiseEntity implements ResultEntity {
+class DemiseEntity implements ResultEntity, TableRowElement {
 
   //deceased data
   int? id;
@@ -165,4 +166,30 @@ class DemiseEntity implements ResultEntity {
   };
 
   factory DemiseEntity.emptyDemise() => DemiseEntity();
+
+  @override
+  List<String> getHeaders() {
+     return [
+      "ID",
+      "Nome",
+      "Cognome",
+      "Città",
+      "Telefono",
+      "Indirizzo Chiesa",
+      "Indirizzo Veglia",
+     ];
+  }
+
+  @override
+  List<RowElement> rowElements() {
+     return [
+       RowElement(isText: true, isImage: false, element: id.toString()),
+       RowElement(isText: true, isImage: false, element: firstName ?? ""),
+       RowElement(isText: true, isImage: false, element: lastName ?? ""),
+       RowElement(isText: true, isImage: false, element: city?.name ?? ""),
+       RowElement(isText: true, isImage: false, element: phoneNumber ?? ""),
+       RowElement(isText: true, isImage: false, element: funeralAddress ?? ""),
+       RowElement(isText: true, isImage: false, element: wakeAddress ?? ""),
+     ];
+  }
 }
