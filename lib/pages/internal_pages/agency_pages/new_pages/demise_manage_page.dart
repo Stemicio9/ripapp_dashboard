@@ -1,21 +1,26 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
+import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/app_pages.dart';
+import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
-import 'package:ripapp_dashboard/data_table/data_table_widget/action_widget_list.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/empty_table_content.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
+import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/circular_progress_indicator.dart';
+import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
+import 'package:ripapp_dashboard/widgets/utilities/firebase_image_utility.dart';
 
 class DemiseManagePage extends StatefulWidget {
   const DemiseManagePage({Key? key}) : super(key: key);
+
   @override
   State<DemiseManagePage> createState() => _DemiseManagePageState();
 }
@@ -23,6 +28,8 @@ class DemiseManagePage extends StatefulWidget {
 class _DemiseManagePageState extends State<DemiseManagePage> {
 
   CurrentPageCubit get _searchDemiseCubit => context.read<CurrentPageCubit>();
+  SelectedDemiseCubit get _selectedDemiseCubit => context.read<SelectedDemiseCubit>();
+  DemiseCubit get _demiseCubit => context.read<DemiseCubit>();
 
   @override
   void initState() {
@@ -59,24 +66,88 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
                   headers: tableRowElements[0].getHeaders(),
                   rows: tableRowElements,
                   superiorActions: composeSuperiorActions(),
-                  rowActions: []
-              ),
-            ],
+                  rowActions: composeRowActions()),
+              ],
+            ),
           ),
-        ),
-      );
+        );
     });
   }
 
   List<ActionDefinition> composeSuperiorActions(){
     var actions = <ActionDefinition>[];
     actions.add(ActionDefinition(
-        text: "Aggiungi decesso",
-        isButton: true,
-        action: () {
-          context.push(AppPage.addDemise.path);
-        }
+      text: "Aggiungi decesso",
+      isButton: true,
+      action: () {
+        context.push(AppPage.addDemise.path);
+      }
     ));
     return actions;
+  }
+
+  List<ActionDefinition> composeRowActions(){
+    List<ActionDefinition> result = [];
+    result.add(viewAction());
+    result.add(editAction());
+    result.add(deleteAction());
+    return result;
+  }
+
+  ActionDefinition editAction(){
+    ActionDefinition result = ActionDefinition(
+        action: (DemiseEntity demiseEntity){
+          _selectedDemiseCubit.selectDemise(demiseEntity);
+          context.push(AppPage.editDemise.path);
+        },
+        icon: Icons.edit_rounded,
+        tooltip: "Modifica"
+    );
+    return result;
+  }
+
+  ActionDefinition deleteAction(){
+    ActionDefinition result = ActionDefinition(
+        action: (DemiseEntity demiseEntity){
+          showDialog(
+              context: context,
+              builder: (_) => DeleteMessageDialog(
+                onConfirm: (){
+                  _demiseCubit.delete(demiseEntity.id);
+                  FirebaseImageUtility.deleteAllImages(demiseEntity.firebaseid);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: green,
+                      content: const Text('Defunto eliminato con successo!'),
+                      duration: const Duration(milliseconds: 3000),
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                    ),
+                  );
+                  context.pop();
+                },
+                onCancel: () {context.pop();},
+                message: 'Le informazioni riguardanti questo decesso verranno eliminate. Sei sicuro di volerle eliminare?',
+              )
+          );
+        },
+        icon: Icons.delete_rounded,
+        tooltip: "Elimina"
+    );
+    return result;
+  }
+
+  ActionDefinition viewAction(){
+    ActionDefinition result = ActionDefinition(
+        action: (DemiseEntity demiseEntity){
+          _selectedDemiseCubit.selectDemise(demiseEntity);
+          context.push(AppPage.demiseDetail.path);
+        },
+        icon: Icons.remove_red_eye_rounded,
+        tooltip: "Dettaglio"
+    );
+    return result;
   }
 }

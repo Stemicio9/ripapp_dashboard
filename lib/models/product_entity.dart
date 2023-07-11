@@ -64,6 +64,7 @@ class ProductEntity implements ResultEntity, TableRowElement {
       "Foto",
       "Nome",
       "Prezzo",
+      ""
     ];
   }
 

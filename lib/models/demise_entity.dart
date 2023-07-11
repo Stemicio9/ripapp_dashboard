@@ -165,9 +165,10 @@ class DemiseEntity implements ResultEntity, TableRowElement {
 
   factory DemiseEntity.emptyDemise() => DemiseEntity();
 
+
   @override
   List<String> getHeaders() {
-     return [
+    return [
       "ID",
       "Nome",
       "Cognome",
@@ -175,19 +176,22 @@ class DemiseEntity implements ResultEntity, TableRowElement {
       "Telefono",
       "Indirizzo Chiesa",
       "Indirizzo Veglia",
-     ];
+      ""
+    ];
   }
 
   @override
   List<RowElement> rowElements() {
-     return [
-       RowElement(isText: true, isImage: false, element: id.toString()),
-       RowElement(isText: true, isImage: false, element: firstName ?? ""),
-       RowElement(isText: true, isImage: false, element: lastName ?? ""),
-       RowElement(isText: true, isImage: false, element: city?.name ?? ""),
-       RowElement(isText: true, isImage: false, element: phoneNumber ?? ""),
-       RowElement(isText: true, isImage: false, element: funeralAddress ?? ""),
-       RowElement(isText: true, isImage: false, element: wakeAddress ?? ""),
-     ];
+    return [
+      RowElement(isText: true, isImage: false, element: id.toString()),
+      RowElement(isText: true, isImage: false, element: firstName ?? ""),
+      RowElement(isText: true, isImage: false, element: lastName ?? ""),
+      RowElement(isText: true, isImage: false, element: city?.name ?? ""),
+      RowElement(isText: true, isImage: false, element: phoneNumber ?? ""),
+      RowElement(isText: true, isImage: false, element: funeralAddress ?? ""),
+      RowElement(isText: true, isImage: false, element: wakeAddress ?? ""),
+    ];
   }
+
+
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
+import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/repositories/demise_repository.dart';
@@ -62,5 +63,15 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
 
   void changeCurrentPage(String page) {
     emit(state.copyWith(page: page));
+  }
+
+  // todo add to this method pagination logic
+  void updateDemise(DemiseEntity demiseEntity){
+    try{
+      DemiseRepository().saveDemise(demiseEntity);
+      loadPage(ScaffoldWidgetState.agency_demises_page, 0);
+    }catch(e){
+      print(e);
+    }
   }
 }

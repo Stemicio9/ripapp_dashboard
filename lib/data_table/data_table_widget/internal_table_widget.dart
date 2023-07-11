@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
+import 'package:ripapp_dashboard/data_table/data_table_widget/action_widget.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
@@ -53,7 +54,22 @@ class InternalTableWidget extends StatelessWidget {
 
   DataRow composeDataRow(TableRowElement element){
     return DataRow(
-        cells: element.rowElements().map((e) => composeDataCell(e)).toList()
+        cells: element.rowElements().map((e) => composeDataCell(e)).toList()..add(composeActionCell(element))
+    );
+  }
+
+  DataCell composeActionCell(TableRowElement element){
+    return DataCell(
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [...rowActions.map((e) {
+          e.actionInputs = element;
+          return Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: ActionWidget(action: e),
+          );
+        }).toList()],
+      )
     );
   }
 
