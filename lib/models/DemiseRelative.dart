@@ -4,7 +4,7 @@ import 'package:ripapp_dashboard/models/user_entity.dart';
 
 class DemiseRelative {
   int? relativeId;
-  DemiseEntity? demise;
+  DemiseEntity? demise; //todo, forse si puo togliere questo campo
   UserEntity? user;
   Kinship? kinshipType;
   String? name;
@@ -34,11 +34,11 @@ class DemiseRelative {
     relativeId: json["productId"] ?? 0,
     demise: json["demise"],
     user: json["user"],
-    kinshipType: json["kinshipType"],
+    kinshipType: Kinship.fromJson(json['kinship']),
     name: json["name"],
     surname: json["surname"],
     email: json["email"],
-    telephoneNumber: json["telephoneNumber"]
+    telephoneNumber: json["phone"]
   );
 
   DemiseRelative copyWith({
@@ -58,14 +58,14 @@ class DemiseRelative {
   }
 
   Map<String, dynamic> toJson() => {
-    "RELATIVEID": relativeId,
+    "relativeid": relativeId,
     "demise": demise,
     "account": user,
-    "KINSHIP": kinshipType,
+    "kinship": kinshipType,
     "name": name,
     "surname": surname,
     "email": email,
-    "PHONE": telephoneNumber,
+    "phone": telephoneNumber,
   };
 
   factory DemiseRelative.emptyDemise() => DemiseRelative();

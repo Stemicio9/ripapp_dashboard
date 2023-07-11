@@ -78,6 +78,8 @@ class DemiseRepository{
       var userId = (user != null) ? user.id : 48;
       Map<String, dynamic>? parameters = {};
       parameters.putIfAbsent("userid", () => userId);
+      parameters.putIfAbsent("pageNumber", () => demisesSearchEntity.pageNumber);
+      parameters.putIfAbsent("pageElements", () => demisesSearchEntity.pageElements);
       res = await globalDio.get(searchDemisesByCityUrl, queryParameters: parameters);
       print("esatto2");
     }
@@ -87,7 +89,9 @@ class DemiseRepository{
     if (res.statusCode != 201 && res.statusCode != 200) {
       return List.empty(growable: true);
     }
-    List<DemiseEntity> demises = (res.data as List).map((e) => DemiseEntity.fromJson(e)).toList();
+    print("esatto 3 " + res.data.toString());
+    String goodJson = jsonEncode(res.data);
+    List<DemiseEntity> demises = ((jsonDecode(goodJson) as Map)["content"] as List).map((e) => DemiseEntity.fromJson(e)).toList();
 
     print(" demises"+ demises.toString());
     return demises;
@@ -98,7 +102,7 @@ class DemiseRepository{
 
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
-    int pageElements = 3;
+    int pageElements = 30;
     AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
 
     try {

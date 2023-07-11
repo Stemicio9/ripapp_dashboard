@@ -10,4 +10,9 @@ class RelativeRowNew {
   int currentIndex;
 
   RelativeRowNew({this.value = "", this.kinship = Kinship.mother, this.currentIndex = 0});
+
+  @override
+  String toString() {
+    return 'RelativeRowNew{value: $value, kinship: $kinship, currentIndex: $currentIndex,}';
+  }
 }

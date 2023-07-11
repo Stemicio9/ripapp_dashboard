@@ -27,7 +27,7 @@ class DemiseCubit extends Cubit<DemiseState> {
           .then((demises) => emit(SearchDemiseLoaded(demises, false))).catchError((e) => emit(SearchDemiseLoaded(List.empty(growable: false), false)));
       */
       //var demises = await DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset));
-      var demises = await DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset));
+      var demises = await DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset, pageElements: 10, pageNumber: 0));
       print(demises);
       emit(SearchDemiseLoaded(demises, false));
     }catch(e){
@@ -51,12 +51,15 @@ class DemiseCubit extends Cubit<DemiseState> {
   }
 
   saveDemise(DemiseEntity demiseEntity) async{
+    print("qui ci entro??");
     emit(SaveDemiseLoading());
     try{
       var result= await DemiseRepository().saveDemise(demiseEntity);
-      print("ECCO RESULT DEMISE");
+      print("qui ci entrai??");
       print(result);
-      emit(SaveDemiseLoaded(result));
+      List<DemiseEntity> currentDemises = (result as List).map((e) => DemiseEntity.fromJson(e)).toList();
+      print("eccoti i demises castati : " + currentDemises.toString());
+      emit(SaveDemiseLoaded(currentDemises));
       print("HO SALVATO LA DEMISE, FACCIO LA FETCH");
 
       fetchDemises();
@@ -85,7 +88,7 @@ class SearchDemiseLoaded extends DemiseState {
 
 class SaveDemiseLoading extends DemiseState {}
 class SaveDemiseLoaded extends DemiseState {
-  final DemiseEntity demiseSaved;
+  final List<DemiseEntity> demiseSaved;
   SaveDemiseLoaded(this.demiseSaved);
 }
 class SaveDemiseError extends DemiseState {}
