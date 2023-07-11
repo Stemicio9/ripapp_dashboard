@@ -15,14 +15,11 @@ class ActionWidget extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          if (action.actionInputs != null) {
-            action.action(action.actionInputs);
-          } else {
-            action.action();
-          }
+            Function.apply(action.action, action.actionInputs);
+           // action.action(action.actionInputs);
         },
         child: action.isButton
-            ? SuperiorActionWidget(action: action.action, text: action.text)
+            ? SuperiorActionWidget(action: action.action, text: action.text, buttonColor: action.buttonColor)
             : IconTableWidget(icon: action.icon, tooltip: action.tooltip),
       ),
     );

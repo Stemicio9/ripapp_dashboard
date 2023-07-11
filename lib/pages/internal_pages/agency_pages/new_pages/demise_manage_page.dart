@@ -81,7 +81,8 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
       isButton: true,
       action: () {
         context.push(AppPage.addDemise.path);
-      }
+      },
+      actionInputs: List.empty(growable: true)
     ));
     return actions;
   }
@@ -101,7 +102,8 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
           context.push(AppPage.editDemise.path);
         },
         icon: Icons.edit_rounded,
-        tooltip: "Modifica"
+        tooltip: "Modifica",
+        actionInputs: List.empty(growable: true)
     );
     return result;
   }
@@ -129,12 +131,14 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
                   context.pop();
                 },
                 onCancel: () {context.pop();},
-                message: 'Le informazioni riguardanti questo decesso verranno eliminate. Sei sicuro di volerle eliminare?',
+                message: 'Le informazioni riguardanti questo decesso '
+                    'verranno eliminate. Sei sicuro di volerle eliminare?',
               )
           );
         },
         icon: Icons.delete_rounded,
-        tooltip: "Elimina"
+        tooltip: "Elimina",
+        actionInputs: List.empty(growable: true)
     );
     return result;
   }
@@ -146,7 +150,8 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
           context.push(AppPage.demiseDetail.path);
         },
         icon: Icons.remove_red_eye_rounded,
-        tooltip: "Dettaglio"
+        tooltip: "Dettaglio",
+        actionInputs: List.empty(growable: true)
     );
     return result;
   }

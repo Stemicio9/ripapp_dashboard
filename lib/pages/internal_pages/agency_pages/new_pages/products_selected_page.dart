@@ -89,6 +89,7 @@ class _ProductsSelectedPageState extends State<ProductsSelectedPage> {
             )
         );
       },
+      actionInputs: List.empty(growable: true),
     ));
     return actions;
   }

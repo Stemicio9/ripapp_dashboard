@@ -96,6 +96,7 @@ class AgencyProfileState extends State<AgencyProfile> {
             builder: (ctx) => editProfile()
         );
       },
+      actionInputs: List.empty(growable: true)
     ));
 
     actions.add(ActionDefinition(
@@ -108,6 +109,7 @@ class AgencyProfileState extends State<AgencyProfile> {
             builder: (ctx) => deleteProfile()
         );
       },
+      actionInputs: List.empty(growable: true)
     ));
     return actions;
   }

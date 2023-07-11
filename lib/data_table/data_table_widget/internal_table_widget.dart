@@ -63,7 +63,7 @@ class InternalTableWidget extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [...rowActions.map((e) {
-          e.actionInputs = element;
+          e.actionInputs.add(element);
           return Padding(
             padding: const EdgeInsets.only(left: 10),
             child: ActionWidget(action: e),
