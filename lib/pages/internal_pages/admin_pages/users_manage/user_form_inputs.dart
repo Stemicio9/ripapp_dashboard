@@ -13,6 +13,7 @@ import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/autocomplete.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
+import 'package:ripapp_dashboard/widgets/utilities/empty_fields_widget.dart';
 
 
 class UserFormInputs extends StatelessWidget {
@@ -31,6 +32,7 @@ class UserFormInputs extends StatelessWidget {
   final bool isAddPage;
   final bool isPassword;
   final Function() iconOnTap;
+  final Function() emptyFields;
   final List<UserRoles> roles;
   final suffixIcon;
   final UserEntity selectedUser;
@@ -41,6 +43,7 @@ class UserFormInputs extends StatelessWidget {
 
   UserFormInputs({
     super.key,
+    required this.emptyFields,
     required this.nameController,
     required this.lastNameController,
     required this.emailController,
@@ -304,14 +307,27 @@ class UserFormInputs extends StatelessWidget {
           ),
         ),
 
-        Align(
-          alignment: Alignment.centerRight,
-          child: ActionButtonV2(
-            action: () {
-              action();
-            },
-            text: getCurrentLanguageValue(SAVE)!,
-          ),
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: EmptyFieldsWidget().emptyFields(emptyFields),
+            ),
+
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: getPadding(top: 40),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: ActionButtonV2(
+                    action: action,
+                    text: getCurrentLanguageValue(SAVE)!,
+                  ),
+                ),
+              ),
+            ),
+          ],
         )
       ],
     );

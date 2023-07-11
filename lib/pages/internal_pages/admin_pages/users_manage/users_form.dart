@@ -25,7 +25,7 @@ class UsersForm extends StatelessWidget {
   final TextEditingController passwordController;
   final List<CityFromAPI> options;
   final onTap;
-  final Function(String selectedValue) statusChange;
+  Function(String selectedValue) statusChange;
   final Function(AgencyEntity selectedAgency) agencyChange;
   late List<UserRoles> roles;
   final bool isAddPage;
@@ -79,7 +79,7 @@ class UsersFormWidget extends StatefulWidget {
   final TextEditingController passwordController;
   final List<CityFromAPI> options;
   final onTap;
-  final Function(String selectedValue) statusChange;
+  late final Function(String selectedValue) statusChange;
   final Function(AgencyEntity selectedAgency) agencyChange;
   late List<UserRoles> roles;
   final bool isAddPage;
@@ -170,64 +170,48 @@ class UsersFormState extends State<UsersFormWidget> {
                                         paddingLeft: 10,
                                         paddingRight: 10,
                                         cardTitle: widget.cardTitle,
-                                        child: BlocBuilder<CityListCubit,
-                                                CityListState>(
+                                        child: BlocBuilder<CityListCubit, CityListState>(
                                             builder: (context, cityState) {
                                           if (cityState is CityListLoading) {
-                                            return const Center(
-                                                child:
-                                                    CircularProgressIndicator());
+                                            return const Center(child: CircularProgressIndicator());
                                           } else if (cityState
                                               is CityListLoaded) {
                                             cityList = cityState.listCity;
                                             return UserFormInputs(
-                                              nameController:
-                                                  widget.nameController,
-                                              lastNameController:
-                                                  widget.lastNameController,
-                                              emailController:
-                                                  widget.emailController,
-                                              passwordController:
-                                                  widget.passwordController,
-                                              cityController:
-                                                  widget.filterController,
-                                              phoneController:
-                                                  widget.phoneController,
+                                              emptyFields: (){
+                                                widget.nameController.text = "";
+                                                widget.lastNameController.text = "";
+                                                widget.phoneController.text = "";
+                                                widget.emailController.text = "";
+                                                widget.passwordController.text = "";
+
+                                              },
+                                              nameController: widget.nameController,
+                                              lastNameController: widget.lastNameController,
+                                              emailController: widget.emailController,
+                                              passwordController: widget.passwordController,
+                                              cityController: widget.filterController,
+                                              phoneController: widget.phoneController,
                                               action: () {
-                                                widget.onTap(
-                                                    stateCity.selectedCity);
+                                                widget.onTap(stateCity.selectedCity);
                                               },
                                               isAddPage: widget.isAddPage,
                                               iconOnTap: () {
                                                 setState(() {
-                                                  _passwordVisible =
-                                                      !_passwordVisible;
+                                                  _passwordVisible = !_passwordVisible;
                                                 });
                                               },
                                               isPassword: !_passwordVisible,
-                                              suffixIcon: _passwordVisible
-                                                  ? ImagesConstants.imgPassSee
-                                                  : ImagesConstants
-                                                      .imgPassUnsee,
+                                              suffixIcon: _passwordVisible ? ImagesConstants.imgPassSee : ImagesConstants.imgPassUnsee,
                                               cityList: cityList,
                                               roles: widget.roles,
-                                              selectedAgency:
-                                                  agencyState.selectedAgency,
+                                              selectedAgency: agencyState.selectedAgency,
                                               statusChange: (UserRoles? value) {
-                                                _selectedUserCubit.selectUser(
-                                                    state.selectedUser.copyWith(
-                                                        status: fromUserRole(
-                                                            value ??
-                                                                UserRoles
-                                                                    .Utente)));
-                                                widget.statusChange(
-                                                    value?.name ?? "");
+                                                _selectedUserCubit.selectUser(state.selectedUser.copyWith(status: fromUserRole(value ?? UserRoles.Utente)));
+                                                widget.statusChange(value?.name ?? "");
                                               },
-                                              agencyChange:
-                                                  (AgencyEntity? value) {
-                                                _searchAgencyCubit
-                                                    .changeSelectedAgency(
-                                                        value);
+                                              agencyChange: (AgencyEntity? value) {
+                                                _searchAgencyCubit.changeSelectedAgency(value);
                                                 if (value != null) {
                                                   widget.agencyChange(value);
                                                 }
@@ -235,21 +219,25 @@ class UsersFormState extends State<UsersFormWidget> {
                                               selectedUser: state.selectedUser,
                                               agencies: agencyState.agencies,
                                             );
-                                          } else
+                                          } else {
                                             return ErrorWidget("exception");
+                                          }
                                         })))
                               ],
                             ),
                           )
                         ]));
-              } else
+              } else {
                 return ErrorWidget("exception");
+              }
             });
-          } else
+          } else {
             return ErrorWidget("exception");
+          }
         });
-      } else
+      } else {
         return ErrorWidget("exception2");
+      }
     });
   }
 }

@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage/product_form_image.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage/product_form_inputs.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage/products_form_buttons.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
@@ -58,7 +60,7 @@ class ProductFormState extends State<ProductForm> {
     print(fileName);
 
     if (fileName.isNotEmpty && fileBytes != null) {
-        await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes!);
+      await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes!);
     }
   }
 
@@ -86,7 +88,7 @@ class ProductFormState extends State<ProductForm> {
       nameController.text = "";
       priceController.text = "";
 
-      Navigator.pop(context);
+      context.pop();
     }
   }
 
@@ -119,29 +121,42 @@ class ProductFormState extends State<ProductForm> {
                         paddingLeft: 10,
                         paddingRight: 10,
                         cardTitle: widget.cardTitle,
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                      padding: const EdgeInsets.only(right: 30),
-                                      child: ProductFormImage(
-                                                imageUrl: imageUrl,
-                                                onTap: formImageOnTap,
-                                                isNetwork: isNetwork,
-                                                memoryImage: memoryImage),
-                                          )),
-                              Expanded(
-                                  flex: 2,
-                                  child: ProductFormInputs(
-                                            nameController: nameController,
-                                            priceController: priceController,
-                                            action: () {
-                                              formSubmit(imageUrl, id);
-                                            })
-                                      )
-                            ])))
+                        child: Column(
+                          children: [
+                            Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(right: 30),
+                                        child: ProductFormImage(
+                                            imageUrl: imageUrl,
+                                            onTap: formImageOnTap,
+                                            isNetwork: isNetwork,
+                                            memoryImage: memoryImage),
+                                      )),
+                                  Expanded(
+                                      flex: 2,
+                                      child: ProductFormInputs(
+                                        nameController: nameController,
+                                        priceController: priceController,
+
+                                      ))
+                                ]),
+
+                            ProductFormButtons(
+                              action: () {
+                                formSubmit(imageUrl, id);
+                              },
+                              emptyFields: (){
+                                nameController.text = "";
+                                priceController.text = "";
+                              },
+                            ),
+
+                          ],
+                        )))
               ],
             )));
   }
@@ -150,19 +165,19 @@ class ProductFormState extends State<ProductForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<SelectedProductCubit, SelectedProductState>(
         builder: (context, state) {
-      nameController.text = "";
-      priceController.text = "";
-      print("SONO APPENA ENTRATO NEL BLOC");
-      print(state.imageUrl);
-      if (widget.isEdit) {
-        nameController.text = state.selectedProduct.name ?? nameController.text;
-        priceController.text = state.selectedProduct.price.toString();
-        fileName = state.imageUrl;
-      }
-      return widget.isEdit
-          ? composeProductForm(state.imageUrl, state.selectedProduct.id)
-          : composeProductForm(ImagesConstants.imgDemisePlaceholder, null);
-    });
+          nameController.text = "";
+          priceController.text = "";
+          print("SONO APPENA ENTRATO NEL BLOC");
+          print(state.imageUrl);
+          if (widget.isEdit) {
+            nameController.text = state.selectedProduct.name ?? nameController.text;
+            priceController.text = state.selectedProduct.price.toString();
+            fileName = state.imageUrl;
+          }
+          return widget.isEdit
+              ? composeProductForm(state.imageUrl, state.selectedProduct.id)
+              : composeProductForm(ImagesConstants.imgDemisePlaceholder, null);
+        });
   }
 
 }

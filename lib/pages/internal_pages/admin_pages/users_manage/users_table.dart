@@ -89,8 +89,7 @@ class UsersTableState extends State<UsersTable> {
             child: DataTable(
               columnSpacing: 30,
               dataRowColor: MaterialStateColor.resolveWith((states) => white),
-              headingRowColor:
-                  MaterialStateColor.resolveWith((states) => background),
+              headingRowColor: MaterialStateColor.resolveWith((states) => background),
               border: const TableBorder(
                 top: BorderSide(width: 0.5, color: greyState),
                 bottom: BorderSide(width: 0.5, color: greyState),

@@ -106,7 +106,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<CurrentUserCubit>(create: (_) => CurrentUserCubit()),
             BlocProvider<SelectedDemiseCubit>(create: (_) => SelectedDemiseCubit()),
             BlocProvider<SelectedUserCubit>(create: (_) => SelectedUserCubit()),
-           // BlocProvider<SelectedAgencyCubit>(create: (_) => SelectedAgencyCubit()),
+            BlocProvider<SelectedAgencyCubit>(create: (_) => SelectedAgencyCubit()),
             BlocProvider<SelectedProductCubit>(create: (_) => SelectedProductCubit()),
             BlocProvider<CurrentPageCubit>(create: (_) => CurrentPageCubit()),
             BlocProvider<SelectedUserCubit>(create: (_) => SelectedUserCubit()),

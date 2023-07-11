@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/widgets/autocomplete.dart';
+import 'package:ripapp_dashboard/widgets/utilities/empty_fields_widget.dart';
 import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
 import '../../../../blocs/city_list_cubit.dart';
 import '../../../../blocs/selected_city_cubit.dart';
@@ -25,7 +26,7 @@ class DeceasedData extends StatefulWidget {
   final TextEditingController citiesController;
   final TextEditingController filterController;
   bool isEdit = false;
-
+  final Function() emptyFields;
   final dynamic nameValidator;
   final dynamic phoneValidator;
   final dynamic lastNameValidator;
@@ -44,6 +45,7 @@ class DeceasedData extends StatefulWidget {
 
 
   DeceasedData({super.key,
+    required this.emptyFields,
     required this.child,
     required this.isEdit,
     this.memoryImage,
@@ -113,6 +115,8 @@ class DeceasedDataState extends State<DeceasedData>{
                           weight: FontWeight.w700,
                         ),
                       ),
+
+                      EmptyFieldsWidget().emptyFields(widget.emptyFields),
 
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
@@ -451,4 +455,5 @@ class DeceasedDataState extends State<DeceasedData>{
             return ErrorWidget("exception");
         } );
   }
+
 }

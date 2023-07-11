@@ -3,17 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
-import 'package:ripapp_dashboard/utils/size_utils.dart';
-import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
 
 class ProductFormInputs extends StatelessWidget {
 
   final TextEditingController nameController;
   final TextEditingController priceController;
-  final Function() action;
 
-  const ProductFormInputs({super.key, required this.nameController, required this.priceController, required this.action});
+  const ProductFormInputs({super.key, required this.nameController, required this.priceController});
 
   @override
   Widget build(BuildContext context) {
@@ -47,18 +44,7 @@ class ProductFormInputs extends StatelessWidget {
           activeBorderSide: const BorderSide(color: background),
         ),
 
-        Padding(
-          padding: getPadding(top: 40),
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: ActionButtonV2(
-              action: () {
-                action();
-              },
-              text: getCurrentLanguageValue(SAVE)!,
-            ),
-          ),
-        ),
+
       ],
     );
   }

@@ -13,7 +13,6 @@ import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/dropzone/file_data_model.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
@@ -172,6 +171,25 @@ class EditDemiseState extends State<EditDemise> {
 
                           //deceased data
                           imageState.loaded ? DeceasedData(
+                            emptyFields: (){
+                              nameController.text = '';
+                              lastNameController.text = '';
+                              cityController.text = '';
+                              phoneController.text = '';
+                              ageController.text = '';
+                              deceasedDateController.text = '';
+                              wakeAddressController.text = '';
+                              wakeDateController.text = '';
+                              wakeTimeController.text = '';
+                              wakeNoteController.text = '';
+                              funeralAddressController.text = '';
+                              funeralDateController.text = '';
+                              funeralTimeController.text = '';
+                              funeralNoteController.text = '';
+                              citiesController.text = '';
+                              relativeController.text = '';
+                              filterController.text = '';
+                            },
                             isEdit: true,
                             isNetwork: isNetwork,
                             imageFile: imageFile,

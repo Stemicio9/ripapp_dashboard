@@ -149,8 +149,10 @@ class ProductsManageState extends State<ProductsManage>{
               },
 
 
-              showDetail: (dynamic p){
-                _selectedProductCubit.selectProduct(p);
+              showDetail: (dynamic p) async {
+                print("IL PRODOTTO CHE STO SELEZIONANDO");
+                print(p);
+                await _selectedProductCubit.selectProduct(p);
                 showDialog(
                     context: context,
                     builder: (ctx)=> ProductDetail(

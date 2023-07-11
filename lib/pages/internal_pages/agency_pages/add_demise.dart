@@ -10,6 +10,7 @@ import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
+import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
@@ -29,6 +30,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
+import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:uuid/uuid.dart';
 import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
@@ -51,7 +53,7 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController deceasedDateController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
+  final TextEditingController wakeAddressController = TextEditingController();
   final TextEditingController wakeDateController = TextEditingController();
   final TextEditingController wakeTimeController = TextEditingController();
   final TextEditingController wakeNoteController = TextEditingController();
@@ -137,8 +139,30 @@ class AddDemiseState extends State<AddDemise> {
                         isVisible: false,
                       ),
 
+
+
                       //deceased data
                       state.loaded ?  DeceasedData(
+                        emptyFields: () {
+
+                            nameController.text = '';
+                            lastNameController.text = '';
+                            cityController.text = '';
+                            phoneController.text = '';
+                            ageController.text = '';
+                            deceasedDateController.text = '';
+                            wakeAddressController.text = '';
+                            wakeDateController.text = '';
+                            wakeTimeController.text = '';
+                            wakeNoteController.text = '';
+                            funeralAddressController.text = '';
+                            funeralDateController.text = '';
+                            funeralTimeController.text = '';
+                            funeralNoteController.text = '';
+                            citiesController.text = '';
+                            filterController.text = '';
+
+                        },
                         isEdit: false,
                         isNetwork: isNetwork,
                         imageFile: imageFile,
@@ -214,7 +238,7 @@ class AddDemiseState extends State<AddDemise> {
                         padding: const EdgeInsets.only(top: 20),
                         child: WakeData(
                           timeController: wakeTimeController,
-                          wakeAddressController: addressController,
+                          wakeAddressController: wakeAddressController,
                           dateController: wakeDateController,
                           wakeNoteController: wakeNoteController,
                           timeValidator: notEmptyValidate,
@@ -399,7 +423,7 @@ class AddDemiseState extends State<AddDemise> {
       demiseEntity.deceasedDate = (deceasedDateController.text != "" && deceasedDateController.text != null) ? convertDate(deceasedDateController.text) : null;
       demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
       demiseEntity.wakeDateTime = (wakeDateController.text != "" && wakeDateController.text != null) ? convertDate(wakeDateController.text) : null;
-      demiseEntity.wakeAddress = (addressController.text);
+      demiseEntity.wakeAddress = (wakeAddressController.text);
       demiseEntity.wakeNotes = (wakeNoteController.text);
       demiseEntity.funeralAddress = (funeralAddressController.text);
       demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
@@ -542,5 +566,7 @@ class AddDemiseState extends State<AddDemise> {
     var dt = dateString.split("-").reversed.join("-");
     return DateTime.parse(dt);
   }
+
+
 
 }

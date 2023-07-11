@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/city_list_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_city_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
@@ -158,17 +159,18 @@ class UsersManageState extends State<UsersManage> {
 
                                 userEntity.firstName = nameController.text;
                                 userEntity.lastName = lastNameController.text;
-                                userEntity.email = emailController.text;
+                                userEntity.email = p.email;
                                 userEntity.phoneNumber = phoneController.text;
                                 userEntity.password = passwordController.text;
                                 userEntity.city = [nome!];
+                                userEntity.id = p.id;
+                                userEntity.agency = p.agency;
 
                                 print("stampo utente modificato");
                                 print(userEntity);
 
-
                                 UserRepository().editUser(userEntity).then((res) {
-                                  SuccessSnackbar(context, text: "Profilo modificato con successo");
+                                  SuccessSnackbar(context, text: "Utente modificato con successo");
                                 }, onError: (e) {
                                   ErrorSnackbar(context, text: "Errore generico durante la modifica dell\'utente");
                                 });
@@ -179,8 +181,7 @@ class UsersManageState extends State<UsersManage> {
                                 emailController.text = "";
                                 phoneController.text = "";
                                 cityOptions;
-                                SuccessSnackbar(context, text: 'Utente modificato con successo!');
-                                Navigator.pop(context);
+                                context.pop();
                               }
                             },
                             isAddPage: false,
@@ -217,6 +218,9 @@ class UsersManageState extends State<UsersManage> {
       ),
     );
   }
+
+
+
 
   formSubmit(CityFromAPI? nome) {
     print("SONO NEL VERO METODO FORM SUBMIT");

@@ -58,6 +58,12 @@ class AgenciesManageState extends State<AgenciesManage> {
                     builder: (ctx) => Form(
                           key: _formKey,
                           child: AgencyForm(
+                            emptyFields: (){
+                              nameController.text = "";
+                              cityController.text = "";
+                              emailController.text = "";
+                              phoneController.text = "";
+                            },
                             cityOptions: cityList,
                             cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
                             nameController: nameController,
@@ -102,6 +108,11 @@ class AgenciesManageState extends State<AgenciesManage> {
                     builder: (ctx) => Form(
                           key: _editKey,
                           child: AgencyForm(
+                            emptyFields: (){
+                              nameController.text = "";
+                              cityController.text = "";
+                              phoneController.text = "";
+                            },
                             onSubmit: () {
                               if (_editKey.currentState!.validate()) {
                                 AgencyEntity agencyEntity = AgencyEntity(

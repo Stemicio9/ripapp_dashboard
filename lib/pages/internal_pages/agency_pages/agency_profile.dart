@@ -8,6 +8,7 @@ import 'package:ripapp_dashboard/authentication/firebase_authentication_listener
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
+import 'package:ripapp_dashboard/utils/image_utils.dart';
 import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/edit_profile_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/profile_data.dart';
@@ -41,30 +42,7 @@ class AgencyProfileState extends State<AgencyProfile> {
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
   var imageFile;
 
-  Future<dynamic> downloadUrlImage(String uid) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/users_images/UID:$uid/').listAll();
-    for (var element in fileList.items) {
-      print(element.name);
-    }
 
-    if (fileList.items.isEmpty) {
-      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
-      var file = fileList.items[0];
-      var result = await file.getDownloadURL();
-      return result;
-    }
-
-
-    var file = fileList.items[0];
-    var result = await file.getDownloadURL();
-
-    return result;
-  }
-
-  void func(value){
-    _profileImageCubit.changeLoaded(true);
-    imageFile = value;
-  }
 
   @override
   void initState() {
@@ -76,12 +54,17 @@ class AgencyProfileState extends State<AgencyProfile> {
     super.initState();
   }
 
+  void func(value){
+    _profileImageCubit.changeLoaded(true);
+    imageFile = value;
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final User user = FirebaseAuth.instance.currentUser!;
     final uid = user.uid;
-    downloadUrlImage(uid).then((value) => func(value));
+    ImageUtils().downloadUrlImageUser(uid).then((value) => func(value));
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, state) {
         print("il nostro link è " + imageFile.toString());
@@ -130,6 +113,13 @@ class AgencyProfileState extends State<AgencyProfile> {
                         Form(
                           key: _formKey,
                           child: EditProfileForm(
+                            emptyFields: (){
+                              nameController.text = "";
+                              lastNameController.text = "";
+                              emailController.text = "";
+                              phoneController.text = "";
+
+                            },
                               cardTitle: getCurrentLanguageValue(EDIT_PROFILE) ?? "",
                               nameController: nameController,
                               lastNameController: lastNameController,
