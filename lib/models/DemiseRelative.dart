@@ -34,7 +34,7 @@ class DemiseRelative {
     relativeId: json["productId"] ?? 0,
     demise: json["demise"],
     user: json["user"],
-    kinshipType: json["kinship"],
+    kinshipType: Kinship.fromJson(json['kinship']),
     name: json["name"],
     surname: json["surname"],
     email: json["email"],

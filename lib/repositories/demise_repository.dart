@@ -102,7 +102,7 @@ class DemiseRepository{
 
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
-    int pageElements = 3;
+    int pageElements = 30;
     AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
 
     try {
