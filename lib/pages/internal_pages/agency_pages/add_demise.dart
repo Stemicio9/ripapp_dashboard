@@ -74,18 +74,6 @@ class AddDemiseState extends State<AddDemise> {
   File_Data_Model? obituaryFile;
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
   int relativeIndex = 0;
-
-  static const List<String> kinship = <String>[
-    'Madre',
-    'Padre',
-    'Fratello',
-    'Sorella',
-    'Figlio',
-    'Figlia',
-    'Nonno',
-    'Nonna',
-  ];
-
   final _formKey = GlobalKey<FormState>();
   final List<Widget> relativeRows = [];
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
@@ -95,23 +83,19 @@ class AddDemiseState extends State<AddDemise> {
   late String fileName = "";
   late Uint8List fileBytes = Uint8List.fromList([0,1]);
   DemiseEntity demiseEntity = DemiseEntity(relatives: []);
-
+  List<RelativeRowNew> relativesNew = [];
 
   Future<dynamic> downloadUrlImage(String uid) async {
     var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
     var file = fileList.items[0];
     var result = await file.getDownloadURL();
     return result;
-
   }
 
   void func(value){
     _profileImageCubit.changeLoaded(true);
     imageFile = value;
   }
-
-
-  List<RelativeRowNew> relativesNew = [];
 
   @override
   Widget build(BuildContext context) {
@@ -131,17 +115,14 @@ class AddDemiseState extends State<AddDemise> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       const PageHeader(
                           pageTitle: "Aggiungi decesso",
                           showBackButton: true,
                       ),
 
-
                       //deceased data
                       state.loaded ?  DeceasedData(
                         emptyFields: () {
-
                             nameController.text = '';
                             lastNameController.text = '';
                             cityController.text = '';
@@ -158,7 +139,6 @@ class AddDemiseState extends State<AddDemise> {
                             funeralNoteController.text = '';
                             citiesController.text = '';
                             filterController.text = '';
-
                         },
                         isEdit: false,
                         isNetwork: isNetwork,
@@ -170,13 +150,11 @@ class AddDemiseState extends State<AddDemise> {
                             fileBytes = result.files.first.bytes!;
                             fileName = result.files.first.name;
                             isNetwork = false;
-
                             setState(() {
                               memoryImage = fileBytes;
                             });
                           }
                         },
-
                         filterController: filterController,
                         nameController: nameController,
                         phoneController: phoneController,
@@ -221,14 +199,8 @@ class AddDemiseState extends State<AddDemise> {
 
                               ),
                             ),
-
                           ],
-                        ),
-
-
-
-
-                          ) : Container(),
+                        ),) : Container(),
 
                       //wake data
                       Padding(
@@ -250,8 +222,7 @@ class AddDemiseState extends State<AddDemise> {
                             );
                             if (pickedTime != null) {
                               setState(() {
-                                wakeTimeController.text =
-                                    pickedTime.format(context).toString();
+                                wakeTimeController.text = pickedTime.format(context).toString();
                               });
                             } else {
                               print("Time is not selected");
@@ -262,8 +233,7 @@ class AddDemiseState extends State<AddDemise> {
                                 context: context,
                                 initialDate: DateTime.now(),
                                 firstDate: DateTime.now(),
-                                lastDate:
-                                DateTime.now().add(const Duration(days: 365)));
+                                lastDate: DateTime.now().add(const Duration(days: 365)));
                             if (pickedDate != null) {
                               String formattedDate =
                               DateFormat('dd-MM-yyyy').format(pickedDate);
@@ -297,8 +267,7 @@ class AddDemiseState extends State<AddDemise> {
                             );
                             if (pickedTime != null) {
                               setState(() {
-                                funeralTimeController.text =
-                                    pickedTime.format(context).toString();
+                                funeralTimeController.text = pickedTime.format(context).toString();
                               });
                             } else {
                               print("Time is not selected");
@@ -309,11 +278,9 @@ class AddDemiseState extends State<AddDemise> {
                                 context: context,
                                 initialDate: DateTime.now(),
                                 firstDate: DateTime.now(),
-                                lastDate:
-                                DateTime.now().add(const Duration(days: 365)));
+                                lastDate: DateTime.now().add(const Duration(days: 365)));
                             if (pickedDate != null) {
-                              String formattedDate =
-                              DateFormat('dd-MM-yyyy').format(pickedDate);
+                              String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
                               setState(() {
                                 funeralDateController.text = formattedDate;
                               });
@@ -327,10 +294,7 @@ class AddDemiseState extends State<AddDemise> {
                       //add relative
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
-                        child:
-
-
-                        RelativesWidget(
+                        child: RelativesWidget(
                           isDetail: false,
                           relatives: relativesNew,
                           addDemisePress: () {
@@ -358,17 +322,6 @@ class AddDemiseState extends State<AddDemise> {
                               refactorRelativeIndexes();
                             });
                           },)
-
-
-
-                        /*AddRelative(
-                          relativeRows: relativeRows,
-                          addRelative: () async {
-                            setState(() {
-                              createNewRelativeRow();
-                            });
-                          },
-                        ), */
                       ),
 
                       //form submit
@@ -412,8 +365,6 @@ class AddDemiseState extends State<AddDemise> {
     if (obituaryFile == null) {
       ErrorSnackbar(context, text: 'Inserire necrologio!');
     } else {
-
-
       demiseEntity.firstName = (nameController.text);
       demiseEntity.lastName = (lastNameController.text);
       demiseEntity.city = CityEntity(name: cityController.text);
@@ -466,8 +417,6 @@ class AddDemiseState extends State<AddDemise> {
         }
       }
 
-
-
       final User user = FirebaseAuth.instance.currentUser!;
       final uid = user.uid;
       var uuid = const Uuid();
@@ -486,8 +435,6 @@ class AddDemiseState extends State<AddDemise> {
         fileesistente.delete();
       }
       await FirebaseStorage.instance.ref("$obituaryPath${obituaryFile!.name}").putData(obituaryFile!.file);
-
-
 
       var path = 'profile_images/deceased_images/UID:$uid/demiseId:$demiseId/';
       var fileList = await FirebaseStorage.instance.ref(path).listAll();
@@ -511,8 +458,6 @@ class AddDemiseState extends State<AddDemise> {
     // }
 
   }
-
-
 
   void createNewRelativeRow() {
     print("stampettina");
@@ -569,7 +514,4 @@ class AddDemiseState extends State<AddDemise> {
     var dt = dateString.split("-").reversed.join("-");
     return DateTime.parse(dt);
   }
-
-
-
 }

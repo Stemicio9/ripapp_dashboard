@@ -48,18 +48,21 @@ class IconTableWidget extends StatelessWidget {
 class SuperiorActionWidget extends StatelessWidget {
   final String text;
   final Function action;
+  final Color buttonColor;
 
-  const SuperiorActionWidget(
-      {Key? key, required this.text, required this.action})
-      : super(key: key);
+  const SuperiorActionWidget({Key? key,
+    required this.text,
+    required this.action,
+    this.buttonColor = background}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ActionButtonV2(
-      action: action,
-      text: text,
-      fontSize: 14,
-      containerHeight: 35,
+        action: action,
+        color: buttonColor,
+        text: text,
+        fontSize: 14,
+        containerHeight: 35,
     );
   }
 }

@@ -18,14 +18,11 @@ import '../../../../widgets/input.dart';
 
 
 class EditProfileForm extends StatefulWidget {
-
-
   final String cardTitle;
   final TextEditingController nameController;
   final TextEditingController lastNameController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
-
   final dynamic nameValidator;
   final dynamic lastNameValidator;
   final dynamic phoneValidator;
@@ -57,16 +54,13 @@ class EditProfileForm extends StatefulWidget {
   State<StatefulWidget> createState() {
     return EditProfileFormState();
   }
-
 }
-
 
 class EditProfileFormState extends State<EditProfileForm> {
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
   var imageFile = ImagesConstants.imgDemisePlaceholder;
   var memoryImage;
   bool isNetwork = true;
-
 
   Future<dynamic> downloadUrlImage(String uid) async {
     var fileList = await FirebaseStorage.instance.ref(
@@ -82,12 +76,8 @@ class EditProfileFormState extends State<EditProfileForm> {
       var result = await file.getDownloadURL();
       return result;
     }
-
-
     var file = fileList.items[0];
     var result = await file.getDownloadURL();
-
-
     return result;
   }
 
@@ -102,8 +92,6 @@ class EditProfileFormState extends State<EditProfileForm> {
     final User user = FirebaseAuth.instance.currentUser!;
     final uid = user.uid;
     downloadUrlImage(uid).then((value) => func(value));
-
-
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, state) {
           print("il nostro link è " + imageFile.toString());
@@ -323,7 +311,6 @@ class EditProfileFormState extends State<EditProfileForm> {
                                             ],
                                           )
                                       )
-
                                     ],
                                   )),
 
@@ -346,8 +333,7 @@ class EditProfileFormState extends State<EditProfileForm> {
                                         ),
                                       ),
                                       InputsV2Widget(
-                                        hinttext: getCurrentLanguageValue(
-                                            LAST_NAME) ?? "",
+                                        hinttext: getCurrentLanguageValue(LAST_NAME) ?? "",
                                         controller: widget.lastNameController,
                                         validator: widget.lastNameValidator,
                                         paddingLeft: 0,
@@ -371,8 +357,7 @@ class EditProfileFormState extends State<EditProfileForm> {
                                         ),
                                       ),
                                       InputsV2Widget(
-                                        hinttext: getCurrentLanguageValue(
-                                            PHONE_NUMBER)!,
+                                        hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
                                         controller: widget.phoneController,
                                         validator: widget.phoneValidator,
                                         inputFormatters: <TextInputFormatter>[

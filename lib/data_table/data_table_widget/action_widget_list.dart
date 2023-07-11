@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action_widget.dart';
+import 'package:ripapp_dashboard/utils/size_utils.dart';
 
 class ActionWidgetList extends StatelessWidget {
 
@@ -12,7 +13,10 @@ class ActionWidgetList extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        ...actions.map((e) => ActionWidget(action: e))
+        ...actions.map((e) => Padding(
+          padding: getPadding(right: 5),
+          child: ActionWidget(action: e),
+        ))
       ],
     );
   }

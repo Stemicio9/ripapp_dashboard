@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
-import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
-import 'package:ripapp_dashboard/models/CityEntity.dart';
-import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
