@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/browser.dart';
@@ -51,12 +52,19 @@ class DemiseRepository{
     myoptions.headers!["Content-Type"] = "application/json";
     myoptions.headers!["app_version"] = appVersion;
     print("ciao4");
+    print(demiseEntity.toJson());
+    print("ciao5");
+   try {
+     var response = await globalDio.post(demiseUrl, data: JsonEncoder().convert(demiseEntity), options: myoptions);
+     print("viene mandato = " + response.toString());
 
-    var response = await globalDio.post(demiseUrl, data: demiseEntity.toJson(), options: myoptions);
-
-    //var response = await _dio.post(demiseUrl, data: demiseEntity);
+     //var response = await _dio.post(demiseUrl, data: demiseEntity);
      print(response.data);
-    return response.data;
+     return response.data;
+   }catch(e){
+     print("errore saveDemise");
+     print(e);
+   }
   }
 
 
@@ -77,17 +85,30 @@ class DemiseRepository{
       Map<String, dynamic>? parameters = {};
       parameters.putIfAbsent("userid", () => userId);
       res = await globalDio.get(searchDemisesByCityUrl, queryParameters: parameters);
+      print("RES CONTIENE");
       print("esatto2");
     }
     on DioError catch (e) {
+      print("errore getDemise");
+      print(e);
       return List.empty(growable: true);
     }
     if (res.statusCode != 201 && res.statusCode != 200) {
       return List.empty(growable: true);
     }
-    List<DemiseEntity> demises = (res.data as List).map((e) => DemiseEntity.fromJson(e)).toList();
+    print("GET DEMISES");
+    print("NON ENTRO PROPRIO DOVE DEVO ENTRARE");
+    print(res.data);
+    List<dynamic> resultList = res.data as List;
+    print("Ho la resultlist");
+    Iterable<DemiseEntity> iterable = resultList.map((e) => DemiseEntity.fromJson(e));
+    print("Ho iterable");
+    List<DemiseEntity> demises = iterable.toList();
+    print("Ho trasformato in lista finale");
+  //  List<DemiseEntity> demises = resultList.map((e) => DemiseEntity.fromJson(e)).toList();
+    print(demises);
+    print("object");
 
-    print(" demises"+ demises.toString());
     return demises;
   }
 

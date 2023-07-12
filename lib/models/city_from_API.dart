@@ -34,7 +34,7 @@ class CityFromAPI {
 
     return CityFromAPI(
         codice: json["codice"] ?? "",
-        name: json["nome"] ?? json["name"] ?? "",
+        name: json["nome"] ?? json["name"] ?? "" ?? ["cityname"],
         nomeStraniero: json["nomeStraniero"] ?? "",
         codiceCatastale: json["codiceCatastale"] ?? "",
         cap: json["cap"] ?? "",
@@ -80,7 +80,7 @@ class CityFromAPI {
 
   @override
   String toString() {
-    return '{nome: $name}';
+    return '{name: $name}';
   }
   factory CityFromAPI.emptyCity() => CityFromAPI();
 

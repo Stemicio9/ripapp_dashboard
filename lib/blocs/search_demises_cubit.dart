@@ -1,23 +1,25 @@
 
 
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:ripapp_dashboard/models/DemisesSearchEntity.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 
 class DemiseCubit extends Cubit<DemiseState> {
   DemiseCubit() : super(DemiseState());
 
-  Future fetchDemises({ List<String> cities = const [], SearchSorting sorting = SearchSorting.date, int offset = 0}) async {
+  Future fetchDemises({ List<CityFromAPI> cities = const [], SearchSorting sorting = SearchSorting.date, int offset = 0}) async {
     if(offset == 0) {
       emit(SearchDemiseLoading());
     }else{
       try {
         var currentState = state as SearchDemiseLoaded;
         emit(SearchDemiseLoaded(currentState.demises, false));
+        print("questo è il : $currentState");
       }catch(e){
+        print(e);
         // ignore
       }
     }
@@ -26,11 +28,11 @@ class DemiseCubit extends Cubit<DemiseState> {
       DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset))
           .then((demises) => emit(SearchDemiseLoaded(demises, false))).catchError((e) => emit(SearchDemiseLoaded(List.empty(growable: false), false)));
       */
-      var demises = await DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities, sorting: sorting, offset: offset));
+      var demises = await DemiseRepository().getDemisesByCities(DemisesSearchEntity(cities: cities , sorting: sorting, offset: offset));
       print(demises);
       emit(SearchDemiseLoaded(demises, false));
     }catch(e){
-      print("ERRORE DI FETCH");
+      print("ERRORE DI FETCH DEMISES");
       print(e);
       emit(SearchDemiseError());
     }

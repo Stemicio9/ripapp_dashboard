@@ -17,6 +17,7 @@ import 'package:ripapp_dashboard/blocs/selected_agency_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_city_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_relative_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -114,7 +115,8 @@ class MyApp extends StatelessWidget {
             BlocProvider<CityListCubit>(create: (_)=> CityListCubit()),
             BlocProvider<ProfileImageCubit>(create: (_) => ProfileImageCubit()),
             BlocProvider<FirebaseStorageCubit>(create: (_) => FirebaseStorageCubit()),
-            BlocProvider<SelectedCityCubit>(create: (_)=> SelectedCityCubit())
+            BlocProvider<SelectedCityCubit>(create: (_)=> SelectedCityCubit()),
+            BlocProvider<SelectedRelativeCubit>(create: (_)=> SelectedRelativeCubit()),
           ],
           child: Builder(
             builder: (context) {

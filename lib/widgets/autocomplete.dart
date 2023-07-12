@@ -4,43 +4,6 @@ import 'package:ripapp_dashboard/models/city_from_API.dart';
 import '../blocs/selected_city_cubit.dart';
 import '../constants/colors.dart';
 
-class MyAutocomplete extends StatelessWidget {
-  final List<CityFromAPI> options;
-  final dynamic validator;
-  final String hintText;
-  final double paddingLeft; //40
-  final double paddingRight; //40
-  final double paddingTop; //10
-  final double paddingBottom; //10
-  final FocusNode focusNode = FocusNode();
-  final TextEditingController filterController;
-
-  MyAutocomplete({
-    required this.options,
-    required this.hintText,
-    required this.filterController,
-    this.validator,
-    this.paddingBottom = 0,
-    this.paddingTop = 0,
-    this.paddingLeft = 40,
-    this.paddingRight = 40,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SelectedCityCubit(),
-      child: AutocompleteWidget(
-          options: options,
-          hintText: hintText,
-          paddingLeft: paddingLeft,
-          paddingRight: paddingRight,
-          paddingTop: paddingTop,
-          paddingBottom: paddingBottom,
-          filterController: filterController),
-    );
-  }
-}
 
 class AutocompleteWidget extends StatefulWidget {
   final List<CityFromAPI> options;
@@ -52,6 +15,7 @@ class AutocompleteWidget extends StatefulWidget {
   final double paddingBottom; //10
   final FocusNode focusNode = FocusNode();
   final TextEditingController filterController;
+  final Function(CityFromAPI city) addCityToInterestCities;
 
   AutocompleteWidget({
     super.key,
@@ -63,6 +27,7 @@ class AutocompleteWidget extends StatefulWidget {
     this.paddingTop = 10,
     this.paddingBottom = 10,
     required this.filterController,
+    required this.addCityToInterestCities,
   });
 
   @override
@@ -72,23 +37,19 @@ class AutocompleteWidget extends StatefulWidget {
 }
 
 class AutocompleteWidgetState extends State<AutocompleteWidget> {
-   String? city;
+  String? city;
   SelectedCityCubit get _cityFromAPI => context.read<SelectedCityCubit>();
-
+  String? inputString;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SelectedCityCubit, SelectedCityState>(
+    return
+      BlocBuilder<SelectedCityCubit, SelectedCityState>(
         builder: (context, stateCity) {
       if (stateCity is SelectedCityState) {
-        print("Qui ci arrivooo");
         if (stateCity.selectedCity.name != null ) {
           city =  stateCity.selectedCity.name?? "";
-          print("CITY CONTIENE");
-          print(city);
         }
-        print(" AUTOCOMPLETE CITY");
-        print(city);
         return Padding(
           padding: EdgeInsets.only(
               left: widget.paddingLeft,
@@ -106,6 +67,7 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
                       .contains(textEditingValue.text.toLowerCase());
                 });
               },
+
               displayStringForOption: (CityFromAPI option) => option.name!,
               fieldViewBuilder: (BuildContext context,
                   TextEditingController textEditingController,
@@ -147,7 +109,7 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
                   },
                 );
               },
-              optionsViewBuilder: (context, onSelected, options) => Align(
+              optionsViewBuilder: (context, onSelected, options,) => Align(
                     alignment: Alignment.topLeft,
                     child: Material(
                       shape: const RoundedRectangleBorder(
@@ -175,13 +137,16 @@ class AutocompleteWidgetState extends State<AutocompleteWidget> {
                       ),
                     ),
                   ),
-              onSelected: (CityFromAPI city) {
+              onSelected: widget.addCityToInterestCities,
+                  /*(CityFromAPI city) {
                 _cityFromAPI.selectCity(city);
                 debugPrint('You just selected $city');
-              }),
+              }*/),
         );
-      } else
+      } else {
         return ErrorWidget("exception2");
+      }
     });
+
   }
 }

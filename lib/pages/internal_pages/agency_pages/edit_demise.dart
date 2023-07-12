@@ -164,6 +164,7 @@ class EditDemiseState extends State<EditDemise> {
 
                           //deceased data
                           imageState.loaded ? DeceasedData(
+                            addCityToInterestCities: (CityFromAPI c){},
                             isEdit: true,
                             isNetwork: isNetwork,
                             imageFile: imageFile,

@@ -299,6 +299,7 @@ class UsersFormState extends State<UsersForm> {
                                                               ),
 
                                                               AutocompleteWidget(
+                                                                addCityToInterestCities: (CityFromAPI c){},
                                                                 options: cityList,
                                                                 paddingRight: 10,
                                                                 paddingLeft: 0,

@@ -152,7 +152,9 @@ import '../../../../widgets/input.dart';
                     ),
                   )
                 ],
-              )),
+              )
+
+          ),
           Expanded(
               flex: 1,
               child: Column(

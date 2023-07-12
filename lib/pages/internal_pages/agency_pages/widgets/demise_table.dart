@@ -11,7 +11,15 @@ import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:ripapp_dashboard/widgets/tooltip_widget.dart';
 
 class DemiseTable extends StatefulWidget {
-  const DemiseTable({required this.delete, required this.edit, required this.showDetail, required this.detailMessage, required this.editMessage,required this.deleteMessage});
+  const DemiseTable({
+    required this.delete,
+    required this.edit,
+    required this.showDetail,
+    required this.detailMessage,
+    required this.editMessage,
+    required this.deleteMessage
+  });
+
   final edit;
   final delete;
   final showDetail;
@@ -63,7 +71,14 @@ class DemiseTableState extends State<DemiseTable>{
   final String deleteMessage;
 
 
-  DemiseTableState({required this.delete, required this.edit, required this.showDetail, required this.detailMessage, required this.editMessage,required this.deleteMessage});
+  DemiseTableState({
+    required this.delete,
+    required this.edit,
+    required this.showDetail,
+    required this.detailMessage,
+    required this.editMessage,
+    required this.deleteMessage
+  });
 
 
   @override
@@ -79,6 +94,7 @@ class DemiseTableState extends State<DemiseTable>{
               );
             }
             if (state is SearchDemiseLoaded){
+              print("STATO LOADED DEMISE");
               demises = state.demises;
               print("LOADED DEMISE");
               print(demises);

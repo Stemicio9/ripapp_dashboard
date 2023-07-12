@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../blocs/selected_relative_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../utils/size_utils.dart';
 import '../../../../utils/style_utils.dart';
@@ -7,18 +9,24 @@ import '../../../../widgets/texts.dart';
 
 class RelativeDetailRow extends StatelessWidget {
 
-  final String? relativePhone;
-  final String? relativeName;
+  late String? relativePhone;
+  late String? relativeName;
 
-  const RelativeDetailRow({
+   RelativeDetailRow({
     Key? key,
-    this.relativeName,
-    this.relativePhone,
+    this.relativeName = "",
+    this.relativePhone = "",
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return BlocBuilder<SelectedRelativeCubit, SelectedRelativeState>(
+        builder: (context, stateRelative) {
+      if (stateRelative is SelectedRelativeState) {
+          relativeName = stateRelative.selectedRelative.relativeName ?? "";
+          relativePhone = stateRelative.selectedRelative.relativePhone ?? "";
+        return
+      Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -80,5 +88,9 @@ class RelativeDetailRow extends StatelessWidget {
 
       ),
     );
+      }
+      else return ErrorWidget("exception");
+
+        });
   }
 }

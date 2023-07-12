@@ -29,7 +29,7 @@ class DemiseDetailState extends State<DemiseDetail> {
   final String age = "89";
   final String id = "67";
   final String deceasedDate = "22-03-2023";
-  final String cityOfInterest = "Milano";
+  String cityOfInterest = "";
   final String city = "Milano";
   final String phoneNumber = "3401234567";
   final String funeralDate = "24-03-2023";
@@ -117,7 +117,6 @@ class DemiseDetailState extends State<DemiseDetail> {
           obituary(value);
           obituaryName = extractFileNameFromFirebaseUrl(value);
         });
-
         firstName = state.selectedDemise.firstName ?? "";
         lastName = state.selectedDemise.lastName ?? "";
         return ScaffoldWidget(

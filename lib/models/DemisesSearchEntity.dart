@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:ripapp_dashboard/models/city_from_API.dart';
+
 DemisesSearchEntity demisesSearchEntityFromJson(String str) => DemisesSearchEntity.fromJson(json.decode(str));
 
 String demisesSearchEntityToJson(DemisesSearchEntity data) => json.encode(data.toJson());
@@ -15,21 +17,25 @@ class DemisesSearchEntity {
     required this.offset,
   });
 
-  List<String> cities;
+  List<CityFromAPI> cities;
   SearchSorting sorting;
   int offset;
 
   factory DemisesSearchEntity.fromJson(Map<String, dynamic> json) => DemisesSearchEntity(
-    cities: List<String>.from(json["cities"].map((x) => x)),
+    cities: List<CityFromAPI>.from(json["cities"].map((x) => x)),
     sorting: json["sorting"] != null ? searchSortingFromString(json["sorting"]) : SearchSorting.surname,
     offset: json["offset"],
   );
 
   Map<String, dynamic> toJson() => {
-    "cities": List<dynamic>.from(cities.map((x) => x)),
+    "cities": List<CityFromAPI>.from(cities.map((x) => x)),
     "sorting": searchSortingToString(sorting),
     "offset": offset,
   };
+  @override
+  String toString() {
+   return '{cities: $cities}';
+  }
 }
 
 enum SearchSorting {

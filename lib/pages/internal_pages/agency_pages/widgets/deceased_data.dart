@@ -48,6 +48,7 @@ class DeceasedData extends StatefulWidget {
   final bool isNetwork;
   final List<CityFromAPI> options;
   final List<CityFromAPI> citiesOfInterestOptions;
+  final Function(CityFromAPI city) addCityToInterestCities;
 
   DeceasedData({super.key,
     required this.isEdit,
@@ -77,20 +78,18 @@ class DeceasedData extends StatefulWidget {
     required this.options,
     required this.citiesOfInterestOptions,
     this.imageFile,
-    required this.dateController});
+    required this.dateController,
+    required this.addCityToInterestCities});
 
   @override
   State<StatefulWidget> createState() {
     return DeceasedDataState();
   }
-
-
 }
 
 class DeceasedDataState extends State<DeceasedData>{
   CityListCubit get _cityListCubit => context.read<CityListCubit>();
   List<CityFromAPI> cityList = [];
-
 
   @override
   void initState() {
@@ -101,12 +100,14 @@ class DeceasedDataState extends State<DeceasedData>{
 
   @override
   Widget  build(BuildContext context) {
-    return  BlocBuilder<SelectedCityCubit, SelectedCityState>(
+    return
+      BlocBuilder<SelectedCityCubit, SelectedCityState>(
         builder: (context, stateCity) {
           if (stateCity is SelectedCityState) {
             print("QUI SI SELEZIONA LA CITTA");
-            widget.cityController.text = stateCity.selectedCity.name ?? "";
-            widget.citiesController.text = stateCity.selectedCity.name ?? "";
+            widget.cityController.text = stateCity.selectedCity.name ?? widget.cityController.text;
+            print("QUI SI SELEZIONA IL COMUNE DI INTERESSE");
+            widget.citiesController.text = stateCity.selectedCity.name?? widget.citiesController.text;
             return
               Card(
                 child: Padding(
@@ -332,7 +333,6 @@ class DeceasedDataState extends State<DeceasedData>{
                                       return const Center(child: CircularProgressIndicator());
                                     } else if (cityState is CityListLoaded) {
                                       cityList = cityState.listCity;
-                                      print("decesssed city: $cityList");
                                       if (cityList.isNotEmpty) {
                                         return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,13 +350,14 @@ class DeceasedDataState extends State<DeceasedData>{
                                               ),
                                             ),
                                             AutocompleteWidget(
+                                              addCityToInterestCities: (CityFromAPI city){},
                                               options: cityList,
                                               paddingRight: 0,
                                               paddingLeft: 0,
                                               paddingTop: 0,
                                               paddingBottom: 0,
                                               hintText: getCurrentLanguageValue(CITY)!,
-                                              filterController: widget.filterController,
+                                              filterController: widget.cityController,
                                               validator: widget.cityValidator,
                                             )
                                           ],
@@ -383,12 +384,11 @@ class DeceasedDataState extends State<DeceasedData>{
                               child:  BlocBuilder<CityListCubit, CityListState>(
                                   builder: (context, cityState) {
                                     if (cityState is CityListLoading) {
-                                      print("DECESSED DATA CITY LOADING");
+                                      print("DECESSED DATA CITIES LOADING");
                                       return const Center(
                                           child: CircularProgressIndicator());
                                     } else if (cityState is CityListLoaded) {
                                       cityList = cityState.listCity;
-                                      print("decesssed city: $cityList");
                                       if (cityList.isNotEmpty) {
                                         return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,6 +406,7 @@ class DeceasedDataState extends State<DeceasedData>{
                                               ),
                                             ),
                                             AutocompleteWidget(
+                                              addCityToInterestCities: widget.addCityToInterestCities,
                                               options: cityList,
                                               paddingRight: 20,
                                               paddingLeft: 0,
@@ -463,5 +464,6 @@ class DeceasedDataState extends State<DeceasedData>{
           else
             return ErrorWidget("exception");
         } );
+
   }
 }

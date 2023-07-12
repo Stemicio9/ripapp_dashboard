@@ -167,6 +167,7 @@ class AgencyFormState extends State<AgencyForm> {
                                                                 ),
                                                               ),
                                                               AutocompleteWidget(
+                                                                addCityToInterestCities: (CityFromAPI c){},
                                                                 options: cityList,
                                                                 paddingRight: 0,
                                                                 paddingLeft: 10,

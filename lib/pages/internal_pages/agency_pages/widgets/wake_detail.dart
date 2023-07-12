@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 
 import '../../../../constants/colors.dart';
 import '../../../../utils/size_utils.dart';
@@ -7,25 +9,33 @@ import '../../../../widgets/texts.dart';
 
 class WakeDetail extends StatelessWidget {
 
-  final String wakeDate;
-  final String wakeNote;
-  final String wakeHour;
-  final String wakeAddress;
+  late String wakeDate;
+  late String wakeNote;
+  late String wakeHour;
+  late String wakeAddress;
 
 
 
-  const WakeDetail({
-    required this.wakeDate,
-    required this.wakeNote,
-    required this.wakeHour,
-    required this.wakeAddress,
+    WakeDetail({
+    this.wakeDate = "",
+    this.wakeNote = "",
+    this.wakeHour = "",
+    this.wakeAddress = "",
     Key? key,
 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return  BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
+        builder: (context, stateDemise) {
+          if (stateDemise is SelectedDemiseState) {
+            wakeDate = stateDemise.selectedDemise.wakeDateTime.toString();
+            wakeNote = stateDemise.selectedDemise.wakeNotes.toString();
+            wakeAddress = stateDemise.selectedDemise.wakeAddress.toString();
+
+            return
+      Card(
       child: Padding(
         padding: const EdgeInsets.all(30),
         child: Column(
@@ -155,5 +165,9 @@ class WakeDetail extends StatelessWidget {
         ),
       ),
     );
+  }
+  else return ErrorWidget("exception");
+
+});
   }
 }

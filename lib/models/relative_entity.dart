@@ -12,14 +12,18 @@ class RelativeEntity {
   //toString
   @override
   String toString() {
-    return 'UserEntity{id: $id, relativePhone: $relativePhone, relativeName: $relativeName';
+    return 'UserEntity{id: $id, relativePhone: $relativePhone, relativename: $relativeName';
   }
 
-  factory RelativeEntity.fromJson(Map<String, dynamic> json) => RelativeEntity(
+  factory RelativeEntity.fromJson(Map<String, dynamic> json) {
+    print("SONO NEL FORM DELLE RELATIVE");
+    print(json);
+    return
+   RelativeEntity(
     id: json["id"] ?? "",
     relativePhone: json["relativePhone"] ?? "",
     relativeName: json["relativeName"] ?? "",
-  );
+  );}
 
   RelativeEntity copyWith({
     String? id,
@@ -38,4 +42,8 @@ class RelativeEntity {
     "relativePhone": relativePhone,
     "relativeName": relativeName,
   };
+
+  factory RelativeEntity.emptyRelative() => RelativeEntity();
+
+
 }

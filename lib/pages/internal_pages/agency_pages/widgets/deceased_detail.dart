@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
 
 import '../../../../constants/colors.dart';
-import '../../../../constants/images_constants.dart';
-import '../../../../constants/language.dart';
 import '../../../../utils/size_utils.dart';
 import '../../../../utils/style_utils.dart';
 import '../../../../widgets/texts.dart';
@@ -14,16 +14,16 @@ class DeceasedDetail extends StatelessWidget{
 
   var imageFile;
   var memoryImage;
-  final bool isNetwork;
-  final String lastName;
-  final String firstName;
-  final String id;
-  final String phoneNumber;
-  final String city;
-  final String cityOfInterest;
-  final String deceasedDate;
+  late bool isNetwork;
+  late String lastName;
+  late String firstName;
+  late String id;
+  late String phoneNumber;
+  late String city;
+  late String cityOfInterest;
+  late String deceasedDate;
   final File? obituary;
-  final String age;
+  late String age;
   final String obituaryName;
   final downloadObituary;
 
@@ -31,14 +31,14 @@ class DeceasedDetail extends StatelessWidget{
     this.memoryImage,
     this.isNetwork = true,
     this.imageFile,
-    required this.id,
-    required this.age,
-    required this.lastName,
-    required this.firstName,
-    required this.phoneNumber,
-    required this.city,
-    required this.cityOfInterest,
-    required this.deceasedDate,
+    this.id = "",
+    this.age= "",
+    this.lastName= "",
+    this.firstName= "",
+    this.phoneNumber= "",
+    this.city= "",
+    this.cityOfInterest= "",
+    this.deceasedDate= "",
     this.obituary,
     required this.obituaryName,
     required this.downloadObituary,
@@ -46,7 +46,26 @@ class DeceasedDetail extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
+        builder: (context, stateDemise) {
+          if (stateDemise is SelectedDemiseState) {
+            id = stateDemise.selectedDemise.id.toString();
+            firstName = stateDemise.selectedDemise.firstName ?? "";
+            lastName = stateDemise.selectedDemise.lastName ?? "";
+            phoneNumber = stateDemise.selectedDemise.phoneNumber ?? "";
+            age = stateDemise.selectedDemise.age.toString();
+            cityOfInterest = stateDemise.selectedDemise.cityEntities.toString();
+            deceasedDate = stateDemise.selectedDemise.deceasedDate.toString();
+            'Amministratore';
+            try {
+              city = stateDemise.selectedDemise.city?.name ?? "";
+            }catch(e){
+              city = "";
+            }
+            print("LA CITTà DETTAGLI DEL DEFUNTO  è : $city");
+
+            return
+      Card(
       child: Padding(
         padding: const EdgeInsets.all(30),
         child: Column(
@@ -257,5 +276,10 @@ class DeceasedDetail extends StatelessWidget{
         ),
       ),
     );
+  }
+  else return ErrorWidget("exception");
+
+});
+
   }
 }

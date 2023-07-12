@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
@@ -50,6 +49,8 @@ class UserEntity implements ResultEntity {
       CityFromAPI city = CityFromAPI(name: cityMap["name"]);
       resultCityList.add(city);
     }
+    print(resultCityList);
+
     return UserEntity(
         id: json["accountid"] ?? 0,
         firstName: json["name"] ?? "",

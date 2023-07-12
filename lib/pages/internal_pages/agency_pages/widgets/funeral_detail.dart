@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 
 import '../../../../constants/colors.dart';
 import '../../../../utils/size_utils.dart';
@@ -7,25 +9,31 @@ import '../../../../widgets/texts.dart';
 
 class FuneralDetail extends StatelessWidget {
 
-  final String funeralDate;
-  final String funeralNote;
-  final String funeralHour;
-  final String funeralAddress;
+  late String funeralDate;
+  late String funeralNote;
+  late String funeralHour;
+  late String funeralAddress;
 
 
 
-  const FuneralDetail({
-    required this.funeralDate,
-    required this.funeralNote,
-    required this.funeralHour,
-    required this.funeralAddress,
+   FuneralDetail({
+    this.funeralDate = "",
+    this.funeralNote = "",
+    this.funeralHour = "",
+    this.funeralAddress = "",
     Key? key,
 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
+        builder: (context, stateDemise) {
+          if (stateDemise is SelectedDemiseState) {
+            funeralDate = stateDemise.selectedDemise.funeralDateTime.toString();
+            funeralNote = stateDemise.selectedDemise.funeralNotes.toString();
+            funeralAddress = stateDemise.selectedDemise.funeralAddress.toString();
+            return Card(
       child: Padding(
         padding: const EdgeInsets.all(30),
         child: Column(
@@ -155,5 +163,9 @@ class FuneralDetail extends StatelessWidget {
         ),
       ),
     );
+  }
+  else return ErrorWidget("exception");
+
+});
   }
 }

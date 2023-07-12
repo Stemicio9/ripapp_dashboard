@@ -58,6 +58,13 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController relativeController = TextEditingController();
   final TextEditingController filterController = TextEditingController();
   final List<XFile> _list = [];
+  DemiseEntity demiseEntity = DemiseEntity(cityEntities: []);
+
+  addCityToInterestCities(CityFromAPI city){
+    print('ciao, funzione autocomplete');
+    demiseEntity.cityEntities!.add(CityEntity(name: city.name!));
+    print("lista di citta modificata: " + demiseEntity.cityEntities.toString());
+  }
 
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
   bool _dragging = false;
@@ -129,6 +136,7 @@ class AddDemiseState extends State<AddDemise> {
 
                       //deceased data
                       state.loaded ?  DeceasedData(
+                        addCityToInterestCities: addCityToInterestCities,
                         isEdit: false,
                         isNetwork: isNetwork,
                         imageFile: imageFile,
@@ -397,7 +405,6 @@ class AddDemiseState extends State<AddDemise> {
       ErrorSnackbar(context, text: 'Inserire necrologio!');
     } else {
 
-      DemiseEntity demiseEntity = DemiseEntity();
       demiseEntity.firstName = (nameController.text);
       demiseEntity.lastName = (lastNameController.text);
       demiseEntity.city = CityEntity(name: cityController.text);
@@ -411,7 +418,7 @@ class AddDemiseState extends State<AddDemise> {
       demiseEntity.funeralAddress = (funeralAddressController.text);
       demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
       demiseEntity.funeralNotes = (funeralNoteController.text);
-      //demiseEntity.cities = (citiesController.text);
+      //demiseEntity.cities = (citiesController.text); TODO salvare lista comuni di interesse
       //demiseEntity.relative = (relativeController.text);
 
       String wakeTimeString = wakeTimeController.text;
