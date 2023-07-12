@@ -178,7 +178,7 @@ class _AgenciesManagePageState extends State<AgenciesManagePage> {
   ActionDefinition editAction(){
     ActionDefinition result = ActionDefinition(
         action: (AgencyEntity ae){
-          _selectedAgencyCubit.selectUser(ae);
+          _selectedAgencyCubit.selecAgency(ae);
           showDialog(
               context: context,
               builder: (ctx) => Form(
@@ -247,7 +247,7 @@ class _AgenciesManagePageState extends State<AgenciesManagePage> {
   ActionDefinition viewAction(){
     ActionDefinition result = ActionDefinition(
         action: (AgencyEntity agencyEntity){
-          _selectedAgencyCubit.selectUser(agencyEntity);
+          _selectedAgencyCubit.selecAgency(agencyEntity);
           showDialog(
               context: context,
               builder: (ctx) => AgencyDetail(

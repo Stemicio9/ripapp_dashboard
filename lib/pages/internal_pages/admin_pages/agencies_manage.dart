@@ -99,7 +99,7 @@ class AgenciesManageState extends State<AgenciesManage> {
                         message: message));
               },
               edit: (dynamic p) {
-                _selectedAgencyCubit.selectUser(p);
+                _selectedAgencyCubit.selecAgency(p);
                 showDialog(
                     context: context,
                     builder: (ctx) => Form(
@@ -137,7 +137,7 @@ class AgenciesManageState extends State<AgenciesManage> {
                         ));
               },
               showDetail: (dynamic p) {
-                _selectedAgencyCubit.selectUser(p);
+                _selectedAgencyCubit.selecAgency(p);
                 showDialog(
                     context: context,
                     builder: (ctx) => AgencyDetail(

@@ -5,6 +5,18 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseImageUtility {
 
+  static Future<void> deleteProductImage(String? firebaseid) async {
+    if(firebaseid == null) return;
+    var path = 'profile_images/products_images/productid:$firebaseid/';
+    var fileList = await FirebaseStorage.instance.ref(path).listAll();
+    if (fileList.items.isNotEmpty) {
+      var fileesistente = fileList.items[0];
+      fileesistente.delete();
+    }
+  }
+
+
+
   static void deleteAllImages(String? firebaseid) async {
     if(firebaseid == null) return;
     final User user = FirebaseAuth.instance.currentUser!;
@@ -21,7 +33,6 @@ class FirebaseImageUtility {
       fileesistente.delete();
     }
   }
-
 
   static Future<void> deleteDemiseImage(String uid, String firebaseid) async {
     var path = 'profile_images/deceased_images/UID:$uid/demiseId:${firebaseid}/';

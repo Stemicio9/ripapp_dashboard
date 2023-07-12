@@ -13,7 +13,7 @@ class SelectedAgencyState {
 class SelectedAgencyCubit extends Cubit<SelectedAgencyState> {
   SelectedAgencyCubit() : super(SelectedAgencyState(selectedAgency: AgencyEntity.emptyAgency()));
 
-  selectUser(AgencyEntity selectedAgency)async{
+  selecAgency(AgencyEntity selectedAgency)async{
     print("cambio l'agenzia selezionata, che è $selectedAgency");
     emit(SelectedAgencyState(selectedAgency: selectedAgency));
     print(selectedAgency);

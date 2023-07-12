@@ -16,6 +16,7 @@ import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/circular_progress_indicator.dart';
 import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
+import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import 'package:ripapp_dashboard/widgets/utilities/firebase_image_utility.dart';
 
 class DemiseManagePage extends StatefulWidget {
@@ -117,17 +118,7 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
                 onConfirm: (){
                   _demiseCubit.delete(demiseEntity.id);
                   FirebaseImageUtility.deleteAllImages(demiseEntity.firebaseid);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: green,
-                      content: const Text('Defunto eliminato con successo!'),
-                      duration: const Duration(milliseconds: 3000),
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                    ),
-                  );
+                  SuccessSnackbar(context, text: 'Defunto eliminato con successo!');
                   context.pop();
                 },
                 onCancel: () {context.pop();},
