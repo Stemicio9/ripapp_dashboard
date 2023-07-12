@@ -1,7 +1,8 @@
 
+import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
 import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
-class AgencyEntity implements ResultEntity {
+class AgencyEntity implements ResultEntity, TableRowElement {
   int? id;
   String? agencyName;
   String? email;
@@ -67,4 +68,27 @@ class AgencyEntity implements ResultEntity {
           other is AgencyEntity &&
               runtimeType == other.runtimeType &&
               id == other.id;
+
+  @override
+  List<String> getHeaders() {
+    return [
+      "ID",
+      "Nome",
+      "Email",
+      "Città",
+      "Telefono",
+      ""
+    ];
+  }
+
+  @override
+  List<RowElement> rowElements() {
+    return [
+      RowElement(isText: true, isImage: false, isIcon: false, element: id.toString()),
+      RowElement(isText: true, isImage: false, isIcon: false,element: agencyName ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false,element: email ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false,element: city ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false,element: phoneNumber ?? ""),
+    ];
+  }
 }

@@ -109,7 +109,7 @@ class UsersManagePageState extends State<UsersManagePage>{
           emptyMessage: 'Nessun utente inserito',
           showBackButton: false,
           actions: composeSuperiorActions(),
-          pageTitle: 'Gestione Utenti',
+          pageTitle: 'Gestisci utenti',
         );
       }
       return Padding(
@@ -119,7 +119,7 @@ class UsersManagePageState extends State<UsersManagePage>{
             children: [
               const PageHeader(
                 showBackButton: false,
-                pageTitle: 'Gestione Utenti',
+                pageTitle: 'Gestisci utenti',
               ),
               DataTableWidget(
                   headers: tableRowElements[0].getHeaders(),
