@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
-import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
@@ -49,7 +48,6 @@ class UsersTable extends StatefulWidget {
 }
 
 class UsersTableState extends State<UsersTable> {
-  UsersListCubit get _userListCubit => context.read<UsersListCubit>();
 
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
 
@@ -59,8 +57,7 @@ class UsersTableState extends State<UsersTable> {
   void initState() {
     //_userListCubit.fetchUsersListWithIndex(0);
     //_currentPageCubit.loadPage(ScaffoldWidgetState.users_page, 0);
-    _currentPageCubit.loadPage(
-        ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber);
+    _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber);
     super.initState();
   }
 

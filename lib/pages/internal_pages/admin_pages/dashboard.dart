@@ -8,6 +8,7 @@ import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/users_manage_page.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
@@ -126,7 +127,8 @@ class DashboardState extends State<Dashboard> {
     {
       switch (state.page) {
         case ScaffoldWidgetState.users_page:
-          return UsersManage();
+          return UsersManagePage();
+         // return UsersManage();
         case ScaffoldWidgetState.agencies_page:
           return AgenciesManage();
         case ScaffoldWidgetState.products_page:

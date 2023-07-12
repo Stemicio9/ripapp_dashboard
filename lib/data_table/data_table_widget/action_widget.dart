@@ -15,7 +15,8 @@ class ActionWidget extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-            Function.apply(action.action, action.actionInputs);
+            Function.
+            apply(action.action, action.actionInputs);
            // action.action(action.actionInputs);
         },
         child: action.isButton

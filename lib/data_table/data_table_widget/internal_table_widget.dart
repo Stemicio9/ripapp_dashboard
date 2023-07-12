@@ -63,7 +63,7 @@ class InternalTableWidget extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [...rowActions.map((e) {
-          e.actionInputs.add(element);
+          e.actionInputs = List.empty(growable: true)..add(element);
           return Padding(
             padding: const EdgeInsets.only(left: 10),
             child: ActionWidget(action: e),
@@ -100,8 +100,13 @@ class DataCellWidget extends StatelessWidget {
       return Text(
         element.element,
         style: SafeGoogleFont('Montserrat',
-            color: black, fontSize: 12, fontWeight: FontWeight.w700),
+            color: black,
+            fontSize: 12,
+            fontWeight: FontWeight.w700
+        ),
       );
+    } else if(element.isIcon){
+      return Icon(element.iconData, color: element.color);
     } else {
       return Container();
     }

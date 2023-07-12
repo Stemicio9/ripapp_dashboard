@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
@@ -7,7 +10,7 @@ import 'package:ripapp_dashboard/utils/ResultSet.dart';
 
 String userEntityToJson(UserEntity data) => json.encode(data.toJson());
 
-class UserEntity implements ResultEntity {
+class UserEntity implements ResultEntity, TableRowElement  {
   int? id;
   String? firstName;
   String? lastName;
@@ -116,6 +119,48 @@ class UserEntity implements ResultEntity {
   );
 
   factory UserEntity.emptyUser() => UserEntity();
+
+  @override
+  List<String> getHeaders() {
+    return [
+      "ID",
+      "Nome",
+      "Cognome",
+      "Email",
+      "Telefono",
+      "Ruolo",
+      "Nome Agenzia",
+      ""
+    ];
+  }
+
+  @override
+  List<RowElement> rowElements() {
+    return [
+      RowElement(isText: true, isImage: false, isIcon: false, element: id.toString()),
+      RowElement(isText: true, isImage: false, isIcon: false, element: firstName ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false, element: lastName ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false, element: email ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false, element: phoneNumber ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false, element: status.toString() == 'UserStatus.active' ? 'Utente' :
+      status.toString() == 'UserStatus.agency' ? 'Agenzia' :
+      'Amministratore',
+      ),
+      status.toString() == 'UserStatus.agency' ?  RowElement(
+          isText: true,
+          isImage: false,
+          isIcon: false,
+          element: agency!.agencyName!,
+      ) : RowElement(
+        isText: false,
+        isImage: false,
+        isIcon: true,
+        iconData: Icons.cancel_rounded,
+        color: rossoopaco,
+        element: '',
+      ),
+    ];
+  }
 
 // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
 }

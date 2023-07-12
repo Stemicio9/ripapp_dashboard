@@ -1,4 +1,5 @@
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage.dart';
+
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/users_manage_page.dart';
 
 enum UserStatus { agency, active, disabled, notfound, admin;
 

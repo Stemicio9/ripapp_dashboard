@@ -71,10 +71,10 @@ class ProductEntity implements ResultEntity, TableRowElement {
   @override
   List<RowElement> rowElements() {
     return [
-      RowElement(isText: true, isImage: false, element: id.toString()),
-      RowElement(isText: false, isImage: true, element: firebaseId ?? ""),
-      RowElement(isText: true, isImage: false, element: name ?? ""),
-      RowElement(isText: true, isImage: false, element: price.toString()),
+      RowElement(isText: true, isImage: false, isIcon: false, element: id.toString()),
+      RowElement(isText: false, isImage: true, isIcon: false, element: firebaseId ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false, element: name ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false, element: price.toString()),
     ];
   }
 

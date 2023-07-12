@@ -183,13 +183,13 @@ class DemiseEntity implements ResultEntity, TableRowElement {
   @override
   List<RowElement> rowElements() {
     return [
-      RowElement(isText: true, isImage: false, element: id.toString()),
-      RowElement(isText: true, isImage: false, element: firstName ?? ""),
-      RowElement(isText: true, isImage: false, element: lastName ?? ""),
-      RowElement(isText: true, isImage: false, element: city?.name ?? ""),
-      RowElement(isText: true, isImage: false, element: phoneNumber ?? ""),
-      RowElement(isText: true, isImage: false, element: funeralAddress ?? ""),
-      RowElement(isText: true, isImage: false, element: wakeAddress ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false, element: id.toString()),
+      RowElement(isText: true, isImage: false, isIcon: false,element: firstName ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false,element: lastName ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false,element: city?.name ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false,element: phoneNumber ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false,element: funeralAddress ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false,element: wakeAddress ?? ""),
     ];
   }
 
