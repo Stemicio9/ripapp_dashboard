@@ -153,7 +153,7 @@ class AgencyFormState extends State<AgencyForm> {
                                                       children: [
                                                         Padding(
                                                           padding: getPadding(
-                                                              bottom: 5, left: 3),
+                                                              bottom: 5, left: 4),
                                                           child: Text(
                                                             'CITTÀ',
                                                             style: SafeGoogleFont(
@@ -235,7 +235,7 @@ class AgencyFormState extends State<AgencyForm> {
                                                         children: [
                                                           Padding(
                                                             padding: getPadding(
-                                                                bottom: 5, left: 3),
+                                                                bottom: 5, left: 4),
                                                             child: Text(
                                                               'EMAIL',
                                                               style: SafeGoogleFont(

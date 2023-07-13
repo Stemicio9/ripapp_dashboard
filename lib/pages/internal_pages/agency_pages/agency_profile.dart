@@ -63,7 +63,7 @@ class AgencyProfileState extends State<AgencyProfile> {
         builder: (context, state) {
           print("il nostro link è " + imageFile.toString());
           return Padding(
-            padding: getPadding(top: 60, bottom: 60, left: 5, right: 5),
+            padding: getPadding(top: 30, bottom: 30, left: 5, right: 5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
