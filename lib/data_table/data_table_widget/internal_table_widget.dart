@@ -43,6 +43,7 @@ class InternalTableWidget extends StatelessWidget {
     );
   }
 
+
   DataColumn composeDataColumn(String header){
     return DataColumn(
         label: Expanded(
@@ -53,22 +54,28 @@ class InternalTableWidget extends StatelessWidget {
   }
 
   DataRow composeDataRow(TableRowElement element){
+    List<DataCell> elements = element.rowElements().map((e) => composeDataCell(e)).toList();
+    elements.add(composeActionCell(element));
     return DataRow(
-        cells: element.rowElements().map((e) => composeDataCell(e)).toList()..add(composeActionCell(element))
+        cells: elements
     );
   }
 
   DataCell composeActionCell(TableRowElement element){
+    List<ActionDefinition> actions = List.empty(growable: true);
+    for(var currentAction in rowActions){
+      ActionDefinition action = currentAction.copy();
+      action.actionInputs = List.empty(growable: true)..add(element);
+      actions.add(action);
+    }
+    List<Widget> widgets = actions.map((e) => Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: ActionWidget(action: e),
+    )).toList();
     return DataCell(
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [...rowActions.map((e) {
-          e.actionInputs = List.empty(growable: true)..add(element);
-          return Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: ActionWidget(action: e),
-          );
-        }).toList()],
+        children: widgets,
       )
     );
   }

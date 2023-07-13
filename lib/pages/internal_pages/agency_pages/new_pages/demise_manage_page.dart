@@ -137,6 +137,8 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
   ActionDefinition viewAction(){
     ActionDefinition result = ActionDefinition(
         action: (DemiseEntity demiseEntity){
+          print("HO PREMUTO SU VIEWACTION");
+          print(demiseEntity.firstName);
           _selectedDemiseCubit.selectDemise(demiseEntity);
           context.push(AppPage.demiseDetail.path);
         },

@@ -20,6 +20,18 @@ class ActionDefinition {
     this.icon = Icons.add, this.text = "",
     this.isButton = false, this.tooltip = "", required this.actionInputs,
     this.buttonColor = background});
+
+   ActionDefinition copy(){
+     return ActionDefinition(
+         action: action,
+         actionInputs: actionInputs,
+         icon: icon,
+          text: text,
+          buttonColor: buttonColor,
+          isButton: isButton,
+          tooltip: tooltip
+     );
+   }
 }
 
 
