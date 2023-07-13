@@ -350,7 +350,11 @@ class DeceasedDataState extends State<DeceasedData>{
                                               ),
                                             ),
                                             AutocompleteWidget(
-                                              addCityToInterestCities: (CityFromAPI city){},
+                                              addCityToInterestCities: (CityFromAPI city){
+                                                setState(() {
+                                                  widget.cityController.text = city.name!;
+                                                });
+                                              },
                                               options: cityList,
                                               paddingRight: 0,
                                               paddingLeft: 0,

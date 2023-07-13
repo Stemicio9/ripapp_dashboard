@@ -4,7 +4,8 @@ import 'package:ripapp_dashboard/models/city_from_API.dart';
 import '../blocs/selected_city_cubit.dart';
 import '../constants/colors.dart';
 
-
+// todo
+// todo   è stato modificato male, ora lo rifacciamo insieme
 class AutocompleteWidget extends StatefulWidget {
   final List<CityFromAPI> options;
   final dynamic validator;
@@ -16,6 +17,7 @@ class AutocompleteWidget extends StatefulWidget {
   final FocusNode focusNode = FocusNode();
   final TextEditingController filterController;
   final Function(CityFromAPI city) addCityToInterestCities;
+
 
   AutocompleteWidget({
     super.key,
