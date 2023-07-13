@@ -39,12 +39,18 @@ enum Kinship {
   static Kinship fromJson(String json) => values.byName(json);
 }
 
+extension ParseToString on Kinship {
+  String toShortString() {
+    return this.toString().split('.').last;
+  }
+}
+/*
 String kinshipToString(Kinship? type) {
   if (type == null) {
     return "";
   }
   return '$type'.split('.').last;
-}
+}*/
 
 Kinship kinshipFromString(String type) {
   if (type == null) {

@@ -7,7 +7,9 @@ import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
+import 'package:ripapp_dashboard/constants/kinships.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
+import 'package:ripapp_dashboard/models/DemiseRelative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_detail.dart';
@@ -34,27 +36,27 @@ class DemiseDetailState extends State<DemiseDetail> {
   var obituaryUrl = "";
   String firstName = "Mario";
   String lastName = "Rossi";
-  final String age = "89";
-  final String id = "67";
-  final String deceasedDate = "22-03-2023";
-  final String cityOfInterest = "Milano";
-  final String city = "Milano";
-  final String phoneNumber = "3401234567";
-  final String funeralDate = "24-03-2023";
-  final String funeralNote = "Note del funerale";
-  final String funeralAddress = "Via Roma, 56";
-  final String funeralHour = "16:00";
-  final String wakeHour = "09:00";
-  final String wakeNote = "Note della veglia";
-  final String wakeAddress = "Via Milano, 35";
-  final String wakeDate = "23-03-2023";
+  String age = "89";
+  String id = "67";
+  String deceasedDate = "22-03-2023";
+  String cityOfInterest = "Milano";
+  String city = "Milano";
+  String phoneNumber = "3401234567";
+  String funeralDate = "24-03-2023";
+  String funeralNote = "Note del funerale";
+  String funeralAddress = "Via Roma, 56";
+  String funeralHour = "16:00";
+  String wakeHour = "09:00";
+  String wakeNote = "Note della veglia";
+  String wakeAddress = "Via Milano, 35";
+  String wakeDate = "23-03-2023";
   final TextEditingController relativeController = TextEditingController();
+
+  late List<DemiseRelative> relativeList = [];
+
   List<Widget> relativeRows = [];
 
-  late List<RelativeEntity> relativeList = [
-    RelativeEntity(relativeName: 'Madre di', relativePhone: '3401234567'),
-    RelativeEntity(relativeName: 'Padre di', relativePhone: '3409876543'),
-  ];
+
 
   void downloadFile(String url) {
     html.AnchorElement anchorElement =  html.AnchorElement(href: url);
@@ -107,7 +109,7 @@ class DemiseDetailState extends State<DemiseDetail> {
     final User user = FirebaseAuth.instance.currentUser!;
     final uid = user.uid;
 
-    createRelative();
+
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
       return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
@@ -120,6 +122,11 @@ class DemiseDetailState extends State<DemiseDetail> {
         });
 
         firstName = state.selectedDemise.firstName ?? "";
+        lastName = state.selectedDemise.lastName ?? "";
+        phoneNumber = state.selectedDemise.phoneNumber ?? "";
+        print('allopa?' + state.selectedDemise.relatives.toString());
+        relativeList = state.selectedDemise.relatives ?? [];
+        createRelative();
         lastName = state.selectedDemise.lastName ?? "";
         return ScaffoldWidget(
           body: SingleChildScrollView(
@@ -192,8 +199,8 @@ class DemiseDetailState extends State<DemiseDetail> {
     relativeRows = [];
     for (var element in relativeList) {
       relativeRows.add(RelativeDetailRow(
-        relativeName: element.relativeName,
-        relativePhone: element.relativePhone,
+        relativeName: element.kinshipType!.toShortString(),
+        relativePhone: element.telephoneNumber,
       ));
     }
   }
