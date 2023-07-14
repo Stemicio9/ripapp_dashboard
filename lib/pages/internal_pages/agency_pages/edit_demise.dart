@@ -78,6 +78,15 @@ class EditDemiseState extends State<EditDemise> {
     'Padre',
   ];
 
+  @override
+  void initState() {
+    final User user = FirebaseAuth.instance.currentUser!;
+    final uid = user.uid;
+    String demiseId = _selectedDemiseCubit.state.selectedDemise.firebaseid!;
+    _profileImageCubit.fetchProfileImage(uid, demiseId);
+    super.initState();
+  }
+
 
   final List<Widget> relativeRows = [];
   var imageFile = ImagesConstants.imgDemisePlaceholder;
@@ -94,21 +103,7 @@ class EditDemiseState extends State<EditDemise> {
     (_selectedDemiseCubit.state.selectedDemise).relatives![index].telephoneNumber = phoneNumber;
   }
 
-  Future<dynamic> downloadUrlImage(String uid,String demiseId) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/UID:$uid/demiseId:$demiseId/').listAll();
-    for (var element in fileList.items) {
-      print(element.name);
-    }
-    if (fileList.items.isEmpty) {
-      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
-      var file = fileList.items[0];
-      var result = await file.getDownloadURL();
-      return result;
-    }
-    var file = fileList.items[0];
-    var result = await file.getDownloadURL();
-    return result;
-  }
+
 
   void func(value){
     _profileImageCubit.changeLoaded(true);
@@ -124,15 +119,11 @@ class EditDemiseState extends State<EditDemise> {
   @override
   Widget build(BuildContext context) {
     _currentPageCubit.changeCurrentPage(RouteConstants.editDemise);
-    final User user = FirebaseAuth.instance.currentUser!;
-    final uid = user.uid;
+
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
       return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
           builder: (context, state) {
-              print("perche non si valoriza? "+ state.selectedDemise.toString());
-              downloadUrlImage(uid,state.selectedDemise.firebaseid!).then((value) => func(value));
-
               nameController.text = state.selectedDemise.firstName ?? nameController.text;
               lastNameController.text = state.selectedDemise.lastName ?? lastNameController.text;
               phoneController.text = state.selectedDemise.phoneNumber ?? phoneController.text;
@@ -377,7 +368,6 @@ class EditDemiseState extends State<EditDemise> {
                                 });
                               },
                               onKinshipChange: (int index, Kinship kinship) {
-                                print("entro nel kinship change");
                                 setState(() {
                                   _selectedDemiseCubit.state.selectedDemise.relatives![index].kinshipType = kinship;
                                   //relativesNew[index].kinship = kinship;
@@ -425,6 +415,10 @@ class EditDemiseState extends State<EditDemise> {
   }
 
 
+  updateDemise(String path) async {
+    await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+  }
+
 
   formSubmit() async {
     if(_formKey.currentState!.validate()){
@@ -448,7 +442,7 @@ class EditDemiseState extends State<EditDemise> {
         var fileesistente = fileList.items[0];
         fileesistente.delete();
       }
-      await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+      updateDemise(path);
 
 
       SuccessSnackbar(
