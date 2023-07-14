@@ -120,6 +120,7 @@ class EditDemiseState extends State<EditDemise> {
 
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
+          imageFile = imageState.imageUrl;
       return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
           builder: (context, state) {
               nameController.text = state.selectedDemise.firstName ?? nameController.text;

@@ -64,10 +64,7 @@ class DemiseDetailState extends State<DemiseDetail> {
     final uid = user.uid;
     String demiseId = _selectedDemiseCubit.state.selectedDemise.firebaseid!;
     _profileImageCubit.fetchProfileImage(uid, demiseId);
-    downloadObituary(uid, demiseId).then((value) {
-      obituary(value);
-      obituaryName = extractFileNameFromFirebaseUrl(value);
-    });
+    _profileImageCubit.fetchObituary(uid, demiseId);
     super.initState();
   }
 
@@ -78,12 +75,7 @@ class DemiseDetailState extends State<DemiseDetail> {
   }
 
 
-  Future<dynamic> downloadObituary(String uid, String demiseId) async {
-    var fileList = await FirebaseStorage.instance.ref('obituaries/UID:$uid/demiseId:$demiseId/').listAll();
-    var file = fileList.items[0];
-    var result = await file.getDownloadURL();
-    return result;
-  }
+
 
   Future<dynamic> downloadUrlImage(String uid, String demiseId) async {
     var fileList = await FirebaseStorage.instance
@@ -112,7 +104,6 @@ class DemiseDetailState extends State<DemiseDetail> {
   }
 
   void obituary(value) {
-    _profileImageCubit.changeLoaded(true);
     obituaryUrl = value;
   }
 
@@ -149,7 +140,7 @@ class DemiseDetailState extends State<DemiseDetail> {
                   imageState.loaded
                       ? DeceasedDetail(
                           imageFile: imageFile,
-                          downloadObituary: (){downloadFile(obituaryUrl);},
+                          downloadObituary: (){downloadFile(imageState.obituaryUrl);},
                           obituaryName: obituaryName,
                           id: id,
                           age: age,
