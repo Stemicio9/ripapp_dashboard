@@ -106,10 +106,7 @@ class EditDemiseState extends State<EditDemise> {
 
 
 
-  void func(value){
-    _profileImageCubit.changeLoaded(true);
-    imageFile = value;
-  }
+
 
   refactorRelativeIndexes(){
     for(int i = 0; i< relativesNew.length; i++){
@@ -421,7 +418,7 @@ class EditDemiseState extends State<EditDemise> {
 
 
   Future updateDemise(String path) async {
-    await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+    //await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
     await DemiseRepository().updateDemise(_selectedDemiseCubit.state.selectedDemise);
   }
 
@@ -453,10 +450,7 @@ class EditDemiseState extends State<EditDemise> {
           .onError((error, stackTrace) => ErrorSnackbar(context, text: "Errore durante l'aggiornamento del decesso"));
 
 
-      SuccessSnackbar(
-          context,
-          text: 'Defunto modificato con successo!'
-      );
+
       Navigator.pop(context);
     }else{
       ErrorSnackbar(

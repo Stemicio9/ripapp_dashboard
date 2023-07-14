@@ -65,6 +65,7 @@ class DemiseRepository{
   Future<dynamic> updateDemise(DemiseEntity demiseToBeUpdated) async {
     String demiseId = demiseToBeUpdated.id.toString();
     String urlUpdateDemise = '$demiseUrl/$demiseId';
+    print('qui ci arrivo secondo te?');
     var response = await globalDio.put(urlUpdateDemise, data: demiseToBeUpdated.toJson());
   }
 

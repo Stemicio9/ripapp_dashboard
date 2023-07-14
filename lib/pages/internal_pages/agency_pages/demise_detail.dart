@@ -31,6 +31,7 @@ class DemiseDetail extends StatefulWidget {
 class DemiseDetailState extends State<DemiseDetail> {
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
+  SelectedDemiseCubit  get _selectedDemiseCubit => context.read<SelectedDemiseCubit>();
   var imageFile = ImagesConstants.imgDemisePlaceholder;
   var obituaryName = "";
   var obituaryUrl = "";
@@ -57,6 +58,18 @@ class DemiseDetailState extends State<DemiseDetail> {
   List<Widget> relativeRows = [];
 
 
+  @override
+  void initState() {
+    final User user = FirebaseAuth.instance.currentUser!;
+    final uid = user.uid;
+    String demiseId = _selectedDemiseCubit.state.selectedDemise.firebaseid!;
+    _profileImageCubit.fetchProfileImage(uid, demiseId);
+    downloadObituary(uid, demiseId).then((value) {
+      obituary(value);
+      obituaryName = extractFileNameFromFirebaseUrl(value);
+    });
+    super.initState();
+  }
 
   void downloadFile(String url) {
     html.AnchorElement anchorElement =  html.AnchorElement(href: url);
@@ -106,20 +119,12 @@ class DemiseDetailState extends State<DemiseDetail> {
   @override
   Widget build(BuildContext context) {
     _currentPageCubit.changeCurrentPage(RouteConstants.demiseDetail);
-    final User user = FirebaseAuth.instance.currentUser!;
-    final uid = user.uid;
-
-
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
       return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
           builder: (context, state) {
-        downloadUrlImage(uid, state.selectedDemise.firebaseid!).then((value) => func(value));
 
-        downloadObituary(uid, state.selectedDemise.firebaseid!).then((value) {
-          obituary(value);
-          obituaryName = extractFileNameFromFirebaseUrl(value);
-        });
+
 
         firstName = state.selectedDemise.firstName ?? "";
         lastName = state.selectedDemise.lastName ?? "";
