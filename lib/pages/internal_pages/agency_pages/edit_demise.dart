@@ -420,9 +420,9 @@ class EditDemiseState extends State<EditDemise> {
   }
 
 
-  updateDemise(String path) async {
+  Future updateDemise(String path) async {
     await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
-    await DemiseRepository().up
+    await DemiseRepository().updateDemise(_selectedDemiseCubit.state.selectedDemise);
   }
 
 
@@ -448,7 +448,9 @@ class EditDemiseState extends State<EditDemise> {
         var fileesistente = fileList.items[0];
         fileesistente.delete();
       }
-      updateDemise(path);
+      updateDemise(path)
+          .then((value) => SuccessSnackbar(context, text: "Decesso aggiornato con successo!"))
+          .onError((error, stackTrace) => ErrorSnackbar(context, text: "Errore durante l'aggiornamento del decesso"));
 
 
       SuccessSnackbar(
