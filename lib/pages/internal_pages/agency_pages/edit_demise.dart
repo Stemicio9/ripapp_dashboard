@@ -21,6 +21,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relat
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
+import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
@@ -365,11 +366,13 @@ class EditDemiseState extends State<EditDemise> {
                                   //relativesNew.add(relativeRow);
                                   RelativeRowNew newRelative = RelativeRowNew(); //used just for default values
                                   _selectedDemiseCubit.state.selectedDemise.relatives!.add(DemiseRelative(telephoneNumber: newRelative.value, kinshipType: newRelative.kinship));
+                                  print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                 });
                               },
                               onKinshipChange: (int index, Kinship kinship) {
                                 setState(() {
                                   _selectedDemiseCubit.state.selectedDemise.relatives![index].kinshipType = kinship;
+                                  print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   //relativesNew[index].kinship = kinship;
                                 });
                               },
@@ -377,6 +380,7 @@ class EditDemiseState extends State<EditDemise> {
                                 print("CAMBIO VALORE DI INDICE $index");
                                 setState(() {
                                   _selectedDemiseCubit.state.selectedDemise.relatives![index].telephoneNumber = value;
+                                  print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   //relativesNew[index].value = value;
                                 });
                               },
@@ -386,6 +390,7 @@ class EditDemiseState extends State<EditDemise> {
                                 setState(() {
                                   //relativesNew.removeAt(index);
                                   _selectedDemiseCubit.state.selectedDemise.relatives!.removeAt(index);
+                                  print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   //refactorRelativeIndexes();
                                 });
                               },)
@@ -417,11 +422,12 @@ class EditDemiseState extends State<EditDemise> {
 
   updateDemise(String path) async {
     await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+    await DemiseRepository().up
   }
 
 
   formSubmit() async {
-    if(_formKey.currentState!.validate()){
+    if(!_formKey.currentState!.validate()){
       DemiseEntity demiseEntity = DemiseEntity();
       if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
         if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {
