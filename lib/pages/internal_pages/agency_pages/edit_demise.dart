@@ -9,8 +9,11 @@ import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
+import 'package:ripapp_dashboard/models/DemiseRelative.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relative_row.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relatives.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_data.dart';
@@ -68,6 +71,7 @@ class EditDemiseState extends State<EditDemise> {
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
+  List<RelativeRowNew> relativesNew = [];
 
   static const List<String> kinship = <String>[
     'Madre',
@@ -111,6 +115,12 @@ class EditDemiseState extends State<EditDemise> {
     imageFile = value;
   }
 
+  refactorRelativeIndexes(){
+    for(int i = 0; i< relativesNew.length; i++){
+      relativesNew[i].currentIndex = i;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _currentPageCubit.changeCurrentPage(RouteConstants.editDemise);
@@ -143,6 +153,15 @@ class EditDemiseState extends State<EditDemise> {
               //funeralTimeController.text = state.selectedDemise.funeralDateTime.toString() ?? "";
               funeralNoteController.text = state.selectedDemise.funeralNotes ?? funeralNoteController.text;
               funeralAddressController.text = state.selectedDemise.funeralAddress ?? funeralAddressController.text;
+              relativesNew.clear();
+              for (int i = 0; i < state.selectedDemise.relatives!.length; ++i){
+                print("entro nell'aggiunta ai newrelative");
+                DemiseRelative currentRelative = state.selectedDemise.relatives![i];
+                relativesNew.add(
+                    RelativeRowNew(value: currentRelative.telephoneNumber!,
+                        kinship: currentRelative.kinshipType!,
+                        currentIndex: i)
+                );}
 
 
               //relativeController.text = state.selectedDemise.relative.toString() ?? "";
@@ -346,14 +365,40 @@ class EditDemiseState extends State<EditDemise> {
                           //add relative
                           Padding(
                             padding: const EdgeInsets.only(top: 20),
-                            child: AddRelative(
-                              relativeRows: relativeRows,
-                              addRelative: () {
+                            child: RelativesWidget(
+                              isDetail: false,
+                              relatives: relativesNew,
+                              addDemisePress: () {
+                                RelativeRowNew relativeRow = RelativeRowNew(currentIndex: relativesNew.length);
                                 setState(() {
-                                  createNewRelativeRow();
+                                  //relativesNew.add(relativeRow);
+                                  RelativeRowNew newRelative = RelativeRowNew(); //used just for default values
+                                  _selectedDemiseCubit.state.selectedDemise.relatives!.add(DemiseRelative(telephoneNumber: newRelative.value, kinshipType: newRelative.kinship));
                                 });
                               },
-                            ),
+                              onKinshipChange: (int index, Kinship kinship) {
+                                print("entro nel kinship change");
+                                setState(() {
+                                  _selectedDemiseCubit.state.selectedDemise.relatives![index].kinshipType = kinship;
+                                  //relativesNew[index].kinship = kinship;
+                                });
+                              },
+                              inputValueChange: (int index, String value) {
+                                print("CAMBIO VALORE DI INDICE $index");
+                                setState(() {
+                                  _selectedDemiseCubit.state.selectedDemise.relatives![index].telephoneNumber = value;
+                                  //relativesNew[index].value = value;
+                                });
+                              },
+                              deleteRow: (int index) {
+                                // TODO
+                                // TODO What problem can generate this method?
+                                setState(() {
+                                  //relativesNew.removeAt(index);
+                                  _selectedDemiseCubit.state.selectedDemise.relatives!.removeAt(index);
+                                  //refactorRelativeIndexes();
+                                });
+                              },)
                           ),
 
 
