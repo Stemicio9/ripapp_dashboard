@@ -150,7 +150,9 @@ class EditDemiseState extends State<EditDemise> {
                 relativesNew.add(
                     RelativeRowNew(value: currentRelative.telephoneNumber!,
                         kinship: currentRelative.kinshipType!,
-                        currentIndex: i)
+                        currentIndex: i,
+                        relativeId: currentRelative.relativeId!
+                    )
                 );}
 
 
@@ -419,7 +421,7 @@ class EditDemiseState extends State<EditDemise> {
 
 
   Future updateDemise(String path) async {
-    //await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+    //await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes); todo da ripristinare
     await DemiseRepository().updateDemise(_selectedDemiseCubit.state.selectedDemise);
   }
 
