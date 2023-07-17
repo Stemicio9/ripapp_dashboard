@@ -69,7 +69,7 @@ class RelativeRowWidget extends StatelessWidget {
                         underline: const SizedBox(),
                         value: relative.kinship,
                         onChanged: (Kinship? value) {
-                          kinshipChange(relative.currentIndex, value ?? Kinship.mother);
+                          kinshipChange(relative.currentIndex, value ?? Kinship.madre);
                         },
                         items: Kinship.values.map<DropdownMenuItem<Kinship>>(
                                 (Kinship kinship) {

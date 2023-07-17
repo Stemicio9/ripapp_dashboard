@@ -473,7 +473,7 @@ class AddDemiseState extends State<AddDemise> {
       changeKinship: setKinshipFromDropdownOf,
       changeTelephoneNumber: setTelephoneNumberOf,
       isDetail: false,
-      selectedKinship: Kinship.brother,
+      selectedKinship: Kinship.fratello,
       listKinship: const ['nonno'],
       index: relativeIndex,
     );
@@ -486,7 +486,7 @@ class AddDemiseState extends State<AddDemise> {
     relativeIndex += 1;
     relativeRows.add(x);
     demiseEntity.relatives!.add(DemiseRelative());
-    (_searchKinshipCubit.state as SearchKinshipState).selectedKinships!.add(Kinship.aunt);
+    (_searchKinshipCubit.state as SearchKinshipState).selectedKinships!.add(Kinship.zia);
     (_searchKinshipCubit.state as SearchKinshipState).phoneNumbersInserted!.add("");
     print("ecco i telefoni dallo stato "+ _searchKinshipCubit.state.phoneNumbersInserted.toString());
     print("ecco le kinship dallo stato "+ _searchKinshipCubit.state.selectedKinships.toString());
