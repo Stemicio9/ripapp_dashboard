@@ -69,6 +69,8 @@ class AgencyFormState extends State<AgencyForm> {
     return BlocBuilder<SelectedCityCubit, SelectedCityState>(
         builder: (context, stateCity) {
           if (stateCity is SelectedCityState) {
+            widget.cityController.text = stateCity.selectedCity.name ?? "";
+            print("seleziono città agenzia : ${widget.cityController.text}");
             return BlocBuilder<SelectedAgencyCubit, SelectedAgencyState>(
                 builder: (context, state) {
                   if (state is SelectedAgencyState) {
@@ -78,7 +80,7 @@ class AgencyFormState extends State<AgencyForm> {
                       widget.cityController.text = "";
                     } else {
                       widget.cityController.text =
-                          stateCity.selectedCity.name ?? widget.cityController.text;
+                          state.selectedAgency.city ?? widget.cityController.text;
                       widget.nameController.text =
                           state.selectedAgency.agencyName ?? widget.nameController.text;
                       widget.phoneController.text = state.selectedAgency.phoneNumber ??
@@ -104,9 +106,8 @@ class AgencyFormState extends State<AgencyForm> {
                                       is CityListLoaded) {cityList = cityState.listCity;
                                       if (cityList.isNotEmpty) {
                                         widget.cityController.text =
-                                            state.selectedAgency.city ?? widget.cityController.text;
-                                        print("STAMPO LA CITTA");
-                                        print(widget.cityController.text);
+                                            stateCity.selectedCity.nam ?? widget.cityController.text;
+                                        print("STAMPO LA CITTA : ${widget.cityController.text}");
                                         return Column(
                                           children: [
                                             Padding(

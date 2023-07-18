@@ -95,7 +95,6 @@ class EditProfileFormState extends State<EditProfileForm> {
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, state) {
           print("il nostro link è " + imageFile.toString());
-
           return Padding(
             padding: getPadding(left: 20, right: 20),
             child: Column(

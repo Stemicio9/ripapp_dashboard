@@ -7,6 +7,7 @@ class ProfileImageCubit extends Cubit<ProfileImageState> {
   changeLoaded(bool loaded) {
     print("sto cambiando il loaded");
     emit(ProfileImageState(loaded));
+    print("il loaded cambiato è : $loaded");
   }
 }
 
