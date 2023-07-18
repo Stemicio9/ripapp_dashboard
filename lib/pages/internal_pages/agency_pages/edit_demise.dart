@@ -21,6 +21,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relat
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
+import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
@@ -78,6 +79,15 @@ class EditDemiseState extends State<EditDemise> {
     'Padre',
   ];
 
+  @override
+  void initState() {
+    final User user = FirebaseAuth.instance.currentUser!;
+    final uid = user.uid;
+    String demiseId = _selectedDemiseCubit.state.selectedDemise.firebaseid!;
+    _profileImageCubit.fetchProfileImage(uid, demiseId);
+    super.initState();
+  }
+
 
   final List<Widget> relativeRows = [];
   var imageFile = ImagesConstants.imgDemisePlaceholder;
@@ -94,26 +104,9 @@ class EditDemiseState extends State<EditDemise> {
     (_selectedDemiseCubit.state.selectedDemise).relatives![index].telephoneNumber = phoneNumber;
   }
 
-  Future<dynamic> downloadUrlImage(String uid,String demiseId) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/UID:$uid/demiseId:$demiseId/').listAll();
-    for (var element in fileList.items) {
-      print(element.name);
-    }
-    if (fileList.items.isEmpty) {
-      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
-      var file = fileList.items[0];
-      var result = await file.getDownloadURL();
-      return result;
-    }
-    var file = fileList.items[0];
-    var result = await file.getDownloadURL();
-    return result;
-  }
 
-  void func(value){
-    _profileImageCubit.changeLoaded(true);
-    imageFile = value;
-  }
+
+
 
   refactorRelativeIndexes(){
     for(int i = 0; i< relativesNew.length; i++){
@@ -124,15 +117,13 @@ class EditDemiseState extends State<EditDemise> {
   @override
   Widget build(BuildContext context) {
     _currentPageCubit.changeCurrentPage(RouteConstants.editDemise);
-    final User user = FirebaseAuth.instance.currentUser!;
-    final uid = user.uid;
+
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
+          imageFile = imageState.imageUrl;
       return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
           builder: (context, state) {
-              print("perche non si valoriza? "+ state.selectedDemise.toString());
-              downloadUrlImage(uid,state.selectedDemise.firebaseid!).then((value) => func(value));
-
+              print("ricostruisco il widget e la lista è " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
               nameController.text = state.selectedDemise.firstName ?? nameController.text;
               lastNameController.text = state.selectedDemise.lastName ?? lastNameController.text;
               phoneController.text = state.selectedDemise.phoneNumber ?? phoneController.text;
@@ -160,7 +151,9 @@ class EditDemiseState extends State<EditDemise> {
                 relativesNew.add(
                     RelativeRowNew(value: currentRelative.telephoneNumber!,
                         kinship: currentRelative.kinshipType!,
-                        currentIndex: i)
+                        currentIndex: i,
+                        relativeId: currentRelative.relativeId
+                    )
                 );}
 
 
@@ -374,12 +367,13 @@ class EditDemiseState extends State<EditDemise> {
                                   //relativesNew.add(relativeRow);
                                   RelativeRowNew newRelative = RelativeRowNew(); //used just for default values
                                   _selectedDemiseCubit.state.selectedDemise.relatives!.add(DemiseRelative(telephoneNumber: newRelative.value, kinshipType: newRelative.kinship));
+                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                 });
                               },
                               onKinshipChange: (int index, Kinship kinship) {
-                                print("entro nel kinship change");
                                 setState(() {
                                   _selectedDemiseCubit.state.selectedDemise.relatives![index].kinshipType = kinship;
+                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   //relativesNew[index].kinship = kinship;
                                 });
                               },
@@ -387,6 +381,7 @@ class EditDemiseState extends State<EditDemise> {
                                 print("CAMBIO VALORE DI INDICE $index");
                                 setState(() {
                                   _selectedDemiseCubit.state.selectedDemise.relatives![index].telephoneNumber = value;
+                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   //relativesNew[index].value = value;
                                 });
                               },
@@ -395,7 +390,9 @@ class EditDemiseState extends State<EditDemise> {
                                 // TODO What problem can generate this method?
                                 setState(() {
                                   //relativesNew.removeAt(index);
+                                  print("ecco la nuova lista pre modifica " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   _selectedDemiseCubit.state.selectedDemise.relatives!.removeAt(index);
+                                  print("ecco la nuova lista post modifica " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   //refactorRelativeIndexes();
                                 });
                               },)
@@ -425,9 +422,26 @@ class EditDemiseState extends State<EditDemise> {
   }
 
 
+  Future updateDemise(String path) async {
+    //await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes); todo da ripristinare
+    return DemiseRepository().updateDemise(_selectedDemiseCubit.state.selectedDemise);
+  }
+
+  onUpdateError(StackTrace stackTrace){
+    print(stackTrace);
+    ErrorSnackbar(context, text: "Errore durante l'aggiornamento del decesso");
+    Navigator.pop(context);
+  }
+  onUpdateSuccess(DemiseEntity value){
+    //_selectedDemiseCubit.selectDemise(selectedDemise) = value;
+    SuccessSnackbar(context, text: "Decesso aggiornato con successo!");
+    Navigator.pop(context);
+    _currentPageCubit.loadPage(ScaffoldWidgetState.agency_demises_page, 0);
+  }
+
 
   formSubmit() async {
-    if(_formKey.currentState!.validate()){
+    if(!_formKey.currentState!.validate()){
       DemiseEntity demiseEntity = DemiseEntity();
       if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
         if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {
@@ -448,14 +462,9 @@ class EditDemiseState extends State<EditDemise> {
         var fileesistente = fileList.items[0];
         fileesistente.delete();
       }
-      await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
-
-
-      SuccessSnackbar(
-          context,
-          text: 'Defunto modificato con successo!'
-      );
-      Navigator.pop(context);
+      updateDemise(path)
+          .then((value) => onUpdateSuccess(value))
+          .onError((error, stackTrace) => onUpdateError(stackTrace));
     }else{
       ErrorSnackbar(
           context,

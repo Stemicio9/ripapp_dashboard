@@ -99,6 +99,7 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
   ActionDefinition editAction(){
     ActionDefinition result = ActionDefinition(
         action: (DemiseEntity demiseEntity){
+          print("ecco il demise selezionato" + demiseEntity.toString());
           _selectedDemiseCubit.selectDemise(demiseEntity);
           context.push(AppPage.editDemise.path);
         },

@@ -29,6 +29,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relat
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
+import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
@@ -425,7 +426,10 @@ class AddDemiseState extends State<AddDemise> {
 
       demiseEntity.relatives = relativesNew.map((relativeRow) => DemiseRelative(telephoneNumber: relativeRow.value, kinshipType: relativeRow.kinship)).toList();
 
-      _searchDemiseCubit.saveDemise(demiseEntity);
+      //_searchDemiseCubit.saveDemise(demiseEntity);
+      DemiseRepository().saveDemise(demiseEntity)
+          .then((value) => SuccessSnackbar(context, text: 'Defunto aggiunto con successo!'))
+          .onError((error, stackTrace) => ErrorSnackbar(context, text: "Errore durante l'aggiunta del defunto"));
 
 
       var obituaryPath = 'obituaries/UID:$uid/demiseId:$demiseId/';
@@ -446,7 +450,7 @@ class AddDemiseState extends State<AddDemise> {
         await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
       }
 
-      SuccessSnackbar(context, text: 'Defunto aggiunto con successo!');
+      //SuccessSnackbar(context, text: 'Defunto aggiunto con successo!');
       context.pop();
 
     }
@@ -469,7 +473,7 @@ class AddDemiseState extends State<AddDemise> {
       changeKinship: setKinshipFromDropdownOf,
       changeTelephoneNumber: setTelephoneNumberOf,
       isDetail: false,
-      selectedKinship: Kinship.brother,
+      selectedKinship: Kinship.fratello,
       listKinship: const ['nonno'],
       index: relativeIndex,
     );
@@ -482,7 +486,7 @@ class AddDemiseState extends State<AddDemise> {
     relativeIndex += 1;
     relativeRows.add(x);
     demiseEntity.relatives!.add(DemiseRelative());
-    (_searchKinshipCubit.state as SearchKinshipState).selectedKinships!.add(Kinship.aunt);
+    (_searchKinshipCubit.state as SearchKinshipState).selectedKinships!.add(Kinship.zia);
     (_searchKinshipCubit.state as SearchKinshipState).phoneNumbersInserted!.add("");
     print("ecco i telefoni dallo stato "+ _searchKinshipCubit.state.phoneNumbersInserted.toString());
     print("ecco le kinship dallo stato "+ _searchKinshipCubit.state.selectedKinships.toString());

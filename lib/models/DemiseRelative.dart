@@ -31,7 +31,7 @@ class DemiseRelative {
   }
 
   factory DemiseRelative.fromJson(Map<String, dynamic> json) => DemiseRelative(
-    relativeId: json["productId"] ?? 0,
+    relativeId: json["relativeid"] ?? 0,
     demise: json["demise"],
     user: json["user"],
     kinshipType: Kinship.fromJson(json['kinship']),
