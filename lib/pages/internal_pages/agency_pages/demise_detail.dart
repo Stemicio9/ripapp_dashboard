@@ -10,6 +10,7 @@ import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/kinships.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/DemiseRelative.dart';
+import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_detail.dart';
@@ -35,22 +36,23 @@ class DemiseDetailState extends State<DemiseDetail> {
   var imageFile = ImagesConstants.imgDemisePlaceholder;
   var obituaryName = "";
   var obituaryUrl = "";
-  String firstName = "Mario";
-  String lastName = "Rossi";
-  String age = "89";
-  String id = "67";
-  String deceasedDate = "22-03-2023";
-  String cityOfInterest = "Milano";
-  String city = "Milano";
-  String phoneNumber = "3401234567";
-  String funeralDate = "24-03-2023";
-  String funeralNote = "Note del funerale";
-  String funeralAddress = "Via Roma, 56";
-  String funeralHour = "16:00";
-  String wakeHour = "09:00";
-  String wakeNote = "Note della veglia";
-  String wakeAddress = "Via Milano, 35";
-  String wakeDate = "23-03-2023";
+  String firstName = "";
+  String lastName = "";
+  String age = "";
+  String id = "";
+  String deceasedDate = "";
+  String cityOfInterest = "";
+  String city = "";
+  String phoneNumber = "";
+  String funeralDate = "";
+  String funeralNote = "";
+  String funeralAddress = "";
+  String funeralHour = "";
+  String wakeHour = "";
+  String wakeNote = "";
+  String wakeAddress = "";
+  String wakeDate = "";
+  String missingData = "Dato non inserito";
   final TextEditingController relativeController = TextEditingController();
 
   late List<DemiseRelative> relativeList = [];
@@ -116,14 +118,8 @@ class DemiseDetailState extends State<DemiseDetail> {
           builder: (context, state) {
 
 
-
-        firstName = state.selectedDemise.firstName ?? "";
-        lastName = state.selectedDemise.lastName ?? "";
-        phoneNumber = state.selectedDemise.phoneNumber ?? "";
-        print('allopa?' + state.selectedDemise.relatives.toString());
-        relativeList = state.selectedDemise.relatives ?? [];
+        fillValues(state.selectedDemise);
         createRelative();
-        lastName = state.selectedDemise.lastName ?? "";
         return ScaffoldWidget(
           body: SingleChildScrollView(
             child: Padding(
@@ -209,4 +205,76 @@ class DemiseDetailState extends State<DemiseDetail> {
     }
     return '';
   }
+
+  /*  better todo something like that for dates
+  DatelabelWidget{
+    final Date x;
+
+    build{
+      Dateformat.format("MM..");
+    }
+  }*/
+  void fillValues(DemiseEntity demiseEntity) {
+    firstName = (demiseEntity.firstName != null) ? demiseEntity.firstName.toString() : missingData;
+    lastName = ( demiseEntity.lastName != null) ? demiseEntity.lastName.toString() : missingData;
+    phoneNumber = ( demiseEntity.phoneNumber != null) ? demiseEntity.phoneNumber.toString() : missingData;
+    age = ( demiseEntity.age != null ) ? demiseEntity.age.toString() : missingData;
+    id = demiseEntity.id.toString();
+    deceasedDate = ( demiseEntity.deceasedDate != null ) ? demiseEntity.deceasedDate.toString() : missingData;
+
+    if (demiseEntity.deceasedDate != null){
+      deceasedDate = demiseEntity.deceasedDate!.day.toString() + "/"+ demiseEntity.deceasedDate!.month.toString() + "/" +
+          demiseEntity.deceasedDate!.year.toString();
+    } else deceasedDate = missingData;
+
+    //cityOfInterest = demiseEntity.cities.toString(); todo decide how to handle city list
+    city = ( demiseEntity.city != null ) ? demiseEntity.city.toString() : missingData;
+    phoneNumber = ( demiseEntity.phoneNumber != null ) ? demiseEntity.phoneNumber.toString() : missingData;
+    funeralNote = ( demiseEntity.funeralNotes != null ) ? demiseEntity.funeralNotes.toString() : missingData;
+    funeralAddress = ( demiseEntity.funeralAddress != null ) ? demiseEntity.funeralAddress.toString() : missingData;
+
+    if (demiseEntity.funeralDateTime != null){
+      funeralDate = demiseEntity.funeralDateTime!.day.toString() + "/"+ demiseEntity.funeralDateTime!.month.toString() + "/" +
+          demiseEntity.funeralDateTime!.year.toString();
+      funeralHour = (demiseEntity.funeralDateTime!.hour < 10) ? "0" : "";
+      funeralHour += (demiseEntity.funeralDateTime!.hour.toString() + ":"+ demiseEntity.funeralDateTime!.minute.toString());
+    } else {
+      funeralDate = missingData;
+      funeralHour = missingData;
+    }
+
+    wakeNote = ( demiseEntity.wakeNotes != null ) ? demiseEntity.wakeNotes.toString() : missingData;
+    wakeAddress = ( demiseEntity.wakeAddress != null ) ? demiseEntity.wakeAddress.toString() : missingData;
+
+    wakeDate = ( demiseEntity.wakeDateTime != null ) ? demiseEntity.wakeDateTime.toString() : missingData;
+    wakeHour = ( demiseEntity.wakeDateTime != null ) ? demiseEntity.wakeDateTime.toString() : missingData;
+
+    if (demiseEntity.wakeDateTime != null){
+      wakeDate = demiseEntity.wakeDateTime!.day.toString() + "/"+ demiseEntity.wakeDateTime!.month.toString() + "/" +
+          demiseEntity.wakeDateTime!.year.toString();
+      wakeHour = (demiseEntity.wakeDateTime!.hour < 10) ? "0" : "";
+      wakeHour += demiseEntity.wakeDateTime!.hour.toString() + ":"+ demiseEntity.wakeDateTime!.minute.toString();
+    } else {wakeDate = missingData;
+      wakeHour = missingData;
+    }
+
+    relativeList = demiseEntity.relatives ?? [];
+  }
+
+  void fillDate(DateTime? dateTime, String date, String time) {
+    if (dateTime != null) {
+      String dateTimeString = dateTime.toString();
+      date = dateTimeString.split(" ").first;
+      time = dateTimeString.split(" ").last;
+      List<String> timeComponents = time.split(":");
+      String hours = timeComponents[0];
+      String minutes = timeComponents[1];
+      time = hours + ":" + minutes;
+      print("eccoci la time  " + time);
+    } else {
+        date = missingData;
+        time = missingData;
+    }
+  }
+
 }
