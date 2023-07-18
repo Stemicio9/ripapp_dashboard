@@ -144,6 +144,7 @@ class EditDemiseState extends State<EditDemise> {
               funeralNoteController.text = state.selectedDemise.funeralNotes ?? funeralNoteController.text;
               funeralAddressController.text = state.selectedDemise.funeralAddress ?? funeralAddressController.text;
               relativesNew.clear();
+              print("ecco la lista dei relatives " + state.selectedDemise.relatives!.toString());
               for (int i = 0; i < state.selectedDemise.relatives!.length; ++i){
                 print("entro nell'aggiunta ai newrelative");
                 DemiseRelative currentRelative = state.selectedDemise.relatives![i];
@@ -151,7 +152,7 @@ class EditDemiseState extends State<EditDemise> {
                     RelativeRowNew(value: currentRelative.telephoneNumber!,
                         kinship: currentRelative.kinshipType!,
                         currentIndex: i,
-                        relativeId: currentRelative.relativeId!
+                        relativeId: currentRelative.relativeId
                     )
                 );}
 
@@ -425,6 +426,15 @@ class EditDemiseState extends State<EditDemise> {
     await DemiseRepository().updateDemise(_selectedDemiseCubit.state.selectedDemise);
   }
 
+  onUpdateError(){
+    ErrorSnackbar(context, text: "Errore durante l'aggiornamento del decesso");
+    Navigator.pop(context);
+  }
+  onUpdateSuccess(){
+    SuccessSnackbar(context, text: "Decesso aggiornato con successo!");
+    Navigator.pop(context);
+  }
+
 
   formSubmit() async {
     if(!_formKey.currentState!.validate()){
@@ -449,12 +459,8 @@ class EditDemiseState extends State<EditDemise> {
         fileesistente.delete();
       }
       updateDemise(path)
-          .then((value) => SuccessSnackbar(context, text: "Decesso aggiornato con successo!"))
-          .onError((error, stackTrace) => ErrorSnackbar(context, text: "Errore durante l'aggiornamento del decesso"));
-
-
-
-      Navigator.pop(context);
+          .then((value) => onUpdateSuccess())
+          .onError((error, stackTrace) => onUpdateError());
     }else{
       ErrorSnackbar(
           context,
