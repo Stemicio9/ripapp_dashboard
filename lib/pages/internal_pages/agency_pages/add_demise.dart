@@ -65,7 +65,6 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController funeralNoteController = TextEditingController();
   final TextEditingController citiesController = TextEditingController();
   final TextEditingController relativeController = TextEditingController();
-  final TextEditingController filterController = TextEditingController();
   DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
   SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
   DateTime? wakeDate;
@@ -140,7 +139,6 @@ class AddDemiseState extends State<AddDemise> {
                             funeralTimeController.text = '';
                             funeralNoteController.text = '';
                             citiesController.text = '';
-                            filterController.text = '';
                             obituaryFile = null;
                             });
                         },
@@ -159,7 +157,6 @@ class AddDemiseState extends State<AddDemise> {
                             });
                           }
                         },
-                        filterController: filterController,
                         nameController: nameController,
                         phoneController: phoneController,
                         cityController: cityController,

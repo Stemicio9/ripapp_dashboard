@@ -78,8 +78,6 @@ class DemiseEntity implements ResultEntity, TableRowElement {
           'wakeAddress: $wakeAddress}'
            'photourl: $photoUrl'
           'relatives: $relatives}\n';
-
-
   }
 
   factory DemiseEntity.fromJson(Map<String, dynamic> json) => DemiseEntity(

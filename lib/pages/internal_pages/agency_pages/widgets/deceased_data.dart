@@ -24,7 +24,6 @@ class DeceasedData extends StatefulWidget {
   final TextEditingController ageController;
   final TextEditingController dateController;
   final TextEditingController citiesController;
-  final TextEditingController filterController;
   bool isEdit = false;
   final Function() emptyFields;
   final dynamic nameValidator;
@@ -63,7 +62,6 @@ class DeceasedData extends StatefulWidget {
     required this.nameController,
     required this.phoneController,
     required this.cityController,
-    required this.filterController,
     required this.lastNameController,
     required this.ageController,
     required this.options,
@@ -351,7 +349,7 @@ class DeceasedDataState extends State<DeceasedData>{
                                               paddingTop: 0,
                                               paddingBottom: 0,
                                               hintText: getCurrentLanguageValue(CITY)!,
-                                              filterController: widget.filterController,
+                                              filterController: widget.cityController,
                                               validator: widget.cityValidator,
                                             )
                                           ],
