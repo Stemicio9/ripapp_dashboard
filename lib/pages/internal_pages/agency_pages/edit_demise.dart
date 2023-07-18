@@ -123,6 +123,7 @@ class EditDemiseState extends State<EditDemise> {
           imageFile = imageState.imageUrl;
       return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
           builder: (context, state) {
+              print("ricostruisco il widget e la lista è " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
               nameController.text = state.selectedDemise.firstName ?? nameController.text;
               lastNameController.text = state.selectedDemise.lastName ?? lastNameController.text;
               phoneController.text = state.selectedDemise.phoneNumber ?? phoneController.text;
@@ -144,7 +145,6 @@ class EditDemiseState extends State<EditDemise> {
               funeralNoteController.text = state.selectedDemise.funeralNotes ?? funeralNoteController.text;
               funeralAddressController.text = state.selectedDemise.funeralAddress ?? funeralAddressController.text;
               relativesNew.clear();
-              print("ecco la lista dei relatives " + state.selectedDemise.relatives!.toString());
               for (int i = 0; i < state.selectedDemise.relatives!.length; ++i){
                 print("entro nell'aggiunta ai newrelative");
                 DemiseRelative currentRelative = state.selectedDemise.relatives![i];
@@ -367,13 +367,13 @@ class EditDemiseState extends State<EditDemise> {
                                   //relativesNew.add(relativeRow);
                                   RelativeRowNew newRelative = RelativeRowNew(); //used just for default values
                                   _selectedDemiseCubit.state.selectedDemise.relatives!.add(DemiseRelative(telephoneNumber: newRelative.value, kinshipType: newRelative.kinship));
-                                  print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                 });
                               },
                               onKinshipChange: (int index, Kinship kinship) {
                                 setState(() {
                                   _selectedDemiseCubit.state.selectedDemise.relatives![index].kinshipType = kinship;
-                                  print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   //relativesNew[index].kinship = kinship;
                                 });
                               },
@@ -381,7 +381,7 @@ class EditDemiseState extends State<EditDemise> {
                                 print("CAMBIO VALORE DI INDICE $index");
                                 setState(() {
                                   _selectedDemiseCubit.state.selectedDemise.relatives![index].telephoneNumber = value;
-                                  print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   //relativesNew[index].value = value;
                                 });
                               },
@@ -390,8 +390,9 @@ class EditDemiseState extends State<EditDemise> {
                                 // TODO What problem can generate this method?
                                 setState(() {
                                   //relativesNew.removeAt(index);
+                                  print("ecco la nuova lista pre modifica " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   _selectedDemiseCubit.state.selectedDemise.relatives!.removeAt(index);
-                                  print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                  print("ecco la nuova lista post modifica " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   //refactorRelativeIndexes();
                                 });
                               },)
@@ -423,16 +424,19 @@ class EditDemiseState extends State<EditDemise> {
 
   Future updateDemise(String path) async {
     //await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes); todo da ripristinare
-    await DemiseRepository().updateDemise(_selectedDemiseCubit.state.selectedDemise);
+    return DemiseRepository().updateDemise(_selectedDemiseCubit.state.selectedDemise);
   }
 
-  onUpdateError(){
+  onUpdateError(StackTrace stackTrace){
+    print(stackTrace);
     ErrorSnackbar(context, text: "Errore durante l'aggiornamento del decesso");
     Navigator.pop(context);
   }
-  onUpdateSuccess(){
+  onUpdateSuccess(DemiseEntity value){
+    //_selectedDemiseCubit.selectDemise(selectedDemise) = value;
     SuccessSnackbar(context, text: "Decesso aggiornato con successo!");
     Navigator.pop(context);
+    _currentPageCubit.loadPage(ScaffoldWidgetState.agency_demises_page, 0);
   }
 
 
@@ -459,8 +463,8 @@ class EditDemiseState extends State<EditDemise> {
         fileesistente.delete();
       }
       updateDemise(path)
-          .then((value) => onUpdateSuccess())
-          .onError((error, stackTrace) => onUpdateError());
+          .then((value) => onUpdateSuccess(value))
+          .onError((error, stackTrace) => onUpdateError(stackTrace));
     }else{
       ErrorSnackbar(
           context,
