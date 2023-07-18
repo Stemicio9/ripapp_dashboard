@@ -106,7 +106,7 @@ class AgencyFormState extends State<AgencyForm> {
                                       is CityListLoaded) {cityList = cityState.listCity;
                                       if (cityList.isNotEmpty) {
                                         widget.cityController.text =
-                                            stateCity.selectedCity.nam ?? widget.cityController.text;
+                                            stateCity.selectedCity.name ?? widget.cityController.text;
                                         print("STAMPO LA CITTA : ${widget.cityController.text}");
                                         return Column(
                                           children: [
