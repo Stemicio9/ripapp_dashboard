@@ -124,6 +124,7 @@ class AddDemiseState extends State<AddDemise> {
                       //deceased data
                       state.loaded ?  DeceasedData(
                         emptyFields: () {
+                          setState(() {
                             nameController.text = '';
                             lastNameController.text = '';
                             cityController.text = '';
@@ -140,6 +141,8 @@ class AddDemiseState extends State<AddDemise> {
                             funeralNoteController.text = '';
                             citiesController.text = '';
                             filterController.text = '';
+                            obituaryFile = null;
+                            });
                         },
                         isEdit: false,
                         isNetwork: isNetwork,
@@ -196,7 +199,8 @@ class AddDemiseState extends State<AddDemise> {
                               padding: const EdgeInsets.only(bottom: 20),
                               child: DropZoneWidget(
                                 file: obituaryFile,
-                                onDroppedFile: (file) => setState(()=> obituaryFile = file),
+                                onDroppedFile: (file) => setState(
+                                        ()=> obituaryFile = file),
 
                               ),
                             ),
