@@ -118,32 +118,20 @@ class EditDemiseState extends State<EditDemise> {
   Widget build(BuildContext context) {
     _currentPageCubit.changeCurrentPage(RouteConstants.editDemise);
 
+    print("ecco il demise selzionato " + _selectedDemiseCubit.state.selectedDemise.toString());
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
           imageFile = imageState.imageUrl;
       return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
           builder: (context, state) {
               print("ricostruisco il widget e la lista è " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
-              nameController.text = state.selectedDemise.firstName ?? nameController.text;
-              lastNameController.text = state.selectedDemise.lastName ?? lastNameController.text;
-              phoneController.text = state.selectedDemise.phoneNumber ?? phoneController.text;
-              if (state.selectedDemise.age != null) {
-                ageController.text = state.selectedDemise.age.toString();
-              }
-              deceasedDateController.text = state.selectedDemise.deceasedDate.toString();
+
+              fillValues(_selectedDemiseCubit.state.selectedDemise);
 
 
-              //  DateTime datetime = state.selectedDemise.wakeDateTime!;
-              //   wakeDateController.text =  DateTime(datetime.year, datetime.month, datetime.day).toString();
-              //   wakeTimeController.text = state.selectedDemise.wakeDateTime!.hour.toString() + state.selectedDemise.wakeDateTime!.minute.toString();
-              wakeAddressController.text = state.selectedDemise.wakeAddress ?? wakeAddressController.text;
-              wakeNoteController.text = state.selectedDemise.wakeNotes ?? wakeNoteController.text;
 
 
-              // funeralDateController.text = state.selectedDemise.funeralDateTime!.toString() ?? "";
-              //funeralTimeController.text = state.selectedDemise.funeralDateTime.toString() ?? "";
-              funeralNoteController.text = state.selectedDemise.funeralNotes ?? funeralNoteController.text;
-              funeralAddressController.text = state.selectedDemise.funeralAddress ?? funeralAddressController.text;
+
               relativesNew.clear();
               for (int i = 0; i < state.selectedDemise.relatives!.length; ++i){
                 print("entro nell'aggiunta ai newrelative");
@@ -516,5 +504,43 @@ class EditDemiseState extends State<EditDemise> {
   }
 
   var selectedValues = [];
+
+  void fillValues(DemiseEntity selectedDemise) {
+    nameController.text = selectedDemise.firstName ?? nameController.text;
+    lastNameController.text = selectedDemise.lastName ?? lastNameController.text;
+    phoneController.text = selectedDemise.phoneNumber ?? phoneController.text;
+    if (selectedDemise.age != null) {
+      ageController.text = selectedDemise.age.toString();
+    }
+    deceasedDateController.text = selectedDemise.deceasedDate.toString();
+
+
+    wakeAddressController.text = selectedDemise.wakeAddress ?? wakeAddressController.text;
+    wakeNoteController.text = selectedDemise.wakeNotes ?? wakeNoteController.text;
+
+
+    funeralNoteController.text = selectedDemise.funeralNotes ?? funeralNoteController.text;
+    funeralAddressController.text = selectedDemise.funeralAddress ?? funeralAddressController.text;
+
+
+    if (selectedDemise.deceasedDate != null){
+      deceasedDateController.text = selectedDemise.deceasedDate!.day.toString() + "/"+ selectedDemise.deceasedDate!.month.toString() + "/" +
+          selectedDemise.deceasedDate!.year.toString();
+    }
+
+    if (selectedDemise.funeralDateTime != null){
+      funeralDateController.text = selectedDemise.funeralDateTime!.day.toString() + "/"+ selectedDemise.funeralDateTime!.month.toString() + "/" +
+          selectedDemise.funeralDateTime!.year.toString();
+      funeralTimeController.text = (selectedDemise.funeralDateTime!.hour < 10) ? "0" : "";
+      funeralTimeController.text += (selectedDemise.funeralDateTime!.hour.toString() + ":"+ selectedDemise.funeralDateTime!.minute.toString());
+    }
+
+    if (selectedDemise.wakeDateTime != null){
+      wakeDateController.text = selectedDemise.wakeDateTime!.day.toString() + "/"+ selectedDemise.wakeDateTime!.month.toString() + "/" +
+          selectedDemise.wakeDateTime!.year.toString();
+      wakeTimeController.text = (selectedDemise.wakeDateTime!.hour < 10) ? "0" : "";
+      wakeTimeController.text += selectedDemise.wakeDateTime!.hour.toString() + ":"+ selectedDemise.wakeDateTime!.minute.toString();
+    }
+  }
 
 }
