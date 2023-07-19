@@ -4,13 +4,13 @@ import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 
 class EmptyFieldsWidget{
-  emptyFields(Function() onTap) {
+  emptyFields(Function() onTap, {String text = "Svuota campi"}) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: onTap,
         child: Texth4V2(
-          testo: getCurrentLanguageValue(EMPTY_FIELDS) ?? "",
+          testo: text,
           color: background,
           weight: FontWeight.w600,
           underline: true,

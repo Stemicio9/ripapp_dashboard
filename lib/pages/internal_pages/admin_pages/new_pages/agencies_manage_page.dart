@@ -99,10 +99,10 @@ class _AgenciesManagePageState extends State<AgenciesManagePage> {
                 key: _formKey,
                 child: AgencyForm(
                   emptyFields: (){
-                    nameController.text = "";
-                    cityController.text = "";
-                    emailController.text = "";
-                    phoneController.text = "";
+                    nameController.clear();
+                    emailController.clear();
+                    phoneController.clear();
+                    cityController.clear();
                   },
                   cityOptions: cityList,
                   cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,

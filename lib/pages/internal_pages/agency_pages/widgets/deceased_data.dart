@@ -325,7 +325,6 @@ class DeceasedDataState extends State<DeceasedData>{
                                       return const Center(child: CircularProgressIndicator());
                                     } else if (cityState is CityListLoaded) {
                                       cityList = cityState.listCity;
-                                      //print("decesssed city: $cityList");
                                       if (cityList.isNotEmpty) {
                                         return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,8 +405,10 @@ class DeceasedDataState extends State<DeceasedData>{
                                               hintText: "Comuni di interesse",
                                               filterController: widget.citiesController,
                                               validator: widget.citiesOfInterestValidator,
-                                            )
+                                            ),
+
                                           ],
+
                                         );
                                       }
                                     }return ErrorWidget("errore di connessione");
@@ -451,7 +452,6 @@ class DeceasedDataState extends State<DeceasedData>{
           }
           else
             return ErrorWidget("exception");
-        } );
+        });
   }
-
 }
