@@ -9,8 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
-import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
-import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
@@ -20,18 +18,16 @@ import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relatives.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/dropzone/dropzone_widget.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/dropzone/file_data_model.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
+import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
-import 'package:ripapp_dashboard/widgets/texts.dart';
 import 'package:uuid/uuid.dart';
 import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
@@ -64,13 +60,12 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController funeralNoteController = TextEditingController();
   final TextEditingController citiesController = TextEditingController();
   final TextEditingController relativeController = TextEditingController();
-  final TextEditingController filterController = TextEditingController();
-  DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
   SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
   DateTime? wakeDate;
   DateTime? funeralDate;
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+  List<CityFromAPI> chips = [];
   File_Data_Model? obituaryFile;
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
   int relativeIndex = 0;
@@ -123,6 +118,7 @@ class AddDemiseState extends State<AddDemise> {
                       //deceased data
                       state.loaded ?  DeceasedData(
                         emptyFields: () {
+                          setState(() {
                             nameController.text = '';
                             lastNameController.text = '';
                             cityController.text = '';
@@ -138,8 +134,10 @@ class AddDemiseState extends State<AddDemise> {
                             funeralTimeController.text = '';
                             funeralNoteController.text = '';
                             citiesController.text = '';
-                            filterController.text = '';
+                            obituaryFile = null;
+                            });
                         },
+                        chips: chips,
                         isEdit: false,
                         isNetwork: isNetwork,
                         imageFile: imageFile,
@@ -155,7 +153,6 @@ class AddDemiseState extends State<AddDemise> {
                             });
                           }
                         },
-                        filterController: filterController,
                         nameController: nameController,
                         phoneController: phoneController,
                         cityController: cityController,
@@ -195,7 +192,8 @@ class AddDemiseState extends State<AddDemise> {
                               padding: const EdgeInsets.only(bottom: 20),
                               child: DropZoneWidget(
                                 file: obituaryFile,
-                                onDroppedFile: (file) => setState(()=> obituaryFile = file),
+                                onDroppedFile: (file) => setState(
+                                        ()=> obituaryFile = file),
 
                               ),
                             ),
@@ -295,6 +293,11 @@ class AddDemiseState extends State<AddDemise> {
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
                         child: RelativesWidget(
+                          emptyFields: (){
+                            setState(() {
+                              relativesNew.clear();
+                            });
+                          },
                           isDetail: false,
                           relatives: relativesNew,
                           addDemisePress: () {
@@ -315,7 +318,6 @@ class AddDemiseState extends State<AddDemise> {
                             });
                           },
                           deleteRow: (int index) {
-                          // TODO
                           // TODO What problem can generate this method?
                             setState(() {
                               relativesNew.removeAt(index);
@@ -425,7 +427,10 @@ class AddDemiseState extends State<AddDemise> {
 
       demiseEntity.relatives = relativesNew.map((relativeRow) => DemiseRelative(telephoneNumber: relativeRow.value, kinshipType: relativeRow.kinship)).toList();
 
-      _searchDemiseCubit.saveDemise(demiseEntity);
+      //_searchDemiseCubit.saveDemise(demiseEntity);
+      DemiseRepository().saveDemise(demiseEntity)
+          .then((value) => SuccessSnackbar(context, text: 'Defunto aggiunto con successo!'))
+          .onError((error, stackTrace) => ErrorSnackbar(context, text: "Errore durante l'aggiunta del defunto"));
 
 
       var obituaryPath = 'obituaries/UID:$uid/demiseId:$demiseId/';
@@ -446,7 +451,7 @@ class AddDemiseState extends State<AddDemise> {
         await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
       }
 
-      SuccessSnackbar(context, text: 'Defunto aggiunto con successo!');
+      //SuccessSnackbar(context, text: 'Defunto aggiunto con successo!');
       context.pop();
 
     }
@@ -469,7 +474,7 @@ class AddDemiseState extends State<AddDemise> {
       changeKinship: setKinshipFromDropdownOf,
       changeTelephoneNumber: setTelephoneNumberOf,
       isDetail: false,
-      selectedKinship: Kinship.brother,
+      selectedKinship: Kinship.fratello,
       listKinship: const ['nonno'],
       index: relativeIndex,
     );
@@ -482,7 +487,7 @@ class AddDemiseState extends State<AddDemise> {
     relativeIndex += 1;
     relativeRows.add(x);
     demiseEntity.relatives!.add(DemiseRelative());
-    (_searchKinshipCubit.state as SearchKinshipState).selectedKinships!.add(Kinship.aunt);
+    (_searchKinshipCubit.state as SearchKinshipState).selectedKinships!.add(Kinship.zia);
     (_searchKinshipCubit.state as SearchKinshipState).phoneNumbersInserted!.add("");
     print("ecco i telefoni dallo stato "+ _searchKinshipCubit.state.phoneNumbersInserted.toString());
     print("ecco le kinship dallo stato "+ _searchKinshipCubit.state.selectedKinships.toString());

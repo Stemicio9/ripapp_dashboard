@@ -1,6 +1,7 @@
 import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/chip_text/chip_text.dart';
 
-class CityFromAPI {
+class CityFromAPI extends ChipText{
   String? codice;
   String? name;
   String? nomeStraniero;
@@ -83,5 +84,10 @@ class CityFromAPI {
     return '{nome: $name}';
   }
   factory CityFromAPI.emptyCity() => CityFromAPI();
+
+  @override
+  String getChipText() {
+    return name ?? "";
+  }
 
 }

@@ -1,29 +1,29 @@
 enum Kinship {
   notfound,
-  son,
-  daughter,
-  nephew,
-  uncle,
-  aunt,
-  father,
-  mother,
-  wife,
-  brother,
-  sister,
-  grandmother,
-  grandfather,
-  husband,
-  mother_in_law,
-  father_in_law,
-  son_in_law,
-  daughter_in_law,
-  brother_in_law,
-  sister_in_law,
-  cousin_m,
-  cousin_f,
-  grandniece_m,
-  grandniece_f,
-  nephew_f;
+  figlio,
+  figlia,
+  nipote_m,
+  zio,
+  zia,
+  padre,
+  madre,
+  moglie,
+  fratello,
+  sorella,
+  nonna,
+  nonno,
+  marito,
+  matrigna,
+  patrigno,
+  figliastro,
+  figliastra,
+  fratellastro,
+  sorellastra,
+  cugino,
+  cugina,
+  pronipote_m,
+  pronipote_f,
+  nipote_f;
   /*notfound,
   Madre,
   Padre,
@@ -39,12 +39,18 @@ enum Kinship {
   static Kinship fromJson(String json) => values.byName(json);
 }
 
+extension ParseToString on Kinship {
+  String toShortString() {
+    return this.toString().split('.').last;
+  }
+}
+/*
 String kinshipToString(Kinship? type) {
   if (type == null) {
     return "";
   }
   return '$type'.split('.').last;
-}
+}*/
 
 Kinship kinshipFromString(String type) {
   if (type == null) {

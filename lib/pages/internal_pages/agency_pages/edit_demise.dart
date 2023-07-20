@@ -9,8 +9,11 @@ import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
+import 'package:ripapp_dashboard/models/DemiseRelative.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relative_row.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relatives.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_data.dart';
@@ -18,6 +21,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relat
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_data.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
+import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import '../../../constants/kinships.dart';
 import '../../../constants/language.dart';
@@ -45,7 +49,6 @@ class EditDemiseState extends State<EditDemise> {
   final TextEditingController ageController = TextEditingController();
   final TextEditingController deceasedDateController = TextEditingController();
   final TextEditingController citiesController = TextEditingController();
-  final TextEditingController filterController = TextEditingController();
 
 
   final TextEditingController wakeDateController = TextEditingController();
@@ -67,12 +70,23 @@ class EditDemiseState extends State<EditDemise> {
   DateTime? funeralDate;
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+  List<CityFromAPI> chips = [];
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
+  List<RelativeRowNew> relativesNew = [];
 
   static const List<String> kinship = <String>[
     'Madre',
     'Padre',
   ];
+
+  @override
+  void initState() {
+    final User user = FirebaseAuth.instance.currentUser!;
+    final uid = user.uid;
+    String demiseId = _selectedDemiseCubit.state.selectedDemise.firebaseid!;
+    _profileImageCubit.fetchProfileImage(uid, demiseId);
+    super.initState();
+  }
 
 
   final List<Widget> relativeRows = [];
@@ -90,59 +104,47 @@ class EditDemiseState extends State<EditDemise> {
     (_selectedDemiseCubit.state.selectedDemise).relatives![index].telephoneNumber = phoneNumber;
   }
 
-  Future<dynamic> downloadUrlImage(String uid,String demiseId) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/UID:$uid/demiseId:$demiseId/').listAll();
-    for (var element in fileList.items) {
-      print(element.name);
+
+
+
+
+  refactorRelativeIndexes(){
+    for(int i = 0; i< relativesNew.length; i++){
+      relativesNew[i].currentIndex = i;
     }
-    if (fileList.items.isEmpty) {
-      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
-      var file = fileList.items[0];
-      var result = await file.getDownloadURL();
-      return result;
-    }
-    var file = fileList.items[0];
-    var result = await file.getDownloadURL();
-    return result;
   }
 
-  void func(value){
-    _profileImageCubit.changeLoaded(true);
-    imageFile = value;
-  }
+
 
   @override
   Widget build(BuildContext context) {
     _currentPageCubit.changeCurrentPage(RouteConstants.editDemise);
-    final User user = FirebaseAuth.instance.currentUser!;
-    final uid = user.uid;
+
+    print("ecco il demise selzionato " + _selectedDemiseCubit.state.selectedDemise.toString());
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
+          imageFile = imageState.imageUrl;
       return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
           builder: (context, state) {
-              print("perche non si valoriza? "+ state.selectedDemise.toString());
-              downloadUrlImage(uid,state.selectedDemise.firebaseid!).then((value) => func(value));
+              print("ricostruisco il widget e la lista è " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
 
-              nameController.text = state.selectedDemise.firstName ?? nameController.text;
-              lastNameController.text = state.selectedDemise.lastName ?? lastNameController.text;
-              phoneController.text = state.selectedDemise.phoneNumber ?? phoneController.text;
-              if (state.selectedDemise.age != null) {
-                ageController.text = state.selectedDemise.age.toString();
-              }
-              deceasedDateController.text = state.selectedDemise.deceasedDate.toString();
+              fillValues(_selectedDemiseCubit.state.selectedDemise);
 
 
-              //  DateTime datetime = state.selectedDemise.wakeDateTime!;
-              //   wakeDateController.text =  DateTime(datetime.year, datetime.month, datetime.day).toString();
-              //   wakeTimeController.text = state.selectedDemise.wakeDateTime!.hour.toString() + state.selectedDemise.wakeDateTime!.minute.toString();
-              wakeAddressController.text = state.selectedDemise.wakeAddress ?? wakeAddressController.text;
-              wakeNoteController.text = state.selectedDemise.wakeNotes ?? wakeNoteController.text;
 
 
-              // funeralDateController.text = state.selectedDemise.funeralDateTime!.toString() ?? "";
-              //funeralTimeController.text = state.selectedDemise.funeralDateTime.toString() ?? "";
-              funeralNoteController.text = state.selectedDemise.funeralNotes ?? funeralNoteController.text;
-              funeralAddressController.text = state.selectedDemise.funeralAddress ?? funeralAddressController.text;
+
+              relativesNew.clear();
+              for (int i = 0; i < state.selectedDemise.relatives!.length; ++i){
+                print("entro nell'aggiunta ai newrelative");
+                DemiseRelative currentRelative = state.selectedDemise.relatives![i];
+                relativesNew.add(
+                    RelativeRowNew(value: currentRelative.telephoneNumber!,
+                        kinship: currentRelative.kinshipType!,
+                        currentIndex: i,
+                        relativeId: currentRelative.relativeId
+                    )
+                );}
 
 
               //relativeController.text = state.selectedDemise.relative.toString() ?? "";
@@ -181,8 +183,8 @@ class EditDemiseState extends State<EditDemise> {
                               funeralNoteController.text = '';
                               citiesController.text = '';
                               relativeController.text = '';
-                              filterController.text = '';
                             },
+                            chips: chips,
                             isEdit: true,
                             isNetwork: isNetwork,
                             imageFile: imageFile,
@@ -202,7 +204,6 @@ class EditDemiseState extends State<EditDemise> {
                               }
                             },
 
-                            filterController: filterController,
                             nameController: nameController,
                             phoneController: phoneController,
                             cityController: cityController,
@@ -346,14 +347,50 @@ class EditDemiseState extends State<EditDemise> {
                           //add relative
                           Padding(
                             padding: const EdgeInsets.only(top: 20),
-                            child: AddRelative(
-                              relativeRows: relativeRows,
-                              addRelative: () {
+                            child: RelativesWidget(
+                              isDetail: false,
+                              relatives: relativesNew,
+                              addDemisePress: () {
+                                RelativeRowNew relativeRow = RelativeRowNew(currentIndex: relativesNew.length);
                                 setState(() {
-                                  createNewRelativeRow();
+                                  //relativesNew.add(relativeRow);
+                                  RelativeRowNew newRelative = RelativeRowNew(); //used just for default values
+                                  _selectedDemiseCubit.state.selectedDemise.relatives!.add(DemiseRelative(telephoneNumber: newRelative.value, kinshipType: newRelative.kinship));
+                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                 });
                               },
-                            ),
+                              onKinshipChange: (int index, Kinship kinship) {
+                                setState(() {
+                                  _selectedDemiseCubit.state.selectedDemise.relatives![index].kinshipType = kinship;
+                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                  //relativesNew[index].kinship = kinship;
+                                });
+                              },
+                              inputValueChange: (int index, String value) {
+                                print("CAMBIO VALORE DI INDICE $index");
+                                setState(() {
+                                  _selectedDemiseCubit.state.selectedDemise.relatives![index].telephoneNumber = value;
+                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                  //relativesNew[index].value = value;
+                                });
+                              },
+                              deleteRow: (int index) {
+                                // TODO
+                                // TODO What problem can generate this method?
+                                setState(() {
+                                  //relativesNew.removeAt(index);
+                                  print("ecco la nuova lista pre modifica " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                  _selectedDemiseCubit.state.selectedDemise.relatives!.removeAt(index);
+                                  print("ecco la nuova lista post modifica " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                  //refactorRelativeIndexes();
+                                });
+                              },
+                                emptyFields: (){
+                                  setState(() {
+                                    _selectedDemiseCubit.state.selectedDemise.relatives!.clear();
+                                  });
+                                }
+                            )
                           ),
 
 
@@ -380,9 +417,30 @@ class EditDemiseState extends State<EditDemise> {
   }
 
 
+  Future updateDemise(String path) async {
+    //await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes); todo da ripristinare
+    return DemiseRepository().updateDemise(_selectedDemiseCubit.state.selectedDemise);
+  }
+
+  onUpdateError(StackTrace stackTrace){
+    print(stackTrace);
+    ErrorSnackbar(context, text: "Errore durante l'aggiornamento del decesso");
+    backToListPage();
+  }
+  onUpdateSuccess(DemiseEntity value){
+    //_selectedDemiseCubit.selectDemise(selectedDemise) = value;
+    SuccessSnackbar(context, text: "Decesso aggiornato con successo!");
+    backToListPage();
+  }
+
+  backToListPage(){
+    Navigator.pop(context);
+    _currentPageCubit.loadPage(ScaffoldWidgetState.agency_demises_page, 0);
+  }
+
 
   formSubmit() async {
-    if(_formKey.currentState!.validate()){
+    if(!_formKey.currentState!.validate()){
       DemiseEntity demiseEntity = DemiseEntity();
       if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
         if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {
@@ -403,14 +461,9 @@ class EditDemiseState extends State<EditDemise> {
         var fileesistente = fileList.items[0];
         fileesistente.delete();
       }
-      await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
-
-
-      SuccessSnackbar(
-          context,
-          text: 'Defunto modificato con successo!'
-      );
-      Navigator.pop(context);
+      updateDemise(path)
+          .then((value) => onUpdateSuccess(value))
+          .onError((error, stackTrace) => onUpdateError(stackTrace));
     }else{
       ErrorSnackbar(
           context,
@@ -462,5 +515,42 @@ class EditDemiseState extends State<EditDemise> {
   }
 
   var selectedValues = [];
+
+  void fillValues(DemiseEntity selectedDemise) {
+    nameController.text = selectedDemise.firstName ?? nameController.text;
+    lastNameController.text = selectedDemise.lastName ?? lastNameController.text;
+    phoneController.text = selectedDemise.phoneNumber ?? phoneController.text;
+    if (selectedDemise.age != null) {
+      ageController.text = selectedDemise.age.toString();
+    }
+
+
+    wakeAddressController.text = selectedDemise.wakeAddress ?? wakeAddressController.text;
+    wakeNoteController.text = selectedDemise.wakeNotes ?? wakeNoteController.text;
+
+
+    funeralNoteController.text = selectedDemise.funeralNotes ?? funeralNoteController.text;
+    funeralAddressController.text = selectedDemise.funeralAddress ?? funeralAddressController.text;
+
+
+    if (selectedDemise.deceasedDate != null){
+      deceasedDateController.text = selectedDemise.deceasedDate!.day.toString() + "/"+ selectedDemise.deceasedDate!.month.toString() + "/" +
+          selectedDemise.deceasedDate!.year.toString();
+    }
+
+    if (selectedDemise.funeralDateTime != null){
+      funeralDateController.text = selectedDemise.funeralDateTime!.day.toString() + "/"+ selectedDemise.funeralDateTime!.month.toString() + "/" +
+          selectedDemise.funeralDateTime!.year.toString();
+      funeralTimeController.text = (selectedDemise.funeralDateTime!.hour < 10) ? "0" : "";
+      funeralTimeController.text += (selectedDemise.funeralDateTime!.hour.toString() + ":"+ selectedDemise.funeralDateTime!.minute.toString());
+    }
+
+    if (selectedDemise.wakeDateTime != null){
+      wakeDateController.text = selectedDemise.wakeDateTime!.day.toString() + "/"+ selectedDemise.wakeDateTime!.month.toString() + "/" +
+          selectedDemise.wakeDateTime!.year.toString();
+      wakeTimeController.text = (selectedDemise.wakeDateTime!.hour < 10) ? "0" : "";
+      wakeTimeController.text += selectedDemise.wakeDateTime!.hour.toString() + ":"+ selectedDemise.wakeDateTime!.minute.toString();
+    }
+  }
 
 }

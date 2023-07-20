@@ -1,10 +1,10 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/kinships.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relative_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/add_relative_button.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relative_list.dart';
+import 'package:ripapp_dashboard/utils/size_utils.dart';
+import 'package:ripapp_dashboard/widgets/utilities/empty_fields_widget.dart';
 
 class RelativesWidget extends StatelessWidget {
 
@@ -14,10 +14,13 @@ class RelativesWidget extends StatelessWidget {
   final Function(int index, String value) inputValueChange;
   final Function(int index) deleteRow;
   final bool isDetail;
+  final Function()? emptyFields;
+
 
   const RelativesWidget({Key? key,
     required this.relatives, required this.addDemisePress,
-    required this.onKinshipChange, required this.inputValueChange, required this.deleteRow,
+    this.emptyFields, required this.onKinshipChange,
+    required this.inputValueChange, required this.deleteRow,
     required this.isDetail
   }) : super(key: key);
 
@@ -31,6 +34,10 @@ class RelativesWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AddRelativeButton(onPress: addDemisePress, isDetail: isDetail,),
+            Padding(
+              padding: getPadding(bottom: 25),
+              child: EmptyFieldsWidget().emptyFields(emptyFields!,text: "Elimina parenti"),
+            ),
             Center(child: RelativeList(relatives: relatives, kinshipChange: onKinshipChange, valueChange: inputValueChange, deleteRow: deleteRow,))
           ],
         ),

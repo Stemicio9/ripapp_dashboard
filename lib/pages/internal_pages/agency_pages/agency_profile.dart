@@ -136,20 +136,30 @@ class AgencyProfileState extends State<AgencyProfile> {
   }
 
   Widget editProfile(){
+    final TextEditingController formNameController = TextEditingController();
+    final TextEditingController formLastNameController = TextEditingController();
+    final TextEditingController formEmailController = TextEditingController();
+    final TextEditingController formPhoneController = TextEditingController();
+
+    formNameController.text = nameController.text;
+    formLastNameController.text = lastNameController.text;
+    formEmailController.text = emailController.text;
+    formPhoneController.text = phoneController.text;
+
     return  Form(
       key: _formKey,
       child: EditProfileForm(
           emptyFields: (){
-            nameController.text = "";
-            lastNameController.text = "";
-            emailController.text = "";
-            phoneController.text = "";
+            formNameController.text = "";
+            formLastNameController.text = "";
+            formEmailController.text = "";
+            formPhoneController.text = "";
           },
           cardTitle: getCurrentLanguageValue(EDIT_PROFILE) ?? "",
-          nameController: nameController,
-          lastNameController: lastNameController,
-          emailController: emailController,
-          phoneController: phoneController,
+          nameController: formNameController,
+          lastNameController: formLastNameController,
+          emailController: formEmailController,
+          phoneController: formPhoneController,
           phoneValidator: notEmptyValidate,
           emailValidator: validateEmail,
           lastNameValidator: notEmptyValidate,
@@ -163,10 +173,10 @@ class AgencyProfileState extends State<AgencyProfile> {
 
               UserEntity ue = UserEntity(
                   id: userEntity.id,
-                  firstName: nameController.text,
-                  lastName: lastNameController.text,
-                  email: emailController.text,
-                  phoneNumber: phoneController.text,
+                  firstName: formNameController.text,
+                  lastName: formLastNameController.text,
+                  email: formEmailController.text,
+                  phoneNumber: formPhoneController.text,
                   agency: userEntity.agency,
                   role: userEntity.role
 

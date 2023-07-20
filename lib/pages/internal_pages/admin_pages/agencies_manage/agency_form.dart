@@ -69,6 +69,8 @@ class AgencyFormState extends State<AgencyForm> {
     return BlocBuilder<SelectedCityCubit, SelectedCityState>(
         builder: (context, stateCity) {
           if (stateCity is SelectedCityState) {
+            widget.cityController.text = stateCity.selectedCity.name ?? "";
+            print("seleziono città agenzia : ${widget.cityController.text}");
             return BlocBuilder<SelectedAgencyCubit, SelectedAgencyState>(
                 builder: (context, state) {
                   if (state is SelectedAgencyState) {
@@ -77,12 +79,9 @@ class AgencyFormState extends State<AgencyForm> {
                       widget.phoneController.text = "";
                       widget.cityController.text = "";
                     } else {
-                      widget.cityController.text =
-                          stateCity.selectedCity.name ?? widget.cityController.text;
-                      widget.nameController.text =
-                          state.selectedAgency.agencyName ?? widget.nameController.text;
-                      widget.phoneController.text = state.selectedAgency.phoneNumber ??
-                          widget.phoneController.text;
+                      widget.cityController.text = state.selectedAgency.city ?? widget.cityController.text;
+                      widget.nameController.text = state.selectedAgency.agencyName ?? widget.nameController.text;
+                      widget.phoneController.text = state.selectedAgency.phoneNumber ?? widget.phoneController.text;
                     }
                     return Container(
                       padding: getPadding(left: 20, right: 20),
@@ -104,9 +103,8 @@ class AgencyFormState extends State<AgencyForm> {
                                       is CityListLoaded) {cityList = cityState.listCity;
                                       if (cityList.isNotEmpty) {
                                         widget.cityController.text =
-                                            state.selectedAgency.city ?? widget.cityController.text;
-                                        print("STAMPO LA CITTA");
-                                        print(widget.cityController.text);
+                                            stateCity.selectedCity.name ?? widget.cityController.text;
+                                        print("STAMPO LA CITTA : ${widget.cityController.text}");
                                         return Column(
                                           children: [
                                             Padding(
@@ -132,14 +130,12 @@ class AgencyFormState extends State<AgencyForm> {
                                                             ),
                                                           ),
                                                           InputsV2Widget(
-                                                            hinttext: getCurrentLanguageValue(
-                                                                NAME)!,
+                                                            hinttext: getCurrentLanguageValue(NAME)!,
                                                             controller: widget.nameController,
                                                             validator: widget.nameValidator,
                                                             paddingLeft: 0,
                                                             paddingRight: 10,
-                                                            borderSide: const BorderSide(
-                                                                color: greyState),
+                                                            borderSide: const BorderSide(color: greyState),
                                                             activeBorderSide:
                                                             const BorderSide(
                                                                 color: background),
@@ -170,10 +166,8 @@ class AgencyFormState extends State<AgencyForm> {
                                                           paddingRight: 0,
                                                           paddingLeft: 10,
                                                           hintText: "Città",
-                                                          filterController:
-                                                          widget.cityController,
-                                                          validator:
-                                                          widget.cityValidator,
+                                                          filterController: widget.cityController,
+                                                          validator: widget.cityValidator,
                                                           paddingTop: 0,
                                                           paddingBottom: 0,
                                                         )
@@ -207,19 +201,13 @@ class AgencyFormState extends State<AgencyForm> {
                                                             ),
                                                           ),
                                                           InputsV2Widget(
-                                                            hinttext: getCurrentLanguageValue(
-                                                                PHONE_NUMBER)!,
-                                                            controller:
-                                                            widget.phoneController,
+                                                            hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
+                                                            controller: widget.phoneController,
                                                             validator: widget.phoneValidator,
                                                             paddingLeft: 0,
                                                             paddingRight: 10,
-                                                            inputFormatters: <TextInputFormatter>[
-                                                              FilteringTextInputFormatter
-                                                                  .digitsOnly,
-                                                            ],
-                                                            borderSide: const BorderSide(
-                                                                color: greyState),
+                                                            inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly,],
+                                                            borderSide: const BorderSide(color: greyState),
                                                             activeBorderSide:
                                                             const BorderSide(
                                                                 color: background),

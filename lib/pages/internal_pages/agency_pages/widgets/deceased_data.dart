@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/chips_row.dart';
 import 'package:ripapp_dashboard/widgets/autocomplete.dart';
 import 'package:ripapp_dashboard/widgets/utilities/empty_fields_widget.dart';
 import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
@@ -24,7 +25,6 @@ class DeceasedData extends StatefulWidget {
   final TextEditingController ageController;
   final TextEditingController dateController;
   final TextEditingController citiesController;
-  final TextEditingController filterController;
   bool isEdit = false;
   final Function() emptyFields;
   final dynamic nameValidator;
@@ -42,9 +42,11 @@ class DeceasedData extends StatefulWidget {
   final Widget child;
   final List<CityFromAPI> options;
   final List<CityFromAPI> citiesOfInterestOptions;
+  final List<CityFromAPI> chips;
 
 
   DeceasedData({super.key,
+    required this.chips,
     required this.emptyFields,
     required this.child,
     required this.isEdit,
@@ -63,7 +65,6 @@ class DeceasedData extends StatefulWidget {
     required this.nameController,
     required this.phoneController,
     required this.cityController,
-    required this.filterController,
     required this.lastNameController,
     required this.ageController,
     required this.options,
@@ -327,7 +328,6 @@ class DeceasedDataState extends State<DeceasedData>{
                                       return const Center(child: CircularProgressIndicator());
                                     } else if (cityState is CityListLoaded) {
                                       cityList = cityState.listCity;
-                                      //print("decesssed city: $cityList");
                                       if (cityList.isNotEmpty) {
                                         return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -351,7 +351,7 @@ class DeceasedDataState extends State<DeceasedData>{
                                               paddingTop: 0,
                                               paddingBottom: 0,
                                               hintText: getCurrentLanguageValue(CITY)!,
-                                              filterController: widget.filterController,
+                                              filterController: widget.cityController,
                                               validator: widget.cityValidator,
                                             )
                                           ],
@@ -408,8 +408,12 @@ class DeceasedDataState extends State<DeceasedData>{
                                               hintText: "Comuni di interesse",
                                               filterController: widget.citiesController,
                                               validator: widget.citiesOfInterestValidator,
-                                            )
+                                            ),
+
+                                            ChipsRow(chips: widget.chips),
+
                                           ],
+
                                         );
                                       }
                                     }return ErrorWidget("errore di connessione");
@@ -453,7 +457,6 @@ class DeceasedDataState extends State<DeceasedData>{
           }
           else
             return ErrorWidget("exception");
-        } );
+        });
   }
-
 }
