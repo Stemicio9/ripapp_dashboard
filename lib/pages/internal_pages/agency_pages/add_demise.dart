@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/searchKinshipCubit.dart';
-import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
@@ -61,12 +60,12 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController funeralNoteController = TextEditingController();
   final TextEditingController citiesController = TextEditingController();
   final TextEditingController relativeController = TextEditingController();
-  DemiseCubit get _searchDemiseCubit => context.read<DemiseCubit>();
   SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
   DateTime? wakeDate;
   DateTime? funeralDate;
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+  List<CityFromAPI> chips = [];
   File_Data_Model? obituaryFile;
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
   int relativeIndex = 0;
@@ -138,6 +137,7 @@ class AddDemiseState extends State<AddDemise> {
                             obituaryFile = null;
                             });
                         },
+                        chips: chips,
                         isEdit: false,
                         isNetwork: isNetwork,
                         imageFile: imageFile,

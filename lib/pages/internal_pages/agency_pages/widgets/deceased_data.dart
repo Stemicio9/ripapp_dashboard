@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/chips_row.dart';
 import 'package:ripapp_dashboard/widgets/autocomplete.dart';
 import 'package:ripapp_dashboard/widgets/utilities/empty_fields_widget.dart';
 import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
@@ -41,9 +42,11 @@ class DeceasedData extends StatefulWidget {
   final Widget child;
   final List<CityFromAPI> options;
   final List<CityFromAPI> citiesOfInterestOptions;
+  final List<CityFromAPI> chips;
 
 
   DeceasedData({super.key,
+    required this.chips,
     required this.emptyFields,
     required this.child,
     required this.isEdit,
@@ -406,6 +409,8 @@ class DeceasedDataState extends State<DeceasedData>{
                                               filterController: widget.citiesController,
                                               validator: widget.citiesOfInterestValidator,
                                             ),
+
+                                            ChipsRow(chips: widget.chips),
 
                                           ],
 

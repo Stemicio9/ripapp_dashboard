@@ -70,6 +70,7 @@ class EditDemiseState extends State<EditDemise> {
   DateTime? funeralDate;
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
+  List<CityFromAPI> chips = [];
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
   List<RelativeRowNew> relativesNew = [];
 
@@ -193,6 +194,7 @@ class EditDemiseState extends State<EditDemise> {
                               citiesController.text = '';
                               relativeController.text = '';
                             },
+                            chips: chips,
                             isEdit: true,
                             isNetwork: isNetwork,
                             imageFile: imageFile,
