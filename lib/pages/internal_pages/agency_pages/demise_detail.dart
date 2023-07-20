@@ -1,6 +1,5 @@
 import 'dart:html' as html;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
@@ -16,10 +15,8 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/decea
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relative_detail_row.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_detail.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/header.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
-import '../../../models/relative_entity.dart';
 import '../../../utils/size_utils.dart';
 
 class DemiseDetail extends StatefulWidget {
@@ -76,49 +73,13 @@ class DemiseDetailState extends State<DemiseDetail> {
     anchorElement.click();
   }
 
-
-  Future<dynamic> downloadObituary(String uid, String demiseId) async {
-    var fileList = await FirebaseStorage.instance.ref('obituaries/UID:$uid/demiseId:$demiseId/').listAll();
-    var file = fileList.items[0];
-    var result = await file.getDownloadURL();
-    return result;
-  }
-
-  Future<dynamic> downloadUrlImage(String uid, String demiseId) async {
-    var fileList = await FirebaseStorage.instance
-        .ref('profile_images/deceased_images/UID:$uid/demiseId:$demiseId/')
-        .listAll();
-    for (var element in fileList.items) {
-      print(element.name);
-    }
-
-    if (fileList.items.isEmpty) {
-      var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
-      var file = fileList.items[0];
-      var result = await file.getDownloadURL();
-      return result;
-    }
-
-    var file = fileList.items[0];
-    var result = await file.getDownloadURL();
-
-    return result;
-  }
-
-  void func(value) {
-    _profileImageCubit.changeLoaded(true);
-    imageFile = value;
-  }
-
-  void obituary(value) {
-    obituaryUrl = value;
-  }
-
   @override
   Widget build(BuildContext context) {
     _currentPageCubit.changeCurrentPage(RouteConstants.demiseDetail);
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
+          obituaryName = extractFileNameFromFirebaseUrl(imageState.obituaryUrl);
+
       return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
           builder: (context, state) {
 
