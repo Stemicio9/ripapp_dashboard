@@ -114,10 +114,7 @@ class EditDemiseState extends State<EditDemise> {
     }
   }
 
-  Future<bool> _onWillPop() async {
-    backToListPage();
-    return true;
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -152,9 +149,7 @@ class EditDemiseState extends State<EditDemise> {
 
               //relativeController.text = state.selectedDemise.relative.toString() ?? "";
 
-              return WillPopScope(
-                  onWillPop: _onWillPop,
-                child: ScaffoldWidget(
+              return ScaffoldWidget(
                 body: SingleChildScrollView(
                   child: Padding(
                     padding: getPadding(top: 30, bottom: 30, left: 5, right: 5),
@@ -416,12 +411,7 @@ class EditDemiseState extends State<EditDemise> {
                     ),
                   ),
                 ),
-              )
               );
-
-
-
-
           });
     });
   }
