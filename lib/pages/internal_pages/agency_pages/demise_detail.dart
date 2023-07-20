@@ -78,79 +78,79 @@ class DemiseDetailState extends State<DemiseDetail> {
     _currentPageCubit.changeCurrentPage(RouteConstants.demiseDetail);
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
-          obituaryName = extractFileNameFromFirebaseUrl(imageState.obituaryUrl);
+          print('gli passo ' + obituaryName);
+      obituaryName = extractFileNameFromFirebaseUrl(imageState.obituaryUrl);
+      print(imageState.imageUrl);
 
-      return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
-          builder: (context, state) {
+          return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
+              builder: (context, state) {
+                fillValues(state.selectedDemise);
+                createRelative();
+                return ScaffoldWidget(
+                  body: SingleChildScrollView(
+                    child: Padding(
+                      padding: getPadding(top: 30, bottom: 30, left: 5, right: 5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const PageHeader(
+                            pageTitle: "Dettaglio decesso",
+                            showBackButton: true,
+                          ),
 
+                          //deceased data
+                          imageState.loaded
+                              ? DeceasedDetail(
+                            imageFile: imageState.imageUrl,
+                            downloadObituary: (){downloadFile(imageState.obituaryUrl);},
+                            obituaryName: obituaryName,
+                            id: id,
+                            age: age,
+                            lastName: lastName,
+                            firstName: firstName,
+                            phoneNumber: phoneNumber,
+                            city: city,
+                            cityOfInterest: cityOfInterest,
+                            deceasedDate: deceasedDate,
+                          )
+                              : Container(),
 
-        fillValues(state.selectedDemise);
-        createRelative();
-        return ScaffoldWidget(
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: getPadding(top: 30, bottom: 30, left: 5, right: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const PageHeader(
-                    pageTitle: "Dettaglio decesso",
-                    showBackButton: true,
-                  ),
+                          //wake data
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: WakeDetail(
+                                wakeDate: wakeDate,
+                                wakeNote: wakeNote,
+                                wakeHour: wakeHour,
+                                wakeAddress: wakeAddress),
+                          ),
 
-                  //deceased data
-                  imageState.loaded
-                      ? DeceasedDetail(
-                          imageFile: imageFile,
-                          downloadObituary: (){downloadFile(imageState.obituaryUrl);},
-                          obituaryName: obituaryName,
-                          id: id,
-                          age: age,
-                          lastName: lastName,
-                          firstName: firstName,
-                          phoneNumber: phoneNumber,
-                          city: city,
-                          cityOfInterest: cityOfInterest,
-                          deceasedDate: deceasedDate,
-                        )
-                      : Container(),
+                          //funeral data
+                          Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: FuneralDetail(
+                                  funeralDate: funeralDate,
+                                  funeralNote: funeralNote,
+                                  funeralHour: funeralHour,
+                                  funeralAddress: funeralAddress
+                              )
+                          ),
 
-                  //wake data
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: WakeDetail(
-                        wakeDate: wakeDate,
-                        wakeNote: wakeNote,
-                        wakeHour: wakeHour,
-                        wakeAddress: wakeAddress),
-                  ),
-
-                  //funeral data
-                  Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: FuneralDetail(
-                          funeralDate: funeralDate,
-                          funeralNote: funeralNote,
-                          funeralHour: funeralHour,
-                          funeralAddress: funeralAddress
-                      )
-                  ),
-
-                  //add relative
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: AddRelative(
-                      isDetail: true,
-                      relativeRows: relativeRows,
+                          //add relative
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: AddRelative(
+                              isDetail: true,
+                              relativeRows: relativeRows,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        );
-      });
-    });
+                );
+              });
+        });
   }
 
   createRelative() {
@@ -221,7 +221,7 @@ class DemiseDetailState extends State<DemiseDetail> {
       wakeHour = (demiseEntity.wakeDateTime!.hour < 10) ? "0" : "";
       wakeHour += demiseEntity.wakeDateTime!.hour.toString() + ":"+ demiseEntity.wakeDateTime!.minute.toString();
     } else {wakeDate = missingData;
-      wakeHour = missingData;
+    wakeHour = missingData;
     }
 
     relativeList = demiseEntity.relatives ?? [];
@@ -238,8 +238,8 @@ class DemiseDetailState extends State<DemiseDetail> {
       time = hours + ":" + minutes;
       print("eccoci la time  " + time);
     } else {
-        date = missingData;
-        time = missingData;
+      date = missingData;
+      time = missingData;
     }
   }
 

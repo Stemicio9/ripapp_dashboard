@@ -105,9 +105,6 @@ class EditDemiseState extends State<EditDemise> {
   }
 
 
-
-
-
   refactorRelativeIndexes(){
     for(int i = 0; i< relativesNew.length; i++){
       relativesNew[i].currentIndex = i;
@@ -129,9 +126,6 @@ class EditDemiseState extends State<EditDemise> {
               print("ricostruisco il widget e la lista è " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
 
               fillValues(_selectedDemiseCubit.state.selectedDemise);
-
-
-
 
 
               relativesNew.clear();
@@ -440,7 +434,7 @@ class EditDemiseState extends State<EditDemise> {
 
 
   formSubmit() async {
-    if(!_formKey.currentState!.validate()){
+    if(_formKey.currentState!.validate()){
       DemiseEntity demiseEntity = DemiseEntity();
       if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
         if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {

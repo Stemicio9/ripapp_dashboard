@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/kinships.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/relative_row.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
@@ -109,15 +110,14 @@ class RelativeRowWidget extends StatelessWidget {
                   ),
                 ),
 
-                //widget.relativeController.text();
                 InputsV2Widget(
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly,
                   ],
-                  hinttext:
-                  getCurrentLanguageValue(RELATIVE_NUMBER) ?? "",
+                  hinttext: getCurrentLanguageValue(RELATIVE_NUMBER) ?? "",
                   controller: phoneController,
                   paddingLeft: 0,
+                  validator: notEmptyValidate,
                   paddingRight: 0,
                   borderSide: const BorderSide(color: greyState),
                   activeBorderSide: const BorderSide(color: background),

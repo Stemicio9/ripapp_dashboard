@@ -111,8 +111,8 @@ class AddDemiseState extends State<AddDemise> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const PageHeader(
-                          pageTitle: "Aggiungi decesso",
-                          showBackButton: true,
+                        pageTitle: "Aggiungi decesso",
+                        showBackButton: true,
                       ),
 
                       //deceased data
@@ -135,7 +135,7 @@ class AddDemiseState extends State<AddDemise> {
                             funeralNoteController.text = '';
                             citiesController.text = '';
                             obituaryFile = null;
-                            });
+                          });
                         },
                         chips: chips,
                         isEdit: false,
@@ -291,39 +291,39 @@ class AddDemiseState extends State<AddDemise> {
 
                       //add relative
                       Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: RelativesWidget(
-                          emptyFields: (){
-                            setState(() {
-                              relativesNew.clear();
-                            });
-                          },
-                          isDetail: false,
-                          relatives: relativesNew,
-                          addDemisePress: () {
-                            RelativeRowNew relativeRow = RelativeRowNew(currentIndex: relativesNew.length);
-                            setState(() {
-                              relativesNew.add(relativeRow);
-                            });
-                          },
-                          onKinshipChange: (int index, Kinship kinship) {
-                             setState(() {
-                               relativesNew[index].kinship = kinship;
-                             });
-                          },
-                          inputValueChange: (int index, String value) {
-                            print("CAMBIO VALORE DI INDICE $index");
-                            setState(() {
-                              relativesNew[index].value = value;
-                            });
-                          },
-                          deleteRow: (int index) {
-                          // TODO What problem can generate this method?
-                            setState(() {
-                              relativesNew.removeAt(index);
-                              refactorRelativeIndexes();
-                            });
-                          },)
+                          padding: const EdgeInsets.only(top: 20),
+                          child: RelativesWidget(
+                            emptyFields: (){
+                              setState(() {
+                                relativesNew.clear();
+                              });
+                            },
+                            isDetail: false,
+                            relatives: relativesNew,
+                            addDemisePress: () {
+                              RelativeRowNew relativeRow = RelativeRowNew(currentIndex: relativesNew.length);
+                              setState(() {
+                                relativesNew.add(relativeRow);
+                              });
+                            },
+                            onKinshipChange: (int index, Kinship kinship) {
+                              setState(() {
+                                relativesNew[index].kinship = kinship;
+                              });
+                            },
+                            inputValueChange: (int index, String value) {
+                              print("CAMBIO VALORE DI INDICE $index");
+                              setState(() {
+                                relativesNew[index].value = value;
+                              });
+                            },
+                            deleteRow: (int index) {
+                              // TODO What problem can generate this method?
+                              setState(() {
+                                relativesNew.removeAt(index);
+                                refactorRelativeIndexes();
+                              });
+                            },)
                       ),
 
                       //form submit
@@ -347,9 +347,9 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   refactorRelativeIndexes(){
-     for(int i = 0; i< relativesNew.length; i++){
-       relativesNew[i].currentIndex = i;
-     }
+    for(int i = 0; i< relativesNew.length; i++){
+      relativesNew[i].currentIndex = i;
+    }
   }
 
   setKinshipFromDropdownOf(int index, Kinship kinship) {
@@ -363,104 +363,104 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   formSubmit() async{
-    // if (_formKey.currentState!.validate()) {
-    if (obituaryFile == null) {
-      ErrorSnackbar(context, text: 'Inserire necrologio!');
+    if (_formKey.currentState!.validate()) {
+      if (obituaryFile == null) {
+        ErrorSnackbar(context, text: 'Inserire necrologio!');
+      } else {
+        demiseEntity.firstName = (nameController.text);
+        demiseEntity.lastName = (lastNameController.text);
+        demiseEntity.city = CityEntity(name: cityController.text);
+        demiseEntity.phoneNumber = (phoneController.text);
+        demiseEntity.age = ageController.text != "" ? int.parse(ageController.text) : null;
+        demiseEntity.deceasedDate = (deceasedDateController.text != "" && deceasedDateController.text != null) ? convertDate(deceasedDateController.text) : null;
+        demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
+        demiseEntity.wakeDateTime = (wakeDateController.text != "" && wakeDateController.text != null) ? convertDate(wakeDateController.text) : null;
+        demiseEntity.wakeAddress = (wakeAddressController.text);
+        demiseEntity.wakeNotes = (wakeNoteController.text);
+        demiseEntity.funeralAddress = (funeralAddressController.text);
+        demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
+        demiseEntity.funeralNotes = (funeralNoteController.text);
+        //demiseEntity.cities = (citiesController.text);
+        //demiseEntity.relative = (relativeController.text);
+
+        String wakeTimeString = wakeTimeController.text;
+        if (wakeTimeString != null && wakeTimeString != "") {
+          List<String> timeParts = wakeTimeString.split(":");
+          int? wakeHours = int.tryParse(timeParts[0]);
+          int? wakeMinutes = int.tryParse(timeParts[1]);
+          if (wakeMinutes != null && wakeHours != null &&
+              demiseEntity.wakeDateTime != null) {
+            demiseEntity.wakeDateTime = DateTime(
+                demiseEntity.wakeDateTime!.year,
+                demiseEntity.wakeDateTime!.month,
+                demiseEntity.wakeDateTime!.day, wakeHours, wakeMinutes);
+          }
+        }
+        String funeralTimeString = funeralTimeController.text;
+        if (funeralTimeString != null && funeralTimeString != "") {
+          List<String> timeParts = funeralTimeString.split(":");
+          int? funeralHours = int.tryParse(timeParts[0]);
+          int? funeralMinutes = int.tryParse(timeParts[1]);
+          if (funeralMinutes != null && funeralHours != null &&
+              demiseEntity.funeralDateTime != null) {
+            demiseEntity.funeralDateTime = DateTime(
+                demiseEntity.funeralDateTime!.year,
+                demiseEntity.funeralDateTime!.month,
+                demiseEntity.funeralDateTime!.day, funeralHours,
+                funeralMinutes);
+          }
+        }
+        if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
+          if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {
+            return ErrorSnackbar(
+                context,
+                text: 'Date selezionate incoerenti!'
+            );
+          }
+        }
+
+        final User user = FirebaseAuth.instance.currentUser!;
+        final uid = user.uid;
+        var uuid = const Uuid();
+        var demiseId = uuid.v4();
+        demiseEntity.firebaseid = demiseId;
+
+        demiseEntity.relatives = relativesNew.map((relativeRow) => DemiseRelative(telephoneNumber: relativeRow.value, kinshipType: relativeRow.kinship)).toList();
+
+        //_searchDemiseCubit.saveDemise(demiseEntity);
+        DemiseRepository().saveDemise(demiseEntity)
+            .then((value) => SuccessSnackbar(context, text: 'Defunto aggiunto con successo!'))
+            .onError((error, stackTrace) => ErrorSnackbar(context, text: "Errore durante l'aggiunta del defunto"));
+
+
+        var obituaryPath = 'obituaries/UID:$uid/demiseId:$demiseId/';
+        var obituaryList = await FirebaseStorage.instance.ref(obituaryPath).listAll();
+        if (obituaryList.items.isNotEmpty) {
+          var fileesistente = obituaryList.items[0];
+          fileesistente.delete();
+        }
+        await FirebaseStorage.instance.ref("$obituaryPath${obituaryFile!.name}").putData(obituaryFile!.file);
+
+        var path = 'profile_images/deceased_images/UID:$uid/demiseId:$demiseId/';
+        var fileList = await FirebaseStorage.instance.ref(path).listAll();
+        if (fileList.items.isNotEmpty) {
+          var fileesistente = fileList.items[0];
+          fileesistente.delete();
+        }
+        if(fileName != "" ){
+          await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+        }
+
+        //SuccessSnackbar(context, text: 'Defunto aggiunto con successo!');
+        context.pop();
+
+      }
     } else {
-      demiseEntity.firstName = (nameController.text);
-      demiseEntity.lastName = (lastNameController.text);
-      demiseEntity.city = CityEntity(name: cityController.text);
-      demiseEntity.phoneNumber = (phoneController.text);
-      demiseEntity.age = ageController.text != "" ? int.parse(ageController.text) : null;
-      demiseEntity.deceasedDate = (deceasedDateController.text != "" && deceasedDateController.text != null) ? convertDate(deceasedDateController.text) : null;
-      demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
-      demiseEntity.wakeDateTime = (wakeDateController.text != "" && wakeDateController.text != null) ? convertDate(wakeDateController.text) : null;
-      demiseEntity.wakeAddress = (wakeAddressController.text);
-      demiseEntity.wakeNotes = (wakeNoteController.text);
-      demiseEntity.funeralAddress = (funeralAddressController.text);
-      demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
-      demiseEntity.funeralNotes = (funeralNoteController.text);
-      //demiseEntity.cities = (citiesController.text);
-      //demiseEntity.relative = (relativeController.text);
-
-      String wakeTimeString = wakeTimeController.text;
-      if (wakeTimeString != null && wakeTimeString != "") {
-        List<String> timeParts = wakeTimeString.split(":");
-        int? wakeHours = int.tryParse(timeParts[0]);
-        int? wakeMinutes = int.tryParse(timeParts[1]);
-        if (wakeMinutes != null && wakeHours != null &&
-            demiseEntity.wakeDateTime != null) {
-          demiseEntity.wakeDateTime = DateTime(
-              demiseEntity.wakeDateTime!.year,
-              demiseEntity.wakeDateTime!.month,
-              demiseEntity.wakeDateTime!.day, wakeHours, wakeMinutes);
-        }
-      }
-      String funeralTimeString = funeralTimeController.text;
-      if (funeralTimeString != null && funeralTimeString != "") {
-        List<String> timeParts = funeralTimeString.split(":");
-        int? funeralHours = int.tryParse(timeParts[0]);
-        int? funeralMinutes = int.tryParse(timeParts[1]);
-        if (funeralMinutes != null && funeralHours != null &&
-            demiseEntity.funeralDateTime != null) {
-          demiseEntity.funeralDateTime = DateTime(
-              demiseEntity.funeralDateTime!.year,
-              demiseEntity.funeralDateTime!.month,
-              demiseEntity.funeralDateTime!.day, funeralHours,
-              funeralMinutes);
-        }
-      }
-      if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
-        if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {
-          return ErrorSnackbar(
-              context,
-              text: 'Date selezionate incoerenti!'
-          );
-        }
-      }
-
-      final User user = FirebaseAuth.instance.currentUser!;
-      final uid = user.uid;
-      var uuid = const Uuid();
-      var demiseId = uuid.v4();
-      demiseEntity.firebaseid = demiseId;
-
-      demiseEntity.relatives = relativesNew.map((relativeRow) => DemiseRelative(telephoneNumber: relativeRow.value, kinshipType: relativeRow.kinship)).toList();
-
-      //_searchDemiseCubit.saveDemise(demiseEntity);
-      DemiseRepository().saveDemise(demiseEntity)
-          .then((value) => SuccessSnackbar(context, text: 'Defunto aggiunto con successo!'))
-          .onError((error, stackTrace) => ErrorSnackbar(context, text: "Errore durante l'aggiunta del defunto"));
-
-
-      var obituaryPath = 'obituaries/UID:$uid/demiseId:$demiseId/';
-      var obituaryList = await FirebaseStorage.instance.ref(obituaryPath).listAll();
-      if (obituaryList.items.isNotEmpty) {
-        var fileesistente = obituaryList.items[0];
-        fileesistente.delete();
-      }
-      await FirebaseStorage.instance.ref("$obituaryPath${obituaryFile!.name}").putData(obituaryFile!.file);
-
-      var path = 'profile_images/deceased_images/UID:$uid/demiseId:$demiseId/';
-      var fileList = await FirebaseStorage.instance.ref(path).listAll();
-      if (fileList.items.isNotEmpty) {
-        var fileesistente = fileList.items[0];
-        fileesistente.delete();
-      }
-      if(fileName != "" ){
-        await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
-      }
-
-      //SuccessSnackbar(context, text: 'Defunto aggiunto con successo!');
-      context.pop();
-
+      ErrorSnackbar(
+          context,
+          text: 'Impossibile aggiungere defunto!'
+      );
     }
-    // } else {
-    //   ErrorSnackbar(
-    //     context,
-    //       text: 'Impossibile aggiungere defunto!'
-    //  );
-    // }
 
   }
 
@@ -496,12 +496,12 @@ class AddDemiseState extends State<AddDemise> {
 
   changeDropdown(RelativeRow relativeRow, value){
     setState(() {
-    print("ILPARENTE");
-    print(value);
-    var index = relativeRows.indexOf(relativeRow);
-    print("ha indice " + index.toString());
-    selectedValues[index] = value;
-    changeDropdown(relativeRow, value);
+      print("ILPARENTE");
+      print(value);
+      var index = relativeRows.indexOf(relativeRow);
+      print("ha indice " + index.toString());
+      selectedValues[index] = value;
+      changeDropdown(relativeRow, value);
     });
   }
 
