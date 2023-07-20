@@ -7,15 +7,17 @@ class ProfileImageCubit extends Cubit<ProfileImageState> {
   ProfileImageCubit() : super(ProfileImageState(false, "", ImagesConstants.imgDemisePlaceholder));
 
   fetchProfileImage(String uid,String demiseId){
-    downloadUrlImage(uid, demiseId).then((value) =>
-        emit(ProfileImageState(true, "", value)))
-        .onError((error, stackTrace) => emit(ProfileImageState(false, "", ImagesConstants.imgDemisePlaceholder)));
+    downloadUrlImage(uid, demiseId)
+        .then((value) => emit(state.copyWith(newImageUrl: value, newLoaded: true)))
+        .onError((error, stackTrace) => emit(state.copyWith(newImageUrl: ImagesConstants.imgDemisePlaceholder, newLoaded: false)
+       ));
   }
 
   fetchObituary(String uid,String demiseId){
-    downloadObituary(uid, demiseId).then((value) =>
-        emit(ProfileImageState(true, value, ImagesConstants.imgDemisePlaceholder)))
-        .onError((error, stackTrace) => print(stackTrace));
+    downloadObituary(uid, demiseId)
+        .then((value) => emit(state.copyWith(newObituaryUrl: value, newLoaded: true)))
+        .onError((error, stackTrace) => emit(state.copyWith(newObituaryUrl: ImagesConstants.imgDemisePlaceholder, newLoaded: false)
+    ));
   }
 
   changeLoaded(bool loaded) {
@@ -25,7 +27,8 @@ class ProfileImageCubit extends Cubit<ProfileImageState> {
 
   Future<dynamic> downloadUrlImage(String uid,String demiseId) async {
     var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/UID:$uid/demiseId:$demiseId/').listAll();
-    for (var element in fileList.items) {}
+    for (var element in fileList.items) {
+    }
     if (fileList.items.isEmpty) {
       var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
       var file = fileList.items[0];
@@ -53,4 +56,12 @@ class ProfileImageState {
   bool loaded;
 
   ProfileImageState(this.loaded, this.obituaryUrl, this.imageUrl);
+
+  ProfileImageState copyWith({String? newObituaryUrl, String? newImageUrl, bool? newLoaded}) {
+    return ProfileImageState(
+      newLoaded ?? loaded,
+      newObituaryUrl ?? obituaryUrl,
+      newImageUrl ?? imageUrl,
+    );
+  }
 }
