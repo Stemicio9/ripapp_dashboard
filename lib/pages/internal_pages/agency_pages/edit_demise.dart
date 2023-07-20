@@ -114,6 +114,11 @@ class EditDemiseState extends State<EditDemise> {
     }
   }
 
+  Future<bool> _onWillPop() async {
+    backToListPage();
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     _currentPageCubit.changeCurrentPage(RouteConstants.editDemise);
@@ -147,7 +152,9 @@ class EditDemiseState extends State<EditDemise> {
 
               //relativeController.text = state.selectedDemise.relative.toString() ?? "";
 
-              return ScaffoldWidget(
+              return WillPopScope(
+                  onWillPop: _onWillPop,
+                child: ScaffoldWidget(
                 body: SingleChildScrollView(
                   child: Padding(
                     padding: getPadding(top: 30, bottom: 30, left: 5, right: 5),
@@ -382,7 +389,13 @@ class EditDemiseState extends State<EditDemise> {
                                   print("ecco la nuova lista post modifica " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
                                   //refactorRelativeIndexes();
                                 });
-                              },)
+                              },
+                                emptyFields: (){
+                                  setState(() {
+                                    _selectedDemiseCubit.state.selectedDemise.relatives!.clear();
+                                  });
+                                }
+                            )
                           ),
 
 
@@ -403,7 +416,12 @@ class EditDemiseState extends State<EditDemise> {
                     ),
                   ),
                 ),
+              )
               );
+
+
+
+
           });
     });
   }
@@ -417,11 +435,15 @@ class EditDemiseState extends State<EditDemise> {
   onUpdateError(StackTrace stackTrace){
     print(stackTrace);
     ErrorSnackbar(context, text: "Errore durante l'aggiornamento del decesso");
-    Navigator.pop(context);
+    backToListPage();
   }
   onUpdateSuccess(DemiseEntity value){
     //_selectedDemiseCubit.selectDemise(selectedDemise) = value;
     SuccessSnackbar(context, text: "Decesso aggiornato con successo!");
+    backToListPage();
+  }
+
+  backToListPage(){
     Navigator.pop(context);
     _currentPageCubit.loadPage(ScaffoldWidgetState.agency_demises_page, 0);
   }
