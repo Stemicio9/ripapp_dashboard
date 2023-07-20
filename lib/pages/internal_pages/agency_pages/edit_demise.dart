@@ -533,7 +533,6 @@ class EditDemiseState extends State<EditDemise> {
     if (selectedDemise.age != null) {
       ageController.text = selectedDemise.age.toString();
     }
-    deceasedDateController.text = selectedDemise.deceasedDate.toString();
 
 
     wakeAddressController.text = selectedDemise.wakeAddress ?? wakeAddressController.text;
