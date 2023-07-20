@@ -49,7 +49,6 @@ class EditDemiseState extends State<EditDemise> {
   final TextEditingController ageController = TextEditingController();
   final TextEditingController deceasedDateController = TextEditingController();
   final TextEditingController citiesController = TextEditingController();
-  final TextEditingController filterController = TextEditingController();
 
 
   final TextEditingController wakeDateController = TextEditingController();
@@ -181,7 +180,6 @@ class EditDemiseState extends State<EditDemise> {
                               funeralNoteController.text = '';
                               citiesController.text = '';
                               relativeController.text = '';
-                              filterController.text = '';
                             },
                             isEdit: true,
                             isNetwork: isNetwork,
@@ -202,7 +200,6 @@ class EditDemiseState extends State<EditDemise> {
                               }
                             },
 
-                            filterController: filterController,
                             nameController: nameController,
                             phoneController: phoneController,
                             cityController: cityController,

@@ -15,6 +15,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
   int? age;
   List<CityEntity>? cities;
   DateTime? deceasedDate;
+  String? photoUrl;
 
 
   //wake data
@@ -45,7 +46,6 @@ class DemiseEntity implements ResultEntity, TableRowElement {
     this.age,
     this.cities,
     this.deceasedDate,
-    //this.deceasedDate,
     this.wakeAddress,
     this.wakeDateTime,
     this.wakeNotes,
@@ -53,7 +53,8 @@ class DemiseEntity implements ResultEntity, TableRowElement {
     this.funeralDateTime,
     this.funeralNotes,
     this.relatives,
-    this.firebaseid
+    this.firebaseid,
+    this.photoUrl
   });
 
   //toString
@@ -75,6 +76,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
           'wakets: $wakeDateTime, '
           'firebaseid: $firebaseid, '
           'wakeAddress: $wakeAddress}'
+           'photourl: $photoUrl'
           'relatives: $relatives}\n';
   }
 
@@ -85,6 +87,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
     city: json["city"] == null ? null : CityEntity.fromJson(json["city"]),
     phoneNumber: json["phonenumber"] ?? "",
     age: json["age"] ?? 0,
+    photoUrl: json["photourl"] ?? "",
     deceasedDate: json["ts"] == null ? null : DateTime.parse(json["ts"]),
 
 
@@ -111,6 +114,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
     String? lastName,
     CityEntity? city,
     String? phoneNumber,
+    String? photoUrl,
     DateTime? deceasedDate,
 
 
@@ -130,6 +134,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
       city: city ?? this.city,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       deceasedDate: deceasedDate ?? this.deceasedDate,
+      photoUrl: photoUrl ?? this.photoUrl,
 
 
       wakeAddress: wakeAddress ?? this.wakeAddress,
@@ -152,6 +157,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
     "city":city?.toJson() ?? null,
     "phonenumber":phoneNumber,
     "firebaseid":firebaseid,
+    "photourl":photoUrl,
     "age":age,
     "ts":deceasedDate == null ? null : deceasedDate!.toIso8601String(),
     "cities": cities?.map((e) => e.toJson()).toList() ?? [],

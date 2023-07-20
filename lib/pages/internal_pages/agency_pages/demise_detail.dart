@@ -77,7 +77,12 @@ class DemiseDetailState extends State<DemiseDetail> {
   }
 
 
-
+  Future<dynamic> downloadObituary(String uid, String demiseId) async {
+    var fileList = await FirebaseStorage.instance.ref('obituaries/UID:$uid/demiseId:$demiseId/').listAll();
+    var file = fileList.items[0];
+    var result = await file.getDownloadURL();
+    return result;
+  }
 
   Future<dynamic> downloadUrlImage(String uid, String demiseId) async {
     var fileList = await FirebaseStorage.instance
