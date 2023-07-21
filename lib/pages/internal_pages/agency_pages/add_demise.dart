@@ -363,8 +363,8 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   formSubmit() async{
-    if (_formKey.currentState!.validate()) {
-      if (obituaryFile == null) {
+    if (!_formKey.currentState!.validate()) {
+      if (obituaryFile != null) {
         ErrorSnackbar(context, text: 'Inserire necrologio!');
       } else {
         demiseEntity.firstName = (nameController.text);

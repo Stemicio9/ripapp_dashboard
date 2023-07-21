@@ -202,8 +202,9 @@ class DemiseDetailState extends State<DemiseDetail> {
     if (demiseEntity.funeralDateTime != null){
       funeralDate = demiseEntity.funeralDateTime!.day.toString() + "/"+ demiseEntity.funeralDateTime!.month.toString() + "/" +
           demiseEntity.funeralDateTime!.year.toString();
+      String funeralMinute = (demiseEntity.funeralDateTime!.minute < 10) ? ("0"+demiseEntity.funeralDateTime!.minute.toString()) : demiseEntity.funeralDateTime!.minute.toString();
       funeralHour = (demiseEntity.funeralDateTime!.hour < 10) ? "0" : "";
-      funeralHour += (demiseEntity.funeralDateTime!.hour.toString() + ":"+ demiseEntity.funeralDateTime!.minute.toString());
+      funeralHour += (demiseEntity.funeralDateTime!.hour.toString() + ":"+ funeralMinute);
     } else {
       funeralDate = missingData;
       funeralHour = missingData;
@@ -218,8 +219,9 @@ class DemiseDetailState extends State<DemiseDetail> {
     if (demiseEntity.wakeDateTime != null){
       wakeDate = demiseEntity.wakeDateTime!.day.toString() + "/"+ demiseEntity.wakeDateTime!.month.toString() + "/" +
           demiseEntity.wakeDateTime!.year.toString();
+      String wakeMinute = (demiseEntity.wakeDateTime!.minute < 10) ? ("0"+demiseEntity.wakeDateTime!.minute.toString()) : demiseEntity.wakeDateTime!.minute.toString();
       wakeHour = (demiseEntity.wakeDateTime!.hour < 10) ? "0" : "";
-      wakeHour += demiseEntity.wakeDateTime!.hour.toString() + ":"+ demiseEntity.wakeDateTime!.minute.toString();
+      wakeHour += demiseEntity.wakeDateTime!.hour.toString() + ":"+ wakeMinute;
     } else {wakeDate = missingData;
     wakeHour = missingData;
     }
