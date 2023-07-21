@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/DateLabelWidget.dart';
 
 import '../../../../constants/colors.dart';
 import '../../../../utils/size_utils.dart';
@@ -11,6 +12,7 @@ class WakeDetail extends StatelessWidget {
   final String wakeNote;
   final String wakeHour;
   final String wakeAddress;
+  final DateLabelInfo dateLabelInfo;
 
 
 
@@ -19,6 +21,7 @@ class WakeDetail extends StatelessWidget {
     required this.wakeNote,
     required this.wakeHour,
     required this.wakeAddress,
+    required this.dateLabelInfo,
     Key? key,
 
   }) : super(key: key);
@@ -45,7 +48,10 @@ class WakeDetail extends StatelessWidget {
                 children: [
                   Expanded(
                       flex: 1,
-                      child: Column(
+                      child: DateLabelWidget(dateLabelInfo: dateLabelInfo)
+
+
+                      /*Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
@@ -63,7 +69,14 @@ class WakeDetail extends StatelessWidget {
                           Texth3V2(testo: wakeDate, color: black),
 
                         ],
-                      )),
+                      )*/
+
+
+
+
+
+
+                  ),
                   Expanded(
                       flex: 1,
                       child: Column(

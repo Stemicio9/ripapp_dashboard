@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/DateLabelWidget.dart';
 
 import '../../../../constants/colors.dart';
 import '../../../../utils/size_utils.dart';
@@ -12,6 +13,8 @@ class FuneralDetail extends StatelessWidget {
   final String funeralHour;
   final String funeralAddress;
 
+  final DateLabelInfo dateLabelInfo;
+
 
 
   const FuneralDetail({
@@ -19,6 +22,7 @@ class FuneralDetail extends StatelessWidget {
     required this.funeralNote,
     required this.funeralHour,
     required this.funeralAddress,
+    required this.dateLabelInfo,
     Key? key,
 
   }) : super(key: key);
@@ -45,25 +49,9 @@ class FuneralDetail extends StatelessWidget {
                 children: [
                   Expanded(
                       flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: getPadding(bottom: 5),
-                            child: Text(
-                              'DATA FUNERALE',
-                              style: SafeGoogleFont(
-                                'Montserrat',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: background,
-                              ),
-                            ),
-                          ),
-                          Texth3V2(testo: funeralDate, color: black),
-
-                        ],
-                      )),
+                      child:
+                          DateLabelWidget(dateLabelInfo: dateLabelInfo)
+                  ),
                   Expanded(
                       flex: 1,
                       child: Column(

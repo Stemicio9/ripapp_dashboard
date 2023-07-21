@@ -12,7 +12,7 @@ const double appVersion = 0.1;
 // const String baseUrl = "http://172.17.0.3:80";
 
 //ip backend locale
-//const String baseUrl = "http://localhost:48795";
+const String baseUrl = "http://localhost:8080";
 
 //ip backend remote
-const String baseUrl = "http://ripapp.it";
+//const String baseUrl = "http://ripapp.it";

@@ -10,6 +10,7 @@ import 'package:ripapp_dashboard/constants/kinships.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/DemiseRelative.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/DateLabelWidget.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_detail.dart';
@@ -50,6 +51,7 @@ class DemiseDetailState extends State<DemiseDetail> {
   String wakeAddress = "";
   String wakeDate = "";
   String missingData = "Dato non inserito";
+  late DateLabelInfo dateLabelInfo;
   final TextEditingController relativeController = TextEditingController();
 
   late List<DemiseRelative> relativeList = [];
@@ -122,7 +124,9 @@ class DemiseDetailState extends State<DemiseDetail> {
                                 wakeDate: wakeDate,
                                 wakeNote: wakeNote,
                                 wakeHour: wakeHour,
-                                wakeAddress: wakeAddress),
+                                wakeAddress: wakeAddress,
+                                dateLabelInfo: DateLabelInfo(date: state.selectedDemise.wakeDateTime!, name: "DATA VEGLIA"),
+                            ),
                           ),
 
                           //funeral data
@@ -132,7 +136,8 @@ class DemiseDetailState extends State<DemiseDetail> {
                                   funeralDate: funeralDate,
                                   funeralNote: funeralNote,
                                   funeralHour: funeralHour,
-                                  funeralAddress: funeralAddress
+                                  funeralAddress: funeralAddress,
+                                  dateLabelInfo: dateLabelInfo
                               )
                           ),
 
@@ -181,6 +186,7 @@ class DemiseDetailState extends State<DemiseDetail> {
     }
   }*/
   void fillValues(DemiseEntity demiseEntity) {
+    dateLabelInfo = DateLabelInfo(date: demiseEntity.funeralDateTime!, name: "DATA FUNERALE") ;
     firstName = (demiseEntity.firstName != null) ? demiseEntity.firstName.toString() : missingData;
     lastName = ( demiseEntity.lastName != null) ? demiseEntity.lastName.toString() : missingData;
     phoneNumber = ( demiseEntity.phoneNumber != null) ? demiseEntity.phoneNumber.toString() : missingData;
