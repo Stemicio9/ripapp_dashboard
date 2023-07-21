@@ -363,7 +363,7 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   formSubmit() async{
-    if (!_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
       if (obituaryFile != null) {
         ErrorSnackbar(context, text: 'Inserire necrologio!');
       } else {
