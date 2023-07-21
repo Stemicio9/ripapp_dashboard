@@ -1,7 +1,8 @@
 import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/chip_text/chip_text.dart';
+import 'package:ripapp_dashboard/widgets/utilities/classes/autocomplete_element.dart';
 
-class CityFromAPI extends ChipText{
+class CityFromAPI extends ChipText with AutocompleteElement{
   String? codice;
   String? name;
   String? nomeStraniero;
@@ -87,6 +88,18 @@ class CityFromAPI extends ChipText{
 
   @override
   String getChipText() {
+    return name ?? "";
+  }
+
+  @override
+  String getDisplayString() {
+    // TODO: implement getDisplayString
+    return name ?? "";
+  }
+
+  @override
+  String getOptionStringValue() {
+    // TODO: implement getOptionStringValue
     return name ?? "";
   }
 
