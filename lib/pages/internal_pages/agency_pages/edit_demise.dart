@@ -560,15 +560,18 @@ class EditDemiseState extends State<EditDemise> {
     if (selectedDemise.funeralDateTime != null){
       String formattedDate = DateFormat('dd-MM-yyyy').format(selectedDemise.funeralDateTime!);
       funeralDateController.text = formattedDate;
-      funeralTimeController.text = (selectedDemise.funeralDateTime!.hour < 10) ? "0" : "";
-      funeralTimeController.text += ("${selectedDemise.funeralDateTime!.hour}:${selectedDemise.funeralDateTime!.minute}");
+      String formattedTime = DateFormat('HH:mm').format(selectedDemise.funeralDateTime!);
+      funeralTimeController.text = formattedTime;
+      //funeralTimeController.text += ("${selectedDemise.funeralDateTime!.hour}:${selectedDemise.funeralDateTime!.minute}");
     }
 
     if (selectedDemise.wakeDateTime != null){
       String formattedDate = DateFormat('dd-MM-yyyy').format(selectedDemise.wakeDateTime!);
       wakeDateController.text = formattedDate;
-      wakeTimeController.text = (selectedDemise.wakeDateTime!.hour < 10) ? "0" : "";
-      wakeTimeController.text += "${selectedDemise.wakeDateTime!.hour}:${selectedDemise.wakeDateTime!.minute}";
+      String formattedTime = DateFormat('HH:mm').format(selectedDemise.wakeDateTime!);
+      wakeTimeController.text = formattedTime;
+      //wakeTimeController.text = (selectedDemise.wakeDateTime!.hour < 10) ? "0" : "";
+      //wakeTimeController.text += "${selectedDemise.wakeDateTime!.hour}:${selectedDemise.wakeDateTime!.minute}";
     }
   }
 
