@@ -1,5 +1,4 @@
 import 'dart:html' as html;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
@@ -9,6 +8,7 @@ import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/kinships.dart';
 import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/DemiseRelative.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/DateLabelWidget.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
@@ -39,7 +39,6 @@ class DemiseDetailState extends State<DemiseDetail> {
   String age = "";
   String id = "";
   String deceasedDate = "";
-  String cityOfInterest = "";
   String city = "";
   String phoneNumber = "";
   String funeralDate = "";
@@ -55,17 +54,15 @@ class DemiseDetailState extends State<DemiseDetail> {
   final TextEditingController relativeController = TextEditingController();
 
   late List<DemiseRelative> relativeList = [];
-
+  late List<CityFromAPI> citiesOfInterest = [];
   List<Widget> relativeRows = [];
 
 
   @override
   void initState() {
-    final User user = FirebaseAuth.instance.currentUser!;
-    final uid = user.uid;
     String demiseId = _selectedDemiseCubit.state.selectedDemise.firebaseid!;
-    _profileImageCubit.fetchProfileImage(uid, demiseId);
-    _profileImageCubit.fetchObituary(uid, demiseId);
+    _profileImageCubit.fetchProfileImage(demiseId);
+    _profileImageCubit.fetchObituary(demiseId);
     super.initState();
   }
 
@@ -80,10 +77,7 @@ class DemiseDetailState extends State<DemiseDetail> {
     _currentPageCubit.changeCurrentPage(RouteConstants.demiseDetail);
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
-          print('gli passo ' + obituaryName);
       obituaryName = extractFileNameFromFirebaseUrl(imageState.obituaryUrl);
-      print(imageState.imageUrl);
-
           return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
               builder: (context, state) {
                 fillValues(state.selectedDemise);
@@ -101,8 +95,7 @@ class DemiseDetailState extends State<DemiseDetail> {
                           ),
 
                           //deceased data
-                          imageState.loaded
-                              ? DeceasedDetail(
+                          imageState.loaded ? DeceasedDetail(
                             imageFile: imageState.imageUrl,
                             downloadObituary: (){downloadFile(imageState.obituaryUrl);},
                             obituaryName: obituaryName,
@@ -112,10 +105,9 @@ class DemiseDetailState extends State<DemiseDetail> {
                             firstName: firstName,
                             phoneNumber: phoneNumber,
                             city: city,
-                            cityOfInterest: cityOfInterest,
+                            citiesOfInterest: citiesOfInterest,
                             deceasedDate: deceasedDate,
-                          )
-                              : Container(),
+                          ) : Container(),
 
                           //wake data
                           Padding(
@@ -193,13 +185,14 @@ class DemiseDetailState extends State<DemiseDetail> {
     age = ( demiseEntity.age != null ) ? demiseEntity.age.toString() : missingData;
     id = demiseEntity.id.toString();
     deceasedDate = ( demiseEntity.deceasedDate != null ) ? demiseEntity.deceasedDate.toString() : missingData;
+    citiesOfInterest = (demiseEntity.cities != null) ? demiseEntity.cities!.map((e) => CityFromAPI(name: e.name)).toList(): [];
+    print('fanculo ${citiesOfInterest}');
 
     if (demiseEntity.deceasedDate != null){
       deceasedDate = demiseEntity.deceasedDate!.day.toString() + "/"+ demiseEntity.deceasedDate!.month.toString() + "/" +
           demiseEntity.deceasedDate!.year.toString();
     } else deceasedDate = missingData;
 
-    //cityOfInterest = demiseEntity.cities.toString(); todo decide how to handle city list
     city = ( demiseEntity.city != null ) ? demiseEntity.city.toString() : missingData;
     phoneNumber = ( demiseEntity.phoneNumber != null ) ? demiseEntity.phoneNumber.toString() : missingData;
     funeralNote = ( demiseEntity.funeralNotes != null ) ? demiseEntity.funeralNotes.toString() : missingData;

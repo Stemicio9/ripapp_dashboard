@@ -5,14 +5,15 @@ import 'package:ripapp_dashboard/widgets/chip_widget.dart';
 class ChipsRow<T extends ChipText> extends StatelessWidget {
 
   final List<T> chips;
+  final Function? onDeleted;
 
-  const ChipsRow({Key? key, required this.chips}) : super(key: key);
+  const ChipsRow({Key? key, required this.chips, this.onDeleted}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
       children: [
-        ...chips.map((e) => ChipWidget(chipLabel: e.getChipText()))
+        ...chips.map((e) => ChipWidget(chipLabel: e, onDeleted: onDeleted))
       ],
     );
   }

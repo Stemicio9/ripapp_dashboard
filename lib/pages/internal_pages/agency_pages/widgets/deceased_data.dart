@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/chips_row.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/cities_autocomplete.dart';
 import 'package:ripapp_dashboard/widgets/autocomplete.dart';
 import 'package:ripapp_dashboard/widgets/utilities/empty_fields_widget.dart';
 import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
@@ -25,6 +25,8 @@ class DeceasedData extends StatefulWidget {
   final TextEditingController ageController;
   final TextEditingController dateController;
   final TextEditingController citiesController;
+  final TextEditingController initialValue;
+
   bool isEdit = false;
   final Function() emptyFields;
   final dynamic nameValidator;
@@ -32,21 +34,24 @@ class DeceasedData extends StatefulWidget {
   final dynamic lastNameValidator;
   final dynamic ageValidator;
   final dynamic dateValidator;
-  final dynamic citiesOfInterestValidator;
   final dynamic cityValidator;
   final iconOnTap;
   final imageOnTap;
+  final Function(CityFromAPI) onSelected;
+  final Function onDeleted;
   var imageFile;
   var memoryImage;
   final bool isNetwork;
   final Widget child;
   final List<CityFromAPI> options;
-  final List<CityFromAPI> citiesOfInterestOptions;
   final List<CityFromAPI> chips;
 
 
   DeceasedData({super.key,
+    required this.onDeleted,
+    required this.initialValue,
     required this.chips,
+    required this.onSelected,
     required this.emptyFields,
     required this.child,
     required this.isEdit,
@@ -56,7 +61,6 @@ class DeceasedData extends StatefulWidget {
     this.nameValidator,
     this.phoneValidator,
     this.cityValidator,
-    this.citiesOfInterestValidator,
     this.lastNameValidator,
     this.ageValidator,
     this.dateValidator,
@@ -68,7 +72,6 @@ class DeceasedData extends StatefulWidget {
     required this.lastNameController,
     required this.ageController,
     required this.options,
-    required this.citiesOfInterestOptions,
     this.imageFile,
     required this.dateController,
   });
@@ -122,6 +125,7 @@ class DeceasedDataState extends State<DeceasedData>{
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               flex: 1,
@@ -166,117 +170,159 @@ class DeceasedDataState extends State<DeceasedData>{
                               ),
                             ),
                             Expanded(
-                                flex: 2,
+                                flex: 5,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: getPadding(bottom: 5),
-                                      child: Text(
-                                        'NOME',
-                                        style: SafeGoogleFont(
-                                          'Montserrat',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: background,
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                            flex: 1,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: getPadding(bottom: 5),
+                                                  child: Text(
+                                                    'NOME',
+                                                    style: SafeGoogleFont(
+                                                      'Montserrat',
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: background,
+                                                    ),
+                                                  ),
+                                                ),
+                                                InputsV2Widget(
+                                                  inputFormatters: <TextInputFormatter>[
+                                                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                                                  ],
+                                                  hinttext: getCurrentLanguageValue(NAME)!,
+                                                  controller: widget.nameController,
+                                                  validator: widget.nameValidator,
+                                                  paddingLeft: 0,
+                                                  borderSide: const BorderSide(color: greyState),
+                                                  activeBorderSide: const BorderSide(color: background),
+                                                ),
+                                              ],
+                                            )
                                         ),
-                                      ),
-                                    ),
-                                    InputsV2Widget(
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                                        Expanded(
+                                            flex: 1,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: getPadding(bottom: 5),
+                                                  child: Text(
+                                                    'COGNOME',
+                                                    style: SafeGoogleFont(
+                                                      'Montserrat',
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: background,
+                                                    ),
+                                                  ),
+                                                ),
+                                                InputsV2Widget(
+                                                  inputFormatters: <TextInputFormatter>[
+                                                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                                                  ],
+                                                  hinttext: getCurrentLanguageValue(LAST_NAME)!,
+                                                  controller: widget.lastNameController,
+                                                  validator: widget.lastNameValidator,
+                                                  paddingRight: 0,
+                                                  paddingLeft: 0,
+                                                  borderSide: const BorderSide(color: greyState),
+                                                  activeBorderSide: const BorderSide(color: background),
+                                                ),
+                                              ],
+                                            ))
+
+
+
                                       ],
-                                      hinttext: getCurrentLanguageValue(NAME)!,
-                                      controller: widget.nameController,
-                                      validator: widget.nameValidator,
-                                      paddingLeft: 0,
-                                      borderSide: const BorderSide(color: greyState),
-                                      activeBorderSide: const BorderSide(color: background),
                                     ),
 
-                                    Padding(
-                                      padding: getPadding(bottom: 5,top: 30),
-                                      child: Text(
-                                        'ETÀ',
-                                        style: SafeGoogleFont(
-                                          'Montserrat',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: background,
-                                        ),
-                                      ),
-                                    ),
-                                    InputsV2Widget(
-                                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly,],
-                                      maxLenght: 3,
-                                      hinttext: getCurrentLanguageValue(AGE)!,
-                                      controller: widget.ageController,
-                                      validator: widget.ageValidator,
-                                      paddingLeft: 0,
-                                      borderSide: const BorderSide(color: greyState),
-                                      activeBorderSide: const BorderSide(color: background),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                            flex:1,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: getPadding(bottom: 5,top: 30),
+                                                  child: Text(
+                                                    'ETÀ',
+                                                    style: SafeGoogleFont(
+                                                      'Montserrat',
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: background,
+                                                    ),
+                                                  ),
+                                                ),
+                                                InputsV2Widget(
+                                                  inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly,],
+                                                  maxLenght: 3,
+                                                  hinttext: getCurrentLanguageValue(AGE)!,
+                                                  controller: widget.ageController,
+                                                  validator: widget.ageValidator,
+                                                  paddingLeft: 0,
+                                                  borderSide: const BorderSide(color: greyState),
+                                                  activeBorderSide: const BorderSide(color: background),
+                                                ),
+                                              ],
+                                            )),
+                                        Expanded(
+                                            flex:1,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: getPadding(bottom: 5,top: 30),
+                                                  child: Text(
+                                                    'TELEFONO',
+                                                    style: SafeGoogleFont(
+                                                      'Montserrat',
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: background,
+                                                    ),
+                                                  ),
+                                                ),
+                                                InputsV2Widget(
+                                                  inputFormatters: <TextInputFormatter>[
+                                                    FilteringTextInputFormatter.digitsOnly,
+                                                  ],
+                                                  hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
+                                                  controller: widget.phoneController,
+                                                  validator: widget.phoneValidator,
+                                                  paddingLeft: 0,
+                                                  paddingRight: 0,
+                                                  borderSide: const BorderSide(color: greyState),
+                                                  activeBorderSide:
+                                                  const BorderSide(color: background),
+                                                )
+                                              ],
+                                            ))
+
+
+
+                                      ],
+
                                     )
+
                                   ],
-                                )),
-                            Expanded(
-                                flex: 2,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: getPadding(bottom: 5),
-                                      child: Text(
-                                        'COGNOME',
-                                        style: SafeGoogleFont(
-                                          'Montserrat',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: background,
-                                        ),
-                                      ),
-                                    ),
-                                    InputsV2Widget(
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-                                      ],
-                                      hinttext: getCurrentLanguageValue(LAST_NAME)!,
-                                      controller: widget.lastNameController,
-                                      validator: widget.lastNameValidator,
-                                      paddingRight: 0,
-                                      paddingLeft: 0,
-                                      borderSide: const BorderSide(color: greyState),
-                                      activeBorderSide: const BorderSide(color: background),
-                                    ),
-
-
-                                    Padding(
-                                      padding: getPadding(bottom: 5,top: 30),
-                                      child: Text(
-                                        'TELEFONO',
-                                        style: SafeGoogleFont(
-                                          'Montserrat',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: background,
-                                        ),
-                                      ),
-                                    ),
-                                    InputsV2Widget(
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.digitsOnly,
-                                      ],
-                                      hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
-                                      controller: widget.phoneController,
-                                      validator: widget.phoneValidator,
-                                      paddingLeft: 0,
-                                      paddingRight: 0,
-                                      borderSide: const BorderSide(color: greyState),
-                                      activeBorderSide:
-                                      const BorderSide(color: background),
-                                    )
-                                  ],
-                                )),
-
+                                )
+                            ),
                           ],
                         ),
                       ),
@@ -284,12 +330,13 @@ class DeceasedDataState extends State<DeceasedData>{
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                                flex: 1,
+                                flex: 2,
                                 child: Container()),
                             Expanded(
-                                flex: 2,
+                                flex: 5,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -320,7 +367,7 @@ class DeceasedDataState extends State<DeceasedData>{
                                   ],
                                 )),
                             Expanded(
-                              flex: 2,
+                              flex: 5,
                               child: BlocBuilder<CityListCubit, CityListState>(
                                   builder: (context, cityState) {
                                     if (cityState is CityListLoading) {
@@ -372,9 +419,9 @@ class DeceasedDataState extends State<DeceasedData>{
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(flex:1,child: Container()),
+                            Expanded(flex:2,child: Container()),
                             Expanded(
-                              flex: 2,
+                              flex: 5,
                               child:  BlocBuilder<CityListCubit, CityListState>(
                                   builder: (context, cityState) {
                                     if (cityState is CityListLoading) {
@@ -382,38 +429,16 @@ class DeceasedDataState extends State<DeceasedData>{
                                       return const Center(child: CircularProgressIndicator());
                                     } else if (cityState is CityListLoaded) {
                                       cityList = cityState.listCity;
-                                      //print("decesssed city: $cityList");
                                       if (cityList.isNotEmpty) {
-                                        return Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: getPadding(bottom: 5),
-                                              child: Text(
-                                                'COMUNI DI INTERESSE',
-                                                style: SafeGoogleFont(
-                                                  'Montserrat',
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: background,
-                                                ),
-                                              ),
-                                            ),
-                                            AutocompleteWidget(
-                                              options: cityList,
-                                              paddingRight: 20,
-                                              paddingLeft: 0,
-                                              paddingBottom: 0,
-                                              paddingTop: 0,
-                                              hintText: "Comuni di interesse",
-                                              filterController: widget.citiesController,
-                                              validator: widget.citiesOfInterestValidator,
-                                            ),
-
-                                            ChipsRow(chips: widget.chips),
-
-                                          ],
-
+                                        return Padding(
+                                          padding: getPadding(right: 6),
+                                          child: CitiesAutocomplete(
+                                            chips: widget.chips,
+                                            cityList: cityList,
+                                            onSelected: widget.onSelected,
+                                            initialValue: widget.initialValue,
+                                            onDeleted: widget.onDeleted,
+                                          ),
                                         );
                                       }
                                     }return ErrorWidget("errore di connessione");
@@ -421,7 +446,7 @@ class DeceasedDataState extends State<DeceasedData>{
                                   }),
                             ),
                             Expanded(
-                              flex: 2,
+                              flex: 5,
                               child: widget.isEdit ? Container() : Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [

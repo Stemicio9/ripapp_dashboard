@@ -187,190 +187,218 @@ class EditProfileFormState extends State<EditProfileForm> {
                                   )),
 
                               Expanded(
-                                  flex: 2,
+                                  flex: 4,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Padding(
-                                        padding: getPadding(bottom: 5),
-                                        child: Text(
-                                          'NOME',
-                                          style: SafeGoogleFont(
-                                            'Montserrat',
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            color: background,
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                              flex:1,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: getPadding(bottom: 5),
+                                                    child: Text(
+                                                      'NOME',
+                                                      style: SafeGoogleFont(
+                                                        'Montserrat',
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: background,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  InputsV2Widget(
+                                                    hinttext: getCurrentLanguageValue(NAME) ?? "",
+                                                    controller: widget.nameController,
+                                                    validator: widget.nameValidator,
+                                                    paddingLeft: 0,
+                                                    paddingRight: 20,
+                                                    borderSide: const BorderSide(
+                                                        color: greyState),
+                                                    activeBorderSide: const BorderSide(
+                                                        color: background),
+                                                  ),
+                                                ],
+                                              )
                                           ),
-                                        ),
-                                      ),
-                                      InputsV2Widget(
-                                        hinttext: getCurrentLanguageValue(
-                                            NAME) ?? "",
-                                        controller: widget.nameController,
-                                        validator: widget.nameValidator,
-                                        paddingLeft: 0,
-                                        paddingRight: 20,
-                                        borderSide: const BorderSide(
-                                            color: greyState),
-                                        activeBorderSide: const BorderSide(
-                                            color: background),
-                                      ),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
 
-                                      Padding(
-                                        padding: getPadding(bottom: 5, top: 20),
-                                        child: Text(
-                                          'EMAIL',
-                                          style: SafeGoogleFont(
-                                            'Montserrat',
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            color: background,
-                                          ),
-                                        ),
-                                      ),
-                                      InputsV2Widget(
-                                        hinttext: getCurrentLanguageValue(
-                                            EMAIL) ?? "",
-                                        controller: widget.emailController,
-                                        validator: widget.emailValidator,
-                                        paddingRight: 20,
-                                        paddingLeft: 0,
-                                        borderSide: const BorderSide(
-                                            color: greyState),
-                                        activeBorderSide: const BorderSide(
-                                            color: background),
-                                      ),
-
-                                      Padding(
-                                        padding: getPadding(bottom: 5, top: 20),
-                                        child: Text(
-                                          'CAMBIA PASSWORD',
-                                          style: SafeGoogleFont(
-                                            'Montserrat',
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            color: background,
-                                          ),
-                                        ),
-                                      ),
-
-
-                                      Visibility(
-                                        visible: !widget.showConfirmPassword,
-                                        child: ActionButtonV2(
-                                          action: () {
-                                            setState(() {
-                                              widget.showConfirmPassword = true;
-                                            });
-                                          },
-                                          text: "Reset password",
-                                          fontSize: 14,
-                                          containerHeight: 35,
-                                        ),
-                                      ),
-
-                                      Visibility(
-                                          visible: widget.showConfirmPassword,
-                                          child: Row(
-                                            children: [
-
-                                              Padding(
-                                                padding: getPadding(right: 6.5),
-                                                child: ActionButtonV2(
-                                                  action: () {
-                                                    setState(() {
-                                                      widget
-                                                          .showConfirmPassword =
-                                                      false;
-                                                    });
-                                                  },
-                                                  text: getCurrentLanguageValue(
-                                                      CANCEL) ?? "",
-                                                  maxWidth: 100,
-                                                  fontSize: 14,
-                                                  containerHeight: 35,
-                                                  borderColor: background,
-                                                  textColor: background,
-                                                  color: white,
-                                                  hasBorder: true,
-
-                                                ),
-                                              ),
-
-                                              ActionButtonV2(
-                                                action: widget.changePassword,
-                                                text: getCurrentLanguageValue(
-                                                    CONFIRM) ?? "",
-                                                maxWidth: 100,
-                                                fontSize: 14,
-                                                containerHeight: 35,
-
-                                              ),
-                                            ],
+                                                children: [
+                                                  Padding(
+                                                    padding: getPadding(bottom: 5),
+                                                    child: Text(
+                                                      'COGNOME',
+                                                      style: SafeGoogleFont(
+                                                        'Montserrat',
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: background,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  InputsV2Widget(
+                                                    hinttext: getCurrentLanguageValue(LAST_NAME) ?? "",
+                                                    controller: widget.lastNameController,
+                                                    validator: widget.lastNameValidator,
+                                                    paddingLeft: 0,
+                                                    paddingRight: 0,
+                                                    borderSide: const BorderSide(
+                                                        color: greyState),
+                                                    activeBorderSide: const BorderSide(
+                                                        color: background),
+                                                  ),
+                                                ],
+                                              )
                                           )
-                                      )
-                                    ],
-                                  )),
-
-                              Expanded(
-                                  flex: 2,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      Padding(
-                                        padding: getPadding(bottom: 5),
-                                        child: Text(
-                                          'COGNOME',
-                                          style: SafeGoogleFont(
-                                            'Montserrat',
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            color: background,
-                                          ),
-                                        ),
-                                      ),
-                                      InputsV2Widget(
-                                        hinttext: getCurrentLanguageValue(LAST_NAME) ?? "",
-                                        controller: widget.lastNameController,
-                                        validator: widget.lastNameValidator,
-                                        paddingLeft: 0,
-                                        paddingRight: 0,
-                                        borderSide: const BorderSide(
-                                            color: greyState),
-                                        activeBorderSide: const BorderSide(
-                                            color: background),
-                                      ),
-
-                                      Padding(
-                                        padding: getPadding(bottom: 5, top: 20),
-                                        child: Text(
-                                          'TELEFONO',
-                                          style: SafeGoogleFont(
-                                            'Montserrat',
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            color: background,
-                                          ),
-                                        ),
-                                      ),
-                                      InputsV2Widget(
-                                        hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
-                                        controller: widget.phoneController,
-                                        validator: widget.phoneValidator,
-                                        inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.digitsOnly
                                         ],
-                                        // O,
-                                        keyboard: TextInputType.number,
-                                        paddingRight: 0,
-                                        paddingLeft: 0,
-                                        borderSide: const BorderSide(
-                                            color: greyState),
-                                        activeBorderSide: const BorderSide(
-                                            color: background),
-                                      )
+                                      ),
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                              flex:1,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+
+                                                children: [
+                                                  Padding(
+                                                    padding: getPadding(bottom: 5, top: 20),
+                                                    child: Text(
+                                                      'EMAIL',
+                                                      style: SafeGoogleFont(
+                                                        'Montserrat',
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: background,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  InputsV2Widget(
+                                                    hinttext: getCurrentLanguageValue(
+                                                        EMAIL) ?? "",
+                                                    controller: widget.emailController,
+                                                    validator: widget.emailValidator,
+                                                    paddingRight: 20,
+                                                    paddingLeft: 0,
+                                                    borderSide: const BorderSide(
+                                                        color: greyState),
+                                                    activeBorderSide: const BorderSide(
+                                                        color: background),
+                                                  ),
+                                                  Padding(
+                                                    padding: getPadding(bottom: 5, top: 20),
+                                                    child: Text(
+                                                      'CAMBIA PASSWORD',
+                                                      style: SafeGoogleFont(
+                                                        'Montserrat',
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: background,
+                                                      ),
+                                                    ),
+                                                  ),
+
+
+                                                  Visibility(
+                                                    visible: !widget.showConfirmPassword,
+                                                    child: ActionButtonV2(
+                                                      action: () {
+                                                        setState(() {
+                                                          widget.showConfirmPassword = true;
+                                                        });
+                                                      },
+                                                      text: "Reset password",
+                                                      fontSize: 14,
+                                                      containerHeight: 35,
+                                                    ),
+                                                  ),
+
+                                                  Visibility(
+                                                      visible: widget.showConfirmPassword,
+                                                      child: Row(
+                                                        children: [
+
+                                                          Padding(
+                                                            padding: getPadding(right: 6.5),
+                                                            child: ActionButtonV2(
+                                                              action: () {
+                                                                setState(() {
+                                                                  widget.showConfirmPassword =
+                                                                  false;
+                                                                });
+                                                              },
+                                                              text: getCurrentLanguageValue(
+                                                                  CANCEL) ?? "",
+                                                              maxWidth: 100,
+                                                              fontSize: 14,
+                                                              containerHeight: 35,
+                                                              borderColor: background,
+                                                              textColor: background,
+                                                              color: white,
+                                                              hasBorder: true,
+
+                                                            ),
+                                                          ),
+
+                                                          ActionButtonV2(
+                                                            action: widget.changePassword,
+                                                            text: getCurrentLanguageValue(
+                                                                CONFIRM) ?? "",
+                                                            maxWidth: 100,
+                                                            fontSize: 14,
+                                                            containerHeight: 35,
+
+                                                          ),
+                                                        ],
+                                                      )
+                                                  )
+                                                ],
+                                              )
+                                          ),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+
+                                                children: [
+                                                  Padding(
+                                                    padding: getPadding(bottom: 5, top: 20),
+                                                    child: Text(
+                                                      'TELEFONO',
+                                                      style: SafeGoogleFont(
+                                                        'Montserrat',
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: background,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  InputsV2Widget(
+                                                    hinttext: getCurrentLanguageValue(PHONE_NUMBER)!,
+                                                    controller: widget.phoneController,
+                                                    validator: widget.phoneValidator,
+                                                    inputFormatters: <TextInputFormatter>[
+                                                      FilteringTextInputFormatter.digitsOnly
+                                                    ],
+                                                    // O,
+                                                    keyboard: TextInputType.number,
+                                                    paddingRight: 0,
+                                                    paddingLeft: 0,
+                                                    borderSide: const BorderSide(color: greyState),
+                                                    activeBorderSide: const BorderSide(color: background),
+                                                  )
+                                                ],
+                                              )
+                                          )
+                                        ],
+                                      ),
 
                                     ],
                                   )),

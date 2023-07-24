@@ -6,15 +6,15 @@ import 'package:ripapp_dashboard/constants/images_constants.dart';
 class ProfileImageCubit extends Cubit<ProfileImageState> {
   ProfileImageCubit() : super(ProfileImageState(false, "", ImagesConstants.imgDemisePlaceholder));
 
-  fetchProfileImage(String uid,String demiseId){
-    downloadUrlImage(uid, demiseId)
+  fetchProfileImage(String demiseId){
+    downloadUrlImage( demiseId)
         .then((value) => emit(state.copyWith(newImageUrl: value, newLoaded: true)))
         .onError((error, stackTrace) => emit(state.copyWith(newImageUrl: ImagesConstants.imgDemisePlaceholder, newLoaded: false)
        ));
   }
 
-  fetchObituary(String uid,String demiseId){
-    downloadObituary(uid, demiseId)
+  fetchObituary(String demiseId){
+    downloadObituary(demiseId)
         .then((value) => emit(state.copyWith(newObituaryUrl: value, newLoaded: true)))
         .onError((error, stackTrace) => emit(state.copyWith(newObituaryUrl: ImagesConstants.imgDemisePlaceholder, newLoaded: false)
     ));
@@ -25,8 +25,8 @@ class ProfileImageCubit extends Cubit<ProfileImageState> {
     emit(ProfileImageState(loaded, "", ImagesConstants.imgDemisePlaceholder));
   }
 
-  Future<dynamic> downloadUrlImage(String uid,String demiseId) async {
-    var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/UID:$uid/demiseId:$demiseId/').listAll();
+  Future<dynamic> downloadUrlImage(String demiseId) async {
+    var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/demiseId:$demiseId/').listAll();
     for (var element in fileList.items) {
     }
     if (fileList.items.isEmpty) {
@@ -40,8 +40,8 @@ class ProfileImageCubit extends Cubit<ProfileImageState> {
     return result;
   }
 
-  Future<dynamic> downloadObituary(String uid, String demiseId) async {
-    ListResult  fileList = await FirebaseStorage.instance.ref('obituaries/UID:$uid/demiseId:$demiseId/').listAll();
+  Future<dynamic> downloadObituary(String demiseId) async {
+    ListResult  fileList = await FirebaseStorage.instance.ref('obituaries/demiseId:$demiseId/').listAll();
     var file = fileList.items[0];
     var result = await file.getDownloadURL();
     return result;

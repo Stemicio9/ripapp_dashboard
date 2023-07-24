@@ -1,6 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:ripapp_dashboard/models/CityEntity.dart';
+import 'package:ripapp_dashboard/models/city_from_API.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/chip_text/chip_text.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/chips_row.dart';
 import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
 
 import '../../../../constants/colors.dart';
@@ -20,7 +24,7 @@ class DeceasedDetail extends StatelessWidget{
   final String id;
   final String phoneNumber;
   final String city;
-  final String cityOfInterest;
+  final List<CityFromAPI> citiesOfInterest;
   final String deceasedDate;
   final File? obituary;
   final String age;
@@ -37,7 +41,7 @@ class DeceasedDetail extends StatelessWidget{
     required this.firstName,
     required this.phoneNumber,
     required this.city,
-    required this.cityOfInterest,
+    required this.citiesOfInterest,
     required this.deceasedDate,
     this.obituary,
     required this.obituaryName,
@@ -61,6 +65,7 @@ class DeceasedDetail extends StatelessWidget{
               ),
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   flex: 1,
@@ -70,6 +75,7 @@ class DeceasedDetail extends StatelessWidget{
                       Container(
                         height: 150,
                         width: 150,
+                        padding: getPadding(right: 20),
                         decoration: BoxDecoration(
                             borderRadius: const BorderRadius.all(Radius.circular(5)),
                             color: greyDrag,
@@ -87,7 +93,7 @@ class DeceasedDetail extends StatelessWidget{
                   ),
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -136,7 +142,7 @@ class DeceasedDetail extends StatelessWidget{
                   ),
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -170,9 +176,9 @@ class DeceasedDetail extends StatelessWidget{
 
 
                       Padding(
-                        padding: getPadding(bottom: 5,top: 20),
+                        padding: getPadding(top: 20),
                         child: Text(
-                          'COMUNE DI INTERESSE',
+                          'COMUNI DI INTERESSE',
                           style: SafeGoogleFont(
                             'Montserrat',
                             fontSize: 14,
@@ -181,13 +187,14 @@ class DeceasedDetail extends StatelessWidget{
                           ),
                         ),
                       ),
-                      Texth3V2(testo: cityOfInterest, color: black),
+
+                      ChipsRow(chips: citiesOfInterest)
 
                     ],
                   ),
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
