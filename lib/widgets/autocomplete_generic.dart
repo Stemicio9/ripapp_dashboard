@@ -13,7 +13,6 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
   final Function(T) onSelected;
   final TextEditingController initialValue;
 
-
   const GenericAutocomplete({Key? key,
     required this.options,
     this.validator = notEmptyValidate,
@@ -29,7 +28,6 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
 
   Widget _buildAutocomplete() {
     return RawAutocomplete<T>(
-
         optionsBuilder: (TextEditingValue textEditingValue) {
           if (textEditingValue.text == '') {
             return const Iterable.empty();

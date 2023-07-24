@@ -54,6 +54,7 @@ class WakeData extends StatelessWidget{
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                       flex: 1,

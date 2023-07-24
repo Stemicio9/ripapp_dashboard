@@ -46,15 +46,17 @@ class FuneralData extends StatelessWidget{
         child: Column(
           crossAxisAlignment:CrossAxisAlignment.start,
           children: [
-             Texth1V2(
-                testo: "Dati funerale",
-                color: background,
-                weight: FontWeight.w700,
-              ),
+            Texth1V2(
+              testo: "Dati funerale",
+              color: background,
+              weight: FontWeight.w700,
+            ),
 
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
                 children: [
                   Expanded(
                       flex: 1,
@@ -191,8 +193,6 @@ class FuneralData extends StatelessWidget{
                 ],
               ),
             ),
-
-
           ],
         ),
       ),

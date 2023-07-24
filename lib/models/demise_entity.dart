@@ -67,6 +67,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
           'surname: $lastName, '
           'city: $city, '
           'age: $age, '
+          'cities: $cities ,'
           'phonenumber: $phoneNumber, '
           'ts: $deceasedDate, '
           'funeralAddress: $funeralAddress, '
@@ -101,10 +102,8 @@ class DemiseEntity implements ResultEntity, TableRowElement {
     funeralNotes: json["funeralnotes"] ?? "",
     firebaseid: json["firebaseid"] ?? "",
     relatives: json["relatives"] != null ? (json["relatives"] as List).map((e) => DemiseRelative.fromJson(e)).toList() : [],
-    /*cities: json["cities"] todo aggiungere questi due campi!!
-        .map((data) => CityEntity.fromJson(data))
-        .toList(),
-      relative: json["relatives"] ?? "",*/
+    cities: json["cities"] != null ? (json["cities"] as List).map((data) => CityEntity.fromJson(data)).toList() : [],
+
   );
 
   DemiseEntity copyWith({

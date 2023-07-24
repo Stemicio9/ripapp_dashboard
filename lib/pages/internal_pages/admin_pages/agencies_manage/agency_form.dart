@@ -110,6 +110,7 @@ class AgencyFormState extends State<AgencyForm> {
                                             Padding(
                                               padding: getPadding(bottom: 30),
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Expanded(
                                                       flex: 1,
@@ -181,6 +182,8 @@ class AgencyFormState extends State<AgencyForm> {
                                             Padding(
                                               padding: getPadding(bottom: 40),
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+
                                                 children: [
                                                   Expanded(
                                                       flex: 1,
@@ -255,6 +258,7 @@ class AgencyFormState extends State<AgencyForm> {
                                               ),
                                             ),
                                             Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Expanded(
                                                   flex: 1,

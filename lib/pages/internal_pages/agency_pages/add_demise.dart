@@ -60,12 +60,12 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController funeralNoteController = TextEditingController();
   final TextEditingController citiesController = TextEditingController();
   final TextEditingController relativeController = TextEditingController();
+  final TextEditingController initialValue = TextEditingController();
   SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
   DateTime? wakeDate;
   DateTime? funeralDate;
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
-  List<CityFromAPI> citiesOfInterestOptions = <CityFromAPI>[];
-  List<CityFromAPI> chips = [];
+  Set<CityFromAPI> chips = {};
   File_Data_Model? obituaryFile;
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
   int relativeIndex = 0;
@@ -119,25 +119,37 @@ class AddDemiseState extends State<AddDemise> {
                       state.loaded ?  DeceasedData(
                         emptyFields: () {
                           setState(() {
-                            nameController.text = '';
-                            lastNameController.text = '';
-                            cityController.text = '';
-                            phoneController.text = '';
-                            ageController.text = '';
-                            deceasedDateController.text = '';
-                            wakeAddressController.text = '';
-                            wakeDateController.text = '';
-                            wakeTimeController.text = '';
-                            wakeNoteController.text = '';
-                            funeralAddressController.text = '';
-                            funeralDateController.text = '';
-                            funeralTimeController.text = '';
-                            funeralNoteController.text = '';
-                            citiesController.text = '';
+                            nameController.clear();
+                            lastNameController.clear();
+                            cityController.clear();
+                            phoneController.clear();
+                            ageController.clear();
+                            deceasedDateController.clear();
+                            wakeAddressController.clear();
+                            wakeDateController.clear();
+                            wakeTimeController.clear();
+                            wakeNoteController.clear();
+                            funeralAddressController.clear();
+                            funeralDateController.clear();
+                            funeralTimeController.clear();
+                            funeralNoteController.clear();
+                            citiesController.clear();
                             obituaryFile = null;
+                            chips.clear();
                           });
                         },
-                        chips: chips,
+                        onDeleted: (CityFromAPI city){
+                          setState(() {
+                           chips.remove(city);
+                          });
+                        },
+                        onSelected: (value){
+                          setState(() {
+                            chips.add(value);
+                          });
+                        },
+                        initialValue: initialValue,
+                        chips: chips.toList(),
                         isEdit: false,
                         isNetwork: isNetwork,
                         imageFile: imageFile,
@@ -166,9 +178,7 @@ class AddDemiseState extends State<AddDemise> {
                         phoneValidator:notEmptyValidate ,
                         ageValidator: notEmptyValidate,
                         dateValidator: notEmptyValidate,
-                        citiesOfInterestValidator: notEmptyValidate,
                         cityValidator: notEmptyValidate,
-                        citiesOfInterestOptions: citiesOfInterestOptions,
                         iconOnTap: () async {
                           DateTime? pickedDate = await showDatePicker(
                               context: context,
@@ -176,8 +186,7 @@ class AddDemiseState extends State<AddDemise> {
                               firstDate: DateTime.now().add(const Duration(days: -365 * 10)),
                               lastDate: DateTime.now().add(const Duration(days: 365)));
                           if (pickedDate != null) {
-                            String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pickedDate);
+                            String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
                             setState(() {
                               deceasedDateController.text = formattedDate;
                             });
@@ -353,35 +362,32 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   setKinshipFromDropdownOf(int index, Kinship kinship) {
-    print("ecco quanti elementi ha relatives perle kin " + demiseEntity.relatives.toString());
+    print("ecco quanti elementi ha relatives per le kin ${demiseEntity.relatives}");
     demiseEntity.relatives![index].kinshipType = kinship;
   }
 
   setTelephoneNumberOf(int index, String phoneNumber) {
-    print("ecco quanti elementi ha relatives " + demiseEntity.relatives.toString());
+    print("ecco quanti elementi ha relatives ${demiseEntity.relatives}");
     demiseEntity.relatives![index].telephoneNumber = phoneNumber;
   }
 
   formSubmit() async{
     if (_formKey.currentState!.validate()) {
       if (obituaryFile != null) {
-        ErrorSnackbar(context, text: 'Inserire necrologio!');
-      } else {
+        if(chips.isNotEmpty){
         demiseEntity.firstName = (nameController.text);
         demiseEntity.lastName = (lastNameController.text);
         demiseEntity.city = CityEntity(name: cityController.text);
         demiseEntity.phoneNumber = (phoneController.text);
         demiseEntity.age = ageController.text != "" ? int.parse(ageController.text) : null;
         demiseEntity.deceasedDate = (deceasedDateController.text != "" && deceasedDateController.text != null) ? convertDate(deceasedDateController.text) : null;
-        demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
         demiseEntity.wakeDateTime = (wakeDateController.text != "" && wakeDateController.text != null) ? convertDate(wakeDateController.text) : null;
         demiseEntity.wakeAddress = (wakeAddressController.text);
         demiseEntity.wakeNotes = (wakeNoteController.text);
         demiseEntity.funeralAddress = (funeralAddressController.text);
         demiseEntity.funeralDateTime = (funeralDateController.text != "" && funeralDateController.text != null) ? convertDate(funeralDateController.text) : null;
         demiseEntity.funeralNotes = (funeralNoteController.text);
-        //demiseEntity.cities = (citiesController.text);
-        //demiseEntity.relative = (relativeController.text);
+        demiseEntity.cities = chips.map((e) => CityEntity(name: e.name!)).toList();
 
         String wakeTimeString = wakeTimeController.text;
         if (wakeTimeString != null && wakeTimeString != "") {
@@ -419,21 +425,15 @@ class AddDemiseState extends State<AddDemise> {
           }
         }
 
-        final User user = FirebaseAuth.instance.currentUser!;
-        final uid = user.uid;
         var uuid = const Uuid();
         var demiseId = uuid.v4();
         demiseEntity.firebaseid = demiseId;
-
         demiseEntity.relatives = relativesNew.map((relativeRow) => DemiseRelative(telephoneNumber: relativeRow.value, kinshipType: relativeRow.kinship)).toList();
-
-        //_searchDemiseCubit.saveDemise(demiseEntity);
         DemiseRepository().saveDemise(demiseEntity)
             .then((value) => SuccessSnackbar(context, text: 'Defunto aggiunto con successo!'))
             .onError((error, stackTrace) => ErrorSnackbar(context, text: "Errore durante l'aggiunta del defunto"));
 
-
-        var obituaryPath = 'obituaries/UID:$uid/demiseId:$demiseId/';
+        var obituaryPath = 'obituaries/demiseId:$demiseId/';
         var obituaryList = await FirebaseStorage.instance.ref(obituaryPath).listAll();
         if (obituaryList.items.isNotEmpty) {
           var fileesistente = obituaryList.items[0];
@@ -441,7 +441,7 @@ class AddDemiseState extends State<AddDemise> {
         }
         await FirebaseStorage.instance.ref("$obituaryPath${obituaryFile!.name}").putData(obituaryFile!.file);
 
-        var path = 'profile_images/deceased_images/UID:$uid/demiseId:$demiseId/';
+        var path = 'profile_images/deceased_images/demiseId:$demiseId/';
         var fileList = await FirebaseStorage.instance.ref(path).listAll();
         if (fileList.items.isNotEmpty) {
           var fileesistente = fileList.items[0];
@@ -450,15 +450,16 @@ class AddDemiseState extends State<AddDemise> {
         if(fileName != "" ){
           await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
         }
-
-        //SuccessSnackbar(context, text: 'Defunto aggiunto con successo!');
         context.pop();
 
+      }else{
+          ErrorSnackbar(context, text: "Inserire almeno un comune di interesse!");
+        }
+    }else {
+        ErrorSnackbar(context, text: 'Inserire necrologio!');
       }
-    } else {
-      ErrorSnackbar(
-          context,
-          text: 'Impossibile aggiungere defunto!'
+  } else{
+      ErrorSnackbar(context, text: 'Impossibile aggiungere defunto!'
       );
     }
 

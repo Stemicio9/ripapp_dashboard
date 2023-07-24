@@ -29,6 +29,12 @@ class UsersForm extends StatelessWidget {
   final Function(AgencyEntity selectedAgency) agencyChange;
   late List<UserRoles> roles;
   final bool isAddPage;
+  final Function(CityFromAPI) onSelected;
+  final Function onDeleted;
+  final TextEditingController initialValue;
+  final Set<CityFromAPI> chips;
+  final Set<CityFromAPI> deletedChips;
+
 
   UsersForm(
       {super.key,
@@ -44,7 +50,12 @@ class UsersForm extends StatelessWidget {
         required this.agencyChange,
         required this.roles,
         required this.options,
-        this.isAddPage = true});
+        this.isAddPage = true,
+        required this.onSelected,
+        required this.deletedChips,
+        required this.onDeleted,
+        required this.initialValue,
+        required this.chips});
 
 
   @override
@@ -52,19 +63,26 @@ class UsersForm extends StatelessWidget {
     return BlocProvider(
         create: (_) => SelectedAgencyCubit(),
         child: UsersFormWidget(
-            onTap: onTap,
-            isAddPage: isAddPage,
-            cardTitle: cardTitle,
-            nameController: nameController,
-            emailController: emailController,
-            filterController: filterController,
-            phoneController: phoneController,
-            passwordController: passwordController,
-            lastNameController: lastNameController,
-            statusChange: statusChange,
-            agencyChange: agencyChange,
-            roles: roles,
-            options: options)
+          onTap: onTap,
+          isAddPage: isAddPage,
+          cardTitle: cardTitle,
+          nameController: nameController,
+          emailController: emailController,
+          filterController: filterController,
+          phoneController: phoneController,
+          passwordController: passwordController,
+          lastNameController: lastNameController,
+          statusChange: statusChange,
+          agencyChange: agencyChange,
+          roles: roles,
+          options: options,
+          onSelected: onSelected,
+          initialValue: initialValue,
+          onDeleted: onSelected,
+          chips: chips,
+          deletedChips: deletedChips,
+
+        )
     );
   }
 }
@@ -78,28 +96,40 @@ class UsersFormWidget extends StatefulWidget {
   final TextEditingController lastNameController;
   final TextEditingController filterController;
   final TextEditingController passwordController;
+  final Function(CityFromAPI) onSelected;
+  final Function onDeleted;
+  final TextEditingController initialValue;
+  final Set<CityFromAPI> chips;
   final List<CityFromAPI> options;
   final onTap;
   late final Function(String selectedValue) statusChange;
   final Function(AgencyEntity selectedAgency) agencyChange;
   late List<UserRoles> roles;
   final bool isAddPage;
+  final Set<CityFromAPI> deletedChips;
+
+
 
   UsersFormWidget(
       {super.key,
-      required this.onTap,
-      required this.cardTitle,
-      required this.nameController,
-      required this.emailController,
-      required this.filterController,
-      required this.phoneController,
-      required this.passwordController,
-      required this.lastNameController,
-      required this.statusChange,
-      required this.agencyChange,
-      required this.roles,
-      required this.options,
-      this.isAddPage = true});
+        required this.deletedChips,
+        required this.onTap,
+        required this.cardTitle,
+        required this.nameController,
+        required this.emailController,
+        required this.filterController,
+        required this.phoneController,
+        required this.passwordController,
+        required this.lastNameController,
+        required this.statusChange,
+        required this.agencyChange,
+        required this.roles,
+        required this.options,
+        this.isAddPage = true,
+        required this.onSelected,
+        required this.onDeleted,
+        required this.initialValue,
+        required this.chips});
 
   @override
   State<StatefulWidget> createState() {
@@ -123,6 +153,14 @@ class UsersFormState extends State<UsersFormWidget> {
   void initState() {
     _searchAgencyCubit.fetchAgencies();
     _cityListCubit.fetchCityList();
+    if(widget.isAddPage == false){
+      if(_selectedUserCubit.state.selectedUser.city != null) {
+        for (var element in _selectedUserCubit.state.selectedUser.city!) {
+          widget.chips.add(CityFromAPI(name: element.name));
+        }
+      }
+    }
+
     _passwordVisible = false;
     super.initState();
   }
@@ -131,114 +169,119 @@ class UsersFormState extends State<UsersFormWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<SelectedCityCubit, SelectedCityState>(
         builder: (context, stateCity) {
-      if (stateCity is SelectedCityState) {
-        widget.filterController.text = stateCity.selectedCity.name ?? widget.filterController.text;
-        print(widget.filterController.text);
-        return BlocBuilder<SelectedUserCubit, SelectedUserState>(
-            builder: (context, state) {
-          if (state is SelectedUserState) {
-            if (widget.isAddPage) {
-              widget.nameController.text = "";
-              widget.phoneController.text = "";
-              widget.lastNameController.text = "";
-            } else {
-              widget.nameController.text = state.selectedUser.firstName ?? widget.nameController.text;
-              widget.lastNameController.text = state.selectedUser.lastName ?? widget.lastNameController.text;
-              widget.phoneController.text = state.selectedUser.phoneNumber ?? widget.phoneController.text;
-            }
-            if (state.selectedUser.status == null) {
-              widget.statusChange(UserRoles.Utente.name);
-            }
-            return BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
-                builder: (context, agencyState) {
-              if (agencyState is SearchAgencyLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (agencyState is SearchAgencyLoaded) {
-                return Padding(
-                    padding: getPadding(left: 20, right: 20),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: getPadding(left: 20, right: 20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                    width: 700,
-                                    child: DialogCard(
-                                        cancelIcon: true,
-                                        paddingLeft: 10,
-                                        paddingRight: 10,
-                                        cardTitle: widget.cardTitle,
-                                        child: BlocBuilder<CityListCubit, CityListState>(
-                                            builder: (context, cityState) {
-                                          if (cityState is CityListLoading) {
-                                            return const Center(child: CircularProgressIndicator());
-                                          } else if (cityState
-                                              is CityListLoaded) {
-                                            cityList = cityState.listCity;
-                                            return UserFormInputs(
-                                              emptyFields: (){
-                                                widget.nameController.text = "";
-                                                widget.lastNameController.text = "";
-                                                widget.phoneController.text = "";
-                                                widget.emailController.text = "";
-                                                widget.passwordController.text = "";
+          if (stateCity is SelectedCityState) {
+            widget.filterController.text = stateCity.selectedCity.name ?? widget.filterController.text;
+            print(widget.filterController.text);
+            return BlocBuilder<SelectedUserCubit, SelectedUserState>(
+                builder: (context, state) {
+                  if (state is SelectedUserState) {
+                    if (widget.isAddPage) {
+                      widget.nameController.text = "";
+                      widget.phoneController.text = "";
+                      widget.lastNameController.text = "";
+                    } else {
+                      widget.nameController.text = state.selectedUser.firstName ?? widget.nameController.text;
+                      widget.lastNameController.text = state.selectedUser.lastName ?? widget.lastNameController.text;
+                      widget.phoneController.text = state.selectedUser.phoneNumber ?? widget.phoneController.text;
+                    }
+                    if (state.selectedUser.status == null) {
+                      widget.statusChange(UserRoles.Utente.name);
+                    }
+                    return BlocBuilder<SearchAgencyCubit, SearchAgencyState>(
+                        builder: (context, agencyState) {
+                          if (agencyState is SearchAgencyLoading) {
+                            return const Center(child: CircularProgressIndicator());
+                          } else if (agencyState is SearchAgencyLoaded) {
+                            return Padding(
+                                padding: getPadding(left: 20, right: 20),
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: getPadding(left: 20, right: 20),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                                width: 1000,
+                                                child: DialogCard(
+                                                    cancelIcon: true,
+                                                    paddingLeft: 10,
+                                                    paddingRight: 10,
+                                                    cardTitle: widget.cardTitle,
+                                                    child: BlocBuilder<CityListCubit, CityListState>(
+                                                        builder: (context, cityState) {
+                                                          if (cityState is CityListLoading) {
+                                                            return const Center(child: CircularProgressIndicator());
+                                                          } else if (cityState
+                                                          is CityListLoaded) {
+                                                            cityList = cityState.listCity;
+                                                            return UserFormInputs(
+                                                              emptyFields: (){
+                                                                widget.nameController.text = "";
+                                                                widget.lastNameController.text = "";
+                                                                widget.phoneController.text = "";
+                                                                widget.emailController.text = "";
+                                                                widget.passwordController.text = "";
 
-                                              },
-                                              nameController: widget.nameController,
-                                              lastNameController: widget.lastNameController,
-                                              emailController: widget.emailController,
-                                              passwordController: widget.passwordController,
-                                              cityController: widget.filterController,
-                                              phoneController: widget.phoneController,
-                                              action: () {
-                                                widget.onTap(stateCity.selectedCity);
-                                              },
-                                              isAddPage: widget.isAddPage,
-                                              iconOnTap: () {
-                                                setState(() {
-                                                  _passwordVisible = !_passwordVisible;
-                                                });
-                                              },
-                                              isPassword: !_passwordVisible,
-                                              suffixIcon: _passwordVisible ? ImagesConstants.imgPassSee : ImagesConstants.imgPassUnsee,
-                                              cityList: cityList,
-                                              roles: widget.roles,
-                                              selectedAgency: agencyState.selectedAgency,
-                                              statusChange: (UserRoles? value) {
-                                                _selectedUserCubit.selectUser(state.selectedUser.copyWith(status: fromUserRole(value ?? UserRoles.Utente)));
-                                                widget.statusChange(value?.name ?? "");
-                                              },
-                                              agencyChange: (AgencyEntity? value) {
-                                                _searchAgencyCubit.changeSelectedAgency(value);
-                                                if (value != null) {
-                                                  widget.agencyChange(value);
-                                                }
-                                              },
-                                              selectedUser: state.selectedUser,
-                                              agencies: agencyState.agencies,
-                                            );
-                                          } else {
-                                            return ErrorWidget("exception");
-                                          }
-                                        })))
-                              ],
-                            ),
-                          )
-                        ]));
-              } else {
-                return ErrorWidget("exception");
-              }
-            });
+                                                              },
+                                                              nameController: widget.nameController,
+                                                              lastNameController: widget.lastNameController,
+                                                              emailController: widget.emailController,
+                                                              passwordController: widget.passwordController,
+                                                              cityController: widget.filterController,
+                                                              phoneController: widget.phoneController,
+                                                              action: () {
+                                                                widget.onTap(stateCity.selectedCity);
+                                                              },
+                                                              isAddPage: widget.isAddPage,
+                                                              iconOnTap: () {
+                                                                setState(() {
+                                                                  _passwordVisible = !_passwordVisible;
+                                                                });
+                                                              },
+                                                              isPassword: !_passwordVisible,
+                                                              suffixIcon: _passwordVisible ? ImagesConstants.imgPassSee : ImagesConstants.imgPassUnsee,
+                                                              cityList: cityList,
+                                                              roles: widget.roles,
+                                                              selectedAgency: agencyState.selectedAgency,
+                                                              statusChange: (UserRoles? value) {
+                                                                _selectedUserCubit.selectUser(state.selectedUser.copyWith(status: fromUserRole(value ?? UserRoles.Utente)));
+                                                                widget.statusChange(value?.name ?? "");
+                                                              },
+                                                              agencyChange: (AgencyEntity? value) {
+                                                                _searchAgencyCubit.changeSelectedAgency(value);
+                                                                if (value != null) {
+                                                                  widget.agencyChange(value);
+                                                                }
+                                                              },
+                                                              selectedUser: state.selectedUser,
+                                                              agencies: agencyState.agencies,
+                                                              chips: widget.chips.toList(),
+                                                              initialValue: widget.initialValue,
+                                                              onSelected: widget.onSelected,
+                                                              onDeleted: widget.onDeleted,
+
+                                                            );
+                                                          } else {
+                                                            return ErrorWidget("exception");
+                                                          }
+                                                        })))
+                                          ],
+                                        ),
+                                      )
+                                    ]));
+                          } else {
+                            return ErrorWidget("exception");
+                          }
+                        });
+                  } else {
+                    return ErrorWidget("exception");
+                  }
+                });
           } else {
-            return ErrorWidget("exception");
+            return ErrorWidget("exception2");
           }
         });
-      } else {
-        return ErrorWidget("exception2");
-      }
-    });
   }
 }
