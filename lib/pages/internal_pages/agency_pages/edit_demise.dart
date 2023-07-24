@@ -434,7 +434,7 @@ class EditDemiseState extends State<EditDemise> {
 
 
   formSubmit() async {
-    if(_formKey.currentState!.validate()){
+    if(!_formKey.currentState!.validate()){
       DemiseEntity demiseEntity = DemiseEntity();
       if (demiseEntity.deceasedDate != null && demiseEntity.wakeDateTime != null && demiseEntity.funeralDateTime != null) {
         if (demiseEntity.deceasedDate!.isAfter(demiseEntity.wakeDateTime!) || demiseEntity.deceasedDate!.isAfter(demiseEntity.funeralDateTime!)) {

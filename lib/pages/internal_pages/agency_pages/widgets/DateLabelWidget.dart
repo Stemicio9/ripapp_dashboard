@@ -44,7 +44,9 @@ class DateLabelInfo {
 
   String getFormattedDate(){
     var formatter = DateFormat('dd/MM/yyyy');
-    print(formatter.format(date));
-    return formatter.format(date).toString();
+    String dateString = formatter.format(date).toString();
+    if (dateString == '09/09/9999')
+      dateString = "Dato non inserito";
+    return dateString;
   }
 }

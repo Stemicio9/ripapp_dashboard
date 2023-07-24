@@ -125,7 +125,7 @@ class DemiseDetailState extends State<DemiseDetail> {
                                 wakeNote: wakeNote,
                                 wakeHour: wakeHour,
                                 wakeAddress: wakeAddress,
-                                dateLabelInfo: DateLabelInfo(date: state.selectedDemise.wakeDateTime!, name: "DATA VEGLIA"),
+                                dateLabelInfo: DateLabelInfo(date: state.selectedDemise.wakeDateTime ?? DateTime(9999, DateTime.september, 9), name: "DATA VEGLIA"),
                             ),
                           ),
 
@@ -186,7 +186,7 @@ class DemiseDetailState extends State<DemiseDetail> {
     }
   }*/
   void fillValues(DemiseEntity demiseEntity) {
-    dateLabelInfo = DateLabelInfo(date: demiseEntity.funeralDateTime!, name: "DATA FUNERALE") ;
+    dateLabelInfo = DateLabelInfo(date: demiseEntity.funeralDateTime ?? DateTime(9999, DateTime.september, 9), name: "DATA FUNERALE") ;
     firstName = (demiseEntity.firstName != null) ? demiseEntity.firstName.toString() : missingData;
     lastName = ( demiseEntity.lastName != null) ? demiseEntity.lastName.toString() : missingData;
     phoneNumber = ( demiseEntity.phoneNumber != null) ? demiseEntity.phoneNumber.toString() : missingData;
