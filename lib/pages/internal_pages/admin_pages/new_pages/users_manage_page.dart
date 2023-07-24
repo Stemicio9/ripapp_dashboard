@@ -12,6 +12,7 @@ import 'package:ripapp_dashboard/data_table/data_table_widget.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/empty_table_content.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
+import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
@@ -50,16 +51,13 @@ class UsersManagePageState extends State<UsersManagePage>{
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController filterController = TextEditingController();
+  final TextEditingController initialValue = TextEditingController();
+
   List<CityFromAPI> cityList = [];
+  Set<CityFromAPI> chips = {};
   List<CityFromAPI> cityOptions = [];
-  UserEntity userEntity = UserEntity(
-      id: 1,
-      firstName: '',
-      lastName: '',
-      email: '',
-      city: [CityFromAPI.defaultCity()],
-      phoneNumber: '',
-      role: '');
+  UserEntity userEntity = UserEntity();
+  Set<CityFromAPI> deletedChips = {};
 
   setStatusFromDropdown(String userRole) {
     UserRoles role = UserRoles.values.firstWhere((e) => e.toString() == 'UserRoles.' + userRole);
@@ -141,7 +139,8 @@ class UsersManagePageState extends State<UsersManagePage>{
       userEntity.email = emailController.text;
       userEntity.phoneNumber = phoneController.text;
       userEntity.password = passwordController.text;
-      userEntity.city = [nome!];
+      userEntity.city = chips.map((e) => CityFromAPI(name: e.name!)).toList();
+
 
       if (userEntity.email != "" && userEntity.password != "") {
         FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -196,6 +195,19 @@ class UsersManagePageState extends State<UsersManagePage>{
                   agencyChange: setAgencyFromDropdown,
                   onTap: formSubmit,
                   roles: UserRoles.values,
+                  chips: chips,
+                  deletedChips: deletedChips,
+                  initialValue: initialValue,
+                    onDeleted: (CityFromAPI city){
+                      setState(() {
+                        deletedChips.add(city);
+                      });
+                    },
+                    onSelected: (value){
+                      setState(() {
+                        chips.add(value);
+                      });
+                    },
                 ),
               ));
         },
@@ -232,6 +244,19 @@ class UsersManagePageState extends State<UsersManagePage>{
               builder: (ctx) => Form(
                 key: _editKey,
                 child: UsersForm(
+                  deletedChips: deletedChips,
+                  chips: chips,
+                  initialValue: initialValue,
+                  onDeleted: (CityFromAPI city){
+                    setState(() {
+                      deletedChips.add(city);
+                    });
+                  },
+                  onSelected: (value){
+                    setState(() {
+                      chips.add(value);
+                    });
+                  },
                   statusChange: setStatusFromDropdown,
                   agencyChange: setAgencyFromDropdown,
                   onTap: (CityFromAPI? nome) {
@@ -244,6 +269,7 @@ class UsersManagePageState extends State<UsersManagePage>{
                       userEntity.city = [nome!];
                       userEntity.id = userEntity.id;
                       userEntity.agency = userEntity.agency;
+
 
                       print("stampo utente modificato");
                       print(userEntity);
@@ -314,9 +340,7 @@ class UsersManagePageState extends State<UsersManagePage>{
           showDialog(
               context: context,
               builder: (ctx) => UsersDetail(
-                isAgency: userEntity.status.toString() == 'UserStatus.agency'
-                    ? true
-                    : false,
+                isAgency: userEntity.status.toString() == 'UserStatus.agency' ? true : false,
                 cardTitle: getCurrentLanguageValue(USER_DETAIL)!,
               )
           );

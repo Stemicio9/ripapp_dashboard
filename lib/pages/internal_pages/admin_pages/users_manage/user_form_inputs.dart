@@ -8,10 +8,10 @@ import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/users_manage_page.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/cities_autocomplete.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/action_button.dart';
-import 'package:ripapp_dashboard/widgets/autocomplete.dart';
 import 'package:ripapp_dashboard/widgets/input.dart';
 import 'package:ripapp_dashboard/widgets/utilities/empty_fields_widget.dart';
 
@@ -25,6 +25,8 @@ class UserFormInputs extends StatelessWidget {
   final TextEditingController passwordController;
   final TextEditingController cityController;
   final TextEditingController phoneController;
+  final TextEditingController initialValue;
+
   final Function() action;
   final Function(UserRoles?) statusChange;
   final Function(AgencyEntity?) agencyChange;
@@ -39,10 +41,15 @@ class UserFormInputs extends StatelessWidget {
   final List<AgencyEntity> agencies;
   AgencyEntity? selectedAgency;
   List<String> emptyList = ['Seleziona agenzia'];
+  final List<CityFromAPI> chips;
+  final Function(CityFromAPI) onSelected;
+  final Function onDeleted;
 
 
   UserFormInputs({
     super.key,
+
+    required this.chips,
     required this.emptyFields,
     required this.nameController,
     required this.lastNameController,
@@ -61,18 +68,21 @@ class UserFormInputs extends StatelessWidget {
     required this.agencyChange,
     required this.selectedUser,
     required this.agencies,
-    this.selectedAgency
+    this.selectedAgency,
+    required this.initialValue,
+    required this.onSelected,
+    required this.onDeleted
   });
 
   @override
   Widget build(BuildContext context) {
-    print("STO BUILDANDO WIDGET INTERNO");
-    print(agencies);
     return Column(
       children: [
         Padding(
           padding: getPadding(bottom: 30),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+
             children: [
               Expanded(
                   flex: 1,
@@ -111,6 +121,8 @@ class UserFormInputs extends StatelessWidget {
           child: Padding(
             padding: getPadding(bottom: 30),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
               children: [
                 Expanded(
                     flex: 1,
@@ -159,36 +171,21 @@ class UserFormInputs extends StatelessWidget {
         Padding(
             padding: getPadding(bottom: 30),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: getPadding(bottom: 5),
-                        child: Text(
-                          getCurrentLanguageValue(CITY)!.toUpperCase(),
-                          style: SafeGoogleFont(
-                            'Montserrat',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: background,
-                          ),
-                        ),
-                      ),
-                      AutocompleteWidget(
-                        options: cityList.isNotEmpty ? cityList : [],
-                        validator: notEmptyValidate,
-                        paddingRight: 10,
-                        paddingLeft: 0,
-                        paddingTop: 0,
-                        paddingBottom: 0,
-                        hintText: getCurrentLanguageValue(CITY)!,
-                        filterController: cityController,
-                      ),
-                    ],
-                  ),),
+                  child: Padding(
+                    padding: getPadding(right: 3),
+                    child: CitiesAutocomplete(
+                      chips: chips,
+                      cityList: cityList,
+                      onSelected: onSelected,
+                      initialValue: initialValue,
+                      onDeleted: onDeleted,
+                    ),
+                   )
+                  ),
                 Expanded(
                     flex: 1,
                     child: InputsV2Widget(
@@ -211,6 +208,7 @@ class UserFormInputs extends StatelessWidget {
         Padding(
           padding: getPadding(bottom: 40),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                   flex: 1,
@@ -308,6 +306,7 @@ class UserFormInputs extends StatelessWidget {
         ),
 
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               flex: 1,
