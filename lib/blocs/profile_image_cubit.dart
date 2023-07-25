@@ -27,8 +27,6 @@ class ProfileImageCubit extends Cubit<ProfileImageState> {
 
   Future<dynamic> downloadUrlImage(String demiseId) async {
     var fileList = await FirebaseStorage.instance.ref('profile_images/deceased_images/demiseId:$demiseId/').listAll();
-    for (var element in fileList.items) {
-    }
     if (fileList.items.isEmpty) {
       var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
       var file = fileList.items[0];

@@ -80,7 +80,7 @@ class AddDemiseState extends State<AddDemise> {
   DemiseEntity demiseEntity = DemiseEntity(relatives: []);
   List<RelativeRowNew> relativesNew = [];
 
-  Future<dynamic> downloadUrlImage(String uid) async {
+  Future<dynamic> downloadUrlImage() async {
     var fileList = await FirebaseStorage.instance.ref('profile_images/').listAll();
     var file = fileList.items[0];
     var result = await file.getDownloadURL();
@@ -95,9 +95,7 @@ class AddDemiseState extends State<AddDemise> {
   @override
   Widget build(BuildContext context) {
     _currentPageCubit.changeCurrentPage(RouteConstants.addDemise);
-    final User user = FirebaseAuth.instance.currentUser!;
-    final uid = user.uid;
-    downloadUrlImage(uid).then((value) => func(value));
+    downloadUrlImage().then((value) => func(value));
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, state) {
           print("il nostro link è " + imageFile.toString());
@@ -488,19 +486,18 @@ class AddDemiseState extends State<AddDemise> {
     relativeIndex += 1;
     relativeRows.add(x);
     demiseEntity.relatives!.add(DemiseRelative());
-    (_searchKinshipCubit.state as SearchKinshipState).selectedKinships!.add(Kinship.zia);
-    (_searchKinshipCubit.state as SearchKinshipState).phoneNumbersInserted!.add("");
-    print("ecco i telefoni dallo stato "+ _searchKinshipCubit.state.phoneNumbersInserted.toString());
-    print("ecco le kinship dallo stato "+ _searchKinshipCubit.state.selectedKinships.toString());
+    (_searchKinshipCubit.state).selectedKinships!.add(Kinship.zia);
+    (_searchKinshipCubit.state).phoneNumbersInserted!.add("");
+    print("ecco i telefoni dallo stato ${_searchKinshipCubit.state.phoneNumbersInserted}");
+    print("ecco le kinship dallo stato ${_searchKinshipCubit.state.selectedKinships}");
     //(_searchKinshipCubit.state as SearchKinshipLoaded).phoneNumbersInserted!.add();
   }
 
   changeDropdown(RelativeRow relativeRow, value){
     setState(() {
-      print("ILPARENTE");
-      print(value);
+
       var index = relativeRows.indexOf(relativeRow);
-      print("ha indice " + index.toString());
+      print("ha indice $index");
       selectedValues[index] = value;
       changeDropdown(relativeRow, value);
     });

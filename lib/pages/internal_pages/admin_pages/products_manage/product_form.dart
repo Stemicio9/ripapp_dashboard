@@ -52,14 +52,12 @@ class ProductFormState extends State<ProductForm> {
     var path = 'profile_images/products_images/productid:$productId/';
 
     var fileList = await FirebaseStorage.instance.ref(path).listAll();
-    if (fileList.items.isNotEmpty) {
+
+    if (fileList.items.isNotEmpty && fileName != "") {
       var fileesistente = fileList.items[0];
       fileesistente.delete();
     }
-    print("stampo filename");
-    print(fileName);
-
-    if (fileName.isNotEmpty && fileBytes != null) {
+    if (fileName != "") {
       await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes!);
     }
   }
@@ -72,21 +70,23 @@ class ProductFormState extends State<ProductForm> {
         photoName: imageFile,
       );
 
-      productEntity.id = id;
       var uuid = const Uuid();
       var productId = uuid.v4();
-      productEntity.firebaseId = productId;
+
       if (widget.isEdit) {
+        productEntity.id = id;
+        productEntity.firebaseId =  _selectedProductsCubit.state.selectedProduct.firebaseId;
         _searchProductsCubit.editProduct(productEntity);
         SuccessSnackbar(context, text: 'Prodotto modificato con successo!');
       } else {
+        productEntity.firebaseId = productId;
         _searchProductsCubit.saveProduct(productEntity);
         SuccessSnackbar(context, text: 'Prodotto aggiunto con successo!');
       }
 
-      await manageImageChange(productId);
-      nameController.text = "";
-      priceController.text = "";
+      await manageImageChange(widget.isEdit ? _selectedProductsCubit.state.selectedProduct.firebaseId ?? "" : productId);
+      nameController.clear();
+      priceController.clear();
 
       context.pop();
     }
@@ -150,8 +150,8 @@ class ProductFormState extends State<ProductForm> {
                                 formSubmit(imageUrl, id);
                               },
                               emptyFields: (){
-                                nameController.text = "";
-                                priceController.text = "";
+                                nameController.clear();
+                                priceController.clear();
                               },
                             ),
 
@@ -167,17 +167,15 @@ class ProductFormState extends State<ProductForm> {
         builder: (context, state) {
           nameController.text = "";
           priceController.text = "";
-          print("SONO APPENA ENTRATO NEL BLOC");
-          print(state.imageUrl);
           if (widget.isEdit) {
             nameController.text = state.selectedProduct.name ?? nameController.text;
             priceController.text = state.selectedProduct.price.toString();
-            fileName = state.imageUrl;
           }
           return widget.isEdit
               ? composeProductForm(state.imageUrl, state.selectedProduct.id)
               : composeProductForm(ImagesConstants.imgDemisePlaceholder, null);
         });
   }
+
 
 }
