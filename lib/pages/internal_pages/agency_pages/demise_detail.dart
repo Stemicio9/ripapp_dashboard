@@ -186,11 +186,10 @@ class DemiseDetailState extends State<DemiseDetail> {
     id = demiseEntity.id.toString();
     deceasedDate = ( demiseEntity.deceasedDate != null ) ? demiseEntity.deceasedDate.toString() : missingData;
     citiesOfInterest = (demiseEntity.cities != null) ? demiseEntity.cities!.map((e) => CityFromAPI(name: e.name)).toList(): [];
-    print('fanculo ${citiesOfInterest}');
+    print('fanculo $citiesOfInterest');
 
     if (demiseEntity.deceasedDate != null){
-      deceasedDate = demiseEntity.deceasedDate!.day.toString() + "/"+ demiseEntity.deceasedDate!.month.toString() + "/" +
-          demiseEntity.deceasedDate!.year.toString();
+      deceasedDate = "${demiseEntity.deceasedDate!.day}/${demiseEntity.deceasedDate!.month}/${demiseEntity.deceasedDate!.year}";
     } else deceasedDate = missingData;
 
     city = ( demiseEntity.city != null ) ? demiseEntity.city.toString() : missingData;
@@ -199,11 +198,10 @@ class DemiseDetailState extends State<DemiseDetail> {
     funeralAddress = ( demiseEntity.funeralAddress != null ) ? demiseEntity.funeralAddress.toString() : missingData;
 
     if (demiseEntity.funeralDateTime != null){
-      funeralDate = demiseEntity.funeralDateTime!.day.toString() + "/"+ demiseEntity.funeralDateTime!.month.toString() + "/" +
-          demiseEntity.funeralDateTime!.year.toString();
-      String funeralMinute = (demiseEntity.funeralDateTime!.minute < 10) ? ("0"+demiseEntity.funeralDateTime!.minute.toString()) : demiseEntity.funeralDateTime!.minute.toString();
+      funeralDate = "${demiseEntity.funeralDateTime!.day}/${demiseEntity.funeralDateTime!.month}/${demiseEntity.funeralDateTime!.year}";
+      String funeralMinute = (demiseEntity.funeralDateTime!.minute < 10) ? ("0${demiseEntity.funeralDateTime!.minute}") : demiseEntity.funeralDateTime!.minute.toString();
       funeralHour = (demiseEntity.funeralDateTime!.hour < 10) ? "0" : "";
-      funeralHour += (demiseEntity.funeralDateTime!.hour.toString() + ":"+ funeralMinute);
+      funeralHour += ("${demiseEntity.funeralDateTime!.hour}:$funeralMinute");
     } else {
       funeralDate = missingData;
       funeralHour = missingData;
@@ -216,11 +214,10 @@ class DemiseDetailState extends State<DemiseDetail> {
     wakeHour = ( demiseEntity.wakeDateTime != null ) ? demiseEntity.wakeDateTime.toString() : missingData;
 
     if (demiseEntity.wakeDateTime != null){
-      wakeDate = demiseEntity.wakeDateTime!.day.toString() + "/"+ demiseEntity.wakeDateTime!.month.toString() + "/" +
-          demiseEntity.wakeDateTime!.year.toString();
-      String wakeMinute = (demiseEntity.wakeDateTime!.minute < 10) ? ("0"+demiseEntity.wakeDateTime!.minute.toString()) : demiseEntity.wakeDateTime!.minute.toString();
+      wakeDate = "${demiseEntity.wakeDateTime!.day}/${demiseEntity.wakeDateTime!.month}/${demiseEntity.wakeDateTime!.year}";
+      String wakeMinute = (demiseEntity.wakeDateTime!.minute < 10) ? ("0${demiseEntity.wakeDateTime!.minute}") : demiseEntity.wakeDateTime!.minute.toString();
       wakeHour = (demiseEntity.wakeDateTime!.hour < 10) ? "0" : "";
-      wakeHour += demiseEntity.wakeDateTime!.hour.toString() + ":"+ wakeMinute;
+      wakeHour += "${demiseEntity.wakeDateTime!.hour}:$wakeMinute";
     } else {wakeDate = missingData;
     wakeHour = missingData;
     }
@@ -236,8 +233,8 @@ class DemiseDetailState extends State<DemiseDetail> {
       List<String> timeComponents = time.split(":");
       String hours = timeComponents[0];
       String minutes = timeComponents[1];
-      time = hours + ":" + minutes;
-      print("eccoci la time  " + time);
+      time = "$hours:$minutes";
+      print("eccoci la time  $time");
     } else {
       date = missingData;
       time = missingData;

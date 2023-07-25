@@ -91,7 +91,7 @@ class EditDemiseState extends State<EditDemise> {
   var imageFile = ImagesConstants.imgDemisePlaceholder;
   var memoryImage;
   bool isNetwork = true;
-  late String fileName;
+  late String fileName = "";
   late Uint8List fileBytes;
 
   setKinshipFromDropdownOf(int index, Kinship kinship) {
@@ -116,13 +116,13 @@ class EditDemiseState extends State<EditDemise> {
     _currentPageCubit.changeCurrentPage(RouteConstants.editDemise);
     chips.removeAll(deletedChips);
     deletedChips.clear();
-    print("ecco il demise selzionato " + _selectedDemiseCubit.state.selectedDemise.toString());
+    print("ecco il demise selzionato ${_selectedDemiseCubit.state.selectedDemise}");
     return BlocBuilder<ProfileImageCubit, ProfileImageState>(
         builder: (context, imageState) {
           imageFile = imageState.imageUrl;
           return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
               builder: (context, state) {
-                print("ricostruisco il widget e la lista è " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                print("ricostruisco il widget e la lista è ${_selectedDemiseCubit.state.selectedDemise.relatives}");
                 fillValues(_selectedDemiseCubit.state.selectedDemise);
                 relativesNew.clear();
                 for (int i = 0; i < state.selectedDemise.relatives!.length; ++i){
@@ -372,7 +372,8 @@ class EditDemiseState extends State<EditDemise> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   ActionButtonV2(action: formSubmit,
-                                      text: getCurrentLanguageValue(SAVE) ?? ""),
+                                      text: getCurrentLanguageValue(SAVE) ?? ""
+                                  ),
                                 ],
                               ),
                             ),
@@ -389,7 +390,10 @@ class EditDemiseState extends State<EditDemise> {
 
 
   Future updateDemise(String path, DemiseEntity demiseEntity) async {
-    //await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes); todo da ripristinare
+    if(fileName != "" ){
+      await FirebaseStorage.instance.ref("$path$fileName").putData(fileBytes);
+    }
+
     return DemiseRepository().updateDemise(demiseEntity);
   }
 
@@ -415,6 +419,7 @@ class EditDemiseState extends State<EditDemise> {
         DemiseEntity demiseEntity = DemiseEntity(
           id: _selectedDemiseCubit.state.selectedDemise.id,
           firstName: nameController.text,
+          firebaseid: _selectedDemiseCubit.state.selectedDemise.firebaseid,
           lastName: lastNameController.text,
           age: int.parse(ageController.text),
           phoneNumber: phoneController.text,
@@ -466,14 +471,13 @@ class EditDemiseState extends State<EditDemise> {
           }
         }
 
-        final User user = FirebaseAuth.instance.currentUser!;
-        final uid = user.uid;
-        var path = 'profile_images/deceased_images/UID:$uid/demiseId:${demiseEntity.firebaseid}/';
+        var path = 'profile_images/deceased_images/demiseId:${demiseEntity.firebaseid}/';
         var fileList = await FirebaseStorage.instance.ref(path).listAll();
-        if (fileList.items.isNotEmpty) {
+        if (fileList.items.isNotEmpty && fileName != "") {
           var fileesistente = fileList.items[0];
           fileesistente.delete();
         }
+
         updateDemise(path,demiseEntity).then((value) => onUpdateSuccess(value)).onError((
             error, stackTrace) => onUpdateError(stackTrace));
       }
