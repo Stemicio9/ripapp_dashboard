@@ -129,7 +129,7 @@ class AgencyProfileState extends State<AgencyProfile> {
           FirebaseAuth.instance.signOut();
         },
         onCancel: () {
-          context.pop;
+          context.pop();
         },
         message: 'Sei sicuro di voler eliminare definitivamente questo profilo?'
     );

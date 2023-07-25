@@ -199,13 +199,12 @@ class AddDemiseState extends State<AddDemise> {
                               padding: const EdgeInsets.only(bottom: 20),
                               child: DropZoneWidget(
                                 file: obituaryFile,
-                                onDroppedFile: (file) => setState(
-                                        ()=> obituaryFile = file),
-
+                                onDroppedFile: (file) => setState(()=> obituaryFile = file),
                               ),
                             ),
                           ],
-                        ),) : Container(),
+                        ),
+                      ) : Container(),
 
                       //wake data
                       Padding(

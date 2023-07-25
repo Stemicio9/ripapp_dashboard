@@ -4,6 +4,7 @@ import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/dropzone/file_data_model.dart';
+import 'package:ripapp_dashboard/widgets/snackbars.dart';
 
 class DropZoneWidget extends StatefulWidget {
   final ValueChanged<File_Data_Model> onDroppedFile;
@@ -58,7 +59,7 @@ class _DropZoneWidgetState extends State<DropZoneWidget> {
               // a button to pickfile from computer
               ElevatedButton.icon(
                 onPressed: () async {
-                  final events = await controller.pickFiles();
+                  final events = await controller.pickFiles(mime: ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf']);
                   if (events.isEmpty) return;
                   UploadedFile(events.first);
                 },
@@ -100,9 +101,14 @@ class _DropZoneWidgetState extends State<DropZoneWidget> {
     print('URL: $url');
 
     // update the data model with recent file uploaded
-    final droppedFile = File_Data_Model(
-        name: name, mime: mime, bytes: byte, url: url, file: file);
 
+    final droppedFile = File_Data_Model(
+        name: name,
+        mime: mime,
+        bytes: byte,
+        url: url,
+        file: file
+    );
     //Update the UI
     widget.onDroppedFile(droppedFile);
 
