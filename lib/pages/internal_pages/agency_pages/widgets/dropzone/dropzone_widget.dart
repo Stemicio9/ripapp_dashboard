@@ -101,6 +101,7 @@ class _DropZoneWidgetState extends State<DropZoneWidget> {
     print('URL: $url');
 
     // update the data model with recent file uploaded
+    await controller.pickFiles(mime: ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf']);
 
     final droppedFile = File_Data_Model(
         name: name,
