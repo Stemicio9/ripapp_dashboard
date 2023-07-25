@@ -52,6 +52,7 @@ class FuneralDetail extends StatelessWidget {
                       child:
                           DateLabelWidget(dateLabelInfo: dateLabelInfo)
                   ),
+                  /*
                   Expanded(
                       flex: 1,
                       child: Column(
@@ -74,6 +75,7 @@ class FuneralDetail extends StatelessWidget {
                         ],
                       )
                   ),
+                  */
                   Expanded(
                       flex: 1,
                       child: Column(

@@ -15,13 +15,20 @@ class DateLabelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting();
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+
+        Expanded(
+    flex: 1,
+    child:
+        Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: getPadding(bottom: 5),
           child: Text(
-            dateLabelInfo.name,
+            dateLabelInfo.dateName,
             style: SafeGoogleFont(
               'Montserrat',
               fontSize: 14,
@@ -32,15 +39,43 @@ class DateLabelWidget extends StatelessWidget {
         ),
         Texth3V2(testo: dateLabelInfo.getFormattedDate(), color: black),
       ],
+    )
+    ),
+
+
+    Expanded(
+    flex: 1,
+    child:
+      Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+      Padding(
+      padding: getPadding(bottom: 5),
+      child: Text(
+      dateLabelInfo.timeName,
+      style: SafeGoogleFont(
+      'Montserrat',
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color: background,
+      ),
+      ),
+      ),
+      Texth3V2(testo: dateLabelInfo.getFormattedTime(), color: black),
+      ],
+      )
+    )
+    ]
     );
   }
 }
 
 class DateLabelInfo {
   DateTime date;
-  String name;
+  String dateName;
+  String timeName;
 
-  DateLabelInfo({required this.date, required this.name});
+  DateLabelInfo({required this.date, required this.dateName, required this.timeName});
 
   String getFormattedDate(){
     var formatter = DateFormat('dd/MM/yyyy');
@@ -48,5 +83,10 @@ class DateLabelInfo {
     if (dateString == '09/09/9999')
       dateString = "Dato non inserito";
     return dateString;
+  }
+
+  String getFormattedTime(){
+    var formatter = DateFormat('HH:mm');
+    return formatter.format(date).toString();;
   }
 }

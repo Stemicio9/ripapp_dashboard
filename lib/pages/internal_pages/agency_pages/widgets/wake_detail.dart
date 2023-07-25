@@ -49,34 +49,8 @@ class WakeDetail extends StatelessWidget {
                   Expanded(
                       flex: 1,
                       child: DateLabelWidget(dateLabelInfo: dateLabelInfo)
-
-
-                      /*Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: getPadding(bottom: 5),
-                            child: Text(
-                              'DATA VEGLIA',
-                              style: SafeGoogleFont(
-                                'Montserrat',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: background,
-                              ),
-                            ),
-                          ),
-                          Texth3V2(testo: wakeDate, color: black),
-
-                        ],
-                      )*/
-
-
-
-
-
-
                   ),
+                  /*
                   Expanded(
                       flex: 1,
                       child: Column(
@@ -99,6 +73,7 @@ class WakeDetail extends StatelessWidget {
                         ],
                       )
                   ),
+                  */
                   Expanded(
                       flex: 1,
                       child: Column(
