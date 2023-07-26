@@ -10,7 +10,6 @@ import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/DemiseRelative.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/DateLabelWidget.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/add_relative.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/deceased_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/funeral_detail.dart';
@@ -18,6 +17,7 @@ import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/relat
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/wake_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
+import 'package:ripapp_dashboard/widgets/utilities/string_formatters.dart';
 import '../../../utils/size_utils.dart';
 
 class DemiseDetail extends StatefulWidget {
@@ -50,9 +50,7 @@ class DemiseDetailState extends State<DemiseDetail> {
   String wakeAddress = "";
   String wakeDate = "";
   String missingData = "Dato non inserito";
-  late DateLabelInfo dateLabelInfo;
   final TextEditingController relativeController = TextEditingController();
-
   late List<DemiseRelative> relativeList = [];
   late List<CityFromAPI> citiesOfInterest = [];
   List<Widget> relativeRows = [];
@@ -117,11 +115,7 @@ class DemiseDetailState extends State<DemiseDetail> {
                                 wakeNote: wakeNote,
                                 wakeHour: wakeHour,
                                 wakeAddress: wakeAddress,
-                                dateLabelInfo: DateLabelInfo(
-                                    date: state.selectedDemise.wakeDateTime ?? DateTime(9999, DateTime.september, 9),
-                                    dateName: "DATA VEGLIA",
-                                    timeName: "ORARIO VEGLIA"
-                                ),
+
                             ),
                           ),
 
@@ -133,7 +127,6 @@ class DemiseDetailState extends State<DemiseDetail> {
                                   funeralNote: funeralNote,
                                   funeralHour: funeralHour,
                                   funeralAddress: funeralAddress,
-                                  dateLabelInfo: dateLabelInfo
                               )
                           ),
 
@@ -173,76 +166,36 @@ class DemiseDetailState extends State<DemiseDetail> {
     return '';
   }
 
-  /*  better todo something like that for dates
-  DatelabelWidget{
-    final Date x;
-
-    build{
-      Dateformat.format("MM..");
-    }
-  }*/
   void fillValues(DemiseEntity demiseEntity) {
-    dateLabelInfo = DateLabelInfo(date: demiseEntity.funeralDateTime ?? DateTime(9999, DateTime.september, 9), dateName: "DATA FUNERALE", timeName: "ORARIO FUNERALE") ;
-    firstName = (demiseEntity.firstName != null) ? demiseEntity.firstName.toString() : missingData;
-    lastName = ( demiseEntity.lastName != null) ? demiseEntity.lastName.toString() : missingData;
-    phoneNumber = ( demiseEntity.phoneNumber != null) ? demiseEntity.phoneNumber.toString() : missingData;
-    age = ( demiseEntity.age != null ) ? demiseEntity.age.toString() : missingData;
+    firstName = demiseEntity.firstName != null ? demiseEntity.firstName.toString() : missingData;
+    lastName =  demiseEntity.lastName != null ? demiseEntity.lastName.toString() : missingData;
+    phoneNumber = demiseEntity.phoneNumber != null ? demiseEntity.phoneNumber.toString() : missingData;
+    age =  demiseEntity.age != null ? demiseEntity.age.toString() : missingData;
     id = demiseEntity.id.toString();
-    deceasedDate = ( demiseEntity.deceasedDate != null ) ? demiseEntity.deceasedDate.toString() : missingData;
-    citiesOfInterest = (demiseEntity.cities != null) ? demiseEntity.cities!.map((e) => CityFromAPI(name: e.name)).toList(): [];
-    print('fanculo $citiesOfInterest');
-
-    if (demiseEntity.deceasedDate != null){
-      deceasedDate = "${demiseEntity.deceasedDate!.day}/${demiseEntity.deceasedDate!.month}/${demiseEntity.deceasedDate!.year}";
-    } else deceasedDate = missingData;
-
-    city = ( demiseEntity.city != null ) ? demiseEntity.city.toString() : missingData;
-    phoneNumber = ( demiseEntity.phoneNumber != null ) ? demiseEntity.phoneNumber.toString() : missingData;
-    funeralNote = ( demiseEntity.funeralNotes != null ) ? demiseEntity.funeralNotes.toString() : missingData;
-    funeralAddress = ( demiseEntity.funeralAddress != null ) ? demiseEntity.funeralAddress.toString() : missingData;
-
+    citiesOfInterest = demiseEntity.cities != null ? demiseEntity.cities!.map((e) => CityFromAPI(name: e.name)).toList(): [];
+    city = demiseEntity.city != null  ? demiseEntity.city.toString() : missingData;
+    phoneNumber = demiseEntity.phoneNumber != null ? demiseEntity.phoneNumber.toString() : missingData;
+    deceasedDate = demiseEntity.deceasedDate != null ? StringFormatters().getFormattedDate(demiseEntity.deceasedDate) : missingData;
+    funeralNote = demiseEntity.funeralNotes != null ? demiseEntity.funeralNotes.toString() : missingData;
+    funeralAddress = demiseEntity.funeralAddress != null ? demiseEntity.funeralAddress.toString() : missingData;
     if (demiseEntity.funeralDateTime != null){
-      funeralDate = "${demiseEntity.funeralDateTime!.day}/${demiseEntity.funeralDateTime!.month}/${demiseEntity.funeralDateTime!.year}";
-      String funeralMinute = (demiseEntity.funeralDateTime!.minute < 10) ? ("0${demiseEntity.funeralDateTime!.minute}") : demiseEntity.funeralDateTime!.minute.toString();
-      funeralHour = (demiseEntity.funeralDateTime!.hour < 10) ? "0" : "";
-      funeralHour += ("${demiseEntity.funeralDateTime!.hour}:$funeralMinute");
+      funeralDate = StringFormatters().getFormattedDate(demiseEntity.funeralDateTime);
+      funeralHour = StringFormatters().getFormattedTime(demiseEntity.funeralDateTime);
     } else {
-      funeralDate = missingData;
-      funeralHour = missingData;
+      wakeDate = missingData;
+      wakeHour = missingData;
     }
-
-    wakeNote = ( demiseEntity.wakeNotes != null ) ? demiseEntity.wakeNotes.toString() : missingData;
-    wakeAddress = ( demiseEntity.wakeAddress != null ) ? demiseEntity.wakeAddress.toString() : missingData;
-
-    wakeDate = ( demiseEntity.wakeDateTime != null ) ? demiseEntity.wakeDateTime.toString() : missingData;
-    wakeHour = ( demiseEntity.wakeDateTime != null ) ? demiseEntity.wakeDateTime.toString() : missingData;
-
+    wakeNote = demiseEntity.wakeNotes != null ? demiseEntity.wakeNotes.toString() : missingData;
+    wakeAddress = demiseEntity.wakeAddress != null ? demiseEntity.wakeAddress.toString() : missingData;
     if (demiseEntity.wakeDateTime != null){
-      wakeDate = "${demiseEntity.wakeDateTime!.day}/${demiseEntity.wakeDateTime!.month}/${demiseEntity.wakeDateTime!.year}";
-      String wakeMinute = (demiseEntity.wakeDateTime!.minute < 10) ? ("0${demiseEntity.wakeDateTime!.minute}") : demiseEntity.wakeDateTime!.minute.toString();
-      wakeHour = (demiseEntity.wakeDateTime!.hour < 10) ? "0" : "";
-      wakeHour += "${demiseEntity.wakeDateTime!.hour}:$wakeMinute";
-    } else {wakeDate = missingData;
-    wakeHour = missingData;
+      wakeDate = StringFormatters().getFormattedDate(demiseEntity.wakeDateTime);
+      wakeHour = StringFormatters().getFormattedTime(demiseEntity.wakeDateTime);
+    } else {
+      wakeDate = missingData;
+      wakeHour = missingData;
     }
 
     relativeList = demiseEntity.relatives ?? [];
-  }
-
-  void fillDate(DateTime? dateTime, String date, String time) {
-    if (dateTime != null) {
-      String dateTimeString = dateTime.toString();
-      date = dateTimeString.split(" ").first;
-      time = dateTimeString.split(" ").last;
-      List<String> timeComponents = time.split(":");
-      String hours = timeComponents[0];
-      String minutes = timeComponents[1];
-      time = "$hours:$minutes";
-      print("eccoci la time  $time");
-    } else {
-      date = missingData;
-      time = missingData;
-    }
   }
 
 }

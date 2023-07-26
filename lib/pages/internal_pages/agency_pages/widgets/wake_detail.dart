@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/DateLabelWidget.dart';
-
+import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/widgets/detail_label.dart';
 import '../../../../constants/colors.dart';
-import '../../../../utils/size_utils.dart';
-import '../../../../utils/style_utils.dart';
 import '../../../../widgets/texts.dart';
 
 class WakeDetail extends StatelessWidget {
@@ -12,18 +10,13 @@ class WakeDetail extends StatelessWidget {
   final String wakeNote;
   final String wakeHour;
   final String wakeAddress;
-  final DateLabelInfo dateLabelInfo;
-
-
 
   const WakeDetail({
     required this.wakeDate,
     required this.wakeNote,
     required this.wakeHour,
     required this.wakeAddress,
-    required this.dateLabelInfo,
     Key? key,
-
   }) : super(key: key);
 
   @override
@@ -43,102 +36,43 @@ class WakeDetail extends StatelessWidget {
               ),
             ),
 
-
-             Row(
-                children: [
-                  Expanded(
-                      flex: 2,
-                      child: DateLabelWidget(dateLabelInfo: dateLabelInfo)
-                  ),
-                  /*
-                  Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: getPadding(bottom: 5),
-                            child: Text(
-                              'ORARIO VEGLIA',
-                              style: SafeGoogleFont(
-                                'Montserrat',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: background,
-                              ),
-                            ),
-                          ),
-                          Texth3V2(testo: wakeHour, color: black),
-
-                        ],
-                      )
-                  ),
-                  */
-                  Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: getPadding(bottom: 5),
-                            child: Text(
-                              'INDIRIZZO',
-                              style: SafeGoogleFont(
-                                'Montserrat',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: background,
-                              ),
-                            ),
-                          ),
-                          Texth3V2(testo: wakeAddress, color: black),
-
-
-                        ],
-                      )
-                  ),
-                ],
-              ),
-
-
+            Row(
+              children: [
+                DetailLabel(
+                    flex: 1,
+                    labelText: getCurrentLanguageValue(WAKE_DATE)!.toUpperCase(),
+                    text: wakeDate
+                ),
+                DetailLabel(
+                    flex: 1,
+                    labelText: getCurrentLanguageValue(WAKE_HOUR)!.toUpperCase(),
+                    text: wakeHour
+                ),
+                DetailLabel(
+                    flex: 1,
+                    labelText: getCurrentLanguageValue(WAKE_ADDRESS)!.toUpperCase(),
+                    text: wakeAddress
+                ),
+              ],
+            ),
 
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Row(
                 children: [
-                  Expanded(
+                  DetailLabel(
                       flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: getPadding(bottom: 5),
-                            child: Text(
-                              'NOTE VEGLIA',
-                              style: SafeGoogleFont(
-                                'Montserrat',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: background,
-                              ),
-                            ),
-                          ),
-                          Texth3V2(testo: wakeNote, color: black),
+                      labelText: getCurrentLanguageValue(WAKE_NOTE)!.toUpperCase(),
+                      text: wakeNote
+                  ),
+                  Expanded(
+                      flex: 2,
+                      child: Container()
+                  ),
 
-                        ],
-                      )),
-                  Expanded(
-                      flex: 1,
-                      child: Container()
-                  ),
-                  Expanded(
-                      flex: 1,
-                      child: Container()
-                  ),
                 ],
               ),
             ),
-
           ],
         ),
       ),

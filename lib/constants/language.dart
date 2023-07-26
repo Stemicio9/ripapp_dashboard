@@ -49,6 +49,8 @@ const String FUNERAL_HOUR = "Orario funeral";
 const String FUNERAL_DATE = "Data funeral";
 const String FUNERAL_NOTE = "Note funeral";
 const String ADDRESS = "Indirizzo";
+const String FUNERAL_ADDRESS = "Indirizzo funerale";
+const String WAKE_ADDRESS = "Indirizzo veglia";
 const String RELATIVE_NUMBER = "Numero parente";
 const String INSERT_PHOTO = "Tocca per caricare una foto";
 const String MY_PROFILE = "Il mio profilo";
@@ -101,6 +103,8 @@ final Map<String, String> LANG_IT = {
   FUNERAL_DATE:"Data funerale",
   FUNERAL_NOTE:"Note funerale",
   ADDRESS:"Indirizzo",
+  FUNERAL_ADDRESS:"Indirizzo funerale",
+  WAKE_ADDRESS:"Indirizzo veglia",
   RELATIVE_NUMBER:"Numero parente",
   INSERT_PHOTO: "Tocca per caricare una foto",
   MY_PROFILE: "Il mio profilo",

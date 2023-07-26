@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/DateLabelWidget.dart';
-
+import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/widgets/detail_label.dart';
 import '../../../../constants/colors.dart';
-import '../../../../utils/size_utils.dart';
-import '../../../../utils/style_utils.dart';
 import '../../../../widgets/texts.dart';
 
 class FuneralDetail extends StatelessWidget {
@@ -13,16 +11,11 @@ class FuneralDetail extends StatelessWidget {
   final String funeralHour;
   final String funeralAddress;
 
-  final DateLabelInfo dateLabelInfo;
-
-
-
   const FuneralDetail({
     required this.funeralDate,
     required this.funeralNote,
     required this.funeralHour,
     required this.funeralAddress,
-    required this.dateLabelInfo,
     Key? key,
 
   }) : super(key: key);
@@ -43,104 +36,44 @@ class FuneralDetail extends StatelessWidget {
                 weight: FontWeight.w700,
               ),
             ),
-
-
             Row(
                 children: [
-                  Expanded(
-                      flex: 2,
-                      child:
-                          DateLabelWidget(dateLabelInfo: dateLabelInfo)
-                  ),
-                  /*
-                  Expanded(
+                  DetailLabel(
                       flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: getPadding(bottom: 5),
-                            child: Text(
-                              'ORARIO FUNERALE',
-                              style: SafeGoogleFont(
-                                'Montserrat',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: background,
-                              ),
-                            ),
-                          ),
-                          Texth3V2(testo: funeralHour, color: black),
-
-                        ],
-                      )
+                      labelText: getCurrentLanguageValue(FUNERAL_DATE)!.toUpperCase(),
+                      text: funeralDate
                   ),
-                  */
-                  Expanded(
+
+                  DetailLabel(
                       flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: getPadding(bottom: 5),
-                            child: Text(
-                              'INDIRIZZO',
-                              style: SafeGoogleFont(
-                                'Montserrat',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: background,
-                              ),
-                            ),
-                          ),
-                          Texth3V2(testo: funeralAddress, color: black),
+                      labelText: getCurrentLanguageValue(FUNERAL_HOUR)!.toUpperCase(),
+                      text: funeralHour
+                  ),
 
-
-                        ],
-                      )
+                  DetailLabel(
+                      flex: 1,
+                      labelText: getCurrentLanguageValue(FUNERAL_ADDRESS)!.toUpperCase(),
+                      text: funeralAddress
                   ),
                 ],
               ),
-
 
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Row(
                 children: [
-                  Expanded(
+                  DetailLabel(
                       flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: getPadding(bottom: 5),
-                            child: Text(
-                              'NOTE FUNERALE',
-                              style: SafeGoogleFont(
-                                'Montserrat',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: background,
-                              ),
-                            ),
-                          ),
-                          Texth3V2(testo: funeralNote, color: black),
-
-                        ],
-                      )),
-                  Expanded(
-                      flex: 1,
-                      child: Container()
+                      labelText: getCurrentLanguageValue(FUNERAL_NOTE)!.toUpperCase(),
+                      text: funeralNote
                   ),
                   Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Container()
                   ),
                 ],
               ),
             ),
-
-
           ],
         ),
       ),
