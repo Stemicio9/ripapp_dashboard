@@ -44,10 +44,10 @@ class WakeDetail extends StatelessWidget {
             ),
 
 
-          Row(
+             Row(
                 children: [
                   Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: DateLabelWidget(dateLabelInfo: dateLabelInfo)
                   ),
                   /*

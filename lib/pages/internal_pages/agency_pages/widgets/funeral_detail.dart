@@ -48,7 +48,7 @@ class FuneralDetail extends StatelessWidget {
             Row(
                 children: [
                   Expanded(
-                      flex: 1,
+                      flex: 2,
                       child:
                           DateLabelWidget(dateLabelInfo: dateLabelInfo)
                   ),

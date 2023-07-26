@@ -117,7 +117,11 @@ class DemiseDetailState extends State<DemiseDetail> {
                                 wakeNote: wakeNote,
                                 wakeHour: wakeHour,
                                 wakeAddress: wakeAddress,
-                                dateLabelInfo: DateLabelInfo(date: state.selectedDemise.wakeDateTime ?? DateTime(9999, DateTime.september, 9), dateName: "DATA VEGLIA", timeName: "ORARIO VEGLIA"),
+                                dateLabelInfo: DateLabelInfo(
+                                    date: state.selectedDemise.wakeDateTime ?? DateTime(9999, DateTime.september, 9),
+                                    dateName: "DATA VEGLIA",
+                                    timeName: "ORARIO VEGLIA"
+                                ),
                             ),
                           ),
 

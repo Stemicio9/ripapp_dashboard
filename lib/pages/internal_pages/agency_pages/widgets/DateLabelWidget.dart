@@ -16,56 +16,56 @@ class DateLabelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     initializeDateFormatting();
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
 
-        Expanded(
-    flex: 1,
-    child:
-        Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: getPadding(bottom: 5),
-          child: Text(
-            dateLabelInfo.dateName,
-            style: SafeGoogleFont(
-              'Montserrat',
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: background,
-            ),
+          Expanded(
+              flex: 1,
+              child:
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: getPadding(bottom: 5),
+                    child: Text(
+                      dateLabelInfo.dateName,
+                      style: SafeGoogleFont(
+                        'Montserrat',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: background,
+                      ),
+                    ),
+                  ),
+                  Texth3V2(testo: dateLabelInfo.getFormattedDate(), color: black),
+                ],
+              )
           ),
-        ),
-        Texth3V2(testo: dateLabelInfo.getFormattedDate(), color: black),
-      ],
-    )
-    ),
 
 
-    Expanded(
-    flex: 1,
-    child:
-      Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-      Padding(
-      padding: getPadding(bottom: 5),
-      child: Text(
-      dateLabelInfo.timeName,
-      style: SafeGoogleFont(
-      'Montserrat',
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-      color: background,
-      ),
-      ),
-      ),
-      Texth3V2(testo: dateLabelInfo.getFormattedTime(), color: black),
-      ],
-      )
-    )
-    ]
+          Expanded(
+              flex: 1,
+              child:
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: getPadding(bottom: 5),
+                    child: Text(
+                      dateLabelInfo.timeName,
+                      style: SafeGoogleFont(
+                        'Montserrat',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: background,
+                      ),
+                    ),
+                  ),
+                  Texth3V2(testo: dateLabelInfo.getFormattedTime(), color: black),
+                ],
+              )
+          )
+        ]
     );
   }
 }
