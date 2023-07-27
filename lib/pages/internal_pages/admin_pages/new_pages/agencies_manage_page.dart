@@ -6,6 +6,7 @@ import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_agency_cubit.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
+import 'package:ripapp_dashboard/data_table/data_table_paginator/data_table_paginator_data.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/empty_table_content.dart';
@@ -77,7 +78,13 @@ class _AgenciesManagePageState extends State<AgenciesManagePage> {
                   headers: tableRowElements[0].getHeaders(),
                   rows: tableRowElements,
                   superiorActions: composeSuperiorActions(),
-                  rowActions: composeRowActions()),
+                  rowActions: composeRowActions(),
+                  data: DataTablePaginatorData(
+                      changePageHandle: (index, page) {_currentPageCubit.loadPage(page, index);},
+                      pageNumber: state.pageNumber,
+                      numPages: 10,
+                      currentPageType: ScaffoldWidgetState.agencies_page)
+              ),
             ],
           ),
         ),

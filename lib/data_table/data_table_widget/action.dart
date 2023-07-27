@@ -1,11 +1,7 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 
 class ActionDefinition {
-
   final Function action;
   List<dynamic> actionInputs;
   final IconData icon;

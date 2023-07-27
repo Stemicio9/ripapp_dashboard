@@ -8,21 +8,22 @@ import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/data_table/data_table_paginator/data_table_paginator_data.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/empty_table_content.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
-import 'package:ripapp_dashboard/models/CityEntity.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/user_form/user_form_popup.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage/users_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage/users_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
-import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/circular_progress_indicator.dart';
 import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
+import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
@@ -44,46 +45,28 @@ class UsersManagePageState extends State<UsersManagePage>{
   SelectedCityCubit get _selectedCityCubit => context.read<SelectedCityCubit>();
 
   final _formKey = GlobalKey<FormState>();
-  final _editKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController filterController = TextEditingController();
-  final TextEditingController initialValue = TextEditingController();
 
-  List<CityFromAPI> cityList = [];
-  Set<CityFromAPI> chips = {};
   List<CityFromAPI> cityOptions = [];
-  UserEntity userEntity = UserEntity();
-  Set<CityFromAPI> deletedChips = {};
+  UserEntity userEntity = UserEntity(
+      id: 1,
+      firstName: '',
+      lastName: '',
+      email: '',
+      city: [CityFromAPI.defaultCity()],
+      phoneNumber: '',
+      role: '');
 
   setStatusFromDropdown(String userRole) {
     UserRoles role = UserRoles.values.firstWhere((e) => e.toString() == 'UserRoles.' + userRole);
     userEntity.role = role.toString();
-    switch (role) {
-      case UserRoles.Amministratore:
-        {
-          userEntity.status = UserStatus.admin;
-        }
-        break;
-
-      case UserRoles.Agenzia:
-        {
-          userEntity.status = UserStatus.agency;
-        }
-        break;
-
-      case UserRoles.Utente:
-        {
-          userEntity.status = UserStatus.active;
-        }
-        break;
-      default:
-        {}
-        break;
-    }
+    UserStatus status = fromUserRole(role);
+    userEntity.status = status;
   }
 
   setAgencyFromDropdown(AgencyEntity agencyEntity) {
@@ -94,10 +77,18 @@ class UsersManagePageState extends State<UsersManagePage>{
     _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, 0);
     super.initState();
   }
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CurrentPageCubit, CurrentPageState>
       (builder: (_,state) {
+        print("APPENA EMESSO UNO STATO DI CURRENT PAGE, COSTRUISCO IL WIDGET");
+        print(state.resultSet.length);
       if(state.loading){
         return const CircularProgressIndicatorWidget();
       }
@@ -124,6 +115,11 @@ class UsersManagePageState extends State<UsersManagePage>{
                   rows: tableRowElements,
                   superiorActions: composeSuperiorActions(),
                   rowActions: composeRowActions(),
+                  data: DataTablePaginatorData(
+                    changePageHandle: (index, page) {_currentPageCubit.loadPage(page, index);},
+                    pageNumber: state.pageNumber,
+                    numPages: state.totalPages,
+                    currentPageType: ScaffoldWidgetState.users_page)
               ),
             ],
           ),
@@ -131,6 +127,8 @@ class UsersManagePageState extends State<UsersManagePage>{
       );
     });
   }
+
+
   formSubmit(CityFromAPI? nome) {
     print("SONO NEL VERO METODO FORM SUBMIT");
     if (_formKey.currentState!.validate()) {
@@ -139,8 +137,7 @@ class UsersManagePageState extends State<UsersManagePage>{
       userEntity.email = emailController.text;
       userEntity.phoneNumber = phoneController.text;
       userEntity.password = passwordController.text;
-      userEntity.city = chips.map((e) => CityFromAPI(name: e.name!)).toList();
-
+      userEntity.city = [nome!];
 
       if (userEntity.email != "" && userEntity.password != "") {
         FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -155,7 +152,7 @@ class UsersManagePageState extends State<UsersManagePage>{
           }
 
           print("SALVO SU DB LOCALE");
-          _userListCubit.signup(userEntity);
+          _currentPageCubit.signup(userEntity);
           nameController.text = "";
           lastNameController.text = "";
           passwordController.text = "";
@@ -180,7 +177,10 @@ class UsersManagePageState extends State<UsersManagePage>{
         action: () {
           showDialog(
               context: context,
-              builder: (ctx) => Form(
+              builder: (ctx) => composeDialog(UserEntity.emptyUser())
+          );
+
+               /*   Form(
                 key: _formKey,
                 child: UsersForm(
                   cardTitle: getCurrentLanguageValue(ADD_USER)!,
@@ -195,21 +195,12 @@ class UsersManagePageState extends State<UsersManagePage>{
                   agencyChange: setAgencyFromDropdown,
                   onTap: formSubmit,
                   roles: UserRoles.values,
-                  chips: chips,
-                  deletedChips: deletedChips,
-                  initialValue: initialValue,
-                    onDeleted: (CityFromAPI city){
-                      setState(() {
-                        deletedChips.add(city);
-                      });
-                    },
-                    onSelected: (value){
-                      setState(() {
-                        chips.add(value);
-                      });
-                    },
                 ),
-              ));
+              )); */
+
+
+
+
         },
         actionInputs: List.empty(growable: true)
     ));
@@ -241,66 +232,7 @@ class UsersManagePageState extends State<UsersManagePage>{
           showDialog(
               context: context,
               barrierColor: blackTransparent,
-              builder: (ctx) => Form(
-                key: _editKey,
-                child: UsersForm(
-                  deletedChips: deletedChips,
-                  chips: chips,
-                  initialValue: initialValue,
-                  onDeleted: (CityFromAPI city){
-                    setState(() {
-                      deletedChips.add(city);
-                    });
-                  },
-                  onSelected: (value){
-                    setState(() {
-                      chips.add(value);
-                    });
-                  },
-                  statusChange: setStatusFromDropdown,
-                  agencyChange: setAgencyFromDropdown,
-                  onTap: (CityFromAPI? nome) {
-                    if (_editKey.currentState!.validate()) {
-                      userEntity.firstName = nameController.text;
-                      userEntity.lastName = lastNameController.text;
-                      userEntity.email = userEntity.email;
-                      userEntity.phoneNumber = phoneController.text;
-                      userEntity.password = passwordController.text;
-                      userEntity.city = [nome!];
-                      userEntity.id = userEntity.id;
-                      userEntity.agency = userEntity.agency;
-
-
-                      print("stampo utente modificato");
-                      print(userEntity);
-
-                      UserRepository().editUser(userEntity).then((res) {
-                        SuccessSnackbar(context, text: "Utente modificato con successo");
-                      }, onError: (e) {
-                        ErrorSnackbar(context, text: "Errore generico durante la modifica dell\'utente");
-                      });
-
-                      nameController.text = "";
-                      lastNameController.text = "";
-                      passwordController.text = "";
-                      emailController.text = "";
-                      phoneController.text = "";
-                      cityOptions;
-                      context.pop();
-                    }
-                  },
-                  isAddPage: false,
-                  cardTitle: getCurrentLanguageValue(EDIT_USER)!,
-                  nameController: nameController,
-                  emailController: emailController,
-                  phoneController: phoneController,
-                  filterController: filterController,
-                  lastNameController: lastNameController,
-                  passwordController: passwordController,
-                  options: cityOptions,
-                  roles: UserRoles.values,
-                ),
-              )
+              builder: (ctx) => composeDialog(userEntity)
           );
         },
         icon: Icons.edit_rounded,
@@ -308,6 +240,36 @@ class UsersManagePageState extends State<UsersManagePage>{
         actionInputs: List.empty(growable: true)
     );
     return result;
+  }
+
+  // todo add here choice of function called (save or update)
+  // todo add here something to notice that: password should be saved, email should be saved
+  // todo add something to manage title into popup
+  // todo popup style (change from popup various widgets)
+  Widget composeDialog(UserEntity userEntity){
+    return Form(
+      child: Column(
+        children: [
+          SizedBox(
+            width: 900,
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: DialogCard(
+                cardTitle: 'Modifica utente',
+                cancelIcon: true,
+                child:  UserFormPopup(
+                  onWillPop: () { return Future.value(true); },
+                  selectedUser: userEntity,
+                  onSubmit: (UserEntity internalUserEntity){
+                    _currentPageCubit.editUser(internalUserEntity);
+                    context.pop();
+                  },
+                )
+            ),
+
+          ),
+        ],
+      ),
+    );
   }
 
   ActionDefinition deleteAction(){
@@ -340,7 +302,9 @@ class UsersManagePageState extends State<UsersManagePage>{
           showDialog(
               context: context,
               builder: (ctx) => UsersDetail(
-                isAgency: userEntity.status.toString() == 'UserStatus.agency' ? true : false,
+                isAgency: userEntity.status.toString() == 'UserStatus.agency'
+                    ? true
+                    : false,
                 cardTitle: getCurrentLanguageValue(USER_DETAIL)!,
               )
           );

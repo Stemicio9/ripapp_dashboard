@@ -56,7 +56,7 @@ class ScaffoldWidgetState extends State<ScaffoldWidget> {
           widget.body
         ],
       )),
-      bottomNavigationBar: (isPageablePage(_currentPageCubit.state.page)) ? bottomPagesBar() : null,
+    //  bottomNavigationBar: (isPageablePage(_currentPageCubit.state.page)) ? bottomPagesBar() : null,
     );
   }
 
@@ -96,7 +96,6 @@ class ScaffoldWidgetState extends State<ScaffoldWidget> {
 
 
   Widget bottomPagesBar(){
-    print("bru, la pagina è " + _currentPageCubit.state.page.toString());
     return BlocBuilder<CurrentPageCubit, CurrentPageState>(
         builder: (context, state){
       return (isPageablePage(state.page)) ? BottomNavigationBarExample(changePageHandle: changePageHandleUser) : ErrorWidget("exception4");

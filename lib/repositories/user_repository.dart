@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 import 'package:dio/browser.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/constants/rest_path.dart';
@@ -108,8 +107,6 @@ class UserRepository {
     Response response;
     response = await globalDio.get(listAccountUrl, queryParameters: parameters);
 
-    print("object");
-    print(response.data);
     // todo this could be not necessary
     String goodJson = jsonEncode(response.data);
 
@@ -119,7 +116,7 @@ class UserRepository {
     return userEntityList;
     //return users;
   }
-  Future<List<UserEntity>> getListWithIndex(int pageIndex) async{
+  Future<String> getListWithIndex(int pageIndex) async{
 
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
@@ -130,17 +127,14 @@ class UserRepository {
 
     Response response;
     response = await globalDio.get(listAccountUrl, queryParameters: parameters);
-    print("object");
-    print(response.data);
     // todo this could be not necessary
     String goodJson = jsonEncode(response.data);
 
     var list = (jsonDecode(goodJson) as Map)["content"] as List;
     List<UserEntity> users = (list).map((user) => UserEntity.fromJson(user)).toList();
-    print("ecco i tuoi utenti" + users.toString() + users.length.toString());
     //List<UserEntity> userEntityList = (jsonDecode(goodJson) as List).map((e) => UserEntity.fromJson(e)).toList();
     //return userEntityList;
-    return users;
+    return goodJson;
   }
 
   Future<dynamic> deleteUser(int idUser) async {
@@ -151,18 +145,9 @@ class UserRepository {
 
 
   Future<dynamic> signup(UserEntity userEntity) async {
-    print("REGISTRO UTENTE");
-    print("USER STATUS: ");
-    print("USER no: ");
-    print("USER si: ");
-    print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO");
-    print(userEntity.toJson());
-    print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO 2");
     try {
       var response = await globalDio.post(signupUrl, data: userEntity.toJson(),
           options: Options(headers: buildHeaders()));
-      print("CIAO CIAO CIAO CIAO CIAO CIAO CIAO 3");
-      print("risposta = " + response.toString());
       return response.data;
     }catch(e){
       print("ERRORE");
@@ -218,6 +203,9 @@ class UserRepository {
   }
 
   editUser(UserEntity userEntity) async {
+    print("STO FACENDO EDIT");
+    print(userEntity.toJson());
+    print("CIAO CIAO CIAO");
     var response = await globalDio.post(updateUserUrl, data: userEntity.toJson());
     return UserEntity.fromJson(response.data);
   }

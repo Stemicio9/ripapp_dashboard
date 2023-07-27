@@ -6,6 +6,7 @@ import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
+import 'package:ripapp_dashboard/data_table/data_table_paginator/data_table_paginator_data.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/empty_table_content.dart';
@@ -74,7 +75,13 @@ class _ProductsManagePageState extends State<ProductsManagePage> {
                   headers: tableRowElements[0].getHeaders(),
                   rows: tableRowElements,
                   superiorActions: composeSuperiorActions(),
-                  rowActions: composeRowActions()),
+                  rowActions: composeRowActions(),
+                  data: DataTablePaginatorData(
+                      changePageHandle: (index, page) {_currentPageCubit.loadPage(page, index);},
+                      pageNumber: state.pageNumber,
+                      numPages: 10,
+                      currentPageType: ScaffoldWidgetState.products_page)
+              ),
             ],
           ),
         ),

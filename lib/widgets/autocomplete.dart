@@ -54,7 +54,7 @@ class AutocompleteWidget extends StatefulWidget {
   final TextEditingController filterController;
   final TextStyle errorStyle;
 
-  AutocompleteWidget({
+   AutocompleteWidget({
     super.key,
     required this.options,
     this.validator,

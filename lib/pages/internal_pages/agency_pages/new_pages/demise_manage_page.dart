@@ -5,7 +5,7 @@ import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/search_demises_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/app_pages.dart';
-import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/data_table/data_table_paginator/data_table_paginator_data.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/empty_table_content.dart';
@@ -67,7 +67,13 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
                   headers: tableRowElements[0].getHeaders(),
                   rows: tableRowElements,
                   superiorActions: composeSuperiorActions(),
-                  rowActions: composeRowActions()),
+                  rowActions: composeRowActions(),
+                  data: DataTablePaginatorData(
+                      changePageHandle: (index, page) {_searchDemiseCubit.loadPage(page, index);},
+                      pageNumber: state.pageNumber,
+                      numPages: 10,
+                      currentPageType: ScaffoldWidgetState.agency_demises_page)
+              ),
               ],
             ),
           ),
@@ -137,8 +143,6 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
   ActionDefinition viewAction(){
     ActionDefinition result = ActionDefinition(
         action: (DemiseEntity demiseEntity){
-          print("HO PREMUTO SU VIEWACTION");
-          print(demiseEntity.firstName);
           _selectedDemiseCubit.selectDemise(demiseEntity);
           context.push(AppPage.demiseDetail.path);
         },

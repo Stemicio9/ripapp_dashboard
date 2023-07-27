@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
+import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/repositories/demise_repository.dart';
 import 'package:ripapp_dashboard/repositories/product_repository.dart';
@@ -16,28 +19,38 @@ class CurrentPageState {
   final int pageNumber;
   final List<ResultEntity> resultSet;
   final bool loading;
+  int totalPages;
 
-  CurrentPageState(this.page, this.resultSet, this.loading, this.pageNumber);
+  CurrentPageState(this.page, this.resultSet, this.loading, this.pageNumber, this.totalPages);
 
-  CurrentPageState copyWith({String? page, List<ResultEntity>? resultSet, bool? loading, int? pageNumber}) {
+  CurrentPageState copyWith(
+      {String? page, List<ResultEntity>? resultSet,
+        bool? loading, int? pageNumber,
+        int? totalPages
+      }) {
     return CurrentPageState(
         page ?? this.page,
         resultSet ?? this.resultSet,
         loading ?? this.loading,
         pageNumber ?? this.pageNumber,
+        totalPages ?? this.totalPages
     );
   }
 }
 
 
 class CurrentPageCubit extends Cubit<CurrentPageState> {
-  CurrentPageCubit() : super(CurrentPageState("", [], true, 0));
+  CurrentPageCubit() : super(CurrentPageState("", [], true, 0, 0));
 
 
   Future<List<ResultEntity>?> findResult(String pageName, int index) async {
     List<ResultEntity>? result;
     if (pageName == ScaffoldWidgetState.users_page){
-      result = await UserRepository().getListWithIndex(index);
+      var goodJson = await UserRepository().getListWithIndex(index);
+      var list = (jsonDecode(goodJson) as Map)["content"] as List;
+      List<UserEntity> users = (list).map((user) => UserEntity.fromJson(user)).toList();
+      state.totalPages = (jsonDecode(goodJson) as Map)["totalPages"] ?? 0;
+      result = users;
     }
     else if (pageName == ScaffoldWidgetState.agencies_page){
       result = await AgencyRepository().getAgenciesWithIndex(index);
@@ -54,11 +67,34 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
     return result;
   }
 
+  void refreshPage() async {
+    emit(CurrentPageState(state.page, [], true, state.pageNumber, state.totalPages));
+    List<ResultEntity>? resultSet = await findResult(state.page, state.pageNumber);
+    emit(CurrentPageState(state.page, resultSet!, false, state.pageNumber, state.totalPages));
+  }
+
+  signup(UserEntity userEntity) async {
+    try {
+      var result = await UserRepository().signup(userEntity);
+      refreshPage();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  editUser(UserEntity userEntity) async {
+    try{
+      var result = await UserRepository().editUser(userEntity);
+      refreshPage();
+    }catch(e){
+      print(e);
+    }
+  }
+
   void loadPage(String page, int index) async {
-    emit(CurrentPageState(page, [], true, index));
+    emit(CurrentPageState(page, [], true, index, state.totalPages));
     List<ResultEntity>? resultSet = await findResult(page, index);
-    print("ecco il resultset: " + resultSet.toString());
-    emit(CurrentPageState(page, resultSet!, false, index));
+    emit(CurrentPageState(page, resultSet!, false, index, state.totalPages));
   }
 
   void changeCurrentPage(String page) {

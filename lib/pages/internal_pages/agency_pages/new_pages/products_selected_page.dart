@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductsOfferedCubit.dart';
+import 'package:ripapp_dashboard/data_table/data_table_paginator/data_table_paginator_data.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/empty_table_content.dart';
@@ -68,7 +69,12 @@ class _ProductsSelectedPageState extends State<ProductsSelectedPage> {
                   headers: tableRowElements[0].getHeaders(),
                   rows: tableRowElements,
                   superiorActions: composeSuperiorActions(),
-                  rowActions: []
+                  rowActions: [],
+                  data: DataTablePaginatorData(
+                      changePageHandle: (index, page) {_currentPageCubit.loadPage(page, index);},
+                      pageNumber: state.pageNumber,
+                      numPages: 10,
+                      currentPageType: ScaffoldWidgetState.agency_products_page)
               ),
             ],
           ),

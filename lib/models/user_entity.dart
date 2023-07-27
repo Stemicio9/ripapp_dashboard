@@ -44,14 +44,14 @@ class UserEntity implements ResultEntity, TableRowElement  {
   }
 
   factory UserEntity.fromJson(Map<String, dynamic> json) {
-    print("SONO NEL FROM JSON DI USERENTITY");
-    print(json);
     var cityList = json["city"];
     var resultCityList = List<CityFromAPI>.empty(growable: true);
     if(cityList != null && cityList.length > 0){
-      Map<String, dynamic> cityMap = cityList[0];
-      CityFromAPI city = CityFromAPI(name: cityMap["name"]);
-      resultCityList.add(city);
+      for(int i = 0; i< cityList.length; i++){
+        Map<String, dynamic> cityMap = cityList[i];
+        CityFromAPI city = CityFromAPI(name: cityMap["name"]);
+        resultCityList.add(city);
+      }
     }
     return UserEntity(
         id: json["accountid"] ?? 0,
@@ -79,7 +79,8 @@ class UserEntity implements ResultEntity, TableRowElement  {
       String? phoneNumber,
       String? idtoken,
       String? role,
-      UserStatus? status}) {
+      UserStatus? status,
+      AgencyEntity? agency}) {
     return UserEntity(
         id: id ?? this.id,
         firstName: firstName ?? this.firstName,
@@ -89,25 +90,28 @@ class UserEntity implements ResultEntity, TableRowElement  {
         phoneNumber: phoneNumber ?? this.phoneNumber,
         idtoken: idtoken ?? this.idtoken,
          status: status ?? this.status,
+        agency: agency ?? this.agency,
      //   role: role ?? this.role
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        "accountid": id,
-        "name": firstName,
-        "surname": lastName,
-        "email": email,
-        "city": city?.map((e) => e.toJson()).toList(),
-        "phone": phoneNumber,
-        "idtoken": idtoken,
-        "status":  status?.toJson(),
-        "agency": agency?.toJson()
-      };
+  Map<String, dynamic> toJson()  {
+    var cityList = city?.map((e) => e.toJson()).toList();
+        return {
+          "accountid": id,
+          "name": firstName,
+          "surname": lastName,
+          "email": email,
+          "city": cityList,
+          "phone": phoneNumber,
+          "idtoken": idtoken,
+          "status":  status?.toJson(),
+          "agency": agency?.toJson()
+        };
+      }
 
 
   factory UserEntity.defaultUser() => UserEntity(
-      id: 0,
       firstName: "",
       lastName: "",
       email: "",
@@ -161,6 +165,8 @@ class UserEntity implements ResultEntity, TableRowElement  {
       ),
     ];
   }
+
+
 
 // this.tags != null ? this.tags.map((i) => i.toJson()).toList() : null;
 }

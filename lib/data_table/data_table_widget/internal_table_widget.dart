@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';

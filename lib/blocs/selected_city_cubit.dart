@@ -11,8 +11,10 @@ class SelectedCityState {
 class SelectedCityCubit extends Cubit<SelectedCityState> {
   SelectedCityCubit() : super(SelectedCityState(selectedCity: CityFromAPI.emptyCity()));
 
-  selectCity(CityFromAPI selectedCity)async{
-    emit(SelectedCityState(selectedCity: selectedCity));
+  selectCity(CityFromAPI? selectedCity)async{
+    if(selectedCity != null) {
+      emit(SelectedCityState(selectedCity: selectedCity));
+    }
   }
 
 }

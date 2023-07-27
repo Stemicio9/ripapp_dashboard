@@ -24,8 +24,6 @@ class RegisterPage extends StatelessWidget {
 
       //  userEntity.idtoken = await value.user!.getIdToken();
       userEntity.idtoken = value.user!.uid;
-      print("ID TOKEN = ");
-      print(userEntity.idtoken);
       var response = await UserRepository().signup(userEntity);
     });
   }
