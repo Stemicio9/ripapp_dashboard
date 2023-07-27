@@ -130,7 +130,7 @@ class SingleProductState extends State<SingleProduct> {
                       ),
                     ),
                     Text(
-                      "€ ${widget.singleProductEntity.price}",
+                      "€ ${widget.singleProductEntity.price.replaceAll('.',',')}",
                       style: SafeGoogleFont('Montserrat',
                           fontSize: 14,
                           color: background,

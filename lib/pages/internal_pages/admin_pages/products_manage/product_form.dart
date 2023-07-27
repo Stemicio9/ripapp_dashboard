@@ -165,8 +165,8 @@ class ProductFormState extends State<ProductForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<SelectedProductCubit, SelectedProductState>(
         builder: (context, state) {
-          nameController.text = "";
-          priceController.text = "";
+          nameController.clear();
+          priceController.clear();
           if (widget.isEdit) {
             nameController.text = state.selectedProduct.name ?? nameController.text;
             priceController.text = state.selectedProduct.price.toString();

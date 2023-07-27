@@ -150,10 +150,10 @@ class AgencyProfileState extends State<AgencyProfile> {
       key: _formKey,
       child: EditProfileForm(
           emptyFields: (){
-            formNameController.text = "";
-            formLastNameController.text = "";
-            formEmailController.text = "";
-            formPhoneController.text = "";
+            formNameController.clear();
+            formLastNameController.clear();
+            formEmailController.clear();
+            formPhoneController.clear();
           },
           cardTitle: getCurrentLanguageValue(EDIT_PROFILE) ?? "",
           nameController: formNameController,
