@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/chips_row.dart';
+import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/autocomplete_generic.dart';
 
 class CityAutocomplete extends StatelessWidget {
@@ -24,14 +25,21 @@ class CityAutocomplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GenericAutocomplete<CityFromAPI>(
           options: options,
-          hintText: getCurrentLanguageValue(CITY) ?? "",
+          hintText: "Comuni di interesse" ,
           onSelected: onSelected,
-          initialValue: initialValue
+            validator: (String){
+              return null;
+            },
+            initialValue: initialValue
         ),
-        ChipsRow(chips: chips, onDeleted: onDeleted),
+        Padding(
+          padding: getPadding(bottom: 30),
+          child: ChipsRow(chips: chips, onDeleted: onDeleted),
+        ),
       ],
     );
   }

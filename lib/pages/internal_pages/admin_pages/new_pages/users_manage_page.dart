@@ -18,7 +18,6 @@ import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/user_form/user_form_popup.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage/users_detail.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage/users_form.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/circular_progress_indicator.dart';
@@ -73,22 +72,16 @@ class UsersManagePageState extends State<UsersManagePage>{
     userEntity.agency = agencyEntity;
   }
 
+  @override
   void initState() {
     _currentPageCubit.loadPage(ScaffoldWidgetState.users_page, 0);
     super.initState();
   }
 
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CurrentPageCubit, CurrentPageState>
       (builder: (_,state) {
-        print("APPENA EMESSO UNO STATO DI CURRENT PAGE, COSTRUISCO IL WIDGET");
-        print(state.resultSet.length);
       if(state.loading){
         return const CircularProgressIndicatorWidget();
       }
@@ -116,57 +109,16 @@ class UsersManagePageState extends State<UsersManagePage>{
                   superiorActions: composeSuperiorActions(),
                   rowActions: composeRowActions(),
                   data: DataTablePaginatorData(
-                    changePageHandle: (index, page) {_currentPageCubit.loadPage(page, index);},
-                    pageNumber: state.pageNumber,
-                    numPages: state.totalPages,
-                    currentPageType: ScaffoldWidgetState.users_page)
+                      changePageHandle: (index, page) {_currentPageCubit.loadPage(page, index);},
+                      pageNumber: state.pageNumber,
+                      numPages: state.totalPages,
+                      currentPageType: ScaffoldWidgetState.users_page)
               ),
             ],
           ),
         ),
       );
     });
-  }
-
-
-  formSubmit(CityFromAPI? nome) {
-    print("SONO NEL VERO METODO FORM SUBMIT");
-    if (_formKey.currentState!.validate()) {
-      userEntity.firstName = nameController.text;
-      userEntity.lastName = lastNameController.text;
-      userEntity.email = emailController.text;
-      userEntity.phoneNumber = phoneController.text;
-      userEntity.password = passwordController.text;
-      userEntity.city = [nome!];
-
-      if (userEntity.email != "" && userEntity.password != "") {
-        FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: userEntity.email ?? "",
-            password: userEntity.password ?? "")
-            .then((value) async {
-          if (value.user == null) {
-            print("Utente nullo");
-            return; //TODO: Handle error
-          } else {
-            userEntity.idtoken = value.user!.uid;
-          }
-
-          print("SALVO SU DB LOCALE");
-          _currentPageCubit.signup(userEntity);
-          nameController.text = "";
-          lastNameController.text = "";
-          passwordController.text = "";
-          emailController.text = "";
-          phoneController.text = "";
-
-          SuccessSnackbar(context, text: 'Utente aggiunto con successo!');
-          Navigator.pop(context);
-        }, onError: (e) {
-          print(e);
-          ErrorSnackbar(context, text: 'L\'email inserita è già usata da un altro utente!');
-        });
-      }
-    }
   }
 
   List<ActionDefinition> composeSuperiorActions(){
@@ -179,28 +131,6 @@ class UsersManagePageState extends State<UsersManagePage>{
               context: context,
               builder: (ctx) => composeDialog(UserEntity.emptyUser())
           );
-
-               /*   Form(
-                key: _formKey,
-                child: UsersForm(
-                  cardTitle: getCurrentLanguageValue(ADD_USER)!,
-                  nameController: nameController,
-                  emailController: emailController,
-                  phoneController: phoneController,
-                  filterController: filterController,
-                  options: cityOptions,
-                  lastNameController: lastNameController,
-                  passwordController: passwordController,
-                  statusChange: setStatusFromDropdown,
-                  agencyChange: setAgencyFromDropdown,
-                  onTap: formSubmit,
-                  roles: UserRoles.values,
-                ),
-              )); */
-
-
-
-
         },
         actionInputs: List.empty(growable: true)
     ));
@@ -242,24 +172,27 @@ class UsersManagePageState extends State<UsersManagePage>{
     return result;
   }
 
-  // todo add here choice of function called (save or update)
-  // todo add here something to notice that: password should be saved, email should be saved
-  // todo add something to manage title into popup
-  // todo popup style (change from popup various widgets)
   Widget composeDialog(UserEntity userEntity){
     return Form(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            width: 900,
-            height: MediaQuery.of(context).size.height * 0.8,
+          Container(
+            padding: getPadding(left: 20, right: 20),
+            width: 1000,
             child: DialogCard(
-                cardTitle: 'Modifica utente',
+                cardTitle: userEntity.id == null ? getCurrentLanguageValue(ADD_USER) ?? "" :
+                getCurrentLanguageValue(EDIT_USER) ?? "",
                 cancelIcon: true,
-                child:  UserFormPopup(
-                  onWillPop: () { return Future.value(true); },
+                paddingLeft: 10,
+                paddingRight: 10,
+                child: UserFormPopup(
+                  onWillPop: () {
+                    return Future.value(true);
+                  },
                   selectedUser: userEntity,
                   onSubmit: (UserEntity internalUserEntity){
+                    userEntity.id == null ? _currentPageCubit.signup(internalUserEntity) :
                     _currentPageCubit.editUser(internalUserEntity);
                     context.pop();
                   },
@@ -272,6 +205,7 @@ class UsersManagePageState extends State<UsersManagePage>{
     );
   }
 
+
   ActionDefinition deleteAction(){
     ActionDefinition result = ActionDefinition(
         action: (UserEntity userEntity){
@@ -279,7 +213,7 @@ class UsersManagePageState extends State<UsersManagePage>{
               context: context,
               builder: (_) => DeleteMessageDialog(
                 onConfirm: (){
-                  _userListCubit.delete(userEntity.id);
+                  _currentPageCubit.deleteUser(userEntity.id);
                   SuccessSnackbar(context, text: 'Utente eliminato con successo!');
                   context.pop();
                 },

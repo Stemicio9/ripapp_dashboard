@@ -22,6 +22,7 @@ class UserFormWidget extends StatelessWidget {
   final TextEditingController passwordController;
   final TextEditingController phoneController;
   final TextEditingController cityController;
+  final bool isAddPopup;
 
   // TO USE CITYAUTOCOMPLETE
   final List<CityFromAPI> options;
@@ -39,133 +40,162 @@ class UserFormWidget extends StatelessWidget {
   final Function save;
   final Function() clearFields;
 
-  final List<CityFromAPI> chips;
+  final Set<CityFromAPI> chips;
   final Function(CityFromAPI) onDeleted;
 
-  const UserFormWidget(
+
+   UserFormWidget(
       {Key? key,
-      required this.nameController,
-      required this.lastNameController,
-      required this.emailController,
-      required this.passwordController,
-      required this.phoneController,
-      required this.cityController,
-      required this.options,
-      required this.onSelected,
-      required this.selectedAgency,
-      required this.agencies,
-      required this.agencyChange,
-      required this.selectedUser,
-      required this.statusChange,
-      required this.selectedStatus,
-      required this.save,
-      required this.clearFields,
-      required this.chips,
-      required this.onDeleted
+        required this.nameController,
+        required this.lastNameController,
+        required this.emailController,
+        required this.passwordController,
+        required this.phoneController,
+        required this.cityController,
+        required this.options,
+        required this.onSelected,
+        required this.selectedAgency,
+        required this.agencies,
+        required this.agencyChange,
+        required this.selectedUser,
+        required this.statusChange,
+        required this.selectedStatus,
+        required this.save,
+        required this.clearFields,
+        required this.chips,
+        required this.onDeleted,
+        this.isAddPopup = true,
 
       })
       : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(children: [
-        Row(
+    return  Column(children: [
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          composeInput(
+              getCurrentLanguageValue(NAME) ?? "",
+              getCurrentLanguageValue(NAME) ?? "",
+              nameController,
+              paddingRight: 10
+          ),
+          composeInput(
+              getCurrentLanguageValue(LASTNAME) ?? "",
+              getCurrentLanguageValue(LASTNAME) ?? "",
+              lastNameController,
+              labelPaddingLeft: 3,
+              paddingLeft: 10
+          ),
+        ],
+      ),
+
+    isAddPopup ? Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+        children: [
+          composeInput(getCurrentLanguageValue(EMAIL) ?? "",
+              getCurrentLanguageValue(EMAIL) ?? "",
+              emailController,
+              paddingRight: 10,
+              validator: validateEmail
+          ),
+          composeInput(getCurrentLanguageValue(PASSWORD) ?? "",
+              getCurrentLanguageValue(PASSWORD) ?? "",
+              passwordController,
+              validator: validatePassword,
+              labelPaddingLeft: 3,
+              paddingLeft: 10,
+              isPassword: true
+          ),
+        ],
+      ) : Container(),
+      Row(
           mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            composeInput(getCurrentLanguageValue(NAME) ?? "",
-                getCurrentLanguageValue(NAME) ?? "", nameController),
-            composeInput(getCurrentLanguageValue(LASTNAME) ?? "",
-                getCurrentLanguageValue(LASTNAME) ?? "", lastNameController),
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            composeInput(getCurrentLanguageValue(EMAIL) ?? "",
-                getCurrentLanguageValue(EMAIL) ?? "", emailController,
-                validator: validateEmail),
-            composeInput(getCurrentLanguageValue(PASSWORD) ?? "",
-                getCurrentLanguageValue(PASSWORD) ?? "", passwordController,
-                isPassword: true),
-          ],
-        ),
-        Row(mainAxisSize: MainAxisSize.max, children: [
-          Expanded(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5.0, left: 20),
-                  child: Text(
-                    "CITTA'",
-                    style: SafeGoogleFont(
-                      'Montserrat',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: background,
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 3),
+                    child: Text(
+                      "COMUNI DI INTERESSE",
+                      style: SafeGoogleFont(
+                        'Montserrat',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: background,
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: CityAutocomplete(
+                  Padding(
+                    padding: getPadding(right: 3),
+                    child: CityAutocomplete(
                       options: options,
                       onSelected: onSelected,
                       initialValue: cityController,
-                      chips: chips,
+                      chips: chips.toList(),
                       onDeleted: onDeleted,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          composeInput(getCurrentLanguageValue(PHONE_NUMBER) ?? "",
-              getCurrentLanguageValue(PHONE_NUMBER) ?? "", phoneController,
-              inputFormatter: FilteringTextInputFormatter.digitsOnly),
-        ]),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            composeRole(),
-            Expanded(
-              flex: 1,
-              child: selectedStatus == UserStatus.agency
-                  ? buildAgencyDropdown()
-                  : Container(),
-            )
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: composeActionRow(),
-        )
-      ]),
+            composeInput(
+                getCurrentLanguageValue(PHONE_NUMBER) ?? "",
+                getCurrentLanguageValue(PHONE_NUMBER) ?? "",
+                labelPaddingLeft: 3,
+                paddingLeft: 10,
+                phoneController,
+                inputFormatter: FilteringTextInputFormatter.digitsOnly),
+          ]),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          composeRole(),
+
+          Expanded(
+            flex: 1,
+            child: selectedStatus == UserStatus.agency
+                ? buildAgencyDropdown()
+                : Container(),
+          )
+        ],
+      ),
+      composeActionRow(),
+
+    ]
     );
   }
 
+
+
   Widget composeInput(
       String hint, String label, TextEditingController controller,
-      {TextInputFormatter? inputFormatter,
-      bool isPassword = false,
-      Function validator = notEmptyValidate}) {
+      {TextInputFormatter? inputFormatter, bool isPassword = false, Function validator = notEmptyValidate,
+        double paddingRight = 0, double paddingLeft = 0, double labelPaddingLeft = 0}) {
     return Expanded(
       flex: 1,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15.0),
+        padding: getPadding(bottom: 30),
         child: InputsV2Widget(
           hinttext: hint,
           labelText: label.toUpperCase(),
           isVisible: true,
           controller: controller,
           validator: validator,
+          paddingRight: paddingRight,
+          paddingLeft: paddingLeft,
           isPassword: isPassword,
-          inputFormatters: inputFormatter != null
-              ? <TextInputFormatter>[inputFormatter]
-              : <TextInputFormatter>[],
-          labelPaddingLeft: 4,
+          inputFormatters: inputFormatter != null ? <TextInputFormatter>[inputFormatter] : <TextInputFormatter>[],
+          labelPaddingLeft: labelPaddingLeft,
           borderSide: const BorderSide(color: greyState),
           activeBorderSide: const BorderSide(color: background),
         ),
@@ -178,9 +208,9 @@ class UserFormWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 5.0, left: 20),
+          padding: const EdgeInsets.only(bottom: 3,left: 10),
           child: Text(
-            "Agenzia",
+            "AGENZIA",
             style: SafeGoogleFont(
               'Montserrat',
               fontSize: 14,
@@ -190,41 +220,47 @@ class UserFormWidget extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: DropdownButton<AgencyEntity>(
-            hint: const Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: Text(
-                "Seleziona agenzia",
-                style: TextStyle(
-                  color: black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
+          padding: const EdgeInsets.only(left: 10),
+          child: Container(
+            height: 48,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(3),
+                border: Border.all(color: greyState)
             ),
-            isExpanded: true,
-            underline: const SizedBox(),
-            value: selectedAgency,
-            onChanged: agencyChange,
-            items: agencies.map((AgencyEntity agency) {
-              return DropdownMenuItem<AgencyEntity>(
-                value: agency,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Text(
-                    agency.agencyName ?? "",
-                    style: const TextStyle(
-                      color: black,
-                      fontSize: 14,
-                    ),
+            child: DropdownButton<AgencyEntity>(
+              hint: const Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Text(
+                  "Seleziona agenzia",
+                  style: TextStyle(
+                    color: black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
-              );
-            }).toList(),
+              ),
+              isExpanded: true,
+              underline: const SizedBox(),
+              value: selectedAgency,
+              onChanged: agencyChange,
+              items: agencies.map((AgencyEntity agency) {
+                return DropdownMenuItem<AgencyEntity>(
+                  value: agency,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Text(
+                      agency.agencyName ?? "",
+                      style: const TextStyle(
+                        color: black,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
           ),
-        ),
-      ],
+        )],
     );
   }
 
@@ -235,7 +271,7 @@ class UserFormWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 5.0, left: 20),
+            padding: const EdgeInsets.only(bottom: 3),
             child: Text(
               "RUOLO",
               style: SafeGoogleFont(
@@ -247,39 +283,45 @@ class UserFormWidget extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: DropdownButton<UserRoles>(
-              hint: const Text(
-                "Seleziona ruolo",
-                style: TextStyle(
-                  color: black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
+              padding: const EdgeInsets.only(right: 10),
+              child: Container(
+                height: 48,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3),
+                    border: Border.all(color: greyState)
                 ),
-              ),
-
-              isExpanded: true,
-              underline: const SizedBox(),
-              value: fromUserStatus(
-                  selectedStatus ?? selectedUser.status ?? UserStatus.active),
-              // value: widget.isAddPage ? fromUserStatus(state.selectedUser.status = UserStatus.active) : fromUserStatus(state.selectedUser.status ?? UserStatus.active),
-              onChanged: statusChange,
-              items: UserRoles.values.map((UserRoles role) {
-                return DropdownMenuItem<UserRoles>(
-                  value: role,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Text(
-                      role.name,
-                      style: const TextStyle(
-                        color: black,
-                        fontSize: 14,
-                      ),
+                child: DropdownButton<UserRoles>(
+                  hint: const Text(
+                    "Seleziona ruolo",
+                    style: TextStyle(
+                      color: black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
                     ),
                   ),
-                );
-              }).toList(),
-            ),
+
+                  isExpanded: true,
+                  underline: const SizedBox(),
+                  value: fromUserStatus(selectedStatus ?? selectedUser.status ?? UserStatus.active),
+                  // value: widget.isAddPage ? fromUserStatus(state.selectedUser.status = UserStatus.active) : fromUserStatus(state.selectedUser.status ?? UserStatus.active),
+                  onChanged: statusChange,
+                  items: UserRoles.values.map((UserRoles role) {
+                    return DropdownMenuItem<UserRoles>(
+                      value: role,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          role.name,
+                          style: const TextStyle(
+                            color: black,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              )
           ),
         ],
       ),

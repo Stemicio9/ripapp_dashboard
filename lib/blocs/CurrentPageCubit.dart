@@ -82,6 +82,16 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
     }
   }
 
+
+  deleteUser(idUser) async {
+    try {
+      var result = await UserRepository().deleteUser(idUser);
+      refreshPage();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   editUser(UserEntity userEntity) async {
     try{
       var result = await UserRepository().editUser(userEntity);

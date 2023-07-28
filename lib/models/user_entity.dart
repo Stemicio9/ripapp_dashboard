@@ -39,7 +39,7 @@ class UserEntity implements ResultEntity, TableRowElement  {
   //toString
   @override
   String toString() {
-    return 'UserEntity{accountid: $id, name: $firstName, surname: $lastName, email: $email,'
+    return 'UserEntity{accountid: $id, name: $firstName,password: $password, surname: $lastName, email: $email,'
         ' city: $city, phone:$phoneNumber, idtoken:$idtoken, status:$status, role:$role, agency:$agency}';
   }
 
@@ -58,6 +58,7 @@ class UserEntity implements ResultEntity, TableRowElement  {
         firstName: json["name"] ?? "",
         lastName: json["surname"] ?? "",
         email: json["email"] ?? "",
+        password: json["password"] ?? "",
        // city: (json["city"] as List).isNotEmpty ? (json["city"]).map((e) => CityFromAPI.fromJson(e)).toList() : List.empty(),
         city: resultCityList,
         phoneNumber: json["phone"] ?? "",
@@ -77,6 +78,7 @@ class UserEntity implements ResultEntity, TableRowElement  {
       String? email,
       List<CityFromAPI>? city,
       String? phoneNumber,
+      String? password,
       String? idtoken,
       String? role,
       UserStatus? status,
@@ -87,6 +89,7 @@ class UserEntity implements ResultEntity, TableRowElement  {
         lastName: lastName ?? this.lastName,
         email: email ?? this.email,
         city: city ?? this.city,
+        password: password ?? this.password,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         idtoken: idtoken ?? this.idtoken,
          status: status ?? this.status,
@@ -101,6 +104,7 @@ class UserEntity implements ResultEntity, TableRowElement  {
           "accountid": id,
           "name": firstName,
           "surname": lastName,
+          "password": password,
           "email": email,
           "city": cityList,
           "phone": phoneNumber,
@@ -115,6 +119,7 @@ class UserEntity implements ResultEntity, TableRowElement  {
       firstName: "",
       lastName: "",
       email: "",
+      password: "",
       city: [],
       phoneNumber: "",
       idtoken: "",
@@ -122,7 +127,7 @@ class UserEntity implements ResultEntity, TableRowElement  {
       role: "",
   );
 
-  factory UserEntity.emptyUser() => UserEntity();
+  factory UserEntity.emptyUser() => UserEntity(city: []);
 
   @override
   List<String> getHeaders() {

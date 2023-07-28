@@ -43,8 +43,6 @@ class ProductFormInputs extends StatelessWidget {
           borderSide: const BorderSide(color: greyState),
           activeBorderSide: const BorderSide(color: background),
         ),
-
-
       ],
     );
   }
