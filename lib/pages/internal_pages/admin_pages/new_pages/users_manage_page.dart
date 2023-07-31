@@ -129,7 +129,6 @@ class UsersManagePageState extends State<UsersManagePage>{
   ActionDefinition editAction(){
     ActionDefinition result = ActionDefinition(
         action: (UserEntity userEntity){
-          _selectedUserCubit.selectUser(userEntity);
           _selectedCityCubit.selectCity(extractCity(userEntity));
           showDialog(
               context: context,

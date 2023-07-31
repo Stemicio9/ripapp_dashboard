@@ -140,7 +140,7 @@ class _ProductsManagePageState extends State<ProductsManagePage> {
               context: context,
               builder: (ctx) => DeleteMessageDialog(
                   onConfirm: () async {
-                    ProductRepository().deleteProduct(productEntity.id!).then((deleteProductMessage) async {
+                    _currentPageCubit.deleteProduct(productEntity.id!).then((deleteProductMessage) async {
                       FirebaseImageUtility.deleteProductImage(productEntity.firebaseId);
                       SuccessSnackbar(context, text: "Prodotto eliminato con successo");
                     }, onError: (e) {

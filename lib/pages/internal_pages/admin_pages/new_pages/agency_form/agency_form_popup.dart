@@ -46,7 +46,6 @@ class AgencyFormPopupState extends State<AgencyFormPopup>{
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
       onWillPop: widget.onWillPop,
       child: BlocBuilder<CityListCubit,CityListState>(
@@ -84,8 +83,6 @@ class AgencyFormPopupState extends State<AgencyFormPopup>{
     nameController.text = widget.selectedAgency?.agencyName ?? '';
     emailController.text = widget.selectedAgency?.email ?? '';
     cityController.text = widget.selectedAgency?.city ?? '';
-    print("bert");
-    print(widget.selectedAgency?.city ?? '');
     phoneController.text = widget.selectedAgency?.phoneNumber ?? '';
   }
 

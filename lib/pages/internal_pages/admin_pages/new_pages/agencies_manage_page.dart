@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_agency_cubit.dart';
-import 'package:ripapp_dashboard/blocs/selected_city_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/data_table/data_table_paginator/data_table_paginator_data.dart';
@@ -33,9 +32,7 @@ class AgenciesManagePage extends StatefulWidget {
 class _AgenciesManagePageState extends State<AgenciesManagePage> {
 
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
-  SelectedCityCubit get _selectedCityCubit => context.read<SelectedCityCubit>();
   SelectedAgencyCubit get _selectedAgencyCubit => context.read<SelectedAgencyCubit>();
-  SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();

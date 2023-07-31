@@ -138,6 +138,33 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
   }
 
 
+  addProduct(ProductEntity productEntity) async {
+    try {
+      var result = await ProductRepository().saveProduct(productEntity);
+      refreshPage();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  editProduct(ProductEntity productEntity) async {
+    try {
+      var result = await ProductRepository().editProduct(productEntity);
+      refreshPage();
+    } catch (e) {
+      print(e);
+    }
+  }
+  deleteProduct(productId) async {
+    try {
+      var result = await ProductRepository().deleteProduct(productId);
+      refreshPage();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
   void loadPage(String page, int index) async {
     emit(CurrentPageState(page, [], true, index, state.totalPages));
     List<ResultEntity>? resultSet = await findResult(page, index);

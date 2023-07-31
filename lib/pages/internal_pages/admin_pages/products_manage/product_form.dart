@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/SearchProductCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_product_cubit.dart';
@@ -40,6 +41,8 @@ class ProductForm extends StatefulWidget {
 class ProductFormState extends State<ProductForm> {
   SearchProductCubit get _searchProductsCubit => context.read<SearchProductCubit>();
   SelectedProductCubit get _selectedProductsCubit => context.read<SelectedProductCubit>();
+  CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
+
   var memoryImage;
   bool isNetwork = true;
   final TextEditingController nameController = TextEditingController();
@@ -76,11 +79,11 @@ class ProductFormState extends State<ProductForm> {
       if (widget.isEdit) {
         productEntity.id = id;
         productEntity.firebaseId =  _selectedProductsCubit.state.selectedProduct.firebaseId;
-        _searchProductsCubit.editProduct(productEntity);
+        _currentPageCubit.editProduct(productEntity);
         SuccessSnackbar(context, text: 'Prodotto modificato con successo!');
       } else {
         productEntity.firebaseId = productId;
-        _searchProductsCubit.saveProduct(productEntity);
+        _currentPageCubit.addProduct(productEntity);
         SuccessSnackbar(context, text: 'Prodotto aggiunto con successo!');
       }
 
