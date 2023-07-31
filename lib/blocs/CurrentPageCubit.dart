@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
+import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
@@ -53,10 +54,18 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
       result = users;
     }
     else if (pageName == ScaffoldWidgetState.agencies_page){
-      result = await AgencyRepository().getAgenciesWithIndex(index);
+      var goodJson = await AgencyRepository().getAgenciesWithIndex(index);
+      var list = (jsonDecode(goodJson) as Map)["content"] as List;
+      List<AgencyEntity> agencies = (list).map((agency) => AgencyEntity.fromJson(agency)).toList();
+      state.totalPages = (jsonDecode(goodJson) as Map)["totalPages"] ?? 0;
+      result = agencies;
     }
     else if (pageName == ScaffoldWidgetState.products_page){
-      result = await ProductRepository().getAllProductsWithIndex(index);
+      var goodJson = await ProductRepository().getAllProductsWithIndex(index);
+      var list = (jsonDecode(goodJson) as Map)["content"] as List;
+      List<ProductEntity> products = (list).map((product) => ProductEntity.fromJson(product)).toList();
+      state.totalPages = (jsonDecode(goodJson) as Map)["totalPages"] ?? 0;
+      result = products;
     }
     else if (pageName == ScaffoldWidgetState.agency_products_page){
       result = await AgencyRepository().getAllAgencyProductsWithIndex(index);
@@ -100,6 +109,34 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
       print(e);
     }
   }
+
+
+  addAgency(AgencyEntity agencyEntity) async {
+    try {
+      var result = await AgencyRepository().saveAgency(agencyEntity);
+      refreshPage();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  editAgency(AgencyEntity agencyEntity) async {
+    try {
+      var result = await AgencyRepository().editAgency(agencyEntity);
+      refreshPage();
+    } catch (e) {
+      print(e);
+    }
+  }
+  deleteAgency(idAgency) async {
+    try {
+      var result = await AgencyRepository().removeAgency(idAgency);
+      refreshPage();
+    } catch (e) {
+      print(e);
+    }
+  }
+
 
   void loadPage(String page, int index) async {
     emit(CurrentPageState(page, [], true, index, state.totalPages));

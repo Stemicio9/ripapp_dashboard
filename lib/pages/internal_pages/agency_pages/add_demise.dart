@@ -60,7 +60,6 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController funeralNoteController = TextEditingController();
   final TextEditingController citiesController = TextEditingController();
   final TextEditingController relativeController = TextEditingController();
-  final TextEditingController initialValue = TextEditingController();
   SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
   DateTime? wakeDate;
   DateTime? funeralDate;
@@ -146,7 +145,6 @@ class AddDemiseState extends State<AddDemise> {
                             chips.add(value);
                           });
                         },
-                        initialValue: initialValue,
                         chips: chips.toList(),
                         isEdit: false,
                         isNetwork: isNetwork,

@@ -121,7 +121,7 @@ class AgencyRepository{
     return response.data;
   }
 
-  Future<List<AgencyEntity>> getAgenciesWithIndex(int pageIndex) async {
+  Future<String> getAgenciesWithIndex(int pageIndex) async {
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
     int pageElements = 9;
@@ -132,9 +132,10 @@ class AgencyRepository{
     print("sto facendo la richiesta con indice: $pageIndex");
     response = await globalDio.get(indexedAgenciesUrl, queryParameters: parameters);
     String goodJson = jsonEncode(response.data);
-    //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
-    List<AgencyEntity> agencies = ((jsonDecode(goodJson) as Map)["content"] as List).map((agency) => AgencyEntity.fromJson(agency)).toList();
-    return agencies;
+    var list = (jsonDecode(goodJson) as Map)["content"] as List;
+    List<AgencyEntity> agencies = (list).map((agency) => AgencyEntity.fromJson(agency)).toList();
+   // List<AgencyEntity> agencies = ((jsonDecode(goodJson) as Map)["content"] as List).map((agency) => AgencyEntity.fromJson(agency)).toList();
+    return goodJson;
   }
 
 }

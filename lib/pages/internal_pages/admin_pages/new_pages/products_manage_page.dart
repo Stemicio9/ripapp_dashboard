@@ -61,9 +61,8 @@ class _ProductsManagePageState extends State<ProductsManagePage> {
           pageTitle: 'Gestisci prodotti',
         );
       }
-      return Padding(
+      return SingleChildScrollView(
         padding: getPadding(top: 30, bottom: 30, left: 5, right: 5),
-        child: SingleChildScrollView(
           child: Column(
             children: [
               const PageHeader(
@@ -79,12 +78,11 @@ class _ProductsManagePageState extends State<ProductsManagePage> {
                   data: DataTablePaginatorData(
                       changePageHandle: (index, page) {_currentPageCubit.loadPage(page, index);},
                       pageNumber: state.pageNumber,
-                      numPages: 10,
+                      numPages: state.totalPages,
                       currentPageType: ScaffoldWidgetState.products_page)
               ),
             ],
           ),
-        ),
       );
     });
   }

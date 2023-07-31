@@ -46,7 +46,6 @@ class EditDemiseState extends State<EditDemise> {
   final TextEditingController ageController = TextEditingController();
   final TextEditingController deceasedDateController = TextEditingController();
   final TextEditingController citiesController = TextEditingController();
-  final TextEditingController initialValue = TextEditingController();
 
 
   final TextEditingController wakeDateController = TextEditingController();
@@ -183,7 +182,6 @@ class EditDemiseState extends State<EditDemise> {
                                   chips.add(value);
                                 });
                               },
-                              initialValue: initialValue,
                               chips: chips.toList(),
                               isNetwork: isNetwork,
                               imageFile: imageFile,

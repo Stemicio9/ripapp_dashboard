@@ -31,7 +31,6 @@ class UsersForm extends StatelessWidget {
   final bool isAddPage;
   final Function(CityFromAPI) onSelected;
   final Function onDeleted;
-  final TextEditingController initialValue;
   final Set<CityFromAPI> chips;
   final Set<CityFromAPI> deletedChips;
 
@@ -54,7 +53,6 @@ class UsersForm extends StatelessWidget {
         required this.onSelected,
         required this.deletedChips,
         required this.onDeleted,
-        required this.initialValue,
         required this.chips});
 
 
@@ -77,7 +75,6 @@ class UsersForm extends StatelessWidget {
           roles: roles,
           options: options,
           onSelected: onSelected,
-          initialValue: initialValue,
           onDeleted: onSelected,
           chips: chips,
           deletedChips: deletedChips,
@@ -98,7 +95,6 @@ class UsersFormWidget extends StatefulWidget {
   final TextEditingController passwordController;
   final Function(CityFromAPI) onSelected;
   final Function onDeleted;
-  final TextEditingController initialValue;
   final Set<CityFromAPI> chips;
   final List<CityFromAPI> options;
   final onTap;
@@ -128,7 +124,6 @@ class UsersFormWidget extends StatefulWidget {
         this.isAddPage = true,
         required this.onSelected,
         required this.onDeleted,
-        required this.initialValue,
         required this.chips});
 
   @override
@@ -258,7 +253,6 @@ class UsersFormState extends State<UsersFormWidget> {
                                                               selectedUser: state.selectedUser,
                                                               agencies: agencyState.agencies,
                                                               chips: widget.chips.toList(),
-                                                              initialValue: widget.initialValue,
                                                               onSelected: widget.onSelected,
                                                               onDeleted: widget.onDeleted,
 

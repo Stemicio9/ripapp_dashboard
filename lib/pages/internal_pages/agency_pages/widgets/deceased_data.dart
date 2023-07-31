@@ -25,7 +25,6 @@ class DeceasedData extends StatefulWidget {
   final TextEditingController ageController;
   final TextEditingController dateController;
   final TextEditingController citiesController;
-  final TextEditingController initialValue;
 
   bool isEdit = false;
   final Function() emptyFields;
@@ -49,7 +48,6 @@ class DeceasedData extends StatefulWidget {
 
   DeceasedData({super.key,
     required this.onDeleted,
-    required this.initialValue,
     required this.chips,
     required this.onSelected,
     required this.emptyFields,
@@ -436,7 +434,6 @@ class DeceasedDataState extends State<DeceasedData>{
                                             chips: widget.chips,
                                             cityList: cityList,
                                             onSelected: widget.onSelected,
-                                            initialValue: widget.initialValue,
                                             onDeleted: widget.onDeleted,
                                           ),
                                         );

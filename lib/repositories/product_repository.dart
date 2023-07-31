@@ -57,19 +57,20 @@ class ProductRepository{
     return products;
   }
 
-  Future<List<ProductEntity>> getAllProductsWithIndex(int pageIndex) async {
+  Future<String> getAllProductsWithIndex(int pageIndex) async {
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
-    int pageElements = 9;
+    int pageElements = 5;
     AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
     parameters.putIfAbsent("pageNumber", () => (pageIndex));
     parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
     Response response;
     response = await globalDio.get(indexedProductsUrl, queryParameters: parameters);
     String goodJson = jsonEncode(response.data);
-    //print("ecco il tuo content" + ((jsonDecode(goodJson) as Map)["content"] as List).toString());
-    List<ProductEntity> products = ((jsonDecode(goodJson) as Map)["content"] as List).map((product) => ProductEntity.fromJson(product)).toList();
-    return products;
+    var list = (jsonDecode(goodJson) as Map)["content"] as List;
+    List<ProductEntity> products = (list).map((product) => ProductEntity.fromJson(product)).toList();
+   // List<ProductEntity> products = ((jsonDecode(goodJson) as Map)["content"] as List).map((product) => ProductEntity.fromJson(product)).toList();
+    return goodJson;
   }
 
   editProduct(ProductEntity productEntity) async{

@@ -81,23 +81,4 @@ class SearchAgencyCubit extends Cubit<SearchAgencyState> {
       emit(a.copyWith(selectedAgency: selectedAgency));
     }
   }
-
-  void fetchAgenciesWithIndex(int index) async {
-    emit(SearchAgencyLoading());
-    try {
-      print("FACCIO LA FETCH DELLE AGENZIE");
-      // todo manage if agencies is null or empty in response
-      var agencies = await AgencyRepository().getAgenciesWithIndex(index);
-      if (agencies.isEmpty) {
-        emit(SearchAgencyLoaded(agencies, null));
-      } else {
-        emit(SearchAgencyLoaded(agencies, agencies.first));
-      }
-    } catch (e) {
-      // ignore
-      print("ERRORE SULLA GET");
-      print(e);
-      emit(SearchAgencyError());
-    }
-  }
 }

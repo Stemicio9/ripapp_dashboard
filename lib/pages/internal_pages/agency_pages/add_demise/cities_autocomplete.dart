@@ -10,14 +10,13 @@ class CitiesAutocomplete extends StatelessWidget {
 
   final List<CityFromAPI> chips;
   final List<CityFromAPI> cityList;
-  final TextEditingController initialValue;
   final Function(CityFromAPI) onSelected;
   final Function onDeleted;
 
   const CitiesAutocomplete({
     Key? key, required this.chips,
     required this.cityList, required this.onSelected,
-    required this.initialValue, required this.onDeleted})
+    required this.onDeleted})
       : super(key: key);
 
   @override
@@ -45,7 +44,6 @@ class CitiesAutocomplete extends StatelessWidget {
             validator: (String){
               return null;
             },
-            initialValue: initialValue
         ),
 
         ChipsRow(chips: chips, onDeleted: onDeleted),

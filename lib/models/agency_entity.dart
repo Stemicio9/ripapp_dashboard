@@ -59,7 +59,6 @@ class AgencyEntity implements ResultEntity, TableRowElement {
     "telephoneNumber": phoneNumber,
 
   };
-
   factory AgencyEntity.emptyAgency() => AgencyEntity();
 
   @override

@@ -1,5 +1,4 @@
 
-
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
@@ -10,15 +9,15 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
   final List<T> options;
   final String? Function(String?) validator;
   final String hintText;
+  final String? city;
   final Function(T) onSelected;
-  final TextEditingController initialValue;
 
   const GenericAutocomplete({Key? key,
     required this.options,
     this.validator = notEmptyValidate,
     required this.hintText,
     required this.onSelected,
-    required this.initialValue}) : super(key: key);
+    this.city}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +40,10 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
             TextEditingController textEditingController,
             FocusNode focusNode,
             VoidCallback onFieldSubmitted) {
+          textEditingController.text = city ?? "";
           return TextFormField(
             validator: validator,
-            controller: textEditingController,
-            //initialValue: initialValue.text,
+            controller:  textEditingController,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: greyState),
@@ -94,7 +93,8 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
               ),
             ),
           ),
-        ));
+        )
+    );
   }
 
 

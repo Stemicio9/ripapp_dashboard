@@ -120,8 +120,7 @@ class _UserFormPopupState extends State<UserFormPopup> {
               }
             );
           } else {
-            // TODO POI LO FA EGG
-            return const Text("Error");
+            return ErrorWidget("exception");
           }
         }
       ),

@@ -25,7 +25,6 @@ class UserFormInputs extends StatelessWidget {
   final TextEditingController passwordController;
   final TextEditingController cityController;
   final TextEditingController phoneController;
-  final TextEditingController initialValue;
 
   final Function() action;
   final Function(UserRoles?) statusChange;
@@ -69,7 +68,6 @@ class UserFormInputs extends StatelessWidget {
     required this.selectedUser,
     required this.agencies,
     this.selectedAgency,
-    required this.initialValue,
     required this.onSelected,
     required this.onDeleted
   });
@@ -181,7 +179,6 @@ class UserFormInputs extends StatelessWidget {
                       chips: chips,
                       cityList: cityList,
                       onSelected: onSelected,
-                      initialValue: initialValue,
                       onDeleted: onDeleted,
                     ),
                    )

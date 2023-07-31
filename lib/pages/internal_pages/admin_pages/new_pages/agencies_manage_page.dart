@@ -4,22 +4,22 @@ import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/searchAgenciesCubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_agency_cubit.dart';
+import 'package:ripapp_dashboard/blocs/selected_city_cubit.dart';
+import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
-import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/data_table/data_table_paginator/data_table_paginator_data.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/empty_table_content.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
-import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/agencies_manage/agency_detail.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/agencies_manage/agency_form.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/agency_form/agency_form_popup.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
-import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/circular_progress_indicator.dart';
 import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
+import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 
@@ -33,15 +33,13 @@ class AgenciesManagePage extends StatefulWidget {
 class _AgenciesManagePageState extends State<AgenciesManagePage> {
 
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
+  SelectedCityCubit get _selectedCityCubit => context.read<SelectedCityCubit>();
   SelectedAgencyCubit get _selectedAgencyCubit => context.read<SelectedAgencyCubit>();
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  final _editKey = GlobalKey<FormState>();
-  List<CityFromAPI> cityList = [];
 
   @override
   void initState() {
@@ -82,7 +80,7 @@ class _AgenciesManagePageState extends State<AgenciesManagePage> {
                   data: DataTablePaginatorData(
                       changePageHandle: (index, page) {_currentPageCubit.loadPage(page, index);},
                       pageNumber: state.pageNumber,
-                      numPages: 10,
+                      numPages: state.totalPages,
                       currentPageType: ScaffoldWidgetState.agencies_page)
               ),
             ],
@@ -92,84 +90,53 @@ class _AgenciesManagePageState extends State<AgenciesManagePage> {
     });
   }
 
+  Widget composeDialog(AgencyEntity agencyEntity){
+    return Form(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: getPadding(left: 20, right: 20),
+            width: 1000,
+            child: DialogCard(
+                cardTitle: agencyEntity.id == null ? getCurrentLanguageValue(ADD_AGENCY) ?? "" :
+                getCurrentLanguageValue(EDIT_AGENCY) ?? "",
+                cancelIcon: true,
+                paddingLeft: 10,
+                paddingRight: 10,
+                child: AgencyFormPopup(
+                  onWillPop: () {
+                    return Future.value(true);
+                  },
+                  selectedAgency: agencyEntity,
+                  onSubmit: (AgencyEntity internalAgencyEntity){
+                    agencyEntity.id == null ? _currentPageCubit.addAgency(internalAgencyEntity) :
+                    _currentPageCubit.editAgency(internalAgencyEntity);
+                    context.pop();
+                  },
+                )
+            ),
+
+          ),
+        ],
+      ),
+    );
+  }
+
   List<ActionDefinition> composeSuperiorActions(){
     var actions = <ActionDefinition>[];
     actions.add(ActionDefinition(
         text: "Aggiungi agenzia",
         isButton: true,
-        action: () async {
+        action:  () {
           showDialog(
               context: context,
-              builder: (ctx) => Form(
-                key: _formKey,
-                child: AgencyForm(
-                  emptyFields: (){
-                    nameController.clear();
-                    emailController.clear();
-                    phoneController.clear();
-                    cityController.clear();
-                  },
-                  cityOptions: cityList,
-                  cardTitle: getCurrentLanguageValue(ADD_AGENCY)!,
-                  nameController: nameController,
-                  emailController: emailController,
-                  phoneController: phoneController,
-                  cityController: cityController,
-                  nameValidator: notEmptyValidate,
-                  emailValidator: validateEmail,
-                  cityValidator: notEmptyValidate,
-                  phoneValidator: notEmptyValidate,
-                  onSubmit: () {
-                    formSubmit();
-                  },
-                  isAddPage: true,
-                ),
-              ));
+              builder: (ctx) => composeDialog(AgencyEntity.emptyAgency())
+          );
         },
         actionInputs: List.empty(growable: true)
     ));
     return actions;
-  }
-
-  formSubmit() {
-    if (_formKey.currentState!.validate()) {
-      AgencyEntity agencyEntity = AgencyEntity(
-        agencyName: nameController.text,
-        city: cityController.text,
-        email: emailController.text,
-        phoneNumber: phoneController.text,
-      );
-      saveOrEditAgency(agencyEntity, false);
-      context.pop();
-    }
-  }
-
-  saveOrEditAgency(AgencyEntity agencyEntity, bool isEdit) {
-    if (isEdit) {
-      AgencyRepository().editAgency(agencyEntity).then((savedAgency) {
-        clearControllers();
-        SuccessSnackbar(context, text: "Agenzia modificata con successo");
-      }, onError: (e) {
-        ErrorSnackbar(context,
-            text: "Errore generico durante la modifica dell\'agenzia");
-      });
-    } else {
-      AgencyRepository().saveAgency(agencyEntity).then((savedAgency) {
-        clearControllers();
-        SuccessSnackbar(context, text: "Agenzia salvata con successo");
-      }, onError: (e) {
-        if (e.toString().contains("Duplicate entry")) {
-          ErrorSnackbar(context, text: 'Questa email è già in uso da un\'altra agenzia');
-        }
-      });
-    }
-  }
-
-  clearControllers() {
-    nameController.text = "";
-    emailController.text = "";
-    phoneController.text = "";
-    cityController.text = "";
   }
 
   List<ActionDefinition> composeRowActions(){
@@ -182,48 +149,27 @@ class _AgenciesManagePageState extends State<AgenciesManagePage> {
 
   ActionDefinition editAction(){
     ActionDefinition result = ActionDefinition(
-        action: (AgencyEntity ae){
-          _selectedAgencyCubit.selecAgency(ae);
+        action: (AgencyEntity agencyEntity){
           showDialog(
               context: context,
-              builder: (ctx) => Form(
-                key: _editKey,
-                child: AgencyForm(
-                  emptyFields: (){
-                    nameController.text = "";
-                    cityController.text = "";
-                    phoneController.text = "";
-                  },
-                  onSubmit: () {
-                    if (_editKey.currentState!.validate()) {
-                      AgencyEntity agencyEntity = AgencyEntity(
-                          id: ae.id,
-                          agencyName: nameController.text,
-                          city: cityController.text,
-                          phoneNumber: phoneController.text
-                      );
-                      saveOrEditAgency(agencyEntity, true);
-                      context.pop();
-                    }
-                  },
-                  isAddPage: false,
-                  cityOptions: cityList,
-                  cardTitle: getCurrentLanguageValue(EDIT_AGENCY)!,
-                  nameController: nameController,
-                  emailController: emailController,
-                  phoneController: phoneController,
-                  cityController: cityController,
-                  nameValidator: notEmptyValidate,
-                  cityValidator: notEmptyValidate,
-                  phoneValidator: notEmptyValidate,
-                ),
-              ));
-          },
+              barrierColor: blackTransparent,
+              builder: (ctx) => composeDialog(agencyEntity)
+          );
+        },
         icon: Icons.edit_rounded,
         tooltip: "Modifica",
         actionInputs: List.empty(growable: true)
     );
     return result;
+  }
+
+  extractCity(u) {
+    var agencyEntity = u as AgencyEntity;
+    if (u.city != null && u.city!.isNotEmpty) {
+      return u.city![0];
+    } else {
+      return null;
+    }
   }
 
   ActionDefinition deleteAction(){
@@ -233,7 +179,7 @@ class _AgenciesManagePageState extends State<AgenciesManagePage> {
               context: context,
               builder: (ctx) => DeleteMessageDialog(
                   onConfirm: () {
-                    _searchAgencyCubit.remove(agencyEntity.id);
+                    _currentPageCubit.deleteAgency(agencyEntity.id);
                     SuccessSnackbar(context, text: 'Agenzia eliminata con successo!');
                     context.pop();
                   },

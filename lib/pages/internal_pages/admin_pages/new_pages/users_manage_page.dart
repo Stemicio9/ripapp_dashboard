@@ -1,11 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_city_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
-import 'package:ripapp_dashboard/blocs/users_list_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/data_table/data_table_paginator/data_table_paginator_data.dart';
@@ -13,8 +11,6 @@ import 'package:ripapp_dashboard/data_table/data_table_widget.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/empty_table_content.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
-import 'package:ripapp_dashboard/models/agency_entity.dart';
-import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/user_form/user_form_popup.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage/users_detail.dart';
@@ -24,7 +20,6 @@ import 'package:ripapp_dashboard/widgets/circular_progress_indicator.dart';
 import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
-import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 
 enum UserRoles { Amministratore, Agenzia, Utente }
@@ -40,37 +35,14 @@ class UsersManagePageState extends State<UsersManagePage>{
 
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
   SelectedUserCubit get _selectedUserCubit => context.read<SelectedUserCubit>();
-  UsersListCubit get _userListCubit => context.read<UsersListCubit>();
   SelectedCityCubit get _selectedCityCubit => context.read<SelectedCityCubit>();
 
-  final _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController filterController = TextEditingController();
-
-  List<CityFromAPI> cityOptions = [];
-  UserEntity userEntity = UserEntity(
-      id: 1,
-      firstName: '',
-      lastName: '',
-      email: '',
-      city: [CityFromAPI.defaultCity()],
-      phoneNumber: '',
-      role: '');
-
-  setStatusFromDropdown(String userRole) {
-    UserRoles role = UserRoles.values.firstWhere((e) => e.toString() == 'UserRoles.' + userRole);
-    userEntity.role = role.toString();
-    UserStatus status = fromUserRole(role);
-    userEntity.status = status;
-  }
-
-  setAgencyFromDropdown(AgencyEntity agencyEntity) {
-    userEntity.agency = agencyEntity;
-  }
 
   @override
   void initState() {
