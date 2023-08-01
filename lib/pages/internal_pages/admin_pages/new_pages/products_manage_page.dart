@@ -15,6 +15,7 @@ import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/product_form/product_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/product_form/product_form_popup.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
+import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/circular_progress_indicator.dart';
 import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
@@ -136,7 +137,7 @@ class ProductsManagePageState extends State<ProductsManagePage> {
         children: [
           Container(
             padding: getPadding(left: 20, right: 20),
-            width: 1000,
+            width: 800,
             child: DialogCard(
                 cardTitle: productEntity.id == null ? getCurrentLanguageValue(ADD_PRODUCT) ?? "" :
                 getCurrentLanguageValue(EDIT_PRODUCT) ?? "",
@@ -169,15 +170,15 @@ class ProductsManagePageState extends State<ProductsManagePage> {
               context: context,
               builder: (ctx) => DeleteMessageDialog(
                   onConfirm: () async {
-                    _currentPageCubit.deleteProduct(productEntity.id!).then((deleteProductMessage) async {
+                    _currentPageCubit.deleteProduct(productEntity.id!).then((deleteProductMessage) {
                       FirebaseImageUtility.deleteProductImage(productEntity.firebaseId);
                       SuccessSnackbar(context, text: "Prodotto eliminato con successo");
-                    }, onError: (e) {
-                      if (e.toString().contains("il prodotto è già in uso da parte di")) {
-                        ErrorSnackbar(context, text: 'Prodotto usato da agenzie');
-                      }
+                    },
+                    ).onError((e, stackTrace) {
+                    if (e.toString().contains("il prodotto è già in uso da parte di")) {
+                      ErrorSnackbar(context, text: 'Prodotto usato da agenzie');
                     }
-                    );
+                  });
                     context.pop();
 
                     BlocBuilder<SearchProductCubit, SearchProductState>(
@@ -239,8 +240,8 @@ class ProductsManagePageState extends State<ProductsManagePage> {
 
   ActionDefinition viewAction(){
     ActionDefinition result = ActionDefinition(
-        action: (ProductEntity productEntity) {
-          _selectedProductCubit.selectProduct(productEntity);
+        action: (ProductEntity productEntity) async{
+          await _selectedProductCubit.selectProduct(productEntity);
           showDialog(
               context: context,
               builder: (ctx)=> ProductDetail(

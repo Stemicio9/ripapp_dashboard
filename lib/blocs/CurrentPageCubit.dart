@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
@@ -155,18 +154,17 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
       print(e);
     }
   }
-  deleteProduct(productId) async {
-    try {
+
+  Future deleteProduct(productId) async {
+      print("l'eccezione si verifica qui");
       var result = await ProductRepository().deleteProduct(productId);
+      print("ecco cosa mi arriva.. " + result.toString());
       refreshPage();
-    } catch (e) {
-      print(e);
-    }
   }
 
 
   void loadPage(String page, int index) async {
-    emit(CurrentPageState(page, [], true, index, state.totalPages));
+    emit(CurrentPageState(page, const [], true, index, state.totalPages));
     List<ResultEntity>? resultSet = await findResult(page, index);
     emit(CurrentPageState(page, resultSet!, false, index, state.totalPages));
   }

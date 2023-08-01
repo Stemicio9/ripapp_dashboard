@@ -46,6 +46,33 @@ class _ProductFormPopupState extends State<ProductFormPopup> {
     super.initState();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SelectedProductCubit, SelectedProductState>(
+        builder: (context, state) {
+          return WillPopScope(
+              onWillPop: widget.onWillPop,
+              child: Form(
+                key: _formKey,
+                child: ProductFormWidget(
+                  isAddPopup: widget.selectedProduct?.id != null ? false : true,
+                  nameController: nameController,
+                  priceController: priceController,
+                  save: (){
+                    save(state.imageUrl);
+                  },
+                  clearFields: clearFields,
+                  imageUrl: state.imageUrl,
+                  onTap: formImageOnTap,
+                  isNetwork: isNetwork,
+                  memoryImage: memoryImage,
+                ),
+              )
+
+          );
+        });
+  }
+
   assignTextEditingControllerValues(){
     nameController.text = widget.selectedProduct?.name ?? '';
     if(widget.selectedProduct?.price != null) {
@@ -56,33 +83,6 @@ class _ProductFormPopupState extends State<ProductFormPopup> {
   void clearFields(){
     nameController.clear();
     priceController.clear();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SelectedProductCubit, SelectedProductState>(
-        builder: (context, state) {
-          return WillPopScope(
-        onWillPop: widget.onWillPop,
-        child:Form(
-        key: _formKey,
-        child: ProductFormWidget(
-          isAddPopup: widget.selectedProduct?.id != null ? false : true,
-          nameController: nameController,
-          priceController: priceController,
-          save: (){
-            save(state.imageUrl);
-          },
-          clearFields: clearFields,
-          imageUrl: state.imageUrl,
-          onTap: formImageOnTap,
-          isNetwork: isNetwork,
-          memoryImage: memoryImage,
-        ),
-      )
-
-    );
-        });
   }
 
    save(String imageUrl)async{
