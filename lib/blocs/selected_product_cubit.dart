@@ -32,6 +32,7 @@ class SelectedProductCubit extends Cubit<SelectedProductState> {
   selectProduct(ProductEntity selectedProduct) async {
     var a = await downloadUrlImage(selectedProduct.firebaseId);
     emit(SelectedProductState(selectedProduct: selectedProduct, imageUrl: a));
+
     print(selectedProduct);
   }
 

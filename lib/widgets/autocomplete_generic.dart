@@ -11,13 +11,15 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
   final String hintText;
   final String? city;
   final Function(T) onSelected;
+  TextEditingController? cityController;
 
-  const GenericAutocomplete({Key? key,
+  GenericAutocomplete({Key? key,
     required this.options,
     this.validator = notEmptyValidate,
     required this.hintText,
     required this.onSelected,
-    this.city}) : super(key: key);
+    this.city,
+    this.cityController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
   Widget _buildAutocomplete() {
     return RawAutocomplete<T>(
         optionsBuilder: (TextEditingValue textEditingValue) {
-          if (textEditingValue.text == '') {
+          if (textEditingValue.text.isEmpty) {
             return const Iterable.empty();
           }
           return options.where((T option) {
@@ -41,9 +43,10 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
             FocusNode focusNode,
             VoidCallback onFieldSubmitted) {
           textEditingController.text = city ?? "";
+          cityController = textEditingController;
           return TextFormField(
             validator: validator,
-            controller:  textEditingController,
+            controller: cityController,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: greyState),
@@ -80,7 +83,7 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
               borderRadius:
               BorderRadius.vertical(bottom: Radius.circular(4.0)),
             ),
-            child: Container(
+            child: SizedBox(
               height: 52.0 * options.length,
               width: MediaQuery.of(context).size.width / 3.37,
               child: ListView.builder(

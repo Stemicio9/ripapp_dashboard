@@ -1,18 +1,14 @@
 
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
-import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/agencies_manage_page.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/products_manage_page.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/users_manage_page.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/users_manage.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 
 import '../../../blocs/searchAgenciesCubit.dart';

@@ -31,7 +31,6 @@ class AgencyFormPopupState extends State<AgencyFormPopup>{
   final TextEditingController cityController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  SelectedCityCubit get _cityFromAPI => context.read<SelectedCityCubit>();
   CityListCubit get _cityListCubit => context.read<CityListCubit>();
 
   @override
@@ -56,7 +55,7 @@ class AgencyFormPopupState extends State<AgencyFormPopup>{
                     return Form(
                       key: _formKey,
                       child: AgencyFormWidget(
-                          city: widget.selectedAgency!.city ?? "",
+                          city: cityController.text,
                           nameController: nameController,
                           emailController: emailController,
                           phoneController: phoneController,
@@ -64,8 +63,7 @@ class AgencyFormPopupState extends State<AgencyFormPopup>{
                           isAddPopup: widget.selectedAgency?.id != null ? false : true,
                           options: cityListState.listCity,
                           onSelected: (CityFromAPI city){
-                           _cityFromAPI.selectCity(city);
-                           cityController.text = city.name!;
+                            cityController.text = city.name!;
                           },
                           clearFields: clearFields,
                           save: save,
@@ -90,6 +88,9 @@ class AgencyFormPopupState extends State<AgencyFormPopup>{
     nameController.clear();
     emailController.clear();
     phoneController.clear();
+    setState(() {
+      cityController.clear();
+    });
   }
 
 

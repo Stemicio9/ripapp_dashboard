@@ -76,6 +76,7 @@ class AgencyFormWidget extends StatelessWidget {
                     padding: getPadding(left: 3),
                     child: GenericAutocomplete<CityFromAPI>(
                         city: city,
+                        cityController: cityController,
                         options: options,
                         hintText: "Città" ,
                         onSelected: onSelected,

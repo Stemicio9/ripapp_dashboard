@@ -20,13 +20,13 @@ class ProductEntity implements ResultEntity, TableRowElement {
   //toString
   @override
   String toString() {
-    return 'ProductEntity{id: $id, productName: $name, photoName: $photoName, price: $price, firebaseId: $firebaseId}';
+    return 'ProductEntity{id: $id, productName: $name, url_image: $photoName, price: $price, firebaseId: $firebaseId}';
   }
 
   factory ProductEntity.fromJson(Map<String, dynamic> json) => ProductEntity(
     id: json["productId"] ?? 0,
     name: json["productName"] ?? "",
-    photoName: json["urlImage"] ?? "",
+    photoName: json["url_image"] ?? "",
     price: json["price"] ?? "",
     firebaseId: json["firebaseId"] ?? "",
   );
@@ -50,7 +50,7 @@ class ProductEntity implements ResultEntity, TableRowElement {
   Map<String, dynamic> toJson() => {
     "productId": id,
     "productName": name,
-    "urlImage": photoName,
+    "url_image": photoName,
     "price": price,
     "firebaseId": firebaseId,
   };

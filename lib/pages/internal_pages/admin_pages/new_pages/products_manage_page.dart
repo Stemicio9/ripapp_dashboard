@@ -12,13 +12,13 @@ import 'package:ripapp_dashboard/data_table/data_table_widget/action.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/empty_table_content.dart';
 import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage/product_detail.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/products_manage/product_form.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/product_form/product_detail.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/product_form/product_form_popup.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
-import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/circular_progress_indicator.dart';
 import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';
+import 'package:ripapp_dashboard/widgets/dialog_card.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 import 'package:ripapp_dashboard/widgets/snackbars.dart';
 import 'package:ripapp_dashboard/widgets/utilities/firebase_image_utility.dart';
@@ -27,10 +27,10 @@ class ProductsManagePage extends StatefulWidget {
   const ProductsManagePage({Key? key}) : super(key: key);
 
   @override
-  State<ProductsManagePage> createState() => _ProductsManagePageState();
+  State<ProductsManagePage> createState() => ProductsManagePageState();
 }
 
-class _ProductsManagePageState extends State<ProductsManagePage> {
+class ProductsManagePageState extends State<ProductsManagePage> {
 
   CurrentPageCubit get _currentPageCubit => context.read<CurrentPageCubit>();
   SelectedProductCubit get _selectedProductCubit => context.read<SelectedProductCubit>();
@@ -63,26 +63,26 @@ class _ProductsManagePageState extends State<ProductsManagePage> {
       }
       return SingleChildScrollView(
         padding: getPadding(top: 30, bottom: 30, left: 5, right: 5),
-          child: Column(
-            children: [
-              const PageHeader(
-                showBackButton: false,
-                pageTitle: "Gestisci prodotti",
-              ),
-              DataTableWidget(
-                  dataRowHeight: 85,
-                  headers: tableRowElements[0].getHeaders(),
-                  rows: tableRowElements,
-                  superiorActions: composeSuperiorActions(),
-                  rowActions: composeRowActions(),
-                  data: DataTablePaginatorData(
-                      changePageHandle: (index, page) {_currentPageCubit.loadPage(page, index);},
-                      pageNumber: state.pageNumber,
-                      numPages: state.totalPages,
-                      currentPageType: ScaffoldWidgetState.products_page)
-              ),
-            ],
-          ),
+        child: Column(
+          children: [
+            const PageHeader(
+              showBackButton: false,
+              pageTitle: "Gestisci prodotti",
+            ),
+            DataTableWidget(
+                dataRowHeight: 85,
+                headers: tableRowElements[0].getHeaders(),
+                rows: tableRowElements,
+                superiorActions: composeSuperiorActions(),
+                rowActions: composeRowActions(),
+                data: DataTablePaginatorData(
+                    changePageHandle: (index, page) {_currentPageCubit.loadPage(page, index);},
+                    pageNumber: state.pageNumber,
+                    numPages: state.totalPages,
+                    currentPageType: ScaffoldWidgetState.products_page)
+            ),
+          ],
+        ),
       );
     });
   }
@@ -92,13 +92,10 @@ class _ProductsManagePageState extends State<ProductsManagePage> {
     actions.add(ActionDefinition(
         text: "Aggiungi prodotto",
         isButton: true,
-        action: () async {
+        action: () {
           showDialog(
-            context: context,
-            builder: (ctx)=>  ProductForm(
-              isEdit: false,
-              cardTitle: getCurrentLanguageValue(ADD_PRODUCT)!,
-            ),
+              context: context,
+              builder: (ctx) => composeDialog(ProductEntity.emptyProduct())
           );
         },
         actionInputs: List.empty(growable: true)
@@ -116,21 +113,53 @@ class _ProductsManagePageState extends State<ProductsManagePage> {
 
   ActionDefinition editAction(){
     ActionDefinition result = ActionDefinition(
-        action: (ProductEntity productEntity){
-          _selectedProductCubit.selectProduct(productEntity);
+        action: (ProductEntity productEntity) async {
+          await _selectedProductCubit.selectProduct(productEntity);
           showDialog(
               context: context,
-              builder: (ctx)=>
-                  ProductForm(
-                    cardTitle: getCurrentLanguageValue(EDIT_PRODUCT)!,
-                    isEdit: true,
-                  ));
+              barrierColor: blackTransparent,
+              builder: (ctx) => composeDialog(productEntity)
+          );
         },
         icon: Icons.edit_rounded,
         tooltip: "Modifica",
         actionInputs: List.empty(growable: true)
     );
     return result;
+  }
+
+
+  Widget composeDialog(ProductEntity productEntity){
+    return Form(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: getPadding(left: 20, right: 20),
+            width: 1000,
+            child: DialogCard(
+                cardTitle: productEntity.id == null ? getCurrentLanguageValue(ADD_PRODUCT) ?? "" :
+                getCurrentLanguageValue(EDIT_PRODUCT) ?? "",
+                cancelIcon: true,
+                paddingLeft: 10,
+                paddingRight: 10,
+                child: ProductFormPopup(
+                  onWillPop: () {
+                    return Future.value(true);
+                  },
+                  selectedProduct: productEntity,
+                  onSubmit: (ProductEntity internalProductEntity){
+                    productEntity.id == null ? _currentPageCubit.addProduct(internalProductEntity) :
+                    _currentPageCubit.editProduct(internalProductEntity);
+                    context.pop();
+                  },
+                )
+            ),
+
+          ),
+        ],
+      ),
+    );
   }
 
   ActionDefinition deleteAction(){
@@ -147,7 +176,7 @@ class _ProductsManagePageState extends State<ProductsManagePage> {
                       if (e.toString().contains("il prodotto è già in uso da parte di")) {
                         ErrorSnackbar(context, text: 'Prodotto usato da agenzie');
                       }
-                     }
+                    }
                     );
                     context.pop();
 
@@ -195,8 +224,8 @@ class _ProductsManagePageState extends State<ProductsManagePage> {
 
                   },
                   onCancel: (){
-                   context.pop();
-                   },
+                    context.pop();
+                  },
                   message: 'Le informazioni riguardanti questo prodotto verranno definitivamente eliminate. Sei sicuro di volerle eliminare?'
               )
           );
