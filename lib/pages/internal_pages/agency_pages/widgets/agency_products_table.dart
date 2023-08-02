@@ -23,8 +23,6 @@ class AgencyProductsTable extends StatefulWidget {
 class AgencyProductsTableState extends State<AgencyProductsTable> {
   CurrentPageCubit  get _currentPageCubit => context.read<CurrentPageCubit>();
   List<String> headerTitle = ['ID', 'Foto', 'Nome', 'Prezzo',];
-
-  SearchProductsOfferedCubit get _searchProductCubit => context.read<SearchProductsOfferedCubit>();
   List<ProductEntity> products = [];
   File? imageFile;
 
@@ -60,12 +58,6 @@ class AgencyProductsTableState extends State<AgencyProductsTable> {
       else {
         products.clear();
         products = (state.resultSet as List<ProductEntity>);
-        /*state.resultSet.forEach((
-            productOffered) {
-          if ((productOffered as ProductOffered).offered)
-            products.add(productOffered.productEntity);
-        });*/
-
         print("products: $products");
         if (products.isEmpty) {
           return Center(

@@ -71,7 +71,7 @@ class _DemiseManagePageState extends State<DemiseManagePage> {
                   data: DataTablePaginatorData(
                       changePageHandle: (index, page) {_searchDemiseCubit.loadPage(page, index);},
                       pageNumber: state.pageNumber,
-                      numPages: 10,
+                      numPages: state.totalPages,
                       currentPageType: ScaffoldWidgetState.agency_demises_page)
               ),
               ],

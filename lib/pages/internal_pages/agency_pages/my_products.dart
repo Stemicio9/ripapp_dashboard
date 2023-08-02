@@ -54,8 +54,8 @@ class MyProductsState extends State<MyProducts>{
               onTap: (){
                 showDialog(context: context,
                     builder: (ctx)=> ProductsPopup(
-                      onTap: changeAgencyProducts
-                      )
+                        onTap: changeAgencyProducts
+                    )
                 );
               },
               pageTitle: getCurrentLanguageValue(MY_PRODUCTS) ?? "",
@@ -64,9 +64,9 @@ class MyProductsState extends State<MyProducts>{
             /*Builder(builder: (context) {
                return AgencyProductsTable();
             }*/
-               AgencyProductsTable()
+            AgencyProductsTable()
 
-        ],
+          ],
         ),
       ),
     );

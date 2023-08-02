@@ -32,6 +32,8 @@ class _ProductsPopupState extends State<ProductsPopup> {
     // fixme here we use initState only to initialize product list, but is dummy
     // fixme delete this method when bloc will be done
     _searchProductCubit.fetchProducts();
+    print("STAMPO PRODOTTI SELEZIONATI");
+    print(    _searchProductCubit.fetchProducts());
     super.initState();
   }
 
@@ -39,12 +41,13 @@ class _ProductsPopupState extends State<ProductsPopup> {
   void onProductTapped(SingleProductEntity productEntity, SearchProductsOfferedLoaded state){
     var index = products.indexOf(productEntity);
     print("TAPPATO PRODOTTO IN POSIZIONE $index");
-    print("prima il PRODOTTO IN POSIZIONE $index è " + products[index].isSelected.toString());
+    print("prima il PRODOTTO IN POSIZIONE $index è ${products[index].isSelected}");
     products[index].isSelected = !products[index].isSelected;
-    print("dopo il PRODOTTO IN POSIZIONE $index è " + products[index].isSelected.toString());
+    print("dopo il PRODOTTO IN POSIZIONE $index è ${products[index].isSelected}");
 
-    if (state is SearchProductsOfferedLoaded)
+    if (state is SearchProductsOfferedLoaded) {
       state.productsOffered[index].offered = products[index].isSelected;
+    }
     print(state.productsOffered);
     List<SingleProductEntity> copy = List.from(products);
     setState(() {

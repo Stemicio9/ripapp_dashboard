@@ -8,8 +8,7 @@ class BottomNavigationBarExample extends StatefulWidget {
   const BottomNavigationBarExample({super.key, required this.changePageHandle, });
 
   @override
-  State<BottomNavigationBarExample> createState() =>
-      _BottomNavigationBarExampleState();
+  State<BottomNavigationBarExample> createState() => _BottomNavigationBarExampleState();
 }
 
 class _BottomNavigationBarExampleState
@@ -17,9 +16,6 @@ class _BottomNavigationBarExampleState
   final int _numPages = 10;
 
   CurrentPageCubit get _currentPageCubit  => context.read<CurrentPageCubit>();
-
-
-  NumberPaginatorController _controller = NumberPaginatorController();
 
   @override
   Widget build(BuildContext context) {

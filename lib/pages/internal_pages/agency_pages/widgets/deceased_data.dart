@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
+import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/cities_autocomplete.dart';
-import 'package:ripapp_dashboard/widgets/autocomplete.dart';
+import 'package:ripapp_dashboard/widgets/autocomplete_generic.dart';
 import 'package:ripapp_dashboard/widgets/utilities/empty_fields_widget.dart';
 import 'package:ripapp_dashboard/widgets/utilities/network_memory_image_utility.dart';
 import '../../../../blocs/city_list_cubit.dart';
@@ -37,6 +38,7 @@ class DeceasedData extends StatefulWidget {
   final iconOnTap;
   final imageOnTap;
   final Function(CityFromAPI) onSelected;
+  final Function(CityFromAPI) selectCity;
   final Function onDeleted;
   var imageFile;
   var memoryImage;
@@ -72,6 +74,7 @@ class DeceasedData extends StatefulWidget {
     required this.options,
     this.imageFile,
     required this.dateController,
+    required this.selectCity,
   });
 
   @override
@@ -99,8 +102,6 @@ class DeceasedDataState extends State<DeceasedData>{
     return  BlocBuilder<SelectedCityCubit, SelectedCityState>(
         builder: (context, stateCity) {
           if (stateCity is SelectedCityState) {
-            print("QUI SI SELEZIONA LA CITTA");
-            widget.cityController.text = stateCity.selectedCity.name ?? "";
             widget.citiesController.text = stateCity.selectedCity.name ?? "";
             return
               Card(
@@ -311,9 +312,6 @@ class DeceasedDataState extends State<DeceasedData>{
                                                 )
                                               ],
                                             ))
-
-
-
                                       ],
 
                                     )
@@ -389,16 +387,15 @@ class DeceasedDataState extends State<DeceasedData>{
                                                 ),
                                               ),
                                             ),
-                                            AutocompleteWidget(
-                                              options: cityList,
-                                              paddingRight: 0,
-                                              paddingLeft: 0,
-                                              paddingTop: 0,
-                                              paddingBottom: 0,
-                                              hintText: getCurrentLanguageValue(CITY)!,
-                                              filterController: widget.cityController,
-                                              validator: widget.cityValidator,
-                                            )
+                                            GenericAutocomplete<CityFromAPI>(
+                                                  city: widget.cityController.text,
+                                                  cityController: widget.cityController,
+                                                  options: cityList,
+                                                  hintText: getCurrentLanguageValue(CITY) ?? "" ,
+                                                  onSelected: widget.selectCity,
+                                                  validator: notEmptyValidate
+                                              ),
+
                                           ],
                                         );
                                       }

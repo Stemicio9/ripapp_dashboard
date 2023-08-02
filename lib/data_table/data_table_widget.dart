@@ -16,12 +16,12 @@ class DataTableWidget extends StatelessWidget {
 
   const DataTableWidget(
       {Key? key,
-      required this.headers,
-      required this.rows,
-      required this.superiorActions,
-      required this.rowActions,
-      this.dataRowHeight = 48,
-      required this.data})
+        required this.headers,
+        required this.rows,
+        required this.superiorActions,
+        required this.rowActions,
+        this.dataRowHeight = 48,
+        required this.data})
       : super(key: key);
 
   @override
@@ -30,7 +30,6 @@ class DataTableWidget extends StatelessWidget {
       children: [
         ActionWidgetList(actions: superiorActions),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.75,
           child: InternalTableWidget(
             headers: headers,
             rows: rows,
@@ -39,8 +38,15 @@ class DataTableWidget extends StatelessWidget {
           ),
         ),
         Container(
+            height: 48,
             color: Colors.white,
-            child: DataTablePaginator(data: data)
+            child: Row(
+              children: [
+                Expanded(flex:1,child: Container()),
+                Expanded(flex:1,child: DataTablePaginator(data: data)),
+                Expanded(flex:1,child: Container()),
+              ],
+            )
         )
       ],
     );

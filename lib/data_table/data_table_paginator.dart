@@ -17,8 +17,11 @@ class DataTablePaginator extends StatelessWidget {
         initialPage: data.pageNumber,
         numberPages: data.numPages,
         config: const NumberPaginatorUIConfig(
-
-           ),
+          height: 42,
+          buttonShape: BeveledRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+        ),
         onPageChange: (int index) {
           data.changePageHandle(index, data.currentPageType);
         });

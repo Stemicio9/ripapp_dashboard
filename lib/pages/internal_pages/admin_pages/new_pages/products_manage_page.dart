@@ -15,7 +15,6 @@ import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/product_form/product_detail.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/product_form/product_form_popup.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
-import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/circular_progress_indicator.dart';
 import 'package:ripapp_dashboard/widgets/delete_message_dialog.dart';

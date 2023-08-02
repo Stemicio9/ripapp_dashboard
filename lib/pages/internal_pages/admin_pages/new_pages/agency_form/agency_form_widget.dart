@@ -78,7 +78,7 @@ class AgencyFormWidget extends StatelessWidget {
                         city: city,
                         cityController: cityController,
                         options: options,
-                        hintText: "Città" ,
+                        hintText: getCurrentLanguageValue(CITY) ?? "" ,
                         onSelected: onSelected,
                         validator: notEmptyValidate
                     ),

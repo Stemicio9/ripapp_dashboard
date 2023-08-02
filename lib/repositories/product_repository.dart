@@ -1,16 +1,12 @@
 
 import 'dart:convert';
-
-import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
-import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/AccountSearchEntity.dart';
 import 'package:ripapp_dashboard/utils/DeleteProductMessage.dart';
-
 import '../constants/rest_path.dart';
 
 class ProductRepository{
@@ -36,15 +32,15 @@ class ProductRepository{
     return response.data;
   }
 
-
   Future<DeleteProductMessage> deleteProduct(int idProduct) async{
     String urlDeleteProduct = '$deleteProductUrl/$idProduct';
     print("b1");
     var response = await globalDio.delete(urlDeleteProduct);
-    print("response è " + response.data.toString());
+    print("response è ${response.data}");
     DeleteProductMessage deleteProductMessage = DeleteProductMessage.fromJson(response.data);
-    if (deleteProductMessage.message!.startsWith("il prodotto è già in uso da parte di"))
-      throw new Exception(deleteProductMessage.message);
+    if (deleteProductMessage.message!.startsWith("il prodotto è già in uso da parte di")) {
+      throw Exception(deleteProductMessage.message);
+    }
     return deleteProductMessage;
   }
   Future<dynamic> getAllProducts() async {
@@ -60,7 +56,7 @@ class ProductRepository{
   Future<String> getAllProductsWithIndex(int pageIndex) async {
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
-    int pageElements = 5;
+    int pageElements = 10;
     AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
     parameters.putIfAbsent("pageNumber", () => (pageIndex));
     parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
@@ -69,14 +65,13 @@ class ProductRepository{
     String goodJson = jsonEncode(response.data);
     var list = (jsonDecode(goodJson) as Map)["content"] as List;
     List<ProductEntity> products = (list).map((product) => ProductEntity.fromJson(product)).toList();
-   // List<ProductEntity> products = ((jsonDecode(goodJson) as Map)["content"] as List).map((product) => ProductEntity.fromJson(product)).toList();
     return goodJson;
   }
 
   editProduct(ProductEntity productEntity) async{
       Map<String, String> values = {};
       String token = await UserRepository().getFirebaseToken();
-      values.putIfAbsent("idtoken", () => token ?? "");
+      values.putIfAbsent("idtoken", () => token);
       var response = await globalDio.post(updateProductUrl, data: productEntity.toJson(), options: Options(headers: values));
       return response.data;
   }

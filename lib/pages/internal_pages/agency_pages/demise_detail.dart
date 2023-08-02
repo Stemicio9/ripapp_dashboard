@@ -1,6 +1,7 @@
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
@@ -64,9 +65,13 @@ class DemiseDetailState extends State<DemiseDetail> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const PageHeader(
+                          PageHeader(
                             pageTitle: "Dettaglio decesso",
                             showBackButton: true,
+                            onTap: (){
+                              context.pop();
+                              _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_demises_page);
+                            },
                           ),
 
                           //deceased data

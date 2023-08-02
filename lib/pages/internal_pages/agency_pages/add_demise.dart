@@ -61,8 +61,6 @@ class AddDemiseState extends State<AddDemise> {
   final TextEditingController citiesController = TextEditingController();
   final TextEditingController relativeController = TextEditingController();
   SearchKinshipCubit get _searchKinshipCubit => context.read<SearchKinshipCubit>();
-  DateTime? wakeDate;
-  DateTime? funeralDate;
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   Set<CityFromAPI> chips = {};
   File_Data_Model? obituaryFile;
@@ -107,13 +105,20 @@ class AddDemiseState extends State<AddDemise> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const PageHeader(
+                       PageHeader(
                         pageTitle: "Aggiungi decesso",
                         showBackButton: true,
+                        onTap: (){
+                          context.pop();
+                          _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_demises_page);
+                        },
                       ),
 
                       //deceased data
                       state.loaded ?  DeceasedData(
+                        selectCity: (CityFromAPI city){
+                          cityController.text = city.name!;
+                        },
                         emptyFields: () {
                           setState(() {
                             nameController.clear();
@@ -372,7 +377,7 @@ class AddDemiseState extends State<AddDemise> {
         if(chips.isNotEmpty){
         demiseEntity.firstName = (nameController.text);
         demiseEntity.lastName = (lastNameController.text);
-        demiseEntity.city = CityEntity(name: cityController.text);
+        demiseEntity.city = (cityController.text);
         demiseEntity.phoneNumber = (phoneController.text);
         demiseEntity.age = ageController.text != "" ? int.parse(ageController.text) : null;
         demiseEntity.deceasedDate = (deceasedDateController.text != "" && deceasedDateController.text != null) ? convertDate(deceasedDateController.text) : null;

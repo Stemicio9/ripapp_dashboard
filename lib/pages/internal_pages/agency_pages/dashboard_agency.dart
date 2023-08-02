@@ -7,17 +7,12 @@ import 'package:ripapp_dashboard/authentication/firebase_authentication_listener
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
-import 'package:ripapp_dashboard/constants/route_constants.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/demise_manage.dart';
-import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/my_products.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/new_pages/demise_manage_page.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/new_pages/products_selected_page.dart';
 import 'package:ripapp_dashboard/utils/image_utils.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
-
 import 'agency_profile.dart';
-
 
 class DashboardAgency extends StatefulWidget {
   @override
@@ -36,6 +31,7 @@ class DashboardAgencyState extends State<DashboardAgency> {
 
   @override
   void initState() {
+    _currentPageCubit.state.page = ScaffoldWidgetState.agency_products_page;
     userEntity = CustomFirebaseAuthenticationListener().userEntity!;
     getUserImage();
     super.initState();
@@ -136,22 +132,19 @@ class DashboardAgencyState extends State<DashboardAgency> {
   }
 
   Widget bodyChild() {
-    switch (currentPage) {
-      case 1:
-        // FIXME using new table widget, it is a try
-        // FIXME eventually return to MyProducts
-        // return MyProducts();
-        return const ProductsSelectedPage();
-      case 2:
-        // FIXME using new table widget, it is a try
-        // FIXME eventually return to DemiseManage
-        // return DemiseMenage();
-        return const DemiseManagePage();
-      case 3:
-        return AgencyProfile();
-      default:
-        return Container();
-    }
+    return BlocBuilder<CurrentPageCubit, CurrentPageState>(
+        builder: (context, state) {
+          switch (state.page) {
+            case ScaffoldWidgetState.agency_products_page:
+              return const ProductsSelectedPage();
+            case ScaffoldWidgetState.agency_demises_page:
+              return const DemiseManagePage();
+            case ScaffoldWidgetState.agency_edit_profile_page:
+              return AgencyProfile();
+            default:
+              return Container();
+          }
+        });
   }
 
 /* void logoutFromAll() {

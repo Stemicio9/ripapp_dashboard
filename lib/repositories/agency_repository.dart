@@ -1,13 +1,9 @@
 import 'dart:convert';
-import 'dart:js_interop';
-
-import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/constants/rest_path.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
-import 'package:ripapp_dashboard/models/city_from_API.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
 import 'package:ripapp_dashboard/models/user_entity.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
@@ -79,10 +75,10 @@ class AgencyRepository{
     return products;
   }
 
-  Future<List<ProductEntity>> getAllAgencyProductsWithIndex(int pageIndex) async {
+  Future<String> getAllAgencyProductsWithIndex(int pageIndex) async {
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
-    int pageElements = 10;
+    int pageElements = 5;
     AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
     var userId = (user != null) ? user.id : "48";
@@ -90,17 +86,16 @@ class AgencyRepository{
     parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
     parameters.putIfAbsent("userid", () => userId!);
     Response response;
-    Response res = await globalDio.get(allProductsOfferedByAgencyPaginated, queryParameters: parameters);
-    print("eallora?");
-    String goodJson = jsonEncode(res.data);
-    List<ProductEntity> productsOffered =  ((jsonDecode(goodJson) as Map)["content"] as List).map((e) => ProductEntity.fromJson(e)).toList();
-    //List<AgencyEntity> agencies = ((jsonDecode(goodJson) as Map)["content"] as List).map((agency) => AgencyEntity.fromJson(agency)).toList();
-    return productsOffered;
+    response = await globalDio.get(allProductsOfferedByAgencyPaginated, queryParameters: parameters);
+    String goodJson = jsonEncode(response.data);
+    var list = (jsonDecode(goodJson) as Map)["content"] as List;
+    List<ProductEntity> products = (list).map((product) => ProductEntity.fromJson(product)).toList();
+    return goodJson;
   }
 
-  void setAgencyProducts(List<ProductOffered> productsOffered) async {
+  Future setAgencyProducts(List<ProductOffered> productsOffered) async {
     UserEntity? user = CustomFirebaseAuthenticationListener().userEntity;
-    print("utente agenzia che tenta di cambiare i prodotti: " + user.toString());
+    print("utente agenzia che tenta di cambiare i prodotti: $user");
     var userId = (user != null) ? user.id : "48";
     Map<String, dynamic>? parameters = {};
     parameters.putIfAbsent("userid", () => userId);
@@ -112,7 +107,7 @@ class AgencyRepository{
     myoptions.headers!["Content-Type"] = "application/json";
     myoptions.headers!["app_version"] = appVersion;
 
-    globalDio.post(allProductsOfferedByAgency, data: productsOffered, queryParameters: parameters, options: myoptions);
+    await globalDio.post(allProductsOfferedByAgency, data: productsOffered, queryParameters: parameters, options: myoptions);
   }
 
   Future<dynamic> removeAgency(int idAgency) async{
@@ -124,7 +119,7 @@ class AgencyRepository{
   Future<String> getAgenciesWithIndex(int pageIndex) async {
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
-    int pageElements = 9;
+    int pageElements = 10;
     AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
     parameters.putIfAbsent("pageNumber", () => (pageIndex));
     parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);

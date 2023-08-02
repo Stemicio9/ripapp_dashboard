@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
 import 'package:ripapp_dashboard/models/product_entity.dart';
@@ -15,8 +16,8 @@ import 'package:ripapp_dashboard/widgets/scaffold.dart';
 
 @immutable
 class CurrentPageState {
-  final String page;
-  final int pageNumber;
+   String page;
+   int pageNumber;
   final List<ResultEntity> resultSet;
   final bool loading;
   int totalPages;
@@ -40,6 +41,7 @@ class CurrentPageState {
 
 
 class CurrentPageCubit extends Cubit<CurrentPageState> {
+
   CurrentPageCubit() : super(CurrentPageState("", [], true, 0, 0));
 
 
@@ -67,10 +69,18 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
       result = products;
     }
     else if (pageName == ScaffoldWidgetState.agency_products_page){
-      result = await AgencyRepository().getAllAgencyProductsWithIndex(index);
+      var goodJson = await AgencyRepository().getAllAgencyProductsWithIndex(index);
+      var list = (jsonDecode(goodJson) as Map)["content"] as List;
+      List<ProductEntity> products = (list).map((product) => ProductEntity.fromJson(product)).toList();
+      state.totalPages = (jsonDecode(goodJson) as Map)["totalPages"] ?? 0;
+      result = products;
     }
     else if (pageName == ScaffoldWidgetState.agency_demises_page){
-      result = await DemiseRepository().getDemisesPaginated(index);
+      var goodJson = await DemiseRepository().getDemisesPaginated(index);
+      var list = (jsonDecode(goodJson) as Map)["content"] as List;
+      List<DemiseEntity> products = (list).map((demise) => DemiseEntity.fromJson(demise)).toList();
+      state.totalPages = (jsonDecode(goodJson) as Map)["totalPages"] ?? 0;
+      result = products;
     }
     return result;
   }
@@ -94,6 +104,9 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
   deleteUser(idUser) async {
     try {
       var result = await UserRepository().deleteUser(idUser);
+      if(state.resultSet.length == 1){
+        state.pageNumber = state.pageNumber-1;
+      }
       refreshPage();
     } catch (e) {
       print(e);
@@ -130,6 +143,9 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
   deleteAgency(idAgency) async {
     try {
       var result = await AgencyRepository().removeAgency(idAgency);
+      if(state.resultSet.length == 1){
+        state.pageNumber = state.pageNumber-1;
+      }
       refreshPage();
     } catch (e) {
       print(e);
@@ -156,12 +172,39 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
   }
 
   Future deleteProduct(productId) async {
-      print("l'eccezione si verifica qui");
       var result = await ProductRepository().deleteProduct(productId);
-      print("ecco cosa mi arriva.. " + result.toString());
+      if(state.resultSet.length == 1){
+        state.pageNumber = state.pageNumber-1;
+      }
       refreshPage();
+
   }
 
+
+  setAgencyProducts(List<ProductOffered> productsOffered) async {
+      var result =  await AgencyRepository().setAgencyProducts(productsOffered);
+      state.pageNumber = 0;
+      refreshPage();
+
+  }
+
+  void updateDemise(DemiseEntity demiseEntity){
+    try{
+      DemiseRepository().updateDemise(demiseEntity);
+      refreshPage();
+    }catch(e){
+      print(e);
+    }
+  }
+
+  void addDemise(DemiseEntity demiseEntity){
+    try{
+      DemiseRepository().saveDemise(demiseEntity);
+      refreshPage();
+    }catch(e){
+      print(e);
+    }
+  }
 
   void loadPage(String page, int index) async {
     emit(CurrentPageState(page, const [], true, index, state.totalPages));
@@ -173,13 +216,5 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
     emit(state.copyWith(page: page));
   }
 
-  // todo add to this method pagination logic
-  void updateDemise(DemiseEntity demiseEntity){
-    try{
-      DemiseRepository().saveDemise(demiseEntity);
-      loadPage(ScaffoldWidgetState.agency_demises_page, 0);
-    }catch(e){
-      print(e);
-    }
-  }
+
 }

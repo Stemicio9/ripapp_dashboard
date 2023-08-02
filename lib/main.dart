@@ -45,10 +45,8 @@ void main() async {
 
 class MyApp extends StatelessWidget {
 
-
   static const int primaryColor = 0xFF412268;
   final RouterManager routerManager = RouterManager();
-
 
   final MaterialColor primary = const MaterialColor(primaryColor,
     <int, Color>{
@@ -64,30 +62,7 @@ class MyApp extends StatelessWidget {
       900: Color(0xFF311B92),
   });
 
-
   @override
-  /*
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate
-      ],
-      supportedLocales: const [
-        Locale('it'),
-        Locale('en')
-      ],
-      title: 'Flutter Demo',
-      theme: ThemeData(
-
-        primarySwatch: primary
-      ),
-      routes: RouteConstants.route(context) ,
-      initialRoute: initialRoute,
-    );
-  }
-*/
   Widget build(BuildContext context) {
     return MultiProvider (
       providers: [
@@ -135,7 +110,7 @@ class MyApp extends StatelessWidget {
                   primarySwatch: primary
                 ),
                 routerConfig: routerManager.goRouter,
-    );
+             );
             },
           ),
         )

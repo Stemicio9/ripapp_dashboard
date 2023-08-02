@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
@@ -7,8 +6,9 @@ import 'package:ripapp_dashboard/widgets/texts.dart';
 class PageHeader extends StatelessWidget{
   final bool showBackButton;
   final String pageTitle;
+  final Function()? onTap;
 
-  const PageHeader({super.key, this.showBackButton = false, required this.pageTitle});
+  const PageHeader({super.key, this.showBackButton = false, required this.pageTitle, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,7 @@ class PageHeader extends StatelessWidget{
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
-                    onTap: (){
-                      context.pop();
-                    },
+                    onTap: (){onTap!();},
                     child: const Icon(
                       Icons.arrow_back_ios_new_rounded,
                       color: background,

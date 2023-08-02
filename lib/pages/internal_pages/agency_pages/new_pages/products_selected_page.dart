@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -11,7 +13,6 @@ import 'package:ripapp_dashboard/data_table/data_table_widget/table_row_element.
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/widgets/products_popup.dart';
 import 'package:ripapp_dashboard/pages/internal_pages/page_header.dart';
-import 'package:ripapp_dashboard/repositories/agency_repository.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/widgets/circular_progress_indicator.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
@@ -28,10 +29,10 @@ class _ProductsSelectedPageState extends State<ProductsSelectedPage> {
   SearchProductsOfferedCubit get _searchProductCubit => context.read<SearchProductsOfferedCubit>();
 
   void changeAgencyProducts(List<ProductOffered> productsOffered){
-    AgencyRepository().setAgencyProducts(productsOffered);
+    _currentPageCubit.setAgencyProducts(productsOffered);
+    _searchProductCubit.fetchProducts();
      context.pop();
-    _searchProductCubit.changeSelectedProducts();
-  }
+   }
 
   @override
   void initState() {
@@ -73,7 +74,7 @@ class _ProductsSelectedPageState extends State<ProductsSelectedPage> {
                   data: DataTablePaginatorData(
                       changePageHandle: (index, page) {_currentPageCubit.loadPage(page, index);},
                       pageNumber: state.pageNumber,
-                      numPages: 10,
+                      numPages: state.totalPages,
                       currentPageType: ScaffoldWidgetState.agency_products_page)
               ),
             ],

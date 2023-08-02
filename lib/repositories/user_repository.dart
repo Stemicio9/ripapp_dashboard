@@ -99,7 +99,7 @@ class UserRepository {
 
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
-    int pageElements = 9;
+    int pageElements = 10;
     AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
     parameters.putIfAbsent("pageNumber", () => searchEntity.pageNumber);
     parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);
@@ -120,7 +120,7 @@ class UserRepository {
 
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
-    int pageElements = 9;
+    int pageElements = 10;
     AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
     parameters.putIfAbsent("pageNumber", () => (pageIndex));
     parameters.putIfAbsent("pageElements", () => searchEntity.pageElements);

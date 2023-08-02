@@ -10,7 +10,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
   int? id;
   String? firstName;
   String? lastName;
-  CityEntity? city;
+  String? city;
   String? phoneNumber;
   int? age;
   List<CityEntity>? cities;
@@ -85,7 +85,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
     id: json["demiseid"] ?? 0,
     firstName: json["name"] ?? "",
     lastName: json["surname"] ?? "",
-    city: json["city"] == null ? null : CityEntity.fromJson(json["city"]),
+    city: json["cityname"] ?? "",
     phoneNumber: json["phonenumber"] ?? "",
     age: json["age"] ?? 0,
     photoUrl: json["photourl"] ?? "",
@@ -111,7 +111,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
     int? age,
     String? firstName,
     String? lastName,
-    CityEntity? city,
+    String? city,
     String? phoneNumber,
     String? photoUrl,
     DateTime? deceasedDate,
@@ -153,7 +153,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
     "demiseid":id,
     "name":firstName,
     "surname":lastName,
-    "city":city?.toJson() ?? null,
+    "cityname":city,
     "phonenumber":phoneNumber,
     "firebaseid":firebaseid,
     "photourl":photoUrl,
@@ -192,7 +192,7 @@ class DemiseEntity implements ResultEntity, TableRowElement {
       RowElement(isText: true, isImage: false, isIcon: false, element: id.toString()),
       RowElement(isText: true, isImage: false, isIcon: false,element: firstName ?? ""),
       RowElement(isText: true, isImage: false, isIcon: false,element: lastName ?? ""),
-      RowElement(isText: true, isImage: false, isIcon: false,element: city?.name ?? ""),
+      RowElement(isText: true, isImage: false, isIcon: false,element: city ?? ""),
       RowElement(isText: true, isImage: false, isIcon: false,element: phoneNumber ?? ""),
       RowElement(isText: true, isImage: false, isIcon: false,element: funeralAddress ?? ""),
       RowElement(isText: true, isImage: false, isIcon: false,element: wakeAddress ?? ""),

@@ -106,12 +106,12 @@ class DemiseRepository{
     return demises;
   }
 
-  Future<List<DemiseEntity>> getDemisesPaginated(int pageIndex) async {
+  Future<String> getDemisesPaginated(int pageIndex) async {
     Response res;
 
     Map<String, dynamic>? parameters = {};
     int pageNumber = 1;
-    int pageElements = 30;
+    int pageElements = 10;
     AccountSearchEntity searchEntity = AccountSearchEntity(pageNumber: pageNumber, pageElements: pageElements);
 
     try {
@@ -125,14 +125,17 @@ class DemiseRepository{
       res = await globalDio.get(searchDemisesByCityUrl, queryParameters: parameters);
     }
     on DioError catch (e) {
-      return List.empty(growable: true);
+     // return List.empty(growable: true);
+      return "";
     }
     if (res.statusCode != 201 && res.statusCode != 200) {
-      return List.empty(growable: true);
+     // return List.empty(growable: true);
+      return "";
     }
     String goodJson = jsonEncode(res.data);
-    List<DemiseEntity> demises =  ((jsonDecode(goodJson) as Map)["content"] as List).map((e) => DemiseEntity.fromJson(e)).toList();
-    return demises;
+    var list = (jsonDecode(goodJson) as Map)["content"] as List;
+    List<DemiseEntity> demises = (list).map((demise) => DemiseEntity.fromJson(demise)).toList();
+    return goodJson;
   }
 
 }

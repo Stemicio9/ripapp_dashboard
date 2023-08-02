@@ -11,10 +11,6 @@ import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/prod
 import 'package:ripapp_dashboard/pages/internal_pages/admin_pages/new_pages/users_manage_page.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
 
-import '../../../blocs/searchAgenciesCubit.dart';
-import 'agencies_manage.dart';
-
-
 class Dashboard extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -34,7 +30,6 @@ class DashboardState extends State<Dashboard> {
         icon: Icons.person_rounded,
         onPressed: () => setState(() {
           _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.users_page);
-          //_currentPageCubit.loadPage(ScaffoldWidgetState.users_page, _currentPageCubit.state.pageNumber);
           title = getCurrentLanguageValue(USERS_MANAGE)!;
           currentPage = 1;
         }),
@@ -105,8 +100,7 @@ class DashboardState extends State<Dashboard> {
 
 
   Widget _body(Size size, BuildContext context) {
-    return
-        Builder(
+    return Builder(
           builder: (context) {
             return Container(
               height: double.infinity,
@@ -121,8 +115,7 @@ class DashboardState extends State<Dashboard> {
 
   Widget bodyChild() {
     return BlocBuilder<CurrentPageCubit, CurrentPageState>(
-        builder: (context, state)
-    {
+        builder: (context, state) {
       switch (state.page) {
         case ScaffoldWidgetState.users_page:
           return UsersManagePage();

@@ -13,7 +13,7 @@ class AgencyFormPopup extends StatefulWidget{
   AgencyEntity? selectedAgency;
   final Function onSubmit;
 
-  AgencyFormPopup({Key? key,
+   AgencyFormPopup({Key? key,
     required this.onWillPop,
     this.selectedAgency,
     required this.onSubmit
