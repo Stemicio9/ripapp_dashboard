@@ -166,12 +166,14 @@ class UserRepository {
     print(response.headers);
 
     var accountResponse = await UserRepository().account();
+    print("ecco l'istanza di utente che dovrei avere aggiornata $accountResponse");
 
 
     CustomFirebaseAuthenticationListener().role = userStatusToString(accountResponse.status);
     print("STATUS");
     print(accountResponse.status);
     CustomFirebaseAuthenticationListener().userEntity = accountResponse;
+    print("ho appena settato la entity del listener a ${CustomFirebaseAuthenticationListener().userEntity}");
   }
 
   Future<List<UserEntity>> getAllUsers() async {
@@ -202,10 +204,7 @@ class UserRepository {
     return cityList;
   }
 
-  editUser(UserEntity userEntity) async {
-    print("STO FACENDO EDIT");
-    print(userEntity.toJson());
-    print("CIAO CIAO CIAO");
+  Future<UserEntity> editUser(UserEntity userEntity) async {
     var response = await globalDio.post(updateUserUrl, data: userEntity.toJson());
     return UserEntity.fromJson(response.data);
   }

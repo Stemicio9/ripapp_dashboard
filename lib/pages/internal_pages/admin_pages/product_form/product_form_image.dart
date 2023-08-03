@@ -13,9 +13,19 @@ class ProductFormImage extends StatelessWidget {
   final Function() onTap;
   final bool isNetwork;
   final Uint8List? memoryImage;
+  final double width;
+  final double height;
 
 
-  const ProductFormImage({Key? key, required this.imageUrl, required this.onTap, required this.isNetwork, this.memoryImage}) : super(key: key);
+  const ProductFormImage({
+    Key? key,
+    required this.imageUrl,
+    required this.onTap,
+    required this.isNetwork,
+    this.memoryImage,
+    this.width = 130,
+    this.height = 130
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +49,8 @@ class ProductFormImage extends StatelessWidget {
               onTap();
             },
             child: Container(
-              height: 130,
-              width: 130,
+              height: height,
+              width: width,
               decoration: BoxDecoration(
                 borderRadius:
                 const BorderRadius.all(Radius.circular(3)),

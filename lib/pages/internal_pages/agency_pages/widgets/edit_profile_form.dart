@@ -115,8 +115,7 @@ class EditProfileFormState extends State<EditProfileForm> {
                               Expanded(
                                   flex: 1,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: getPadding(bottom: 5),
@@ -349,8 +348,7 @@ class EditProfileFormState extends State<EditProfileForm> {
 
                                                           ActionButtonV2(
                                                             action: widget.changePassword,
-                                                            text: getCurrentLanguageValue(
-                                                                CONFIRM) ?? "",
+                                                            text: getCurrentLanguageValue(CONFIRM) ?? "",
                                                             maxWidth: 100,
                                                             fontSize: 14,
                                                             containerHeight: 35,

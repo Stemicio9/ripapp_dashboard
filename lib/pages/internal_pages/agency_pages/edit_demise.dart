@@ -46,8 +46,6 @@ class EditDemiseState extends State<EditDemise> {
   final TextEditingController ageController = TextEditingController();
   final TextEditingController deceasedDateController = TextEditingController();
   final TextEditingController citiesController = TextEditingController();
-
-
   final TextEditingController wakeDateController = TextEditingController();
   final TextEditingController wakeTimeController = TextEditingController();
   final TextEditingController wakeNoteController = TextEditingController();
@@ -62,8 +60,6 @@ class EditDemiseState extends State<EditDemise> {
 
   final TextEditingController relativeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  DateTime? wakeDate;
-  DateTime? funeralDate;
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
   Set<CityFromAPI> chips = {};
   Set<CityFromAPI> deletedChips = {};
@@ -83,7 +79,11 @@ class EditDemiseState extends State<EditDemise> {
     }
     super.initState();
   }
-
+  @override
+  void deactivate() {
+    _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_demises_page);
+    super.deactivate();
+  }
 
   final List<Widget> relativeRows = [];
   var imageFile = ImagesConstants.imgDemisePlaceholder;
@@ -115,13 +115,7 @@ class EditDemiseState extends State<EditDemise> {
     chips.removeAll(deletedChips);
     deletedChips.clear();
     print("ecco il demise selzionato ${_selectedDemiseCubit.state.selectedDemise}");
-    return WillPopScope(
-      onWillPop: () {
-        print("checco ramazzotti");
-        _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_demises_page);
-        return Future.value(true);
-      },
-      child: BlocBuilder<ProfileImageCubit, ProfileImageState>(
+    return BlocBuilder<ProfileImageCubit, ProfileImageState>(
           builder: (context, imageState) {
             imageFile = imageState.imageUrl;
             return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
@@ -394,8 +388,8 @@ class EditDemiseState extends State<EditDemise> {
                     ),
                   );
                 });
-          }),
-    );
+          });
+
   }
 
 

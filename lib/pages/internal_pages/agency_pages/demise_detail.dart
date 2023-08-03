@@ -42,7 +42,11 @@ class DemiseDetailState extends State<DemiseDetail> {
     _profileImageCubit.fetchObituary(demiseId);
     super.initState();
   }
-
+  @override
+  void deactivate() {
+    _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_demises_page);
+    super.deactivate();
+  }
   void downloadFile(String url) {
     html.AnchorElement anchorElement =  html.AnchorElement(href: url);
     anchorElement.download = url;

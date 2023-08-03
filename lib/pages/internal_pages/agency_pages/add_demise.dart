@@ -90,6 +90,11 @@ class AddDemiseState extends State<AddDemise> {
   }
 
   @override
+  void deactivate() {
+    _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_demises_page);
+    super.deactivate();
+  }
+  @override
   Widget build(BuildContext context) {
     _currentPageCubit.changeCurrentPage(RouteConstants.addDemise);
     downloadUrlImage().then((value) => func(value));

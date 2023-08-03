@@ -64,7 +64,7 @@ class _ProductsPopupState extends State<ProductsPopup> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SingleChildScrollView(
-              child:   Container(
+              child: SizedBox(
                   width: 1200,
                   child: DialogCard(
                       cancelIcon: true,
@@ -74,7 +74,7 @@ class _ProductsPopupState extends State<ProductsPopup> {
                             if(state is SearchProductsOfferedLoading){
                               return const Center(child: CircularProgressIndicator());
                             }
-                            else if (state is SearchProductsOfferedLoaded) {
+                            else if (state is SearchProductsOfferedLoaded){
                               products.clear();
                               for (var productOffered in state.productsOffered) {
                                 products.add(SingleProductEntity(
@@ -87,10 +87,9 @@ class _ProductsPopupState extends State<ProductsPopup> {
                                   onTap: onProductTapped,
                                 ));
                               }
-
                               return Column(
                                 children: [
-                                  Container(
+                                  SizedBox(
                                       height: 450,
                                       child: SingleChildScrollView(
                                           child:  ProductsRow(

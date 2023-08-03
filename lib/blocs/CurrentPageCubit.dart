@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ripapp_dashboard/authentication/firebase_authentication_listener.dart';
 import 'package:ripapp_dashboard/models/ProductOffered.dart';
 import 'package:ripapp_dashboard/models/agency_entity.dart';
 import 'package:ripapp_dashboard/models/demise_entity.dart';
@@ -13,6 +13,7 @@ import 'package:ripapp_dashboard/repositories/product_repository.dart';
 import 'package:ripapp_dashboard/repositories/user_repository.dart';
 import 'package:ripapp_dashboard/utils/ResultSet.dart';
 import 'package:ripapp_dashboard/widgets/scaffold.dart';
+import 'package:ripapp_dashboard/widgets/snackbars.dart';
 
 @immutable
 class CurrentPageState {
@@ -43,7 +44,6 @@ class CurrentPageState {
 class CurrentPageCubit extends Cubit<CurrentPageState> {
 
   CurrentPageCubit() : super(CurrentPageState("", [], true, 0, 0));
-
 
   Future<List<ResultEntity>?> findResult(String pageName, int index) async {
     List<ResultEntity>? result;
@@ -99,7 +99,6 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
       print(e);
     }
   }
-
 
   deleteUser(idUser) async {
     try {
@@ -205,6 +204,22 @@ class CurrentPageCubit extends Cubit<CurrentPageState> {
       print(e);
     }
   }
+
+  Future editProfile(context, UserEntity userEntity) async{
+    /*UserRepository().editUser(userEntity).then((res) {
+      //CustomFirebaseAuthenticationListener().userEntity = res;
+      String? token = CustomFirebaseAuthenticationListener().tokenId;
+      if (token != null){
+        UserRepository().loginPreLayer(token);
+      }
+      SuccessSnackbar(context, text: "Profilo modificato con successo");
+    }, onError: (e) {
+      ErrorSnackbar(context, text: "Errore generico durante la modifica dell\'utente");
+    });*/
+    return UserRepository().editUser(userEntity);
+  }
+
+
 
   void loadPage(String page, int index) async {
     emit(CurrentPageState(page, const [], true, index, state.totalPages));

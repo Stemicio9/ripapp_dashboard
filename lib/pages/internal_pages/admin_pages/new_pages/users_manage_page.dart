@@ -166,6 +166,7 @@ class UsersManagePageState extends State<UsersManagePage>{
                     userEntity.id == null ? _currentPageCubit.signup(internalUserEntity) :
                     _currentPageCubit.editUser(internalUserEntity);
                     context.pop();
+
                   },
                 )
             ),

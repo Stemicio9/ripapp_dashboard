@@ -87,8 +87,7 @@ class _AgenciesManagePageState extends State<AgenciesManagePage> {
   }
 
   Widget composeDialog(AgencyEntity agencyEntity){
-    return Form(
-      child: Column(
+    return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
@@ -115,7 +114,7 @@ class _AgenciesManagePageState extends State<AgenciesManagePage> {
 
           ),
         ],
-      ),
+
     );
   }
 
