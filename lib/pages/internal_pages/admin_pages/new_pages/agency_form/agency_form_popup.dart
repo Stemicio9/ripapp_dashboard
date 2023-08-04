@@ -77,6 +77,7 @@ class AgencyFormPopupState extends State<AgencyFormPopup>{
       ),
     );
   }
+
   assignTextEditingControllerValues(){
     nameController.text = widget.selectedAgency?.agencyName ?? '';
     emailController.text = widget.selectedAgency?.email ?? '';
@@ -93,18 +94,16 @@ class AgencyFormPopupState extends State<AgencyFormPopup>{
     });
   }
 
-
   void save(){
     if (widget.selectedAgency == null) return;
     if(_formKey.currentState!.validate()) {
         AgencyEntity agencyToSave = widget.selectedAgency!.copyWith(
-            id:  widget.selectedAgency!.id,
+            id: widget.selectedAgency!.id,
             agencyName: nameController.text,
             phoneNumber: phoneController.text,
             email: widget.selectedAgency!.id != null ? widget.selectedAgency!.email : emailController.text,
             city: cityController.text
         );
-
         widget.onSubmit(agencyToSave);
     }
   }

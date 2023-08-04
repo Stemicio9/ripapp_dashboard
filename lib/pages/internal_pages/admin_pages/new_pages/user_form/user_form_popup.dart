@@ -80,20 +80,19 @@ class _UserFormPopupState extends State<UserFormPopup> {
     return WillPopScope(
       onWillPop: widget.onWillPop,
       child: BlocBuilder<CityListCubit,CityListState>(
-        builder: (context, cityListState) {
-          // TODO Calcolare o no il loading delle cities?
-          if(cityListState is CityListLoading) {
-            return const CircularProgressIndicatorWidget();
-          } else if(cityListState is CityListLoaded) {
-            return BlocBuilder<SearchAgencyCubit,SearchAgencyState>(
-              builder: (context, state) {
-                List<AgencyEntity> agencies = [];
-                if(state is SearchAgencyLoaded) {
-                  agencies = state.agencies;
-                }
-                 return Form(
-                   key: _formKey,
-                   child: UserFormWidget(
+          builder: (context, cityListState) {
+            if(cityListState is CityListLoading) {
+              return const CircularProgressIndicatorWidget();
+            } else if(cityListState is CityListLoaded) {
+              return BlocBuilder<SearchAgencyCubit,SearchAgencyState>(
+                  builder: (context, state) {
+                    List<AgencyEntity> agencies = [];
+                    if(state is SearchAgencyLoaded) {
+                      agencies = state.agencies;
+                    }
+                    return Form(
+                      key: _formKey,
+                      child: UserFormWidget(
                           isAddPopup: widget.selectedUser?.id != null ? false : true,
                           nameController: nameController,
                           lastNameController: lastNameController,
@@ -115,14 +114,14 @@ class _UserFormPopupState extends State<UserFormPopup> {
                           chips: widget.selectedUser?.city?.toSet() ?? Set.of([]),
                           onDeleted: deleteCity
 
-                ),
-                 );
-              }
-            );
-          } else {
-            return ErrorWidget("exception");
+                      ),
+                    );
+                  }
+              );
+            } else {
+              return ErrorWidget("exception");
+            }
           }
-        }
       ),
     );
   }
@@ -158,41 +157,39 @@ class _UserFormPopupState extends State<UserFormPopup> {
 
 
   void save(){
-    // todo    compose entire user object to submit on saving
-    // todo    you should call save(userObject)
-    // todo    be careful, you should compose the user object
-    // todo    according to edit controllers
     if (widget.selectedUser == null) return;
-     if(_formKey.currentState!.validate()) {
-       if (widget.selectedUser!.city!.isNotEmpty) {
-          var currentStatus = fromUserRole(selectedStatus ?? UserRoles.Utente);
-          UserEntity userToSave = widget.selectedUser!.copyWith(
-              id:  widget.selectedUser!.id,
-              firstName: nameController.text,
-              lastName: lastNameController.text,
-              phoneNumber: phoneController.text,
-              email: widget.selectedUser!.id != null ? widget.selectedUser!.email : emailController.text,
-              city: widget.selectedUser?.city ?? [],
-              agency: currentStatus == UserStatus.agency ? selectedAgency : null,
-              status: currentStatus
-          );
-          if(userToSave.status == UserStatus.agency && userToSave.agency == null){
-            ErrorSnackbar(context, text: "Scegliere agenzia!");
-          }else {
-            userToSave.id == null ? FirebaseAuth.instance
-                .createUserWithEmailAndPassword(
-                email: userToSave.email ?? "",
-                password: passwordController.text ?? "")
-                .then((value) async {
-              if (value.user == null) {
-                print("Utente nullo");
-                return; //TODO: Handle error
-              } else {
-                userToSave.idtoken = value.user!.uid;
-                widget.onSubmit(userToSave);
-              }
-            }) : widget.onSubmit(userToSave);
-          }
+    if(_formKey.currentState!.validate()) {
+      if (widget.selectedUser!.city!.isNotEmpty) {
+        var currentStatus = fromUserRole(selectedStatus ?? UserRoles.Utente);
+        UserEntity userToSave = widget.selectedUser!.copyWith(
+            id:  widget.selectedUser!.id,
+            firstName: nameController.text,
+            lastName: lastNameController.text,
+            phoneNumber: phoneController.text,
+            email: widget.selectedUser!.id != null ? widget.selectedUser!.email : emailController.text,
+            city: widget.selectedUser?.city ?? [],
+            agency: currentStatus == UserStatus.agency ? selectedAgency : null,
+            status: currentStatus
+        );
+        if(userToSave.status == UserStatus.agency && userToSave.agency == null){
+          ErrorSnackbar(context, text: "Scegliere agenzia!");
+        }else {
+          userToSave.id == null ? FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: userToSave.email ?? "",
+              password: passwordController.text ?? "")
+              .then((value) async {
+            if (value.user == null) {
+              print("Utente nullo");
+              return; //TODO: Handle error
+            } else {
+              userToSave.idtoken = value.user!.uid;
+              widget.onSubmit(userToSave);
+            }
+          }, onError: (e) {
+            print(e);
+            ErrorSnackbar(context, text: 'L\'email inserita è già usata da un altro utente!');
+          }) : widget.onSubmit(userToSave);
+        }
       }else{
         ErrorSnackbar(context, text: "Inserire almeno un Comune di interesse!");
       }

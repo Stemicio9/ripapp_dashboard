@@ -305,14 +305,12 @@ class UserFormWidget extends StatelessWidget {
 
   Widget composeActionRow() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          flex: 1,
-          child: EmptyFieldsWidget().emptyFields(clearFields),
-        ),
-        Expanded(
-          flex: 1,
-          child: Padding(
+
+        EmptyFieldsWidget().emptyFields(clearFields),
+
+        Padding(
             padding: getPadding(top: 40),
             child: Align(
               alignment: Alignment.centerRight,
@@ -322,7 +320,7 @@ class UserFormWidget extends StatelessWidget {
               ),
             ),
           ),
-        ),
+
       ],
     );
   }

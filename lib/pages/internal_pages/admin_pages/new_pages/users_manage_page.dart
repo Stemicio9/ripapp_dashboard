@@ -144,8 +144,7 @@ class UsersManagePageState extends State<UsersManagePage>{
   }
 
   Widget composeDialog(UserEntity userEntity){
-    return Form(
-      child: Column(
+    return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
@@ -173,7 +172,7 @@ class UsersManagePageState extends State<UsersManagePage>{
 
           ),
         ],
-      ),
+
     );
   }
 

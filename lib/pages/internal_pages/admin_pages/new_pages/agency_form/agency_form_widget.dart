@@ -112,30 +112,24 @@ class AgencyFormWidget extends StatelessWidget {
 
           ],
         ),
-
         composeActionRow(),
-
       ],
     );
   }
 
   Widget composeActionRow() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          flex: 1,
-          child: EmptyFieldsWidget().emptyFields(clearFields),
-        ),
-        Expanded(
-          flex: 1,
-          child: Padding(
-            padding: getPadding(top: 40),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: ActionButtonV2(
-                action: save,
-                text: getCurrentLanguageValue(SAVE)!,
-              ),
+        EmptyFieldsWidget().emptyFields(clearFields),
+
+        Padding(
+          padding: getPadding(top: 40),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: ActionButtonV2(
+              action: save,
+              text: getCurrentLanguageValue(SAVE)!,
             ),
           ),
         ),

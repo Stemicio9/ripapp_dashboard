@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
-import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/widgets/texts.dart';
 
 class EmptyFieldsWidget{

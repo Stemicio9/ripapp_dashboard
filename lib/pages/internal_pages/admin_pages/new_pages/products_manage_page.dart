@@ -130,8 +130,7 @@ class ProductsManagePageState extends State<ProductsManagePage> {
 
 
   Widget composeDialog(ProductEntity productEntity){
-    return Form(
-      child: Column(
+    return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
@@ -158,7 +157,7 @@ class ProductsManagePageState extends State<ProductsManagePage> {
 
           ),
         ],
-      ),
+
     );
   }
 
