@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ripapp_dashboard/blocs/CurrentPageCubit.dart';
+import 'package:ripapp_dashboard/blocs/city_list_cubit.dart';
 import 'package:ripapp_dashboard/blocs/profile_image_cubit.dart';
 import 'package:ripapp_dashboard/blocs/selected_demise_cubit.dart';
 import 'package:ripapp_dashboard/constants/images_constants.dart';
@@ -28,6 +29,7 @@ import '../../../constants/validators.dart';
 import '../../../utils/size_utils.dart';
 import 'package:intl/intl.dart';
 import '../../../widgets/action_button.dart';
+import '../../../widgets/circular_progress_indicator.dart';
 import '../../../widgets/snackbars.dart';
 
 class EditDemise extends StatefulWidget {
@@ -57,7 +59,9 @@ class EditDemiseState extends State<EditDemise> {
   CurrentPageCubit  get _currentPageCubit => context.read<CurrentPageCubit>();
   SelectedDemiseCubit  get _selectedDemiseCubit => context.read<SelectedDemiseCubit>();
   int relativeIndex = 0;
+  late String citySearched;
 
+  late List<CityFromAPI> filteredList = [];
   final TextEditingController relativeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   List<CityFromAPI> cityOptions = <CityFromAPI>[];
@@ -66,9 +70,13 @@ class EditDemiseState extends State<EditDemise> {
   ProfileImageCubit get _profileImageCubit => context.read<ProfileImageCubit>();
   List<RelativeRowNew> relativesNew = [];
   static const List<String> kinship = <String>[];
+  CityListCubit get _cityListCubit => context.read<CityListCubit>();
 
   @override
   void initState() {
+    if(_cityListCubit.state is! CityListLoaded) {
+      _cityListCubit.fetchCityList();
+    }
     String demiseId = _selectedDemiseCubit.state.selectedDemise.firebaseid!;
     _profileImageCubit.fetchProfileImage(demiseId);
     fillValues(_selectedDemiseCubit.state.selectedDemise);
@@ -79,6 +87,8 @@ class EditDemiseState extends State<EditDemise> {
     }
     super.initState();
   }
+
+
   @override
   void deactivate() {
     _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_demises_page);
@@ -115,281 +125,300 @@ class EditDemiseState extends State<EditDemise> {
     chips.removeAll(deletedChips);
     deletedChips.clear();
     print("ecco il demise selzionato ${_selectedDemiseCubit.state.selectedDemise}");
-    return BlocBuilder<ProfileImageCubit, ProfileImageState>(
-          builder: (context, imageState) {
-            imageFile = imageState.imageUrl;
-            return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
-                builder: (context, state) {
-                  print("ricostruisco il widget e la lista è ${_selectedDemiseCubit.state.selectedDemise.relatives}");
-                  relativesNew.clear();
-                  for (int i = 0; i < state.selectedDemise.relatives!.length; ++i){
-                    print("entro nell'aggiunta ai newrelative");
-                    DemiseRelative currentRelative = state.selectedDemise.relatives![i];
-                    relativesNew.add(
-                        RelativeRowNew(value: currentRelative.telephoneNumber!,
-                            kinship: currentRelative.kinshipType!,
-                            currentIndex: i,
-                            relativeId: currentRelative.relativeId
-                        )
-                    );}
-                  return ScaffoldWidget(
-                    body: SingleChildScrollView(
-                      child: Padding(
-                        padding: getPadding(top: 30, bottom: 30, left: 5, right: 5),
-                        child: Form(
-                          key: _formKey ,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+    return BlocBuilder<CityListCubit, CityListState>(
+        builder: (context, cityState) {
+          if (cityState is CityListLoading) {
+            print("DECESSED DATA CITY LOADING");
+            return const Center(child: CircularProgressIndicator());
+          } else if (cityState is CityListLoaded) {
+            if (cityState.listCity.isNotEmpty) {
+              return BlocBuilder<ProfileImageCubit, ProfileImageState>(
+                  builder: (context, imageState) {
+                    imageFile = imageState.imageUrl;
+                    return BlocBuilder<SelectedDemiseCubit, SelectedDemiseState>(
+                        builder: (context, state) {
+                          print("ricostruisco il widget e la lista è ${_selectedDemiseCubit.state.selectedDemise.relatives}");
+                          relativesNew.clear();
+                          for (int i = 0; i < state.selectedDemise.relatives!.length; ++i){
+                            print("entro nell'aggiunta ai newrelative");
+                            DemiseRelative currentRelative = state.selectedDemise.relatives![i];
+                            relativesNew.add(
+                                RelativeRowNew(value: currentRelative.telephoneNumber!,
+                                    kinship: currentRelative.kinshipType!,
+                                    currentIndex: i,
+                                    relativeId: currentRelative.relativeId
+                                )
+                            );}return ScaffoldWidget(
+                            body: SingleChildScrollView(
+                              child: Padding(
+                                padding: getPadding(top: 30, bottom: 30, left: 5, right: 5),
+                                child: Form(
+                                  key: _formKey ,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      PageHeader(
+                                        pageTitle: "Modifica decesso",
+                                        showBackButton: true,
+                                        onTap: (){
+                                          context.pop();
+                                          //  _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_demises_page);
+                                        },
+                                      ),
 
-                               PageHeader(
-                                pageTitle: "Modifica decesso",
-                                showBackButton: true,
-                                onTap: (){
-                                  context.pop();
-                                 //  _currentPageCubit.changeCurrentPage(ScaffoldWidgetState.agency_demises_page);
-                                },
-                              ),
+                                      //deceased data
+                                      imageState.loaded ?  DeceasedData(
+                                        isEdit: true,
+                                        emptyFields: () {
+                                          setState(() {
+                                            nameController.clear();
+                                            lastNameController.clear();
+                                            cityController.clear();
+                                            phoneController.clear();
+                                            ageController.clear();
+                                            deceasedDateController.clear();
+                                            wakeAddressController.clear();
+                                            wakeDateController.clear();
+                                            wakeTimeController.clear();
+                                            wakeNoteController.clear();
+                                            funeralAddressController.clear();
+                                            funeralDateController.clear();
+                                            funeralTimeController.clear();
+                                            funeralNoteController.clear();
+                                            citiesController.clear();
+                                            chips.clear();
+                                          });
+                                        },
+                                        onDeleted: (CityFromAPI city){
+                                          setState(() {
+                                            deletedChips.add(city);
+                                          });
+                                        },
+                                        onSelected: (value){
+                                          setState(() {
+                                            chips.add(value);
+                                          });
+                                        },
+                                        chips: chips.toList(),
+                                        isNetwork: isNetwork,
+                                        imageFile: imageFile,
+                                        memoryImage: memoryImage,
+                                        imageOnTap: () async {
+                                          FilePickerResult? result = await FilePicker.platform.pickFiles();
+                                          if (result != null) {
+                                            fileBytes = result.files.first.bytes!;
+                                            fileName = result.files.first.name;
+                                            isNetwork = false;
+                                            setState(() {
+                                              memoryImage = fileBytes;
+                                            });
+                                          }
+                                        },
+                                        onTextChanged: (String text){
+                                          citySearched = text;
+                                          filteredList = cityState.listCity.where((CityFromAPI option) {
+                                            return option.name!.toLowerCase().contains(text.toLowerCase());
+                                          }).toList();
+                                          cityController.clear();
+                                          print("size delle filtrate = ${filteredList.length}");
+                                        },
+                                        selectedSingleCity: (CityFromAPI city){
+                                          cityController.text = city.name!;
+                                        },
+                                        options: cityState.listCity,
+                                        city: cityController.text,
+                                        nameController: nameController,
+                                        phoneController: phoneController,
+                                        cityController: cityController,
+                                        lastNameController: lastNameController,
+                                        ageController: ageController,
+                                        dateController: deceasedDateController,
+                                        citiesController: citiesController,
+                                        nameValidator: notEmptyValidate,
+                                        lastNameValidator: notEmptyValidate,
+                                        phoneValidator:notEmptyValidate ,
+                                        ageValidator: notEmptyValidate,
+                                        dateValidator: notEmptyValidate,
+                                        cityValidator: notEmptyValidate,
+                                        iconOnTap: () async {
+                                          DateTime? pickedDate = await showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime.now().add(const Duration(days: -365 * 10)),
+                                              lastDate: DateTime.now().add(const Duration(days: 365)));
+                                          if (pickedDate != null) {
+                                            String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                                            deceasedDateController.text = formattedDate;
+                                          } else {
+                                            print("Date is not selected");
+                                          }
+                                        },
+                                        child:  Container(),
+                                      ) : Container(),
 
-                              //deceased data
-                              imageState.loaded ?  DeceasedData(
-                                isEdit: true,
-                                selectCity: (CityFromAPI city){
-                                  cityController.text = city.name!;
-                                  },
-                                emptyFields: () {
-                                  setState(() {
-                                    nameController.clear();
-                                    lastNameController.clear();
-                                    cityController.clear();
-                                    phoneController.clear();
-                                    ageController.clear();
-                                    deceasedDateController.clear();
-                                    wakeAddressController.clear();
-                                    wakeDateController.clear();
-                                    wakeTimeController.clear();
-                                    wakeNoteController.clear();
-                                    funeralAddressController.clear();
-                                    funeralDateController.clear();
-                                    funeralTimeController.clear();
-                                    funeralNoteController.clear();
-                                    citiesController.clear();
-                                    chips.clear();
-                                  });
-                                },
-                                onDeleted: (CityFromAPI city){
-                                  setState(() {
-                                    deletedChips.add(city);
-                                  });
-                                },
-                                onSelected: (value){
-                                  setState(() {
-                                    chips.add(value);
-                                  });
-                                },
-                                chips: chips.toList(),
-                                isNetwork: isNetwork,
-                                imageFile: imageFile,
-                                memoryImage: memoryImage,
-                                imageOnTap: () async {
-                                  FilePickerResult? result = await FilePicker.platform.pickFiles();
-                                  if (result != null) {
-                                    fileBytes = result.files.first.bytes!;
-                                    fileName = result.files.first.name;
-                                    isNetwork = false;
-                                    setState(() {
-                                      memoryImage = fileBytes;
-                                    });
-                                  }
-                                },
-                                nameController: nameController,
-                                phoneController: phoneController,
-                                cityController: cityController,
-                                lastNameController: lastNameController,
-                                ageController: ageController,
-                                dateController: deceasedDateController,
-                                citiesController: citiesController,
-                                options: cityOptions,
-                                nameValidator: notEmptyValidate,
-                                lastNameValidator: notEmptyValidate,
-                                phoneValidator:notEmptyValidate ,
-                                ageValidator: notEmptyValidate,
-                                dateValidator: notEmptyValidate,
-                                cityValidator: notEmptyValidate,
-                                iconOnTap: () async {
-                                  DateTime? pickedDate = await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime.now().add(const Duration(days: -365 * 10)),
-                                      lastDate: DateTime.now().add(const Duration(days: 365)));
-                                  if (pickedDate != null) {
-                                    String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-                                    deceasedDateController.text = formattedDate;
-                                  } else {
-                                    print("Date is not selected");
-                                  }
-                                },
-                                child:  Container(),
-                              ) : Container(),
+                                      //wake data
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 20),
+                                        child: WakeData(
+                                          timeController: wakeTimeController,
+                                          wakeAddressController: wakeAddressController,
+                                          dateController: wakeDateController,
+                                          wakeNoteController: wakeNoteController,
+                                          timeValidator: notEmptyValidate,
+                                          dateValidator: notEmptyValidate,
+                                          wakeAddressValidator: notEmptyValidate,
+                                          showWakeTimePicker: () async {
+                                            TimeOfDay? pickedTime = await showTimePicker(
+                                              context: context,
+                                              initialTime: TimeOfDay.now(),
+                                              confirmText: getCurrentLanguageValue(
+                                                  CONFIRM) ?? "",
+                                              cancelText: getCurrentLanguageValue(CANCEL) ??
+                                                  "",
+                                            );
+                                            if (pickedTime != null) {
+                                              wakeTimeController.text = pickedTime.format(context).toString();
+                                            } else {
+                                              print("Time is not selected");
+                                            }
+                                          },
+                                          showWakeDatePicker: () async {
+                                            DateTime? pickedDate = await showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime.now(),
+                                                lastDate:
+                                                DateTime.now().add(
+                                                    const Duration(days: 365)));
+                                            if (pickedDate != null) {
+                                              String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+                                              wakeDateController.text = formattedDate;
+                                            } else {
+                                              print("Date is not selected");
+                                            }
+                                          },
+                                        ),
+                                      ),
 
-                              //wake data
-                              Padding(
-                                padding: const EdgeInsets.only(top: 20),
-                                child: WakeData(
-                                  timeController: wakeTimeController,
-                                  wakeAddressController: wakeAddressController,
-                                  dateController: wakeDateController,
-                                  wakeNoteController: wakeNoteController,
-                                  timeValidator: notEmptyValidate,
-                                  dateValidator: notEmptyValidate,
-                                  wakeAddressValidator: notEmptyValidate,
-                                  showWakeTimePicker: () async {
-                                    TimeOfDay? pickedTime = await showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.now(),
-                                      confirmText: getCurrentLanguageValue(
-                                          CONFIRM) ?? "",
-                                      cancelText: getCurrentLanguageValue(CANCEL) ??
-                                          "",
-                                    );
-                                    if (pickedTime != null) {
-                                      wakeTimeController.text = pickedTime.format(context).toString();
-                                    } else {
-                                      print("Time is not selected");
-                                    }
-                                  },
-                                  showWakeDatePicker: () async {
-                                    DateTime? pickedDate = await showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime.now(),
-                                        lastDate:
-                                        DateTime.now().add(
-                                            const Duration(days: 365)));
-                                    if (pickedDate != null) {
-                                      String formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-                                      wakeDateController.text = formattedDate;
-                                    } else {
-                                      print("Date is not selected");
-                                    }
-                                  },
+                                      //funeral data
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 20),
+                                        child: FuneralData(
+                                          addressController: funeralAddressController,
+                                          timeController: funeralTimeController,
+                                          dateController: funeralDateController,
+                                          noteController: funeralNoteController,
+                                          timeValidator: notEmptyValidate,
+                                          dateValidator: notEmptyValidate,
+                                          addressValidator: notEmptyValidate,
+                                          showFuneralTimePicker: () async {
+                                            TimeOfDay? pickedTime = await showTimePicker(
+                                              context: context,
+                                              initialTime: TimeOfDay.now(),
+                                              confirmText: getCurrentLanguageValue(CONFIRM) ?? "",
+                                              cancelText: getCurrentLanguageValue(CANCEL) ?? "",
+                                            );
+                                            if (pickedTime != null) {
+                                              funeralTimeController.text = pickedTime.format(context).toString();
+                                            } else {
+                                              print("Time is not selected");
+                                            }
+                                          },
+                                          showFuneralDatePicker: () async {
+                                            DateTime? pickedDate = await showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime.now(),
+                                                lastDate:
+                                                DateTime.now().add(const Duration(days: 365)));
+                                            if (pickedDate != null) {
+                                              String formattedDate =
+                                              DateFormat('dd-MM-yyyy').format(pickedDate);
+                                              funeralDateController.text = formattedDate;
+                                            } else {
+                                              print("Date is not selected");
+                                            }
+                                          },
+                                        ),
+                                      ),
+
+                                      //add relative
+                                      Padding(
+                                          padding: const EdgeInsets.only(top: 20),
+                                          child: RelativesWidget(
+                                              isDetail: false,
+                                              relatives: relativesNew,
+                                              addDemisePress: () {
+                                                RelativeRowNew relativeRow = RelativeRowNew(currentIndex: relativesNew.length);
+                                                setState(() {
+                                                  //relativesNew.add(relativeRow);
+                                                  RelativeRowNew newRelative = RelativeRowNew(); //used just for default values
+                                                  _selectedDemiseCubit.state.selectedDemise.relatives!.add(DemiseRelative(telephoneNumber: newRelative.value, kinshipType: newRelative.kinship));
+                                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                                });
+                                              },
+                                              onKinshipChange: (int index, Kinship kinship) {
+                                                setState(() {
+                                                  _selectedDemiseCubit.state.selectedDemise.relatives![index].kinshipType = kinship;
+                                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                                  //relativesNew[index].kinship = kinship;
+                                                });
+                                              },
+                                              inputValueChange: (int index, String value) {
+                                                print("CAMBIO VALORE DI INDICE $index");
+                                                setState(() {
+                                                  _selectedDemiseCubit.state.selectedDemise.relatives![index].telephoneNumber = value;
+                                                  //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                                  //relativesNew[index].value = value;
+                                                });
+                                              },
+                                              deleteRow: (int index) {
+                                                // TODO
+                                                // TODO What problem can generate this method?
+                                                setState(() {
+                                                  //relativesNew.removeAt(index);
+                                                  print("ecco la nuova lista pre modifica " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                                  _selectedDemiseCubit.state.selectedDemise.relatives!.removeAt(index);
+                                                  print("ecco la nuova lista post modifica " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
+                                                  //refactorRelativeIndexes();
+                                                });
+                                              },
+                                              emptyFields: (){
+                                                setState(() {
+                                                  _selectedDemiseCubit.state.selectedDemise.relatives!.clear();
+                                                });
+                                              }
+                                          )
+                                      ),
+
+
+                                      //form submit
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 30),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            ActionButtonV2(
+                                                action: () {formSubmit(cityState.listCity);},
+                                                text: getCurrentLanguageValue(SAVE) ?? ""
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
                                 ),
                               ),
-
-                              //funeral data
-                              Padding(
-                                padding: const EdgeInsets.only(top: 20),
-                                child: FuneralData(
-                                  addressController: funeralAddressController,
-                                  timeController: funeralTimeController,
-                                  dateController: funeralDateController,
-                                  noteController: funeralNoteController,
-                                  timeValidator: notEmptyValidate,
-                                  dateValidator: notEmptyValidate,
-                                  addressValidator: notEmptyValidate,
-                                  showFuneralTimePicker: () async {
-                                    TimeOfDay? pickedTime = await showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.now(),
-                                      confirmText: getCurrentLanguageValue(CONFIRM) ?? "",
-                                      cancelText: getCurrentLanguageValue(CANCEL) ?? "",
-                                    );
-                                    if (pickedTime != null) {
-                                      funeralTimeController.text =pickedTime.format(context).toString();
-                                    } else {
-                                      print("Time is not selected");
-                                    }
-                                  },
-                                  showFuneralDatePicker: () async {
-                                    DateTime? pickedDate = await showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime.now(),
-                                        lastDate:
-                                        DateTime.now().add(const Duration(days: 365)));
-                                    if (pickedDate != null) {
-                                      String formattedDate =
-                                      DateFormat('dd-MM-yyyy').format(pickedDate);
-                                      funeralDateController.text = formattedDate;
-                                    } else {
-                                      print("Date is not selected");
-                                    }
-                                  },
-                                ),
-                              ),
-
-                              //add relative
-                              Padding(
-                                  padding: const EdgeInsets.only(top: 20),
-                                  child: RelativesWidget(
-                                      isDetail: false,
-                                      relatives: relativesNew,
-                                      addDemisePress: () {
-                                        RelativeRowNew relativeRow = RelativeRowNew(currentIndex: relativesNew.length);
-                                        setState(() {
-                                          //relativesNew.add(relativeRow);
-                                          RelativeRowNew newRelative = RelativeRowNew(); //used just for default values
-                                          _selectedDemiseCubit.state.selectedDemise.relatives!.add(DemiseRelative(telephoneNumber: newRelative.value, kinshipType: newRelative.kinship));
-                                          //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
-                                        });
-                                      },
-                                      onKinshipChange: (int index, Kinship kinship) {
-                                        setState(() {
-                                          _selectedDemiseCubit.state.selectedDemise.relatives![index].kinshipType = kinship;
-                                          //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
-                                          //relativesNew[index].kinship = kinship;
-                                        });
-                                      },
-                                      inputValueChange: (int index, String value) {
-                                        print("CAMBIO VALORE DI INDICE $index");
-                                        setState(() {
-                                          _selectedDemiseCubit.state.selectedDemise.relatives![index].telephoneNumber = value;
-                                          //print("ecco la nuova lista " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
-                                          //relativesNew[index].value = value;
-                                        });
-                                      },
-                                      deleteRow: (int index) {
-                                        // TODO
-                                        // TODO What problem can generate this method?
-                                        setState(() {
-                                          //relativesNew.removeAt(index);
-                                          print("ecco la nuova lista pre modifica " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
-                                          _selectedDemiseCubit.state.selectedDemise.relatives!.removeAt(index);
-                                          print("ecco la nuova lista post modifica " + _selectedDemiseCubit.state.selectedDemise.relatives.toString());
-                                          //refactorRelativeIndexes();
-                                        });
-                                      },
-                                      emptyFields: (){
-                                        setState(() {
-                                          _selectedDemiseCubit.state.selectedDemise.relatives!.clear();
-                                        });
-                                      }
-                                  )
-                              ),
-
-
-                              //form submit
-                              Padding(
-                                padding: const EdgeInsets.only(top: 30),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    ActionButtonV2(action: formSubmit,
-                                        text: getCurrentLanguageValue(SAVE) ?? ""
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                });
-          });
-
+                            ),
+                          );
+                        });
+                  });
+            }else {
+              return ErrorWidget("exception");
+            }}else {
+            return ErrorWidget("exception");
+          }});
   }
 
 
@@ -416,9 +445,31 @@ class EditDemiseState extends State<EditDemise> {
     _currentPageCubit.loadPage(ScaffoldWidgetState.agency_demises_page, 0);
   }
 
+  bool equalsIgnoreCase(String? string1, String? string2) {
+    return string1?.toLowerCase() == string2?.toLowerCase();
+  }
 
-  formSubmit() async {
+  formSubmit(List<CityFromAPI> listCity) async {
+
+    String? agencyCity;
+    for (var element in filteredList) {
+      if (equalsIgnoreCase(element.name, citySearched)) {
+        agencyCity = element.name;
+      }
+    }
+
+
     if(_formKey.currentState!.validate()){
+
+      if(agencyCity == null) {
+        if(cityController.text.isEmpty){
+          ErrorSnackbar(context, text: "Città non valida!");
+          return;
+        }else{
+          agencyCity = cityController.text;
+        }
+      }
+
       if(chips.isNotEmpty){
         DemiseEntity demiseEntity = DemiseEntity(
           id: _selectedDemiseCubit.state.selectedDemise.id,
@@ -428,7 +479,7 @@ class EditDemiseState extends State<EditDemise> {
           age: int.parse(ageController.text),
           phoneNumber: phoneController.text,
           deceasedDate: deceasedDateController.text != "" ? convertDate(deceasedDateController.text) : null,
-          city:  cityController.text,
+          city: agencyCity,
           cities: chips.map((e) => CityEntity(name: e.name!)).toList(),
           wakeAddress: wakeAddressController.text,
           wakeDateTime: wakeDateController.text != "" ? convertDate(wakeDateController.text) : null,

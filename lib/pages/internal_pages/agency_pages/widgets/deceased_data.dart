@@ -26,7 +26,11 @@ class DeceasedData extends StatefulWidget {
   final TextEditingController ageController;
   final TextEditingController dateController;
   final TextEditingController citiesController;
+  final List<CityFromAPI> options;
+  final String city;
 
+
+  final Function(String)? onTextChanged;
   bool isEdit = false;
   final Function() emptyFields;
   final dynamic nameValidator;
@@ -38,13 +42,12 @@ class DeceasedData extends StatefulWidget {
   final iconOnTap;
   final imageOnTap;
   final Function(CityFromAPI) onSelected;
-  final Function(CityFromAPI) selectCity;
+  final Function(CityFromAPI) selectedSingleCity;
   final Function onDeleted;
   var imageFile;
   var memoryImage;
   final bool isNetwork;
   final Widget child;
-  final List<CityFromAPI> options;
   final List<CityFromAPI> chips;
 
 
@@ -74,7 +77,9 @@ class DeceasedData extends StatefulWidget {
     required this.options,
     this.imageFile,
     required this.dateController,
-    required this.selectCity,
+    this.onTextChanged,
+    required this.selectedSingleCity,
+    required this.city,
   });
 
   @override
@@ -86,15 +91,6 @@ class DeceasedData extends StatefulWidget {
 }
 
 class DeceasedDataState extends State<DeceasedData>{
-  CityListCubit get _cityListCubit => context.read<CityListCubit>();
-  List<CityFromAPI> cityList = [];
-
-
-  @override
-  void initState() {
-    _cityListCubit.fetchCityList();
-    super.initState();
-  }
 
 
   @override
@@ -364,15 +360,7 @@ class DeceasedDataState extends State<DeceasedData>{
                                 )),
                             Expanded(
                               flex: 5,
-                              child: BlocBuilder<CityListCubit, CityListState>(
-                                  builder: (context, cityState) {
-                                    if (cityState is CityListLoading) {
-                                      print("DECESSED DATA CITY LOADING");
-                                      return const Center(child: CircularProgressIndicator());
-                                    } else if (cityState is CityListLoaded) {
-                                      cityList = cityState.listCity;
-                                      if (cityList.isNotEmpty) {
-                                        return Column(
+                              child:  Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Padding(
@@ -388,20 +376,19 @@ class DeceasedDataState extends State<DeceasedData>{
                                               ),
                                             ),
                                             GenericAutocomplete<CityFromAPI>(
-                                                  city: widget.cityController.text,
+                                                  city: widget.city,
                                                   cityController: widget.cityController,
-                                                  options: cityList,
+                                                  options: widget.options,
                                                   hintText: getCurrentLanguageValue(CITY) ?? "" ,
-                                                  onSelected: widget.selectCity,
+                                                  onSelected: widget.selectedSingleCity,
+                                                  onTextChanged: widget.onTextChanged,
                                                   validator: notEmptyValidate
                                               ),
 
                                           ],
-                                        );
-                                      }
-                                    }return ErrorWidget("errore di connessione");
+                                        )
 
-                                  }),
+
                             ),
                           ],
                         ),
@@ -417,27 +404,17 @@ class DeceasedDataState extends State<DeceasedData>{
                             Expanded(flex:2,child: Container()),
                             Expanded(
                               flex: 5,
-                              child:  BlocBuilder<CityListCubit, CityListState>(
-                                  builder: (context, cityState) {
-                                    if (cityState is CityListLoading) {
-                                      print("DECESSED DATA CITY LOADING");
-                                      return const Center(child: CircularProgressIndicator());
-                                    } else if (cityState is CityListLoaded) {
-                                      cityList = cityState.listCity;
-                                      if (cityList.isNotEmpty) {
-                                        return Padding(
+                              child:  Padding(
                                           padding: getPadding(right: 6),
                                           child: CitiesAutocomplete(
                                             chips: widget.chips,
-                                            cityList: cityList,
+                                            cityList: widget.options,
                                             onSelected: widget.onSelected,
                                             onDeleted: widget.onDeleted,
                                           ),
-                                        );
-                                      }
-                                    }return ErrorWidget("errore di connessione");
+                                        )
 
-                                  }),
+
                             ),
                             Expanded(
                               flex: 5,

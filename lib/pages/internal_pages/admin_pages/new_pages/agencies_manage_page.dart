@@ -105,8 +105,10 @@ class _AgenciesManagePageState extends State<AgenciesManagePage> {
                   },
                   selectedAgency: agencyEntity,
                   onSubmit: (AgencyEntity internalAgencyEntity){
-                    agencyEntity.id == null ? _currentPageCubit.addAgency(internalAgencyEntity) :
-                    _currentPageCubit.editAgency(internalAgencyEntity);
+                    agencyEntity.id == null ? _currentPageCubit.addAgency(internalAgencyEntity)
+                        : _currentPageCubit.editAgency(internalAgencyEntity);
+                    SuccessSnackbar(context, text: agencyEntity.id == null  ? 'Agenzia salvata con successo'
+                        : 'Agenzia modificata con successo');
                     context.pop();
                   },
                 )

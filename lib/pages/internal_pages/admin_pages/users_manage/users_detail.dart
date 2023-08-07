@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ripapp_dashboard/blocs/selected_user_cubit.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/pages/internal_pages/agency_pages/add_demise/chips_row.dart';
 import 'package:ripapp_dashboard/utils/size_utils.dart';
 import 'package:ripapp_dashboard/utils/style_utils.dart';
 import 'package:ripapp_dashboard/widgets/dialog_card.dart';
@@ -48,13 +49,7 @@ class UsersDetail extends StatelessWidget {
           agencyName =  state.selectedUser.agency!.agencyName ?? "";
         }
         role = state.selectedUser.status.toString() == 'UserStatus.active' ? 'Utente' :
-        state.selectedUser.status.toString() == 'UserStatus.agency' ? 'Agenzia' :
-        'Amministratore';
-          try {
-            city = state.selectedUser.city?[0].name ?? "";
-          }catch(e){
-            city = "";
-          }
+        state.selectedUser.status.toString() == 'UserStatus.agency' ? 'Agenzia' : 'Amministratore';
          print("LA CITTà DETTAGLI UTENTE è : $city");
 
         return Container(
@@ -159,7 +154,7 @@ class UsersDetail extends StatelessWidget {
                                 Padding(
                                   padding: getPadding(bottom: 5,top: 20),
                                   child: Text(
-                                    'CITTÀ',
+                                    'COMUNI DI INTERESSE',
                                     style: SafeGoogleFont(
                                       'Montserrat',
                                       fontSize: 14,
@@ -168,7 +163,7 @@ class UsersDetail extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Texth3V2(testo: city, color: black),
+                                ChipsRow(chips: state.selectedUser.city!),
 
                                 Padding(
                                   padding: getPadding(bottom: 5,top: 20),

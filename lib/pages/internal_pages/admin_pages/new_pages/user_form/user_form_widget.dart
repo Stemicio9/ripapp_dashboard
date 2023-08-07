@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ripapp_dashboard/constants/colors.dart';
+import 'package:ripapp_dashboard/constants/images_constants.dart';
 import 'package:ripapp_dashboard/constants/language.dart';
 import 'package:ripapp_dashboard/constants/validators.dart';
 import 'package:ripapp_dashboard/models/UserStatusEnum.dart';
@@ -23,6 +24,9 @@ class UserFormWidget extends StatelessWidget {
   final TextEditingController phoneController;
   final TextEditingController cityController;
   final bool isAddPopup;
+  final bool passwordVisible;
+  final Function iconOnTap;
+
 
   // TO USE CITYAUTOCOMPLETE
   final List<CityFromAPI> options;
@@ -65,6 +69,8 @@ class UserFormWidget extends StatelessWidget {
         required this.chips,
         required this.onDeleted,
         this.isAddPopup = true,
+        required this.passwordVisible,
+        required this.iconOnTap,
 
       })
       : super(key: key);
@@ -109,7 +115,10 @@ class UserFormWidget extends StatelessWidget {
               validator: validatePassword,
               labelPaddingLeft: 3,
               paddingLeft: 10,
-              isPassword: true
+              suffixIcon: passwordVisible ? ImagesConstants.imgPassSee : ImagesConstants.imgPassUnsee,
+              showSuffixIcon: true,
+              iconOnTap: iconOnTap,
+              isPassword: passwordVisible
           ),
         ],
       ) : Container(),

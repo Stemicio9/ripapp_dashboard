@@ -8,7 +8,8 @@ import 'package:ripapp_dashboard/widgets/input.dart';
 Widget composeInput(
     String hint, String label, TextEditingController controller,
     {TextInputFormatter? inputFormatter, bool isPassword = false, Function validator = notEmptyValidate,
-      double paddingRight = 0, double paddingLeft = 0, double labelPaddingLeft = 0}) {
+      double paddingRight = 0, double paddingLeft = 0, double labelPaddingLeft = 0,
+      bool showSuffixIcon = false, String? suffixIcon, Function? iconOnTap}) {
   return Expanded(
     flex: 1,
     child: Padding(
@@ -21,11 +22,20 @@ Widget composeInput(
         validator: validator,
         paddingRight: paddingRight,
         paddingLeft: paddingLeft,
-        isPassword: isPassword,
         inputFormatters: inputFormatter != null ? <TextInputFormatter>[inputFormatter] : <TextInputFormatter>[],
         labelPaddingLeft: labelPaddingLeft,
         borderSide: const BorderSide(color: greyState),
         activeBorderSide: const BorderSide(color: background),
+
+        //password icon parameters
+        isPassword: isPassword,
+        suffixIcon: suffixIcon,
+        isSuffixIcon: showSuffixIcon,
+        suffixIconHeight: 25,
+        suffixIconWidth: 25,
+        iconOnTap: iconOnTap,
+
+
       ),
     ),
   );

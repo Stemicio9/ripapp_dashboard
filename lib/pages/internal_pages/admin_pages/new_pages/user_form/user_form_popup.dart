@@ -39,15 +39,19 @@ class _UserFormPopupState extends State<UserFormPopup> {
   final _formKey = GlobalKey<FormState>();
   UserRoles? selectedStatus;
   AgencyEntity? selectedAgency;
+  late bool _passwordVisible = false;
 
+  Set<CityFromAPI> cityList = {};
   CityListCubit get _cityListCubit => context.read<CityListCubit>();
   SearchAgencyCubit get _searchAgencyCubit => context.read<SearchAgencyCubit>();
 
   @override
   void initState() {
     if(_cityListCubit.state is! CityListLoaded) {
+      print('ciao, come va??');
       _cityListCubit.fetchCityList();
     }
+    cityList = widget.selectedUser?.city?.toSet() ?? Set.of([]);
     _searchAgencyCubit.fetchAgencies();
     widget.selectedUser ??= UserEntity.emptyUser();
     selectedStatus = fromUserStatus(widget.selectedUser?.status ?? UserStatus.active);
@@ -105,14 +109,19 @@ class _UserFormPopupState extends State<UserFormPopup> {
                           selectedAgency: selectedAgency,
                           agencies: agencies,
                           agencyChange: agencyChange,
-                          // we can infer user is not null, we fill it in initState
                           selectedUser: widget.selectedUser!,
                           statusChange: statusChange,
                           selectedStatus: selectedStatus != null ? fromUserRole(selectedStatus!) : null,
                           save: save,
                           clearFields: clearFields,
-                          chips: widget.selectedUser?.city?.toSet() ?? Set.of([]),
-                          onDeleted: deleteCity
+                          chips: cityList,
+                          onDeleted: deleteCity,
+                          passwordVisible: !_passwordVisible,
+                          iconOnTap: (){
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
 
                       ),
                     );
@@ -143,15 +152,14 @@ class _UserFormPopupState extends State<UserFormPopup> {
     setState(() {
       cityController.text = value.name ?? "";
       widget.selectedUser ??= UserEntity.emptyUser();
-      widget.selectedUser?.city ??= [];
-      widget.selectedUser?.city?.add(value);
+      cityList.add(value);
     });
   }
 
   deleteCity(CityFromAPI? value){
     if(value == null) return;
     setState(() {
-      widget.selectedUser?.city?.remove(value);
+      cityList.remove(value);
     });
   }
 
@@ -159,7 +167,7 @@ class _UserFormPopupState extends State<UserFormPopup> {
   void save(){
     if (widget.selectedUser == null) return;
     if(_formKey.currentState!.validate()) {
-      if (widget.selectedUser!.city!.isNotEmpty) {
+      if (cityList.isNotEmpty) {
         var currentStatus = fromUserRole(selectedStatus ?? UserRoles.Utente);
         UserEntity userToSave = widget.selectedUser!.copyWith(
             id:  widget.selectedUser!.id,
@@ -167,7 +175,7 @@ class _UserFormPopupState extends State<UserFormPopup> {
             lastName: lastNameController.text,
             phoneNumber: phoneController.text,
             email: widget.selectedUser!.id != null ? widget.selectedUser!.email : emailController.text,
-            city: widget.selectedUser?.city ?? [],
+            city: cityList.toList(),
             agency: currentStatus == UserStatus.agency ? selectedAgency : null,
             status: currentStatus
         );

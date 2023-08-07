@@ -101,7 +101,6 @@ class DemiseDetailState extends State<DemiseDetail> {
                                 wakeNote:  state.selectedDemise.wakeNotes ?? missingData,
                                 wakeHour:  StringFormatters().getFormattedTime(state.selectedDemise.wakeDateTime),
                                 wakeAddress:  state.selectedDemise.wakeAddress ?? missingData,
-
                             ),
                           ),
 

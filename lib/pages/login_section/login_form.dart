@@ -98,7 +98,7 @@ class LoginFormState extends State<LoginForm> {
 
             isPassword: !_passwordVisible,
             controller: _passwordTextController,
-            suffixIcon: _passwordVisible ? ImagesConstants.imgPassSee : ImagesConstants.imgPassUnsee,
+            suffixIcon: _passwordVisible ? ImagesConstants.imgPassUnsee : ImagesConstants.imgPassSee,
             isSuffixIcon: true,
             suffixIconHeight: 25,
             suffixIconWidth: 25,

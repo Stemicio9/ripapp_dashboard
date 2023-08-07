@@ -11,6 +11,7 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
   final String hintText;
   final String? city;
   final Function(T) onSelected;
+  final Function(String)? onTextChanged;
   TextEditingController? cityController;
 
   GenericAutocomplete({Key? key,
@@ -19,7 +20,8 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
     required this.hintText,
     required this.onSelected,
     this.city,
-    this.cityController}) : super(key: key);
+    this.cityController,
+    this.onTextChanged}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class GenericAutocomplete<T extends AutocompleteElement> extends StatelessWidget
           return TextFormField(
             validator: validator,
             controller: cityController,
+            onChanged: onTextChanged,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: greyState),

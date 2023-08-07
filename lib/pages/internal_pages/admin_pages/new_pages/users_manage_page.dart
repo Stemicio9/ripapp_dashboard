@@ -164,6 +164,8 @@ class UsersManagePageState extends State<UsersManagePage>{
                   onSubmit: (UserEntity internalUserEntity){
                     userEntity.id == null ? _currentPageCubit.signup(internalUserEntity) :
                     _currentPageCubit.editUser(internalUserEntity);
+                    userEntity.id == null ? SuccessSnackbar(context,text: 'Utente aggiunto con successo!') :
+                    SuccessSnackbar(context,text: 'Utente modificato con successo!');
                     context.pop();
 
                   },

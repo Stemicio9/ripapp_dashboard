@@ -19,6 +19,7 @@ class AgencyFormWidget extends StatelessWidget {
   final TextEditingController phoneController;
   final bool isAddPopup;
   final Function() clearFields;
+  final Function(String)? onTextChanged;
   final Function save;
   final String city;
 
@@ -38,7 +39,8 @@ class AgencyFormWidget extends StatelessWidget {
     required this.options,
     required this.onSelected,
     required this.clearFields,
-    required this.save
+    required this.save,
+     required this.onTextChanged
   }) : super(key: key);
 
   @override
@@ -78,6 +80,7 @@ class AgencyFormWidget extends StatelessWidget {
                         city: city,
                         cityController: cityController,
                         options: options,
+                        onTextChanged: onTextChanged,
                         hintText: getCurrentLanguageValue(CITY) ?? "" ,
                         onSelected: onSelected,
                         validator: notEmptyValidate

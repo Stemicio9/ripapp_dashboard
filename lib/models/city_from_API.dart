@@ -105,7 +105,6 @@ class CityFromAPI extends ChipText with AutocompleteElement{
 
   @override
   bool operator == (Object other){
-    print("STO FACENDO UGUALE UGUALE");
     if(identical(this, other)) return true;
     if(other.runtimeType != runtimeType) return false;
     return other is CityFromAPI && other.name == name;
