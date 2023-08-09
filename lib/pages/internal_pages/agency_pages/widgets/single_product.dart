@@ -59,9 +59,11 @@ class SingleProductState extends State<SingleProduct> {
 
 
   changeFunction(String value){
-    setState(() {
-      url = value;
-    });
+    if(this.mounted) {
+      setState(() {
+        url = value;
+      });
+    }
   }
 
   @override
